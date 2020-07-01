@@ -1,0 +1,11 @@
+<div class="m-2">
+
+    <button class="btn btn-success btn-block" routerLink="/publico">Ver llamados</button>
+    <button class="btn btn-success btn-block" routerLink="/nuevo-ticket">Obtener Turno</button>
+    
+    <input #txtEscritorio (keyup.enter)="entrar( txtEscritorio.value )" name="escritorio" type="number" class="form-control"
+    placeholder="Escritorio" autofocus required>
+    
+    <button class="btn btn-success btn-block" (click)="entrar( txtEscritorio.value )">Ingresar
+    </button>
+</div>

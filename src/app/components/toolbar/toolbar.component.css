@@ -1,0 +1,8 @@
+.example-spacer {
+/* Tres valores: flex-grow | flex-shrink | flex-basis */
+  flex: 1 1 auto;
+}
+
+.turnos-toolbar {
+  font-size: medium;
+}

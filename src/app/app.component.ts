@@ -6,5 +6,11 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'web2';
+  events: string[] = [];
+  opened: boolean;
+  title = 'colas';
+
+  toggle(a): void {
+    a.toggle();
+  }
 }

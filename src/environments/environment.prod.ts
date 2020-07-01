@@ -1,3 +1,5 @@
 export const environment = {
-  production: true
+	production: true,
+	// url: 'https://tickets-socket-io.herokuapp.com'
+	url: 'http://localhost:5000'
 };

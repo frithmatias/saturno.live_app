@@ -1,1 +1,34 @@
 /* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+img{border:0;}
+i {border:0; outline: none;}
+
+
+
+.banner-content {
+    line-height: normal;
+    padding: .1em;
+    font-size: xx-large;
+    font-family: monospace;
+    justify-content: center;
+}
+
+.banner-content .xxxxl {
+    font-size: 3em;
+}
+
+.banner-content .xxxl {
+    font-size: xxx-large;
+}
+
+.banner-title {
+    font-size: x-large;
+    font-family: unset;
+}
+
+.banner-subtitle {
+    font-size: x-large;
+    font-family: unset;
+}
