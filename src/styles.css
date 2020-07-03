@@ -8,10 +8,10 @@ i {border:0; outline: none;}
 
 
 .banner-content {
+    font-weight: 100;
     line-height: normal;
     padding: .1em;
-    font-size: xx-large;
-    font-family: monospace;
+    font-size: x-large;
     justify-content: center;
 }
 
@@ -29,6 +29,9 @@ i {border:0; outline: none;}
 }
 
 .banner-subtitle {
+    padding: .4em;
     font-size: x-large;
     font-family: unset;
+    font-weight: 100;
+    line-height: normal;
 }

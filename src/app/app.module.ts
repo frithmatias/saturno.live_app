@@ -16,19 +16,21 @@ import { HomeComponent } from './pages/home/home.component';
 import { PublicoComponent } from './pages/publico/publico.component';
 import { NuevoTicketComponent } from './pages/nuevo-ticket/nuevo-ticket.component';
 import { EscritorioComponent } from './pages/escritorio/escritorio.component';
+import { SidenavComponent } from './components/sidenav/sidenav.component';
+import { ToolbarComponent } from './components/toolbar/toolbar.component';
 
 // SOCKETS
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 
 // PIPES
 import { DomseguroPipe } from './pipes/domseguro.pipe';
+
+// MATERIAL
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
-
-import { MatIconModule } from '@angular/material/icon';
-import { SidenavComponent } from './components/sidenav/sidenav.component';
 import { MatButtonModule } from '@angular/material/button';
-import { ToolbarComponent } from './components/toolbar/toolbar.component';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 const config: SocketIoConfig = { url: environment.url, options: {} };
 
@@ -53,7 +55,8 @@ const config: SocketIoConfig = { url: environment.url, options: {} };
 		MatToolbarModule,
 		MatSidenavModule,
 		MatIconModule,
-		MatButtonModule
+		MatButtonModule,
+		MatSnackBarModule
 	],
 	providers: [],
 	bootstrap: [AppComponent]

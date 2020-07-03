@@ -1,39 +1,53 @@
-<div class="bg-light d-flex justify-content-end justify-content-sm-start justify-content-md-center align-items-center"
-  style="max-width: 100%; height: 100%">
+<div class="row p-3">
+  <div class="col">
 
-  <div class="card border-success m-5" style="max-width: 18rem; text-align: center;">
-    <div class="card-header">Escritorio {{idDesk}}</div>
-    <div class="card-body text-success">
+    <div class="card text-white bg-danger mb-4">
+      <div class="card-header banner-title">ESCRITORIO {{ idDesk }} </div>
+      <div class="rounded m-2 text-center banner-content" style="background-color: rgb(141, 51, 51)">
+        <!------------------------------>
+        <!-- EN ATENCIÓN -->
+        <!------------------------------>
 
-      <h5 class="card-title">
-        <span *ngIf="loading" id="lblNuevoTicket">
-          Cargando...
-        </span>
-        <div *ngIf="idTicket">
-          <span *ngIf="!loading" id="lblNuevoTicket">
-            Atendiendo turno
-          </span>
-          <div>
-            <span *ngIf="!loading" id="lblNuevoTicketNumero">
-              {{ idTicket }}
-            </span>
+        <div class="banner-content" *ngIf="ticket">
+          <div class="row">
+            <div class="col">
+              Atendiendo turno
+            </div>
+          </div>
+          <div class="row">
+            <div class="col xxxxl">
+              {{ ticket.id_ticket }}
+            </div>
+          </div>
+          <!-- CHAT -->
+          <div class="row">
+            <div class="col-8">
+              <input #InputMessage type="text" class="w-100">
+            </div>
+
+            <div class="col-4">
+              <button class="btn btn-danger btn-block" (click)="sendMessage(InputMessage)">Enviar</button>
+            </div>
           </div>
         </div>
 
-        <div *ngIf="!idTicket">
-          <span *ngIf="!loading" id="lblNuevoTicket">
+        <!------------------------------>
+        <!-- EN ESPERA -->
+        <!------------------------------>
+        <div *ngIf="!ticket" class="my-4">
+          <span *ngIf="!loading">
             Disponible para atender
           </span>
         </div>
-      </h5>
 
-      <p class="card-text">
-        LLame al siguiente cliente y espere a que se presente en el escritorio.
-      </p>
-      <div class="card bg-danger text-white mb-2" *ngIf='message'>{{message}}</div>
-      <button class="btn btn-secondary btn-lg" (click)="atenderTicket()">
-        Atender siguiente ticket
-      </button>
+        <div class="card bg-danger text-white my-4 py-2" *ngIf='message'>{{message}}</div>
+
+        <button class="btn btn-secondary btn-lg" (click)="atenderTicket()">
+          Atender siguiente ticket
+        </button>
+
+
+      </div>
     </div>
   </div>
 </div>

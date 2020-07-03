@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { TicketsService } from 'src/app/services/tickets.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Ticket, TicketResponse } from 'src/app/interfaces/ticket.interface';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
 	selector: 'app-nuevo-ticket',
@@ -17,7 +18,8 @@ export class NuevoTicketComponent implements OnInit {
 	constructor(
 		private wsService: WebsocketService,
 		private ticketsService: TicketsService,
-		private router: Router
+		private router: Router,
+		private snak: MatSnackBar
 	) { }
 
 	ngOnInit(): void {
@@ -30,13 +32,13 @@ export class NuevoTicketComponent implements OnInit {
 				console.log(data);
 				if (data.ok) {
 					localStorage.setItem('turno', JSON.stringify(data.ticket));
-					this.ticketsService.getTickets();
 					this.loading = false;
 					this.router.navigate(['/publico']);
 				}
 			});
 		} else {
 			console.log('usted ya tiene un número');
+			this.snak.open('Usted ya tiene un turno!', null, { duration: 2000 });
 			this.router.navigate(['/publico']);
 		}
 	}

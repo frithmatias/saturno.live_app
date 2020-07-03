@@ -1,39 +1,22 @@
 <div class="bg-light turno-container  p-2">
   <div class="card border-success m-5" class="alert-success">
+
     <div class="card-header">SACAR TURNO</div>
     <div class="card-body text-success">
-      <h5 class="card-title">
 
+      <h5 class="card-title">
         <span *ngIf="loading" id="lblNuevoTicket">
           Cargando...
         </span>
-
-        <span *ngIf="!loading && ticketNum" id="lblNuevoTicket">
-          Su turno tiene el número
-          <div>
-            <span *ngIf="!loading" id="lblNuevoTicketNumero">
-              {{ ticketNum }}
-            </span>
-          </div>
-        </span>
       </h5>
 
-      
       <span *ngIf="!hasTicket">
         <p class="card-text">Luego de obtener su turno será redireccionado a la pantalla de espera.</p>
         <button class="btn btn-success btn-block btn-lg" (click)="nuevoTicket()">
           GENERAR TURNO
         </button>
       </span>
-      
-      <span *ngIf="hasTicket">
-        <p>Usted ya tiene un número, por favor espere a ser llamado en la pantalla pública</p>
-        <button class="btn btn-success btn-block btn-lg" (click)="pantallaPublica()">
-          IR A LA PANTALLA PUBLICA
-        </button>
-      </span>
 
     </div>
   </div>
-
 </div>

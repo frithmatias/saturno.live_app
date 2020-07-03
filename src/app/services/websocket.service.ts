@@ -13,26 +13,42 @@ export class WebsocketService {
 	public socketStatus = false;
 	public usuario = null;
 	public idSocket = null;
-	constructor(private socket: Socket, private ticketsService: TicketsService) {
-		this.checkSocket();
-		this.escucharSockets();
+	constructor(
+		private socket: Socket,
+		private ticketsService: TicketsService
+	) {
+
+		this.socketCheck();
+		this.socketListeners();
 	}
 
-	escucharSockets(): void {
-		this.listen('actualizar-pantalla').subscribe((data: any) => {
+	socketListeners(): void {
+
+		this.listen('mensaje-system').subscribe(data => {
+			console.log('mensaje-system', data);
+		});
+
+		this.listen('mensaje-privado').subscribe(data => {
+			console.log('mensaje-privado', data);
+		});
+
+		this.listen('actualizar-pantalla').subscribe(data => {
+			console.log('actualizar-pantalla');
 			this.ticketsService.getTickets();
 			const audio = new Audio();
 			audio.src = '../../assets/new-ticket.mp3';
 			audio.load();
 			audio.play();
 		});
+
 	}
 
-	checkSocket(): void {
+	socketCheck(): void {
+
 		this.socket.on('connect', () => {
 			this.idSocket = this.socket.ioSocket.id;
 			// si había un ticket en la LS lo actualizo
-			if ( localStorage.getItem('turno')) {
+			if (localStorage.getItem('turno')) {
 				console.log('actualizando socket en ls: ', this.idSocket);
 				const myTicket: Ticket = JSON.parse(localStorage.getItem('turno'));
 				this.updateSocket(myTicket.id_socket, this.idSocket);
@@ -53,7 +69,6 @@ export class WebsocketService {
 	listen(evento: string): Observable<string> {
 		return this.socket.fromEvent(evento);
 	}
-
 
 	manejaError = (err: AjaxError) => {
 		// error al actualizar el socket, el socket anterior no existe
