@@ -28,16 +28,11 @@ export class PublicoComponent implements OnInit {
 		this.wsService.emit('extender-tiempo-atencion', this.ticketsService.myTicket);
 	}
 
-	sendMessage(e: HTMLInputElement): void {
-		if (!this.wsService.idSocket) {
-			this.snack.open('Se perdió la conexión con el escritorio.', 'ACEPTAR', { duration: 5000 });
-			return;
-		}
 
-		if (e.value.length > 0) {
-			this.wsService.emit('mensaje-privado', { mensaje: e.value });
-			e.value = '';
-		}
+
+	toggle(chat): void {
+		console.log(chat);
+		chat.toggle();
 	}
 }
 

@@ -20,7 +20,7 @@
             </div>
           </div>
           <!-- CHAT -->
-          <div class="row">
+          <!-- <div class="row">
             <div class="col-8">
               <input #InputMessage type="text" class="w-100">
             </div>
@@ -28,7 +28,7 @@
             <div class="col-4">
               <button class="btn btn-danger btn-block" (click)="sendMessage(InputMessage)">Enviar</button>
             </div>
-          </div>
+          </div> -->
         </div>
 
         <!------------------------------>
@@ -42,9 +42,11 @@
 
         <div class="card bg-danger text-white my-4 py-2" *ngIf='message'>{{message}}</div>
 
-        <button class="btn btn-secondary btn-lg" (click)="atenderTicket()">
-          Atender siguiente ticket
-        </button>
+        <div class="p-2">
+          <button class="btn btn-success btn-block btn-lg" (click)="atenderTicket()">
+            ATENDER CLIENTE
+          </button>
+        </div>
 
 
       </div>

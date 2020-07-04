@@ -7,12 +7,23 @@ import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 })
 export class ToolbarComponent implements OnInit {
   @Output() toggleSideNav: EventEmitter<boolean> = new EventEmitter();
+  @Output() toggleChat: EventEmitter<boolean> = new EventEmitter();
+
   constructor() { }
 
   ngOnInit(): void {
   }
 
-  toggle(): void {
-    this.toggleSideNav.emit( true );
+  toggle(component: string): void {
+    switch (component) {
+      case 'sidenav':
+        this.toggleSideNav.emit(true);
+        break;
+      case 'chat':
+        this.toggleChat.emit(true);
+        break;
+    }
+
+
   }
 }

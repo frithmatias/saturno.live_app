@@ -79,7 +79,6 @@ export class TicketsService {
 			this.ticketsCall = data.filter(ticket => ticket.tm_att !== null);
 			this.ticketsTail = [...this.ticketsCall].sort((a: Ticket, b: Ticket) => -1).slice(0, TAIL_LENGTH);
 			this.lastTicket = this.ticketsTail[0];
-			console.log(this.ticketsAll);
 
 			// si había un ticket en LS lo actualizo
 			this.getMyTicket()
@@ -103,7 +102,7 @@ export class TicketsService {
 					}
 				})
 				.catch(() => {
-					console.log('No existe ticket para actualizar en LS.');
+					// console.log('No existe ticket para actualizar en LS.');
 				});
 		});
 	}

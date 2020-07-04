@@ -1,13 +1,20 @@
-<app-toolbar (toggleSideNav)="toggle( sidenav )"></app-toolbar>
-<mat-sidenav-container class="example-container h-100">
-  
-  <mat-sidenav id="sidenav" #sidenav mode="over" [(opened)]="opened" (opened)="events.push('open!')"
-    (closed)="events.push('close!')">
+<app-toolbar (toggleSideNav)="toggle( sidenav )" (toggleChat)="toggle( chat )"></app-toolbar>
+
+<mat-drawer-container class="example-container h-100">
+
+  <!-- sidebar menu -->
+  <mat-drawer #sidenav id="sidenav" mode="over">
     <app-sidenav></app-sidenav>
-  </mat-sidenav>
+  </mat-drawer>
 
-  <mat-sidenav-content>
+  <!-- chat -->
+  <mat-drawer #chat id="chat" mode="over" position="end" class="mat-drawer-chat">
+    <app-chat></app-chat>
+  </mat-drawer>
+
+  <mat-drawer-content>
     <router-outlet></router-outlet>
-  </mat-sidenav-content>
+  </mat-drawer-content>
 
-</mat-sidenav-container>
+
+</mat-drawer-container>

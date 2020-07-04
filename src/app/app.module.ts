@@ -18,6 +18,7 @@ import { NuevoTicketComponent } from './pages/nuevo-ticket/nuevo-ticket.componen
 import { EscritorioComponent } from './pages/escritorio/escritorio.component';
 import { SidenavComponent } from './components/sidenav/sidenav.component';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
+import { ChatComponent } from './components/chat/chat.component';
 
 // SOCKETS
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
@@ -31,6 +32,9 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatInputModule } from '@angular/material/input';
+import { MessageTimePipe } from './pipes/message-time.pipe';
+
 
 const config: SocketIoConfig = { url: environment.url, options: {} };
 
@@ -43,7 +47,10 @@ const config: SocketIoConfig = { url: environment.url, options: {} };
 		PublicoComponent,
 		DomseguroPipe,
 		SidenavComponent,
-		ToolbarComponent],
+		ToolbarComponent,
+		ChatComponent,
+		MessageTimePipe
+	],
 	imports: [
 		BrowserModule,
 		// MaterialModule,
@@ -56,7 +63,9 @@ const config: SocketIoConfig = { url: environment.url, options: {} };
 		MatSidenavModule,
 		MatIconModule,
 		MatButtonModule,
-		MatSnackBarModule
+		MatSnackBarModule,
+		MatInputModule
+		
 	],
 	providers: [],
 	bootstrap: [AppComponent]

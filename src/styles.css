@@ -2,10 +2,7 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
-img{border:0;}
-i {border:0; outline: none;}
-
-
+button:focus { outline: none; }
 
 .banner-content {
     font-weight: 100;

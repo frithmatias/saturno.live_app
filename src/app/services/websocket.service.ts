@@ -18,20 +18,21 @@ export class WebsocketService {
 		private ticketsService: TicketsService
 	) {
 
-		this.socketCheck();
-		this.socketListeners();
+		this.escucharSockets();
+		this.actualizarLista();
 	}
 
-	socketListeners(): void {
 
-		this.listen('mensaje-system').subscribe(data => {
-			console.log('mensaje-system', data);
-		});
+	escucharMensajes(): Observable<string> {
+		return this.listen('mensaje-privado');
+	}
 
-		this.listen('mensaje-privado').subscribe(data => {
-			console.log('mensaje-privado', data);
-		});
 
+	escucharSystem(): Observable<string> {
+		return this.listen('mensaje-system');
+	}
+
+	actualizarLista(): void {
 		this.listen('actualizar-pantalla').subscribe(data => {
 			console.log('actualizar-pantalla');
 			this.ticketsService.getTickets();
@@ -40,10 +41,9 @@ export class WebsocketService {
 			audio.load();
 			audio.play();
 		});
-
 	}
 
-	socketCheck(): void {
+	escucharSockets(): void {
 
 		this.socket.on('connect', () => {
 			this.idSocket = this.socket.ioSocket.id;

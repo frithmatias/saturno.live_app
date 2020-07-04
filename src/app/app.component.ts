@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { MatSidenav } from '@angular/material/sidenav';
 
 @Component({
   selector: 'app-root',
@@ -10,7 +11,8 @@ export class AppComponent {
   opened: boolean;
   title = 'colas';
 
-  toggle(a): void {
-    a.toggle();
+  toggle(htmlRef: MatSidenav ): void {
+    console.log(htmlRef);
+    htmlRef.toggle();
   }
 }

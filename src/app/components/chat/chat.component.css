@@ -1,0 +1,24 @@
+.send-button {
+    color: white;
+    background-color: seagreen;
+}
+
+
+.message {
+    background-color: lightskyblue;
+    padding: 0.5em;
+    font-size: large;
+    float: left;
+    border-radius: 10px;
+    width: 82%;
+}
+
+.message-me {
+    background-color: lightgoldenrodyellow;
+    float: right;
+}
+
+.message-time {
+    font-size: small;
+    float: right;
+}
