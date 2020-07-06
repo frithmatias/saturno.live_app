@@ -1,24 +1,33 @@
-<div class="p-2 h-100">
-    <div style="height: 83%;">
-        <div *ngFor="let message of messages" class="message m-2" [ngClass]="{'message-me': message.me}">
-            {{ message.message }}
-            <br>
-            <span class="message-time">{{ message.time | messageTime }}</span>
-        </div>
-    </div>
-    <div>
-        <div class="row" style="align-items: center;">
-            <div class="col-10">
-                <mat-form-field class="example-full-width w-100">
-                    <mat-label>CONSULTA A INFORMES</mat-label>
-                    <textarea #textmsg matInput placeholder="Escriba su consulta aquí... "></textarea>
-                </mat-form-field>
-            </div>
-            <div class="col-2 p-0">
-                <button (click)="sendMessage( textmsg )" class="send-button" mat-mini-fab>
-                    <mat-icon>send</mat-icon>
-                </button>
+<div class="p-2 h-100 chat-content" style="width: 99%;">
+
+    <!-- MESSAGES -->
+    <div class="row" #chatmessages id="chatmessages" style="height: 85%;overflow-y: auto;">
+        <div class="col">
+            <div *ngFor="let message of messages" class="message m-2" [ngClass]="{'message-me': message.me}">
+                {{ message.message }}
+                <br>
+                <span class="message-time">{{ message.time | messageTime }}</span>
             </div>
         </div>
     </div>
+
+
+
+    <div class="row p-1" style="position: absolute; width: 98%;">
+        <!-- INPUT TEXT -->
+        <div class="col-10" style="align-self: center">
+
+            <!-- <mat-label>CONSULTA A INFORMES</mat-label> -->
+            <input type="text" class="chat-textarea" #textmsg matInput placeholder="INFORMES"
+                (keydown.enter)="sendMessage( textmsg, chatmessages )">
+
+        </div>
+        <!-- SEND BUTTON -->
+        <div class="col-2 p-0">
+            <button (click)="sendMessage( textmsg, chatmessages )" class="send-button" mat-mini-fab>
+                <mat-icon style="vertical-align: unset;">send</mat-icon>
+            </button>
+        </div>
+    </div>
+
 </div>

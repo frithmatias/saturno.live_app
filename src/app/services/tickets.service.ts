@@ -19,7 +19,9 @@ export class TicketsService {
 	ticketsTail: Ticket[] = [];
 	obsTicket: Observable<Ticket>;
 	myTicket: Ticket;
+	myTicket_end: number;
 	lastTicket: Ticket;
+
 
 	constructor(private http: HttpClient) {
 		this.getMyTicket().then((myTicket: Ticket) => {
@@ -97,6 +99,8 @@ export class TicketsService {
 					
 					if (this.myTicket.tm_end !== null) {
 						// El ticket finalizó.
+						this.myTicket_end = this.myTicket.tm_end;
+						console.log(this.myTicket_end)
 						this.myTicket = null;
 						localStorage.removeItem('turno');
 					}

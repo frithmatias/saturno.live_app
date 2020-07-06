@@ -1,5 +1,9 @@
 .material-icons.orange600 { color: #FB8C00; }
 .mat-drawer-chat {
-    height: 100%;
+    height: 50%;
     width: 80%;
+    top: 25%;
+    background-color: transparent;
+    padding: 0.5rem;
+    box-shadow: none;
 }

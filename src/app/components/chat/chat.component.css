@@ -1,8 +1,22 @@
+.chat-content {
+    background-color: darkslategray;
+    border-radius: .5rem;
+}
+::-webkit-scrollbar {
+    display: none;
+}
 .send-button {
     color: white;
     background-color: seagreen;
+    box-shadow: none;
 }
-
+.chat-textarea {
+    border: 0px;
+    background-color: white;
+    width: -webkit-fill-available;
+    border-radius: 2rem;
+    padding: .5rem 1rem 0.5rem 1rem;
+}
 
 .message {
     background-color: lightskyblue;

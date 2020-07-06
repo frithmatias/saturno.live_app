@@ -1,14 +1,27 @@
 <div class="row p-3">
-    
+
     <div class="col-md-6">
 
         <!-- ======================================================== -->
-        <!-- SU NUMERO -->
+        <!-- SU TURNO FINALIZADO -->
+        <!-- ======================================================== -->
+
+        <div class="card text-white bg-danger mb-4" *ngIf="ticketsService.myTicket_end">
+            <div class="card-header banner-title">TURNO FINALIZADO </div>
+            <div class="rounded text-center banner-content" style="background-color: rgb(141, 51, 51)">
+
+                <span> Su turno ha finalizado </span>
+
+            </div>
+        </div>
+
+        <!-- ======================================================== -->
+        <!-- SU TURNO -->
         <!-- ======================================================== -->
 
         <div class="card text-white bg-danger mb-4" *ngIf="ticketsService.myTicket">
             <div class="card-header banner-title">TURNO {{ticketsService.myTicket.id_ticket}} </div>
-            <div class="rounded m-2 text-center banner-content" style="background-color: rgb(141, 51, 51)">
+            <div class="rounded text-center banner-content" style="background-color: rgb(141, 51, 51)">
 
                 <!------------------------------>
                 <!-- EN ESPERA -->
@@ -23,7 +36,6 @@
                 <!------------------------------>
 
                 <div class="banner-content" *ngIf="ticketsService.myTicket?.id_desk">
-
                     <div class="row">
                         <div class="col">
                             Por favor pase por el escritorio
@@ -34,18 +46,8 @@
                             {{ ticketsService.myTicket.id_desk }}
                         </div>
                     </div>
-
-                    <!-- CHAT
-                    <div class="row">
-                        <div class="col-8">
-                            <input #InputMessage type="text" class="w-100">
-                        </div>
-
-                        <div class="col-4">
-                            <button class="btn btn-danger btn-block" (click)="sendMessage(InputMessage)">Enviar</button>
-                        </div>
-                    </div> -->
                 </div>
+
             </div>
         </div>
 
@@ -82,14 +84,14 @@
 
             </div>
 
-            <div class="rounded m-1 d-flex banner-content" style="background-color:  rgb(51, 141, 51)"
+            <div class="rounded d-flex banner-content" style="background-color:  rgb(51, 141, 51)"
                 *ngIf="ticketsService.ticketsTail.length===0">
                 <div class="d-flex justify-content-center text-white banner-title" style="width: 100%">
                     <span>espere...</span>
                 </div>
             </div>
 
-            <div class="rounded m-1 d-flex banner-content" style="background-color: rgb(51, 141, 51)"
+            <div class="rounded d-flex banner-content" style="background-color: rgb(51, 141, 51)"
                 *ngIf="ticketsService.ticketsTail.length>0">
                 <!-- <div class="card-header p-1">{{n}}</div> -->
 
@@ -126,7 +128,7 @@
 
             </div>
 
-            <div class="rounded m-1 d-flex banner-content" style="background-color: rgb(54, 77, 194)"
+            <div class="rounded d-flex banner-content" style="background-color: rgb(54, 77, 194)"
                 *ngIf="ticketsService.ticketsTail.length===0">
                 <div class="d-flex justify-content-center text-white banner-title" style="width: 100%">
                     <span>espere...</span>
@@ -134,7 +136,7 @@
             </div>
 
 
-            <div class="rounded m-1 banner-content" style="background-color: rgb(54, 77, 194)"
+            <div class="rounded banner-content" style="background-color: rgb(54, 77, 194)"
                 *ngIf="ticketsService.ticketsTail.length>0">
                 <!-- <div class="card-header p-1">{{n}}</div> -->
                 <div class="d-flex" *ngFor="let ticket of ticketsService.ticketsTail;">

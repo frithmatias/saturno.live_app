@@ -21,10 +21,12 @@ export class ChatComponent implements OnInit {
         time: new Date(), 
         message: data.mensaje 
       });
+      const chatref = document.getElementById('chatmessages');
+      chatref.scrollTop = chatref.scrollHeight - chatref.clientHeight;
       console.log(this.messages);
     })
   }
-  sendMessage(message: HTMLTextAreaElement): void {
+  sendMessage(message: HTMLTextAreaElement, chatref: HTMLElement): void {
 
     if (!this.wsService.idSocket) {
 			this.snack.open('Se perdió la conexión con el escritorio.', 'ACEPTAR', { duration: 5000 });
@@ -38,7 +40,9 @@ export class ChatComponent implements OnInit {
         message: message.value 
       });
       this.wsService.emit('mensaje-privado', { mensaje: message.value });
+      chatref.scrollTop = chatref.scrollHeight - chatref.clientHeight;
       message.value = '';
+      message.focus();
     }
   }
 
