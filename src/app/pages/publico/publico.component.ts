@@ -24,15 +24,12 @@ export class PublicoComponent implements OnInit {
 		this.ticketsService.getTickets();
 	}
 
-	extend(): void {
-		this.wsService.emit('extender-tiempo-atencion', this.ticketsService.myTicket);
+	toggle(chat): void {
+		chat.toggle();
 	}
 
-
-
-	toggle(chat): void {
-		console.log(chat);
-		chat.toggle();
+	enCamino(): void {
+		this.wsService.emit('cliente-en-camino', this.ticketsService.myTicket);
 	}
 }
 

@@ -19,6 +19,18 @@
               {{ ticket.id_ticket }}
             </div>
           </div>
+          <div class="row" *ngIf="comingClient">
+            <div clasS="col">
+              <mat-icon class="xxxxl" style="position: relative; right: 22px; color: limegreen">check_circle_outline</mat-icon>
+            </div>
+          </div>
+          <div class="row" *ngIf="comingClient">
+            <div class="col">
+              El cliente confirma que esta en camino!
+              {{timerEnCaminosegundos}}
+            </div>
+
+          </div>
           <!-- CHAT -->
           <!-- <div class="row">
             <div class="col-8">
@@ -42,14 +54,27 @@
 
         <div class="card bg-danger text-white my-4 py-2" *ngIf='message'>{{message}}</div>
 
-        <div class="p-2 d-flex">
-          <button class="btn btn-success btn-block btn-lg" (click)="atenderTicket()">
-            Próximo
-          </button>
-
-          <button class="btn btn-success btn-block btn-lg" (click)="atenderTicket()">
-            Finalizar
-          </button>
+        <div class="row p-2">
+          <div class="col-md-3 col-sm-6 col-xs-12">
+            <button class="btn btn-info btn-block btn-lg m-1" (click)="atenderInformes()" [disabled]="waitForClient">
+              Informes
+            </button>
+          </div>
+          <div class="col-md-3 col-sm-6 col-xs-12">
+            <button class="btn btn-success btn-block btn-lg m-1" (click)="atenderTicket()" [disabled]="waitForClient">
+              Siguiente
+            </button>
+          </div>
+          <div class="col-md-3 col-sm-6 col-xs-12">
+            <button class="btn btn-warning btn-block btn-lg m-1" (click)="pausarTicket()" [disabled]="waitForClient">
+              Retener
+            </button>
+          </div>
+          <div class="col-md-3 col-sm-6 col-xs-12">
+            <button class="btn btn-danger btn-block btn-lg m-1" (click)="finalizarTicket()" [disabled]="waitForClient">
+              Finalizar
+            </button>
+          </div>
         </div>
       </div>
     </div>

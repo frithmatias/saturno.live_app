@@ -1,7 +1,7 @@
 <div class="p-2 h-100 chat-content" style="width: 99%;">
 
     <!-- MESSAGES -->
-    <div class="row" #chatmessages id="chatmessages" style="height: 85%;overflow-y: auto;">
+    <div class="row" #chatmessages id="chatmessages" style="height: 87%;overflow-y: auto;">
         <div class="col">
             <div *ngFor="let message of messages" class="message m-2" [ngClass]="{'message-me': message.me}">
                 {{ message.message }}

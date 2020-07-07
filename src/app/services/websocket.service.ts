@@ -3,7 +3,7 @@ import { Socket } from 'ngx-socket-io';
 import { Observable, of } from 'rxjs';
 import { TicketsService } from './tickets.service';
 import { AjaxError } from 'rxjs/ajax';
-import { catchError } from 'rxjs/operators';
+import { catchError, take } from 'rxjs/operators';
 import { Ticket } from '../interfaces/ticket.interface';
 
 @Injectable({
@@ -22,6 +22,11 @@ export class WebsocketService {
 		this.actualizarLista();
 	}
 
+
+	escucharEnCamino(): Observable<string> {
+		// con take solo dejo pasar una sola emisión luego se des suscribe.
+		return this.listen('cliente-en-camino').pipe(take(3));
+	}
 
 	escucharMensajes(): Observable<string> {
 		return this.listen('mensaje-privado');

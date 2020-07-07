@@ -28,14 +28,18 @@ export class NuevoTicketComponent implements OnInit {
 	nuevoTicket(): void {
 		if (!localStorage.getItem('turno')) {
 			this.loading = true;
-			this.ticketsService.nuevoTicket(this.wsService.idSocket).subscribe((data: TicketResponse) => {
+			this.ticketsService.nuevoTicket(this.wsService.idSocket).subscribe(
+				(data: TicketResponse) => {
 				console.log(data);
 				if (data.ok) {
 					localStorage.setItem('turno', JSON.stringify(data.ticket));
 					this.loading = false;
 					this.router.navigate(['/publico']);
 				}
-			});
+			},
+			undefined,
+			() => console.log('COMPLETADO!!!!!!')
+			);
 		} else {
 			console.log('usted ya tiene un número');
 			this.snak.open('Usted ya tiene un turno!', null, { duration: 2000 });

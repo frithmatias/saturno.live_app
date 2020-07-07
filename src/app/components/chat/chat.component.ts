@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { WebsocketService } from '../../services/websocket.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { interval, timer } from 'rxjs';
 
 @Component({
   selector: 'app-chat',
@@ -14,16 +15,13 @@ export class ChatComponent implements OnInit {
   constructor(private wsService: WebsocketService, private snack: MatSnackBar) { }
 
   ngOnInit(): void {
-    console.log('Subscriendo a mensajes...');
     this.wsService.escucharMensajes().subscribe((data: any) => {
       this.messages.push({ 
         me: false, 
         time: new Date(), 
         message: data.mensaje 
       });
-      const chatref = document.getElementById('chatmessages');
-      chatref.scrollTop = chatref.scrollHeight - chatref.clientHeight;
-      console.log(this.messages);
+      this.scrollTop();
     })
   }
   sendMessage(message: HTMLTextAreaElement, chatref: HTMLElement): void {
@@ -40,11 +38,18 @@ export class ChatComponent implements OnInit {
         message: message.value 
       });
       this.wsService.emit('mensaje-privado', { mensaje: message.value });
-      chatref.scrollTop = chatref.scrollHeight - chatref.clientHeight;
+      this.scrollTop();
       message.value = '';
       message.focus();
     }
   }
 
+  scrollTop(): void {
+    // espero 100ms por la demora del template en renderear los mensajes.
+    const interval$ = timer(100).subscribe(()=> {
+      const chatref = document.getElementById('chatmessages');
+      chatref.scrollTop = chatref.scrollHeight - chatref.clientHeight;
+    })
+  }
 
 }

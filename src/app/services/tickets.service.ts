@@ -1,12 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment.prod';
-import { map, catchError, tap } from 'rxjs/operators';
+import { map, catchError, take } from 'rxjs/operators';
 import { Ticket, TicketsResponse } from '../interfaces/ticket.interface';
 import { AjaxError } from 'rxjs/ajax';
-import { of, Observable, Observer, Subscriber } from 'rxjs';
-import { WebsocketService } from './websocket.service';
-import { TicketResponse } from 'src/app/interfaces/ticket.interface';
+import { of, Observable, interval } from 'rxjs';
 
 const TAIL_LENGTH = 4;
 
@@ -29,6 +27,7 @@ export class TicketsService {
 			this.getTickets();
 		}).catch(() => this.getTickets());
 	}
+
 	// todo: si es escritorio entonces actualizar id_socket_desk en lugar de id_socket
 	actualizarSocket(oldSocket: string, newSocket: string): Observable<object> {
 		const socketsData = { oldSocket, newSocket };
@@ -36,11 +35,7 @@ export class TicketsService {
 	}
 
 	nuevoTicket(idSocket: string): Observable<object> {
-		return this.http.get(environment.url + '/nuevoticket/' + idSocket)
-			.pipe(
-				tap((ticket: TicketResponse) => this.myTicket = ticket.ticket),
-				// tap(() => console.log(this.myTicket))
-			);
+		return this.http.get(environment.url + '/nuevoticket/' + idSocket);
 	}
 
 	atenderTicket(idDesk: number, idDeskSocket: string): Observable<object> {
@@ -49,7 +44,7 @@ export class TicketsService {
 		return this.http.post(url, deskData);
 	}
 
-	// el escritorio solicita el ultimo ticket pendiente en estado LL (null si no existe)
+
 	getPendingTicket(idDesk: number): Observable<object> {
 		const url = environment.url + '/pendingticket/' + idDesk;
 		return this.http.get(url);

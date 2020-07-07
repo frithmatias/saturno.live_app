@@ -4,6 +4,13 @@ import { TicketsService } from 'src/app/services/tickets.service';
 import { WebsocketService } from 'src/app/services/websocket.service';
 import { TicketResponse, Ticket } from '../../interfaces/ticket.interface';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { timer, interval } from 'rxjs';
+import { take, takeUntil, switchMap, tap } from 'rxjs/operators';
+import { IfStmt } from '@angular/compiler';
+import { Timestamp } from 'rxjs/internal/operators/timestamp';
+
+const DESK_TIMEOUT = 10; // 60 segundos
+const DESK_EXTRATIME = 20; // 120 segundos
 
 @Component({
 	selector: 'app-escritorio',
@@ -11,13 +18,15 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 	styleUrls: ['./escritorio.component.css']
 })
 export class EscritorioComponent implements OnInit {
+	waitForClient: boolean = false;
+	comingClient: boolean = false;
 	idDesk: number;
 	ticket: Ticket;
 	message: string;
 	loading = false;
 	constructor(
 		private activatedRoute: ActivatedRoute,
-		private ticketsService: TicketsService,
+		public ticketsService: TicketsService,
 		private wsService: WebsocketService,
 		private snack: MatSnackBar
 	) {
@@ -38,16 +47,50 @@ export class EscritorioComponent implements OnInit {
 	}
 
 	atenderTicket(): void {
-		this.ticketsService.atenderTicket(this.idDesk, this.wsService.idSocket).subscribe((resp: TicketResponse) => {
-			console.log(resp);
-
-
-			this.wsService.emit('actualizar-pantalla');
-			if (!resp.ok) {
+		this.ticketsService.atenderTicket(this.idDesk, this.wsService.idSocket).subscribe(
+			(resp: TicketResponse) => {
+				this.wsService.emit('actualizar-pantalla');
+				if (!resp.ok) {
+				this.waitForClient = false;
 				this.ticket = null;
 				this.message = resp.msg;
 				this.snack.open(resp.msg, 'ACEPTAR', { duration: 2000 });
 			} else {
+				this.waitForClient = true;
+				const encamino$ = this.wsService.escucharEnCamino();
+				const timer_timeout$ = interval(1000).pipe(take(DESK_TIMEOUT));
+				const timer_extratime$ = interval(1000).pipe(take(DESK_EXTRATIME));
+
+				let timeIsOut = false;
+				timer_timeout$.pipe(
+					tap(console.log),
+					takeUntil(encamino$)
+				).subscribe(data => {
+					// el observable se completo por TIMEOUT
+					if (data >= DESK_TIMEOUT - 1) {
+						timeIsOut = true;
+					} else {
+						timeIsOut = false;
+					}
+				},
+				undefined, 
+				()=> {
+					if(timeIsOut){ // Se activan las opciones para el operador de atender otro turno 
+						this.waitForClient = false;
+						this.comingClient = false;
+					} else {
+						// El observable fue completado por el cliente, en camino, se adiciona tiempo de espera.
+						this.waitForClient = true;
+						this.comingClient = true;
+						timer_extratime$.subscribe(console.log, undefined, ()=> {
+							this.waitForClient = false;
+							this.comingClient = false;
+						});
+					}
+				})
+
+
+
 				this.ticket = resp.ticket;
 				this.message = '';
 			}
@@ -66,4 +109,9 @@ export class EscritorioComponent implements OnInit {
 			e.value = '';
 		}
 	}
+
+
+	atenderInformes(): void{}
+	pausarTicket(): void{}
+	finalizarTicket(): void{}
 }

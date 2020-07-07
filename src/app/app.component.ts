@@ -12,7 +12,6 @@ export class AppComponent {
   title = 'colas';
 
   toggle(htmlRef: MatSidenav ): void {
-    console.log(htmlRef);
     htmlRef.toggle();
   }
 }
