@@ -1,5 +1,4 @@
 <div class="row p-3">
-
     <div class="col-md-6">
 
         <!-- ======================================================== -->
@@ -8,7 +7,7 @@
 
         <div class="card text-white bg-danger mb-4" *ngIf="!ticketsService.myTicket">
             <div class="card-header banner-title">TURNO FINALIZADO </div>
-            <div class="rounded text-center banner-content" style="background-color: rgb(141, 51, 51)">
+            <div class="banner-content" style="background-color: rgb(141, 51, 51)">
 
                 <span> Su turno ha finalizado </span>
 
@@ -21,7 +20,7 @@
 
         <div class="card text-white bg-danger mb-4" *ngIf="ticketsService.myTicket">
             <div class="card-header banner-title">TURNO {{ticketsService.myTicket.id_ticket}} </div>
-            <div class="rounded text-center banner-content" style="background-color: rgb(141, 51, 51)">
+            <div class="banner-content" style="background-color: rgb(141, 51, 51)">
 
                 <!------------------------------>
                 <!-- EN ESPERA -->
@@ -48,7 +47,7 @@
                     </div>
                     <div class="row">
                         <div class="col">
-                            <button class="btn btn-warning btn-lg" (click)="enCamino()">En camino!</button>
+                            <button class="btn btn-warning btn-lg" (click)="enCamino()">Estoy en camino!</button>
                         </div>
                     </div>
                 </div>

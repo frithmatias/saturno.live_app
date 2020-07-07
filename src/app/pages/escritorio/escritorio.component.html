@@ -3,80 +3,100 @@
 
     <div class="card text-white bg-danger mb-4">
       <div class="card-header banner-title">ESCRITORIO {{ idDesk }} </div>
-      <div class="rounded m-2 text-center banner-content" style="background-color: rgb(141, 51, 51)">
-        <!------------------------------>
-        <!-- EN ATENCIÓN -->
-        <!------------------------------>
+      <div class="banner-content" style="background-color: rgb(141, 51, 51)">
 
-        <div class="banner-content" *ngIf="ticket">
-          <div class="row">
-            <div class="col">
-              Atendiendo turno
+        <div class="container">
+
+          <!------------------------------>
+          <!-- EN ATENCIÓN -->
+          <!------------------------------>
+
+          <div *ngIf="ticket">
+            <div class="row">
+              <div class="col">
+                Atendiendo turno
+              </div>
+            </div>
+            <div class="row">
+              <div class="col xxxxl">
+                {{ ticket.id_ticket }}
+              </div>
+            </div>
+            <div class="row" *ngIf="comingClient">
+              <div clasS="col">
+                <mat-icon class="xxxxl" style="position: relative; right: 22px; color: limegreen">check_circle_outline
+                </mat-icon>
+              </div>
+            </div>
+            <div class="row" *ngIf="comingClient">
+              <div class="col">
+                El cliente esta en camino.
+                {{timerEnCaminosegundos}}
+              </div>
             </div>
           </div>
-          <div class="row">
-            <div class="col xxxxl">
-              {{ ticket.id_ticket }}
-            </div>
+
+          <!------------------------------>
+          <!-- EN ESPERA -->
+          <!------------------------------>
+          <div *ngIf="!ticket" class="my-4">
+            <span *ngIf="!loading">
+              Disponible para atender
+            </span>
           </div>
-          <div class="row" *ngIf="comingClient">
-            <div clasS="col">
-              <mat-icon class="xxxxl" style="position: relative; right: 22px; color: limegreen">check_circle_outline</mat-icon>
-            </div>
-          </div>
-          <div class="row" *ngIf="comingClient">
-            <div class="col">
-              El cliente confirma que esta en camino!
-              {{timerEnCaminosegundos}}
+
+          <div class="card bg-danger text-white my-4 py-2" *ngIf='message'>{{message}}</div>
+
+            <!------------------------------>
+            <!-- TIEMPOS DE ATENCION -->
+            <!------------------------------>
+            <div class="row banner-footer">
+              <div class="col"><div>TE</div><div>--:--</div></div>
+              <div class="col"><div>TA</div><div>--:--</div></div>
+              <div class="col"><div>Tm</div><div>{{timerCount}}</div></div>
+              <div class="col"><div>TC</div><div>{{pendingTickets}}</div></div>
             </div>
 
-          </div>
-          <!-- CHAT -->
-          <!-- <div class="row">
-            <div class="col-8">
-              <input #InputMessage type="text" class="w-100">
-            </div>
-
-            <div class="col-4">
-              <button class="btn btn-danger btn-block" (click)="sendMessage(InputMessage)">Enviar</button>
-            </div>
-          </div> -->
         </div>
 
-        <!------------------------------>
-        <!-- EN ESPERA -->
-        <!------------------------------>
-        <div *ngIf="!ticket" class="my-4">
-          <span *ngIf="!loading">
-            Disponible para atender
-          </span>
-        </div>
-
-        <div class="card bg-danger text-white my-4 py-2" *ngIf='message'>{{message}}</div>
-
-        <div class="row p-2">
-          <div class="col-md-3 col-sm-6 col-xs-12">
-            <button class="btn btn-info btn-block btn-lg m-1" (click)="atenderInformes()" [disabled]="waitForClient">
-              Informes
-            </button>
-          </div>
-          <div class="col-md-3 col-sm-6 col-xs-12">
-            <button class="btn btn-success btn-block btn-lg m-1" (click)="atenderTicket()" [disabled]="waitForClient">
-              Siguiente
-            </button>
-          </div>
-          <div class="col-md-3 col-sm-6 col-xs-12">
-            <button class="btn btn-warning btn-block btn-lg m-1" (click)="pausarTicket()" [disabled]="waitForClient">
-              Retener
-            </button>
-          </div>
-          <div class="col-md-3 col-sm-6 col-xs-12">
-            <button class="btn btn-danger btn-block btn-lg m-1" (click)="finalizarTicket()" [disabled]="waitForClient">
-              Finalizar
-            </button>
-          </div>
-        </div>
       </div>
     </div>
+
+
+    <div class="card text-white bg-danger mb-4">
+      <div class="card-header banner-title"> Panel </div>
+      <div class="banner-content" style="background-color: rgb(141, 51, 51)">
+
+
+
+        <div class="container">
+          <div class="row py-2">
+            <div class="my-2 col-md-3 col-sm-6 col-xs-12">
+              <button class="btn btn-info btn-block btn-lg" (click)="atenderInformes()" [disabled]="waitForClient">
+                Informes
+              </button>
+            </div>
+            <div class="my-2 col-md-3 col-sm-6 col-xs-12">
+              <button class="btn btn-success btn-block btn-lg" (click)="atenderTicket()" [disabled]="waitForClient">
+                Siguiente
+              </button>
+            </div>
+            <div class="my-2 col-md-3 col-sm-6 col-xs-12">
+              <button class="btn btn-warning btn-block btn-lg" (click)="pausarTicket()" [disabled]="waitForClient">
+                Retener
+              </button>
+            </div>
+            <div class="my-2 col-md-3 col-sm-6 col-xs-12">
+              <button class="btn btn-danger btn-block btn-lg" (click)="finalizarTicket()" [disabled]="waitForClient">
+                Finalizar
+              </button>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+
   </div>
 </div>

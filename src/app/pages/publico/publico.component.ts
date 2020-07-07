@@ -18,7 +18,6 @@ export class PublicoComponent implements OnInit {
 	) { }
 
 	ngOnInit(): void {
-		localStorage.setItem('role', JSON.stringify({role: 2}));
 		const body = document.getElementsByTagName('body')[0];
 		body.classList.remove('container');
 		this.ticketsService.getTickets();

@@ -7,8 +7,10 @@
         <span>WebTurnos</span>
         <span class="example-spacer"></span>
 
-        <button (click)="toggle('chat')" mat-mini-fab>
-            <mat-icon>chat</mat-icon>
+ 
+
+       <button (click)="toggle('chat')" mat-mini-fab>
+            <mat-icon [matBadge]="unreadMessages" matBadgeColor="warn">chat</mat-icon>
         </button>
 
     </mat-toolbar-row>

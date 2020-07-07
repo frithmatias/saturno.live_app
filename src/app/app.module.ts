@@ -34,6 +34,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatInputModule } from '@angular/material/input';
 import { MessageTimePipe } from './pipes/message-time.pipe';
+import { MatBadgeModule } from '@angular/material/badge';
 
 
 const config: SocketIoConfig = { url: environment.url, options: {} };
@@ -64,7 +65,8 @@ const config: SocketIoConfig = { url: environment.url, options: {} };
 		MatIconModule,
 		MatButtonModule,
 		MatSnackBarModule,
-		MatInputModule
+		MatInputModule,
+		MatBadgeModule
 		
 	],
 	providers: [],

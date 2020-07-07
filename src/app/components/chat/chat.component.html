@@ -3,7 +3,7 @@
     <!-- MESSAGES -->
     <div class="row" #chatmessages id="chatmessages" style="height: 87%;overflow-y: auto;">
         <div class="col">
-            <div *ngFor="let message of messages" class="message m-2" [ngClass]="{'message-me': message.me}">
+            <div *ngFor="let message of messages" class="message m-2" [ngClass]="{'message-me': message.own}">
                 {{ message.message }}
                 <br>
                 <span class="message-time">{{ message.time | messageTime }}</span>

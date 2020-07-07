@@ -5,7 +5,7 @@ import { WebsocketService } from 'src/app/services/websocket.service';
 import { TicketResponse, Ticket } from '../../interfaces/ticket.interface';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { timer, interval } from 'rxjs';
-import { take, takeUntil, switchMap, tap } from 'rxjs/operators';
+import { take, takeUntil, switchMap, tap, map } from 'rxjs/operators';
 import { IfStmt } from '@angular/compiler';
 import { Timestamp } from 'rxjs/internal/operators/timestamp';
 
@@ -20,6 +20,8 @@ const DESK_EXTRATIME = 20; // 120 segundos
 export class EscritorioComponent implements OnInit {
 	waitForClient: boolean = false;
 	comingClient: boolean = false;
+	pendingTickets: number = 0;
+	timerCount: number = DESK_TIMEOUT;
 	idDesk: number;
 	ticket: Ticket;
 	message: string;
@@ -36,7 +38,10 @@ export class EscritorioComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
-		localStorage.setItem('role', JSON.stringify({role: 1}));
+		this.wsService.escucharTurnos().subscribe(data => {
+			this.pendingTickets = Number(data);
+		});
+
 		this.ticketsService.getPendingTicket(this.idDesk).subscribe((data: TicketResponse) => {
 			if (data.ok) {
 				this.ticket = data.ticket;
@@ -49,21 +54,27 @@ export class EscritorioComponent implements OnInit {
 	atenderTicket(): void {
 		this.ticketsService.atenderTicket(this.idDesk, this.wsService.idSocket).subscribe(
 			(resp: TicketResponse) => {
-				this.wsService.emit('actualizar-pantalla');
+				// ahora la solicitud de actualización lo hace el backend desde el servicio REST
+				// this.wsService.emit('actualizar-pantalla'); 
 				if (!resp.ok) {
 				this.waitForClient = false;
 				this.ticket = null;
 				this.message = resp.msg;
 				this.snack.open(resp.msg, 'ACEPTAR', { duration: 2000 });
 			} else {
+
 				this.waitForClient = true;
 				const encamino$ = this.wsService.escucharEnCamino();
-				const timer_timeout$ = interval(1000).pipe(take(DESK_TIMEOUT));
-				const timer_extratime$ = interval(1000).pipe(take(DESK_EXTRATIME));
+				const timer_timeout$ = interval(1000).pipe(
+					map(num => num + 1),
+					take(DESK_TIMEOUT));
+				const timer_extratime$ = interval(1000).pipe(
+					map(num => num + 1),
+					take(DESK_EXTRATIME));
 
 				let timeIsOut = false;
 				timer_timeout$.pipe(
-					tap(console.log),
+					tap(num => this.timerCount = DESK_TIMEOUT - num),
 					takeUntil(encamino$)
 				).subscribe(data => {
 					// el observable se completo por TIMEOUT
@@ -82,7 +93,7 @@ export class EscritorioComponent implements OnInit {
 						// El observable fue completado por el cliente, en camino, se adiciona tiempo de espera.
 						this.waitForClient = true;
 						this.comingClient = true;
-						timer_extratime$.subscribe(console.log, undefined, ()=> {
+						timer_extratime$.subscribe(num => this.timerCount = DESK_EXTRATIME - num, undefined, ()=> {
 							this.waitForClient = false;
 							this.comingClient = false;
 						});

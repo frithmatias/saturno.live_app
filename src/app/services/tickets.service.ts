@@ -44,7 +44,6 @@ export class TicketsService {
 		return this.http.post(url, deskData);
 	}
 
-
 	getPendingTicket(idDesk: number): Observable<object> {
 		const url = environment.url + '/pendingticket/' + idDesk;
 		return this.http.get(url);
@@ -71,7 +70,7 @@ export class TicketsService {
 			map<TicketsResponse, Ticket[]>(data => data.tickets),
 			catchError(getError)
 		).subscribe((data: Ticket[]) => {
-			// !cuidado, obtiene los tickets antes de que el servicio de sockets pueda actualizar el id_socket
+			// !obtiene los tickets antes de que el servicio de sockets pueda actualizar el id_socket
 			this.ticketsAll = data;
 			this.ticketsCall = data.filter(ticket => ticket.tm_att !== null);
 			this.ticketsTail = [...this.ticketsCall].sort((a: Ticket, b: Ticket) => -1).slice(0, TAIL_LENGTH);
@@ -95,7 +94,6 @@ export class TicketsService {
 					if (this.myTicket.tm_end !== null) {
 						// El ticket finalizó.
 						this.myTicket_end = this.myTicket.tm_end;
-						console.log(this.myTicket_end)
 						this.myTicket = null;
 						localStorage.removeItem('turno');
 					}

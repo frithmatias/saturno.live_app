@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { WebsocketService } from '../../services/websocket.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { interval, timer } from 'rxjs';
@@ -10,20 +10,27 @@ import { interval, timer } from 'rxjs';
 })
 export class ChatComponent implements OnInit {
 
-  messages: { me: boolean, time: Date, message: string }[] = [];
-
+  messages: { 
+    own: boolean, 
+    time: Date, 
+    message: string, 
+    viewed: boolean
+  }[] = [];
+  
   constructor(private wsService: WebsocketService, private snack: MatSnackBar) { }
 
   ngOnInit(): void {
     this.wsService.escucharMensajes().subscribe((data: any) => {
       this.messages.push({ 
-        me: false, 
+        own: false, 
         time: new Date(), 
-        message: data.mensaje 
+        message: data.mensaje,
+        viewed: false,
       });
       this.scrollTop();
     })
   }
+
   sendMessage(message: HTMLTextAreaElement, chatref: HTMLElement): void {
 
     if (!this.wsService.idSocket) {
@@ -33,9 +40,10 @@ export class ChatComponent implements OnInit {
     
 		if (message.value.length > 0) {
       this.messages.push({ 
-        me: true, 
+        own: true, 
         time: new Date(), 
-        message: message.value 
+        message: message.value,
+        viewed: true
       });
       this.wsService.emit('mensaje-privado', { mensaje: message.value });
       this.scrollTop();

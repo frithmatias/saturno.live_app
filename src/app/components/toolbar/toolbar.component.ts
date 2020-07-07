@@ -6,6 +6,7 @@ import { Component, OnInit, EventEmitter, Output } from '@angular/core';
   styleUrls: ['./toolbar.component.css']
 })
 export class ToolbarComponent implements OnInit {
+  unreadMessages: number = 12;
   @Output() toggleSideNav: EventEmitter<boolean> = new EventEmitter();
   @Output() toggleChat: EventEmitter<boolean> = new EventEmitter();
 
@@ -20,6 +21,7 @@ export class ToolbarComponent implements OnInit {
         this.toggleSideNav.emit(true);
         break;
       case 'chat':
+        this.unreadMessages = 0;
         this.toggleChat.emit(true);
         break;
     }
