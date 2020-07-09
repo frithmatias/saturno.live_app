@@ -1,11 +1,15 @@
 <div class="m-2">
 
-    <button class="btn btn-success btn-block" routerLink="/publico">Ver llamados</button>
-    <button class="btn btn-success btn-block" routerLink="/nuevo-ticket">Obtener Turno</button>
-    
-    <input #txtEscritorio (keyup.enter)="entrar( txtEscritorio.value )" name="escritorio" type="number" class="form-control"
-    placeholder="Escritorio" autofocus required>
-    
-    <button class="btn btn-success btn-block" (click)="entrar( txtEscritorio.value )">Ingresar
-    </button>
+    <div>
+        <button mat-button routerLink="/publico">Ver llamados</button>
+    </div>
+    <div>
+        <button mat-button routerLink="/nuevo-ticket">Obtener Turno</button>
+    </div>
+
+    <div>
+        <input #txtEscritorio (keyup.enter)="entrar( txtEscritorio.value )" name="escritorio" type="number" class="form-control"
+        placeholder="Escritorio" autofocus required>
+        <button mat-button (click)="entrar( txtEscritorio.value )">Ingresar</button>
+    </div>
 </div>

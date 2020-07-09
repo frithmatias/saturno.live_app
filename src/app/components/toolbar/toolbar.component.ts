@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 
 @Component({
   selector: 'app-toolbar',
@@ -6,26 +6,28 @@ import { Component, OnInit, EventEmitter, Output } from '@angular/core';
   styleUrls: ['./toolbar.component.css']
 })
 export class ToolbarComponent implements OnInit {
-  unreadMessages: number = 12;
   @Output() toggleSideNav: EventEmitter<boolean> = new EventEmitter();
   @Output() toggleChat: EventEmitter<boolean> = new EventEmitter();
+  @Input() unreadMessages: number;
+  hiddenBadge: boolean;
 
   constructor() { }
 
   ngOnInit(): void {
   }
 
+  ngOnChanges(changes: any){
+    this.hiddenBadge = false;
+  }
   toggle(component: string): void {
     switch (component) {
       case 'sidenav':
         this.toggleSideNav.emit(true);
         break;
       case 'chat':
-        this.unreadMessages = 0;
+        this.hiddenBadge = true;
         this.toggleChat.emit(true);
         break;
     }
-
-
   }
 }

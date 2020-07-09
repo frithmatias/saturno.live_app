@@ -2,7 +2,14 @@
   <div class="col">
 
     <div class="card text-white bg-danger mb-4">
-      <div class="card-header banner-title">ESCRITORIO {{ idDesk }} </div>
+      <div class="card-header banner-title">
+        <span>
+          ESCRITORIO {{ idDesk }}
+        </span>
+        <span *ngIf="comingClient">
+          <mat-icon style="float: right; color: yellow; font-size: x-large;">directions_walk</mat-icon>
+        </span> 
+      </div>
       <div class="banner-content" style="background-color: rgb(141, 51, 51)">
 
         <div class="container">
@@ -22,18 +29,6 @@
                 {{ ticket.id_ticket }}
               </div>
             </div>
-            <div class="row" *ngIf="comingClient">
-              <div clasS="col">
-                <mat-icon class="xxxxl" style="position: relative; right: 22px; color: limegreen">check_circle_outline
-                </mat-icon>
-              </div>
-            </div>
-            <div class="row" *ngIf="comingClient">
-              <div class="col">
-                El cliente esta en camino.
-                {{timerEnCaminosegundos}}
-              </div>
-            </div>
           </div>
 
           <!------------------------------>
@@ -51,10 +46,10 @@
             <!-- TIEMPOS DE ATENCION -->
             <!------------------------------>
             <div class="row banner-footer">
-              <div class="col"><div>TE</div><div>--:--</div></div>
-              <div class="col"><div>TA</div><div>--:--</div></div>
-              <div class="col"><div>Tm</div><div>{{timerCount}}</div></div>
-              <div class="col"><div>TC</div><div>{{pendingTickets}}</div></div>
+              <div class="col p-0"><div>TE</div><div>{{tmWaiting}}</div></div>
+              <div class="col p-0"><div>TA</div><div>{{tmAttention}}</div></div>
+              <div class="col p-0"><div>Tm</div><div>{{timerCount}}</div></div>
+              <div class="col p-0"><div>TC</div><div>{{pendingTickets}}</div></div>
             </div>
 
         </div>
@@ -82,8 +77,8 @@
               </button>
             </div>
             <div class="my-2 col-md-3 col-sm-6 col-xs-12">
-              <button class="btn btn-warning btn-block btn-lg" (click)="pausarTicket()" [disabled]="waitForClient">
-                Retener
+              <button class="btn btn-primary btn-block btn-lg" (click)="devolverTicket()" [disabled]="waitForClient">
+                Devolver
               </button>
             </div>
             <div class="my-2 col-md-3 col-sm-6 col-xs-12">

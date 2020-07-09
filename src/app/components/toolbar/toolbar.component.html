@@ -4,13 +4,13 @@
         <mat-icon (click)="toggle('sidenav')">menu</mat-icon>
         <span class="example-spacer"></span>
 
-        <span>WebTurnos</span>
+        <span>WebTurnos 0.0.1</span>
         <span class="example-spacer"></span>
 
  
 
        <button (click)="toggle('chat')" mat-mini-fab>
-            <mat-icon [matBadge]="unreadMessages" matBadgeColor="warn">chat</mat-icon>
+            <mat-icon [matBadge]="unreadMessages" [matBadgeHidden]="hiddenBadge" matBadgeColor="warn">chat</mat-icon>
         </button>
 
     </mat-toolbar-row>

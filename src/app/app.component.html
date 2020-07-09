@@ -1,15 +1,15 @@
-<app-toolbar (toggleSideNav)="toggle( sidenav )" (toggleChat)="toggle( chat )"></app-toolbar>
+<app-toolbar (toggleSideNav)="toggle( sidenav )" [unreadMessages]="unreadMessages" (toggleChat)="toggle( chat )" ></app-toolbar>
 
 <mat-drawer-container class="example-container h-100">
 
   <!-- sidebar menu -->
-  <mat-drawer #sidenav id="sidenav" mode="over">
+  <mat-drawer #sidenav id="sidenav" mode="over" >
     <app-sidenav></app-sidenav>
   </mat-drawer>
 
   <!-- chat -->
-  <mat-drawer #chat id="chat" mode="over" position="end" class="mat-drawer-chat">
-    <app-chat></app-chat>
+  <mat-drawer [(opened)]="opened" #chat id="chat" mode="over" position="end" class="mat-drawer-chat">
+    <app-chat [chatOpenStatus]="opened" (unreadMessages)="unreadMessages=$event"></app-chat>
   </mat-drawer>
 
   <mat-drawer-content>

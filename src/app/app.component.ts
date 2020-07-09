@@ -10,8 +10,9 @@ export class AppComponent {
   events: string[] = [];
   opened: boolean;
   title = 'colas';
-
+  unreadMessages: number;
   toggle(htmlRef: MatSidenav ): void {
     htmlRef.toggle();
   }
+  
 }

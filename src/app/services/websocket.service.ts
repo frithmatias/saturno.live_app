@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Output, EventEmitter } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
 import { Observable, of } from 'rxjs';
 import { TicketsService } from './tickets.service';
@@ -17,11 +17,10 @@ export class WebsocketService {
 	constructor(
 		private socket: Socket,
 		private ticketsService: TicketsService,
-		private snack: MatSnackBar
+		private snack: MatSnackBar,
 	) {
-
-		this.escucharSockets();
-		this.actualizarLista();
+		this.escucharConexiones();
+		this.escucharActualizarPantalla();
 	}
 
 
@@ -42,7 +41,7 @@ export class WebsocketService {
 		return this.listen('mensaje-system');
 	}
 
-	actualizarLista(): void {
+	escucharActualizarPantalla(): void {
 		this.listen('actualizar-pantalla').subscribe(data => {
 			this.ticketsService.getTickets();
 			const audio = new Audio();
@@ -52,21 +51,29 @@ export class WebsocketService {
 		});
 	}
 
-	escucharSockets(): void {
+	escucharConexiones(): void {
 
 		this.socket.on('connect', () => {
-			this.snack.open('Conectado al servidor de turnos', null, {duration: 5000});
+			this.snack.open('Conectado al servidor de turnos', null, { duration: 5000 });
 			this.idSocket = this.socket.ioSocket.id;
 			// si había un ticket en la LS lo actualizo
 			if (localStorage.getItem('turno')) {
 				const myTicket: Ticket = JSON.parse(localStorage.getItem('turno'));
-				this.updateSocket(myTicket.id_socket, this.idSocket);
-			}
+				this.ticketsService.actualizarSocket(myTicket.id_socket, this.idSocket).pipe(
+					catchError(this.manejaError)
+				).subscribe((data: any) => {
+					if (data.ok) {
+						// si lo actualizo ok en backend actualizo en LS
+						this.ticketsService.myTicket.id_socket = this.idSocket;
+						localStorage.setItem('turno', JSON.stringify(this.ticketsService.myTicket));
+					}
+				});
+			} 
 			this.socketStatus = true;
 		});
 
 		this.socket.on('disconnect', () => {
-			this.snack.open('Desconectado del servidor de turnos.', null, {duration: 5000});
+			this.snack.open('Desconectado del servidor de turnos.', null, { duration: 5000 });
 			this.socketStatus = false;
 		});
 	}
@@ -81,21 +88,8 @@ export class WebsocketService {
 
 	manejaError = (err: AjaxError) => {
 		// error al actualizar el socket, el socket anterior no existe
-		this.ticketsService.myTicket = null;
 		localStorage.removeItem('turno');
 		return of<AjaxError>(err);  // <b
-	}
-
-	updateSocket(oldSocket: string, newSocket: string): void {
-		this.ticketsService.actualizarSocket(oldSocket, newSocket).pipe(
-			catchError(this.manejaError)
-		).subscribe((data: any) => {
-			if (data.ok) {
-				// si lo actualizo ok en backend actualizo en LS
-				this.ticketsService.myTicket.id_socket = this.idSocket;
-				localStorage.setItem('turno', JSON.stringify(this.ticketsService.myTicket));
-			}
-		});
 	}
 
 }

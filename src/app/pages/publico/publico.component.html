@@ -8,9 +8,9 @@
         <div class="card text-white bg-danger mb-4" *ngIf="!ticketsService.myTicket">
             <div class="card-header banner-title">TURNO FINALIZADO </div>
             <div class="banner-content" style="background-color: rgb(141, 51, 51)">
-
-                <span> Su turno ha finalizado </span>
-
+                <div class="container">
+                    <div class="card bg-danger text-white my-4 py-2">Su turno ha finalizado</div>
+                </div>
             </div>
         </div>
 
@@ -45,9 +45,9 @@
                             {{ ticketsService.myTicket.id_desk }}
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row" *ngIf="!coming">
                         <div class="col">
-                            <button class="btn btn-warning btn-lg" (click)="enCamino()">Estoy en camino!</button>
+                            <button class="btn btn-primary btn-lg" (click)="enCamino()">Estoy en camino!</button>
                         </div>
                     </div>
                 </div>
