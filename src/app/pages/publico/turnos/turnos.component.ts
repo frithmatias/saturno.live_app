@@ -1,17 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { WebsocketService } from 'src/app/services/websocket.service';
-import { HttpClient } from '@angular/common/http';
-import { TicketsService } from 'src/app/services/tickets.service';
-import { Router, ActivatedRoute } from '@angular/router';
-import { Ticket, TicketResponse } from 'src/app/interfaces/ticket.interface';
+import { WebsocketService } from '../../../services/websocket.service';
+import { TicketsService } from '../../../services/tickets.service';
+import { Router  } from '@angular/router';
+import { TicketResponse } from '../../../interfaces/ticket.interface';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
-	selector: 'app-nuevo-ticket',
-	templateUrl: './nuevo-ticket.component.html',
-	styleUrls: ['./nuevo-ticket.component.css']
+	selector: 'app-turnos',
+	templateUrl: './turnos.component.html',
+	styleUrls: ['./turnos.component.css']
 })
-export class NuevoTicketComponent implements OnInit {
+export class TurnosComponent implements OnInit {
 	loading: boolean;
 	ticketNum: number;
 	hasTicket = false;
@@ -33,7 +32,7 @@ export class NuevoTicketComponent implements OnInit {
 				if (data.ok) {
 					localStorage.setItem('turno', JSON.stringify(data.ticket));
 					this.loading = false;
-					this.router.navigate(['/publico']);
+					this.router.navigate(['/publico/pantalla']);
 				}
 			},
 			undefined,
@@ -41,12 +40,12 @@ export class NuevoTicketComponent implements OnInit {
 			);
 		} else {
 			this.snak.open('Usted ya tiene un turno!', null, { duration: 2000 });
-			this.router.navigate(['/publico']);
+			this.router.navigate(['/publico/pantalla']);
 		}
 	}
 
 
 	pantallaPublica(): void {
-		this.router.navigate(['/publico']);
+		this.router.navigate(['/publico/pantalla']);
 	}
 }

@@ -2,7 +2,7 @@ import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TicketsService } from 'src/app/services/tickets.service';
 import { WebsocketService } from 'src/app/services/websocket.service';
-import { TicketResponse, Ticket } from '../../interfaces/ticket.interface';
+import { TicketResponse, Ticket } from '../../../interfaces/ticket.interface';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { interval } from 'rxjs';
 import { take, takeUntil, tap, map } from 'rxjs/operators';

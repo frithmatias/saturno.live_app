@@ -3,7 +3,7 @@ import { WebsocketService } from '../../services/websocket.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { interval, timer } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
-import { TicketsService } from 'src/app/services/tickets.service';
+import { TicketsService } from '../../services/tickets.service';
 
 @Component({
   selector: 'app-chat',

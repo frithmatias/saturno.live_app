@@ -1,0 +1,159 @@
+<div class="row p-3">
+    <div class="col-md-6">
+
+        <!-- ======================================================== -->
+        <!-- SU TURNO FINALIZADO -->
+        <!-- ======================================================== -->
+
+        <div class="card text-white bg-danger mb-4" *ngIf="!ticketsService.myTicket">
+            <div class="card-header banner-title">TURNO FINALIZADO </div>
+            <div class="banner-content" style="background-color: rgb(141, 51, 51)">
+                <div class="container">
+                    <div class="card bg-danger text-white my-4 py-2">Su turno ha finalizado</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ======================================================== -->
+        <!-- SU TURNO -->
+        <!-- ======================================================== -->
+
+        <div class="card text-white bg-danger mb-4" *ngIf="ticketsService.myTicket">
+            <div class="card-header banner-title">TURNO {{ticketsService.myTicket.id_ticket}} </div>
+            <div class="banner-content" style="background-color: rgb(141, 51, 51)">
+
+                <!------------------------------>
+                <!-- EN ESPERA -->
+                <!------------------------------>
+
+                <div class="xxxxl" *ngIf="!ticketsService.myTicket?.id_desk">
+                    <span> {{ ticketsService.myTicket.id_ticket }}</span>
+                </div>
+
+                <!------------------------------>
+                <!-- EN ATENCIÓN -->
+                <!------------------------------>
+
+                <div class="banner-content" *ngIf="ticketsService.myTicket?.id_desk">
+                    <div class="row">
+                        <div class="col">
+                            Por favor pase por el escritorio
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col xxxxl">
+                            {{ ticketsService.myTicket.id_desk }}
+                        </div>
+                    </div>
+                    <div class="row" *ngIf="!coming">
+                        <div class="col">
+                            <button class="btn btn-primary btn-lg" (click)="enCamino()">Estoy en camino!</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ======================================================== -->
+        <!-- PUBLICIDAD VIDEO -->
+        <!-- ======================================================== -->
+
+        <div>
+            <!-- <iframe width="100%" height="480px" [src]="'-FV0KKDdysw?rel=0&autoplay=1&mute=0&fullscreen=1&loop=1&playlist=-FV0KKDdysw' | domseguro: 'https://www.youtube.com/embed/'" frameborder="0" allowtransparency="true" allow="accelerometer; autoplay; loop; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> -->
+        </div>
+
+    </div>
+
+    <div class="col-md-6">
+
+        <!-- ======================================================== -->
+        <!-- ULTIMO LLAMADO -->
+        <!-- ======================================================== -->
+
+        <div class="card text-white bg-success mb-4">
+
+            <div class="card-header banner-title">ULTIMO LLAMADO</div>
+
+            <div class="card-text d-flex banner-subtitle">
+                <!-- <div class="card-header p-1">{{n}}</div> -->
+
+                <div class="d-flex justify-content-center text-white" style="width: 50%">
+                    Turno
+                </div>
+
+                <div class="d-flex justify-content-center ticket-secundario-escritorio  text-white" style="width: 50%">
+                    Escritorio
+                </div>
+
+            </div>
+
+            <div class="rounded d-flex banner-content" style="background-color:  rgb(51, 141, 51)"
+                *ngIf="ticketsService.ticketsTail.length===0">
+                <div class="d-flex justify-content-center text-white banner-title" style="width: 100%">
+                    <span>espere...</span>
+                </div>
+            </div>
+
+            <div class="rounded d-flex banner-content" style="background-color: rgb(51, 141, 51)"
+                *ngIf="ticketsService.ticketsTail.length>0">
+                <!-- <div class="card-header p-1">{{n}}</div> -->
+
+                <div class="d-flex justify-content-center text-white xxxl" style="width: 50%">
+                    <span *ngIf="ticketsService.ticketsTail">{{ ticketsService.ticketsTail[0]?.id_ticket }}</span>
+                </div>
+
+                <div class="d-flex justify-content-center text-white xxxl" style="width: 50%">
+                    <span *ngIf="ticketsService.ticketsTail">{{ ticketsService.ticketsTail[0]?.id_desk }}</span>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- ======================================================== -->
+        <!-- HISTORIAL DE LLAMADAS -->
+        <!-- ======================================================== -->
+
+        <!-- class="card bg-warning d-flex justify-content-sm-start justify-content-end justify-content-sm-end align-items-center -->
+        <div class="card text-white bg-primary">
+            <div class="card-header banner-title">HISTORIAL DE LLAMADOS</div>
+
+            <div class="card-text d-flex banner-subtitle">
+                <!-- <div class="card-header p-1">{{n}}</div> -->
+
+                <div class="d-flex justify-content-center text-white" style="width: 50%">
+                    Turno
+                </div>
+
+                <div class="d-flex justify-content-center ticket-secundario-escritorio  text-white" style="width: 50%">
+                    Escritorio
+                </div>
+
+            </div>
+
+            <div class="rounded d-flex banner-content" style="background-color: rgb(54, 77, 194)"
+                *ngIf="ticketsService.ticketsTail.length===0">
+                <div class="d-flex justify-content-center text-white banner-title" style="width: 100%">
+                    <span>espere...</span>
+                </div>
+            </div>
+
+
+            <div class="rounded banner-content" style="background-color: rgb(54, 77, 194)"
+                *ngIf="ticketsService.ticketsTail.length>0">
+                <!-- <div class="card-header p-1">{{n}}</div> -->
+                <div class="d-flex" *ngFor="let ticket of ticketsService.ticketsTail;">
+                    <div class="d-flex justify-content-center text-white" style="width: 50%">
+                        <span *ngIf="ticketsService.ticketsTail">{{ ticket.id_ticket }}</span>
+                    </div>
+
+                    <div class="d-flex justify-content-center text-white" style="width: 50%">
+                        <span *ngIf="ticketsService.ticketsTail">{{ ticket.id_desk }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
