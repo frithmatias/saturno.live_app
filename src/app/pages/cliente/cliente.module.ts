@@ -3,20 +3,20 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 // PAGES
-import { HomeComponent } from './home/home.component';
+import { HomeClienteComponent } from './home-cliente/home-cliente.component';
 import { EscritorioComponent } from './escritorio/escritorio.component';
-import { AsistenteComponent } from './asistente.component';
+import { ClienteComponent } from './cliente.component';
 
 // MODULES
-import { AsistenteRoutingModule } from './asistente-routing.module';
+import { ClienteRoutingModule } from './cliente-routing.module';
 import { MaterialModule } from '../../modules/material.module';
 import { ComponentsModule } from '../../components/components.module';
 
 @NgModule({
 	declarations: [
 		EscritorioComponent,
-		HomeComponent,
-		AsistenteComponent
+		HomeClienteComponent,
+		ClienteComponent
 	],
 	imports: [
 		CommonModule,
@@ -24,8 +24,8 @@ import { ComponentsModule } from '../../components/components.module';
 		FormsModule,
 		MaterialModule,
 		ComponentsModule,
-		AsistenteRoutingModule
+		ClienteRoutingModule
 	]
 })
-export class AsistenteModule { }
+export class ClienteModule { }
 

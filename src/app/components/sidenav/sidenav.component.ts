@@ -18,7 +18,7 @@ export class SidenavComponent implements OnInit {
     if (!numero) {
       return;
     }
-    this.router.navigate(['/asistente/escritorio', numero]);
+    this.router.navigate(['/cliente/escritorio', numero]);
   }
   
 }

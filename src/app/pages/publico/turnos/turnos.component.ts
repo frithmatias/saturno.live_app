@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { WebsocketService } from '../../../services/websocket.service';
 import { TicketsService } from '../../../services/tickets.service';
-import { Router  } from '@angular/router';
+import { Router } from '@angular/router';
 import { TicketResponse } from '../../../interfaces/ticket.interface';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -28,15 +28,16 @@ export class TurnosComponent implements OnInit {
 		if (!localStorage.getItem('turno')) {
 			this.loading = true;
 			this.ticketsService.nuevoTicket(this.wsService.idSocket).subscribe(
+
 				(data: TicketResponse) => {
-				if (data.ok) {
-					localStorage.setItem('turno', JSON.stringify(data.ticket));
-					this.loading = false;
-					this.router.navigate(['/publico/pantalla']);
-				}
-			},
-			undefined,
-			() => {}
+					if (data.ok) {
+						localStorage.setItem('turno', JSON.stringify(data.ticket));
+						this.loading = false;
+						this.router.navigate(['/publico/pantalla']);
+					}
+				},
+				undefined,
+				() => { }
 			);
 		} else {
 			this.snak.open('Usted ya tiene un turno!', null, { duration: 2000 });

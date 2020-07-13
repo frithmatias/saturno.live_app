@@ -8,10 +8,10 @@
         <span class="example-spacer"></span>
 
  
-
-       <button (click)="toggle('chat')" mat-mini-fab>
+       <button (click)="toggle('chat')" mat-mini-fab *ngIf="userService.usuario">
             <mat-icon [matBadge]="unreadMessages" [matBadgeHidden]="hiddenBadge" matBadgeColor="warn">chat</mat-icon>
         </button>
+        <button *ngIf="!userService.usuario" class="btn btn-primary" routerLink="/login">Login</button>
 
     </mat-toolbar-row>
 </mat-toolbar>

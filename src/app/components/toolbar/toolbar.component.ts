@@ -1,4 +1,5 @@
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-toolbar',
@@ -11,9 +12,10 @@ export class ToolbarComponent implements OnInit {
   @Input() unreadMessages: number;
   hiddenBadge: boolean;
 
-  constructor() { }
+  constructor(public userService: UserService) { }
 
   ngOnInit(): void {
+    console.log(this.userService.usuario);
   }
 
   ngOnChanges(changes: any){

@@ -109,14 +109,14 @@ export class EscritorioComponent implements OnInit {
 					});
 
 					timerEnd.then(() => {
-						// finalizo el tiempo de espera del cliente, comienza el tiempo del asistente.
-						const timer_asistente$ = interval(1000);
-						const start_asistente = new Date().getTime();
-						const sub_asistente = timer_asistente$.subscribe(() => {
+						// finalizo el tiempo de espera del cliente, comienza el tiempo del cliente.
+						const timer_cliente$ = interval(1000);
+						const start_cliente = new Date().getTime();
+						const sub_cliente = timer_cliente$.subscribe(() => {
 							if (!this.ticket) {
-								sub_asistente.unsubscribe();
+								sub_cliente.unsubscribe();
 							} else {
-								this.tmAttention = this.ticketsService.getTimeInterval(start_asistente, + new Date());
+								this.tmAttention = this.ticketsService.getTimeInterval(start_cliente, + new Date());
 							}
 						});
 					});

@@ -1,0 +1,9 @@
+<app-toolbar (toggleSideNav)="toggle( sidenav )"></app-toolbar>
+
+<mat-drawer-container class="example-container h-100">
+
+  <mat-drawer #sidenav id="sidenav" mode="over" >
+    <app-sidenav></app-sidenav>
+  </mat-drawer>
+
+</mat-drawer-container>

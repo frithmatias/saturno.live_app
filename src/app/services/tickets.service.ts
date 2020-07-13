@@ -46,7 +46,7 @@ export class TicketsService {
 	// todo: si es escritorio entonces actualizar id_socket_desk en lugar de id_socket
 	actualizarSocket(oldSocket: string, newSocket: string): Observable<object> {
 		const socketsData = { oldSocket, newSocket };
-		return this.http.put(environment.url + '/actualizarsocket', socketsData);
+		return this.http.put(environment.url + '/t/actualizarsocket', socketsData);
 	}
 	
 	// ========================================================
@@ -55,7 +55,7 @@ export class TicketsService {
 
 	nuevoTicket(idSocket: string): Observable<object> {
 		this.clearPublicSession();
-		return this.http.get(environment.url + '/nuevoticket/' + idSocket);
+		return this.http.get(environment.url + '/t/nuevoticket/' + idSocket);
 	}
 	
 	getMyTicket(): Promise<Ticket | string> {
@@ -85,19 +85,19 @@ export class TicketsService {
 
 	atenderTicket(idDesk: number, idDeskSocket: string): Observable<object> {
 		const deskData = { idDesk, idDeskSocket };
-		const url = environment.url + '/atenderticket';
+		const url = environment.url + '/t/atenderticket';
 		return this.http.post(url, deskData);
 	}
 
 	devolverTicket(idDesk: number): Observable<object> {
 		const deskData = { idDesk };
-		const url = environment.url + '/devolverticket';
+		const url = environment.url + '/t/devolverticket';
 		return this.http.post(url, deskData);
 	}
 
 	finalizarTicket(idDesk: number): Observable<object> {
 		const deskData = { idDesk };
-		const url = environment.url + '/finalizarticket';
+		const url = environment.url + '/t/finalizarticket';
 		return this.http.post(url, deskData);
 	}
 
@@ -106,7 +106,7 @@ export class TicketsService {
 	// ========================================================
 
 	getTickets(): void {
-		const url = environment.url + '/gettickets';
+		const url = environment.url + '/t/gettickets';
 		const getError = (err: AjaxError) => {
 			return of([{ idDesk: 'err', id_ticket: 'err', status: 'err' }]);
 		};

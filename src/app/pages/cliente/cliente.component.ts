@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 
 @Component({
-  selector: 'app-asistente',
-  templateUrl: './asistente.component.html',
-  styleUrls: ['./asistente.component.css']
+  selector: 'app-cliente',
+  templateUrl: './cliente.component.html',
+  styleUrls: ['./cliente.component.css']
 })
-export class AsistenteComponent implements OnInit {
+export class ClienteComponent implements OnInit {
   events: string[] = [];
   opened: boolean;
   unreadMessages: number;
