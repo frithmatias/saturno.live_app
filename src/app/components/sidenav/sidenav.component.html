@@ -1,6 +1,10 @@
 <div class="m-2">
 
     <div>
+        <button mat-button routerLink="/publico">Home Publico</button>
+    </div>
+
+    <div>
         <button mat-button routerLink="/publico/pantalla">Pantalla</button>
     </div>
 
@@ -9,8 +13,15 @@
     </div>
 
     <div>
-        <input #txtEscritorio (keyup.enter)="entrar( txtEscritorio.value )" name="escritorio" type="number" class="form-control"
-        placeholder="Escritorio" autofocus required>
-        <button mat-button (click)="entrar( txtEscritorio.value )">Ingresar</button>
+        <button mat-button routerLink="/cliente">Cliente</button>
     </div>
+
+    <div>
+        <button mat-button routerLink="/cliente/escritorio">Escritorio</button>
+    </div>
+
+    <div>
+        <button mat-button routerLink="/cliente/dashboard">Dashboard</button>
+    </div>
+
 </div>

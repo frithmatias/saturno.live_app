@@ -1,10 +1,22 @@
 <div class="jumbotron m-2">
-    <h1 class="display-4">Tickets Online!</h1>
+    <h1 class="display-4">Bienvenido a la web del cliente</h1>
     <p class="lead">Bienvenido, desde aquí puede sacar un turno y evitar la sala de esperas.</p>
+
+    <div class="my-4">
+        <input #txtEscritorio (keyup.enter)="entrar( txtEscritorio.value )" name="escritorio" type="number"
+            class="form-control" placeholder="Escritorio" required>
+    </div>
+    <div>
+
+    <button class="btn btn-success btn-block" role="button" (click)="entrar( txtEscritorio.value )">Ingresar</button>
+
+    </div>
+
     <hr class="my-4">
-    <p>Usted será notificado sobre tiempos de atención, tenga en cuenta que si usted no se encuentra lo suficientemente cerca de 
-        la recepción al momento de que usted sea llamado, tendrá disponible un botón con el cual usted podrá solicitar minutos 
-        extra para asistir a la ventanilla.
+    <p> Desde acá podes ingresar a una ventanilla de atención. Desde el chat podra ver las consultas de los 
+        clientes una vez se les haya asignado esta ventanilla. Si desea puede también atender consultas desde 
+        la ventanilla de informes para todas las consultas que todavía permanecen en espera.
     </p>
-    <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
-  </div>
+
+    <a class="btn btn-primary btn-lg" href="#" role="button">Dashboard</a>
+</div>

@@ -18,7 +18,26 @@ export class UserService {
 	logueado = false;
 
 	constructor(private http: HttpClient, private router: Router) {
-		console.log(environment.url);
+
+		if (localStorage.getItem('token') && localStorage.getItem('usuario') && localStorage.getItem('menu')) {
+			this.token = localStorage.getItem('token');
+			this.usuario = JSON.parse(localStorage.getItem('usuario'));
+			this.menu = JSON.parse(localStorage.getItem('menu'));
+			this.logueado = true;
+		} else {
+			this.clearClientSession();
+		}
+	}
+
+
+	clearClientSession(): void {
+		if (localStorage.getItem('token')) { localStorage.removeItem('token'); }
+		if (localStorage.getItem('usuario')) { localStorage.removeItem('usuario'); }
+		if (localStorage.getItem('menu')) { localStorage.removeItem('menu'); }
+		this.token = '';
+		this.usuario = null;
+		this.menu = [];
+		this.logueado = false;
 	}
 
 	registerUser(usuario: User) {
@@ -28,9 +47,9 @@ export class UserService {
 	}
 
 	getUser(uid: string) {
-		const url = environment.url + '/usuarios/' + uid;
+		const url = environment.url + '/u/usuarios/' + uid;
 		const headers = new HttpHeaders({
-			'x-token': this.token
+			'turnos-token': this.token
 		});
 		return this.http.get(url, { headers }).pipe(
 			map((resp: any) => {
@@ -40,10 +59,10 @@ export class UserService {
 	}
 
 	updateUser(usuario: User) {
-		const url = environment.url + '/usuarios/' + usuario._id;
+		const url = environment.url + '/u/usuarios/' + usuario._id;
 
 		const headers = new HttpHeaders({
-			'x-token': this.token
+			'turnos-token': this.token
 		});
 
 		return this.http.put(url, usuario, { headers }).pipe(
@@ -73,10 +92,10 @@ export class UserService {
 	}
 
 	deleteUser(id: string) {
-		const url = environment.url + '/usuarios/' + id;
+		const url = environment.url + '/u/' + id;
 
 		const headers = new HttpHeaders({
-			'x-token': this.token
+			'turnos-token': this.token
 		});
 		// url += '?token=' + this.token;
 
@@ -93,7 +112,7 @@ export class UserService {
 	}
 
 	activateUser(id: string) {
-		const url = environment.url + '/usuarios/activate/' + id;
+		const url = environment.url + '/u/activate/' + id;
 		return this.http.get(url)
 			.pipe(map(data => {
 				return data;
@@ -146,7 +165,7 @@ export class UserService {
 		// url += '?token=' + this.token;
 
 		const headers = new HttpHeaders({
-			'x-token': this.token
+			'turnos-token': this.token
 		});
 
 		return this.http.get(url, { headers })
@@ -165,23 +184,12 @@ export class UserService {
 		// si el usuario se logueo en algun momento verifico la expiracion del token
 		const payload = JSON.parse(atob(this.token.split('.')[1]));
 		const ahora = new Date().getTime() / 1000;
+		console.log('estaLogueado', payload);
 		if (payload.exp < ahora) {
 			this.logout();
 			return false; // token expirado
 		} else {
 			return true; // token valido
-		}
-	}
-
-	loadStorage() {
-		if (localStorage.getItem('token')) {
-			this.token = localStorage.getItem('token');
-			this.usuario = JSON.parse(localStorage.getItem('usuario'));
-			this.menu = JSON.parse(localStorage.getItem('menu'));
-		} else {
-			this.token = '';
-			this.usuario = null;
-			this.menu = [];
 		}
 	}
 

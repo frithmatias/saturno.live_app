@@ -32,6 +32,7 @@ export class TurnosComponent implements OnInit {
 				(data: TicketResponse) => {
 					if (data.ok) {
 						localStorage.setItem('turno', JSON.stringify(data.ticket));
+						this.ticketsService.myTicket = data.ticket;
 						this.loading = false;
 						this.router.navigate(['/publico/pantalla']);
 					}

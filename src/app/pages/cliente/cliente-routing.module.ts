@@ -4,12 +4,15 @@ import { Routes, RouterModule } from '@angular/router';
 import { EscritorioComponent } from './escritorio/escritorio.component';
 import { HomeClienteComponent } from './home-cliente/home-cliente.component';
 import { ClienteComponent } from './cliente.component';
+import { NopagefoundComponent } from '../nopagefound/nopagefound.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 const assistantRoutes: Routes = [
-	{ path: 'escritorio/:id', component: EscritorioComponent },
+  { path: 'escritorio/:id', component: EscritorioComponent },
+  { path: 'dashboard', component: DashboardComponent },
   { path: 'home', component: HomeClienteComponent },
-  { path: '**', component: ClienteComponent},
-	{ path: '', redirectTo: '/home', pathMatch: 'full' }
+	{ path: '', redirectTo: '/cliente/home', pathMatch: 'full' },
+  { path: '**', component: NopagefoundComponent}
 
 ];
 

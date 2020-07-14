@@ -11,13 +11,15 @@ import { PublicoComponent } from './publico.component';
 import { PublicoRoutingModule } from './publico-routing.module';
 import { MaterialModule } from '../../modules/material.module';
 import { ComponentsModule } from 'src/app/components/components.module';
+import { HomePublicoComponent } from './home-publico/home-publico.component';
 
 
 @NgModule({
 	declarations: [
 		PantallaComponent,
 		TurnosComponent,
-		PublicoComponent
+		PublicoComponent,
+		HomePublicoComponent
 	],
 	imports: [
 		CommonModule,

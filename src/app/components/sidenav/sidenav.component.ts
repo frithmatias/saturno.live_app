@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-sidenav',
@@ -9,16 +8,9 @@ import { Router } from '@angular/router';
 export class SidenavComponent implements OnInit {
   events: string[] = [];
   opened: boolean;
-  constructor(private router: Router) { }
+  constructor() { }
   
   ngOnInit(): void {
-  }
-
-  entrar(numero: number): void {
-    if (!numero) {
-      return;
-    }
-    this.router.navigate(['/cliente/escritorio', numero]);
   }
   
 }

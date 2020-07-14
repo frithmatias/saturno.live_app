@@ -7,5 +7,11 @@ import { MatSidenav } from '@angular/material/sidenav';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-
+  opened: boolean;
+  unreadMessages: number;
+  
+  toggle(htmlRef: MatSidenav ): void {
+    htmlRef.toggle();
+  }
 }
+

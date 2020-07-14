@@ -121,15 +121,6 @@ export class EscritorioComponent implements OnInit {
 						});
 					});
 				});
-
-
-				// DESKTOP ATTENTION TIMERS 
-
-				// const attention$ = interval(1000).pipe(
-				// 	takeUntil()
-				// )
-
-
 			}
 		});
 	}

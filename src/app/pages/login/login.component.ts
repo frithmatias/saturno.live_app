@@ -53,7 +53,7 @@ export class LoginComponent implements OnInit {
 			this.userService.loginGoogle(token).subscribe(
 				data => {
 					console.log(data);
-					window.location.href = '#/home';
+					window.location.href = '#/cliente';
 				},
 				err => Swal.fire('Error', err.error.mensaje, 'error')
 			);
@@ -79,7 +79,7 @@ export class LoginComponent implements OnInit {
 
 		this.userService.loginUser(usuario, forma.value.recuerdame).subscribe(
 			data => {
-				this.router.navigate(['/home']);
+				this.router.navigate(['/cliente']);
 			},
 			err => {
 				Swal.fire('Error de autenticación', 'Usuario o contraseña incorrecta', 'error');

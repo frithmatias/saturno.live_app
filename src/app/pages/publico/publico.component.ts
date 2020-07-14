@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
+import { ActivatedRoute, ParamMap } from '@angular/router';
+import { TicketsService } from 'src/app/services/tickets.service';
 
 @Component({
   selector: 'app-publico',
@@ -9,12 +11,11 @@ import { MatSidenav } from '@angular/material/sidenav';
 export class PublicoComponent implements OnInit {
   opened: boolean;
   unreadMessages: number;
-  constructor() { }
-
-  ngOnInit(): void {
+  constructor(private ticketsService: TicketsService) { 
+    this.ticketsService.userPreset = true;
   }
-  
-  toggle(htmlRef: MatSidenav ): void {
+  ngOnInit(): void { }
+    toggle(htmlRef: MatSidenav ): void {
     htmlRef.toggle();
   }
 }

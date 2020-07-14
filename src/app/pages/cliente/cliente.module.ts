@@ -11,12 +11,14 @@ import { ClienteComponent } from './cliente.component';
 import { ClienteRoutingModule } from './cliente-routing.module';
 import { MaterialModule } from '../../modules/material.module';
 import { ComponentsModule } from '../../components/components.module';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 @NgModule({
 	declarations: [
 		EscritorioComponent,
 		HomeClienteComponent,
-		ClienteComponent
+		ClienteComponent,
+		DashboardComponent
 	],
 	imports: [
 		CommonModule,

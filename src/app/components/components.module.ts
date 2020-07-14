@@ -4,11 +4,12 @@ import { MaterialModule } from '../modules/material.module';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { SidenavComponent } from './sidenav/sidenav.component';
 import { ChatComponent } from './chat/chat.component';
+import { MessageTimePipe } from '../pipes/message-time.pipe';
 import { RouterModule } from '@angular/router';
-
 
 @NgModule({
   declarations: [
+    MessageTimePipe,
     ToolbarComponent,
     SidenavComponent,
     ChatComponent
@@ -19,6 +20,7 @@ import { RouterModule } from '@angular/router';
     MaterialModule
    ],
   exports: [
+    MessageTimePipe,
     ToolbarComponent,
     SidenavComponent,
     ChatComponent

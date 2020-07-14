@@ -1,17 +1,2 @@
-<app-toolbar (toggleSideNav)="toggle( sidenav )" [unreadMessages]="unreadMessages" (toggleChat)="toggle( chat )" ></app-toolbar>
 
-<mat-drawer-container class="example-container h-100">
-
-  <mat-drawer #sidenav id="sidenav" mode="over" >
-    <app-sidenav></app-sidenav>
-  </mat-drawer>
-
-  <mat-drawer [(opened)]="opened" #chat id="chat" mode="over" position="end" class="mat-drawer-chat">
-    <app-chat [chatOpenStatus]="opened" (unreadMessages)="unreadMessages=$event"></app-chat>
-  </mat-drawer>
-
-  <mat-drawer-content>
     <router-outlet></router-outlet>
-  </mat-drawer-content>
-
-</mat-drawer-container>

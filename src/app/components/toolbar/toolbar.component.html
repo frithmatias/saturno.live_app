@@ -1,17 +1,28 @@
 <mat-toolbar color="primary" class="turnos-toolbar mat-elevation-z2">
     <mat-toolbar-row>
 
+        <!-- Menu -->
         <mat-icon (click)="toggle('sidenav')">menu</mat-icon>
         <span class="example-spacer"></span>
 
+        <!-- Title -->
         <span>WebTurnos 0.0.1</span>
         <span class="example-spacer"></span>
 
- 
-       <button (click)="toggle('chat')" mat-mini-fab *ngIf="userService.usuario">
+        <!-- Chat Icon -->
+        <button (click)="toggle('chat')" mat-mini-fab *ngIf="userService.usuario || ticketsService.myTicket">
             <mat-icon [matBadge]="unreadMessages" [matBadgeHidden]="hiddenBadge" matBadgeColor="warn">chat</mat-icon>
         </button>
-        <button *ngIf="!userService.usuario" class="btn btn-primary" routerLink="/login">Login</button>
+
+        <!-- Login Button -->
+        <button *ngIf="!userService.usuario && !ticketsService.userPreset" class="btn btn-primary"
+            routerLink="/login">Login</button>
+
+        <!-- New Ticket -->
+        <button routerLink="/publico/turnos" *ngIf="!userService.usuario && ticketsService.userPreset && !ticketsService.myTicket" mat-mini-fab
+            style="color: #673ab7; background-color: whitesmoke;" aria-label="Example icon button with a bookmark icon">
+            <mat-icon>bookmark</mat-icon>
+        </button>
 
     </mat-toolbar-row>
 </mat-toolbar>

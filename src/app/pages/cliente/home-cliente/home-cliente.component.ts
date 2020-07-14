@@ -10,6 +10,11 @@ export class HomeClienteComponent implements OnInit {
 	constructor(private router: Router) {}
 
 	ngOnInit() {}
-
+	entrar(numero: number): void {
+		if (!numero) {
+		  return;
+		}
+		this.router.navigate(['/cliente/escritorio', numero]);
+	  }
 
 }

@@ -11,8 +11,7 @@ export class HomeComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    
   }
-  toggle(htmlRef: MatSidenav ): void {
-    htmlRef.toggle();
-  }
+
 }

@@ -15,23 +15,25 @@ import { environment } from '../environments/environment';
 // CONF
 const config: SocketIoConfig = { url: environment.url, options: {} };
 
+
 // COMPONENTS
+import { HomeComponent } from './pages/home/home.component';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './pages/login/login.component';
 import { RegistroComponent } from './pages/registro/registro.component';
-
 import { NopagefoundComponent } from './pages/nopagefound/nopagefound.component';
 
 // MODULES
 import { HttpClientModule } from '@angular/common/http';
 import { MaterialModule } from './modules/material.module';
+import { ComponentsModule } from './components/components.module';
 
 // GUARDS
 import { AdminGuard } from './guards/admin.guard';
 import { TokenGuard } from './guards/token.guard';
 import { LoginGuard } from './guards/login.guard';
-import { ComponentsModule } from 'src/app/components/components.module';
-import { HomeComponent } from './pages/home/home.component';
+
+
 
 
 @NgModule({

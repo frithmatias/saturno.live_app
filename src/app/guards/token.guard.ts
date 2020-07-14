@@ -17,19 +17,24 @@ export class TokenGuard implements CanActivate {
 	canActivate(): Promise<boolean> | boolean {
 
 		const token = this.userService.token;
+
 		// if (typeof token === 'undefined') {
 		if (!token) {
+			console.log('11111111111111');
 			this.userService.logout();
-			this.router.navigate(['/inicio']);
+			this.router.navigate(['/home']);
 			return false;
 		}
 
 
 		const payload = JSON.parse(atob(token.split('.')[1]));
+		console.log('TokenGuard:', payload);
 		const expirado = this.expirado(payload.exp);
 		if (expirado) {
+			console.log('1111122222222');
+
 			this.userService.logout();
-			this.router.navigate(['/inicio']);
+			this.router.navigate(['/home']);
 			return false;
 		}
 		// si no expiro, tengo que chequer si es hora de renovar el token
@@ -65,8 +70,10 @@ export class TokenGuard implements CanActivate {
 					.subscribe(() => {
 						resolve(true);
 					}, () => {
+			console.log('33333333333333');
+
 						this.userService.logout();
-						this.router.navigate(['/inicio']);
+						this.router.navigate(['/home']);
 						reject(false);
 					});
 			}
