@@ -11,11 +11,11 @@ const DESK_TIMEOUT = 10; // 60 segundos
 const DESK_EXTRATIME = 20; // 120 segundos
 
 @Component({
-	selector: 'app-escritorio',
-	templateUrl: './escritorio.component.html',
-	styleUrls: ['./escritorio.component.css']
+	selector: 'app-desktop',
+	templateUrl: './desktop.component.html',
+	styleUrls: ['./desktop.component.css']
 })
-export class EscritorioComponent implements OnInit {
+export class DesktopComponent implements OnInit {
 	waitForClient: boolean = false;
 	comingClient: boolean = false;
 	pendingTickets: number = 0;

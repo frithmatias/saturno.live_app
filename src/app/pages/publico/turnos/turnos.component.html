@@ -1,8 +1,9 @@
 <div class="bg-light turno-container  p-2">
-  <div class="card border-success m-5" class="alert-success">
+  <div class="card m-1">
 
-    <div class="card-header">SACAR TURNO</div>
-    <div class="card-body text-success">
+    <div class="card-header">OBTENER TURNO</div>
+    <div class="card-body">
+
 
       <h5 class="card-title">
         <span *ngIf="loading" id="lblNuevoTicket">
@@ -10,12 +11,49 @@
         </span>
       </h5>
 
-      <span *ngIf="!hasTicket">
-        <p class="card-text">Luego de obtener su turno será redireccionado a la pantalla de espera.</p>
-        <button class="btn btn-success btn-block btn-lg" (click)="nuevoTicket()">
-          GENERAR TURNO
-        </button>
-      </span>
+
+      <div *ngIf="ticketsService.companyData">
+        <div *ngIf="!ticketsService.companyData.empresa">
+          <p class="lead">
+            Por favor ingrese la empresa para la cual desea obtener un turno.
+          </p>
+          <mat-form-field color="warn" appearance="fill" logincss class="w-100">
+            <mat-label>Ingrese su Email</mat-label>
+            <input #inputEmail matInput placeholder="sumail@dominio.com" [ngModel]="email" name="email">
+            <span class="input-icon" (click)="cleanEmail(inputEmail, inputPassword)"><i
+                class="mdi mdi-close"></i></span>
+          </mat-form-field>
+        </div>
+
+
+        <div *ngIf="ticketsService.companyData.empresa">
+          <p class="lead">
+            Usted esta por sacar un turno para ser atendido en
+          </p>
+
+          <p style="color: red; font-size: 2rem; font-weight: 400;">
+            {{ ticketsService.companyData.empresa }}
+          </p>
+
+          <p style="color: red; font-size: 1rem; font-weight: 400;">
+            {{ ticketsService.companyData.email }}
+          </p>
+
+          <span *ngIf="!hasTicket">
+            <p class="card-text">Luego de obtener su turno será redireccionado a la pantalla de espera.</p>
+            <button class="btn btn-success btn-block btn-lg" (click)="nuevoTicket('A')">
+              PEDIATRIA
+            </button>
+            <button class="btn btn-success btn-block btn-lg" (click)="nuevoTicket('B')">
+              CLINICA
+            </button>
+            <button class="btn btn-success btn-block btn-lg" (click)="nuevoTicket('C')">
+              TRAUMATOLOGÍA
+            </button>
+          </span>
+        </div>
+
+      </div>
 
     </div>
   </div>

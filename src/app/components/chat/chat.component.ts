@@ -1,8 +1,7 @@
 import { Component, OnInit, Output, EventEmitter, Input, SimpleChange } from '@angular/core';
 import { WebsocketService } from '../../services/websocket.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { interval, timer } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
+import { timer } from 'rxjs';
 import { TicketsService } from '../../services/tickets.service';
 
 @Component({
@@ -18,13 +17,8 @@ export class ChatComponent implements OnInit {
   constructor(
     private wsService: WebsocketService, 
     private snack: MatSnackBar, 
-    private activatedRoute: ActivatedRoute,
     public ticketsService: TicketsService
-    ) {
-		this.activatedRoute.params.subscribe((data) => {
-			console.log(data);
-		});
-  }
+    ) { }
 
   ngOnChanges(changes: any) {
     this.chatOpen = changes.chatOpenStatus.currentValue;

@@ -27,7 +27,10 @@
                 <!------------------------------>
 
                 <div class="xxxxl" *ngIf="!ticketsService.myTicket?.id_desk">
-                    <span> {{ ticketsService.myTicket.id_ticket }}</span>
+                    <span> 
+                        {{ ticketsService.myTicket.id_type }}
+                        {{ ticketsService.myTicket.id_ticket }}
+                    </span>
                 </div>
 
                 <!------------------------------>
@@ -53,6 +56,10 @@
                 </div>
 
             </div>
+        </div>
+
+        <div class="card mb-4">
+            <button class="btn btn-danger" (click)="cancelTicket()" *ngIf="ticketsService.myTicket">Cancelar Turno</button>
         </div>
 
         <!-- ======================================================== -->
@@ -100,7 +107,7 @@
                 <!-- <div class="card-header p-1">{{n}}</div> -->
 
                 <div class="d-flex justify-content-center text-white xxxl" style="width: 50%">
-                    <span *ngIf="ticketsService.ticketsTail">{{ ticketsService.ticketsTail[0]?.id_ticket }}</span>
+                    <span *ngIf="ticketsService.ticketsTail">{{ ticketsService.ticketsTail[0]?.id_type }}{{ ticketsService.ticketsTail[0]?.id_ticket }}</span>
                 </div>
 
                 <div class="d-flex justify-content-center text-white xxxl" style="width: 50%">
@@ -116,7 +123,7 @@
         <!-- ======================================================== -->
 
         <!-- class="card bg-warning d-flex justify-content-sm-start justify-content-end justify-content-sm-end align-items-center -->
-        <div class="card text-white bg-primary">
+        <div class="card text-white bg-primary mb-4">
             <div class="card-header banner-title">HISTORIAL DE LLAMADOS</div>
 
             <div class="card-text d-flex banner-subtitle">
@@ -145,7 +152,7 @@
                 <!-- <div class="card-header p-1">{{n}}</div> -->
                 <div class="d-flex" *ngFor="let ticket of ticketsService.ticketsTail;">
                     <div class="d-flex justify-content-center text-white" style="width: 50%">
-                        <span *ngIf="ticketsService.ticketsTail">{{ ticket.id_ticket }}</span>
+                        <span *ngIf="ticketsService.ticketsTail">{{ ticket.id_type }}{{ ticket.id_ticket }}</span>
                     </div>
 
                     <div class="d-flex justify-content-center text-white" style="width: 50%">
@@ -155,6 +162,7 @@
             </div>
         </div>
         
-       
+
+
     </div>
 </div>

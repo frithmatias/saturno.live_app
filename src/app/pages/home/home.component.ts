@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MatSidenav } from '@angular/material/sidenav';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -8,10 +8,12 @@ import { MatSidenav } from '@angular/material/sidenav';
 })
 export class HomeComponent implements OnInit {
 
-  constructor() { }
+  constructor(private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    
+    this.route.params.subscribe(data => {
+      console.log(data);
+    })
   }
 
 }

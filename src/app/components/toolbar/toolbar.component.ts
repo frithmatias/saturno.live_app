@@ -18,22 +18,15 @@ export class ToolbarComponent implements OnInit {
     public userService: UserService,
     public ticketsService: TicketsService,
     public router: Router
-    ) {
-
-      console.log(this.router.url);
-
-
-  }
+    ) { }
 
   ngOnInit(): void { }
 
   ngOnChanges(changes: any) {
     this.hiddenBadge = false;
-    console.log(changes);
   }
 
   toggle(component: string): void {
-    console.log(component);
     switch (component) {
       case 'sidenav':
         this.toggleSideNav.emit(true);

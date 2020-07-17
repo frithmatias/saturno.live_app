@@ -1,13 +1,9 @@
-<!-- <form class="form-horizontal form-material" -->
 <form class="m-3" ngNativeValidate #f="ngForm" (ngSubmit)="login( f )">
-
 
     <!---------------------------------------------------------------------->
     <!-- EMAIL -->
     <!---------------------------------------------------------------------->
     <div class="my-2">
-        <!-- <input [ngModel]="email" name="email" class="form-control" type="email" required
-                        placeholder="Correo del usuario"> -->
         <mat-form-field color="warn" appearance="fill" logincss class="w-100">
             <mat-label>Ingrese su Email</mat-label>
             <input #inputEmail matInput placeholder="sumail@dominio.com" [ngModel]="email" name="email">
@@ -16,35 +12,20 @@
         </mat-form-field>
     </div>
 
-
     <!---------------------------------------------------------------------->
     <!-- PASSWORD -->
     <!---------------------------------------------------------------------->
-    <!-- <div class="my-2">
-                    <input ngModel name="password" class="form-control" type="password" required
-                        placeholder="Contraseña">
-                </div> -->
     <div class="my-2">
-        <!-- <input [ngModel]="email" name="email" class="form-control" type="email" required
-                        placeholder="Correo del usuario"> -->
         <mat-form-field color="warn" appearance="fill" logincss class="w-100">
             <mat-label>Ingrese su Password</mat-label>
             <input #inputPassword matInput placeholder="password" ngModel name="password"
                 [type]="hidepass ? 'password' : 'text'" required>
-
-            <!--<button mat-icon-button matSuffix (click)="hidepass = !hidepass"
-                            [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidepass">
-                              <mat-icon>{{hidepass ? 'visibility_off' : 'visibility'}}</mat-icon> 
-                            </button>-->
-
             <span class="input-icon" (click)="hidepass = !hidepass" [attr.aria-label]="'Hide password'"
                 [attr.aria-pressed]="hidepass"><i class="mdi {{hidepass ? 'mdi-eye-off' : 'mdi-eye'}}"></i></span>
         </mat-form-field>
     </div>
 
-
     <div class="inputs-container rounded">
-
 
         <!---------------------------------------------------------------------->
         <!-- RECUERDEME -->

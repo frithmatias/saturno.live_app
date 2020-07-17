@@ -4,6 +4,7 @@ import { TicketsService } from '../../../services/tickets.service';
 import { Router } from '@angular/router';
 import { TicketResponse } from '../../../interfaces/ticket.interface';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { IfStmt } from '@angular/compiler';
 
 @Component({
 	selector: 'app-turnos',
@@ -11,43 +12,42 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 	styleUrls: ['./turnos.component.css']
 })
 export class TurnosComponent implements OnInit {
+	companyData: any;
 	loading: boolean;
 	ticketNum: number;
 	hasTicket = false;
 	constructor(
 		private wsService: WebsocketService,
-		private ticketsService: TicketsService,
+		public ticketsService: TicketsService,
 		private router: Router,
-		private snak: MatSnackBar
+		private snack: MatSnackBar
 	) { }
 
 	ngOnInit(): void {
-	}
-
-	nuevoTicket(): void {
-		if (!localStorage.getItem('turno')) {
-			this.loading = true;
-			this.ticketsService.nuevoTicket(this.wsService.idSocket).subscribe(
-
-				(data: TicketResponse) => {
-					if (data.ok) {
-						localStorage.setItem('turno', JSON.stringify(data.ticket));
-						this.ticketsService.myTicket = data.ticket;
-						this.loading = false;
-						this.router.navigate(['/publico/pantalla']);
-					}
-				},
-				undefined,
-				() => { }
-			);
-		} else {
-			this.snak.open('Usted ya tiene un turno!', null, { duration: 2000 });
+		if (this.ticketsService.myTicket) {
+			this.snack.open('Usted ya tiene un turno!', null, { duration: 5000 });
 			this.router.navigate(['/publico/pantalla']);
+		} else {
+			if (!this.ticketsService.companyData) {
+				this.snack.open('Por favor ingrese una empresa primero!', null, { duration: 5000 });
+				this.router.navigate(['/publico']);
+			}
 		}
 	}
 
-
-	pantallaPublica(): void {
-		this.router.navigate(['/publico/pantalla']);
+	nuevoTicket(tipo_turno: string): void {
+		this.loading = true;
+		this.ticketsService.nuevoTicket(this.wsService.idSocket, tipo_turno, this.ticketsService.companyData._id).subscribe(
+			(data: TicketResponse) => {
+				if (data.ok) {
+					localStorage.setItem('turno', JSON.stringify(data.ticket));
+					this.ticketsService.myTicket = data.ticket;
+					this.loading = false;
+					this.router.navigate(['/publico/pantalla']);
+				}
+			}
+		);
 	}
+
+
 }

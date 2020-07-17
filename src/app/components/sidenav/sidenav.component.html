@@ -1,9 +1,9 @@
 <div class="m-2">
-
+    
     <div>
-        <button mat-button routerLink="/publico">Home Publico</button>
+        <button mat-button routerLink="/publico">Home</button>
     </div>
-
+    
     <div>
         <button mat-button routerLink="/publico/pantalla">Pantalla</button>
     </div>
@@ -11,17 +11,20 @@
     <div>
         <button mat-button routerLink="/publico/turnos">Turnos</button>
     </div>
+    
 
-    <div>
-        <button mat-button routerLink="/cliente">Cliente</button>
+
+    <div *ngFor="let item of userService.menu">
+        <div>
+            {{ item.titulo }}
+        </div>
+        <div *ngFor="let sub of item.submenu">
+            <button mat-button routerLink="/{{sub.url}}">{{ sub.titulo}}</button>
+        </div>
     </div>
 
-    <div>
-        <button mat-button routerLink="/cliente/escritorio">Escritorio</button>
-    </div>
-
-    <div>
-        <button mat-button routerLink="/cliente/dashboard">Dashboard</button>
+    <div *ngIf="userService.logueado">
+        <button mat-button (click)="userService.logout()"> Salir </button>
     </div>
 
 </div>

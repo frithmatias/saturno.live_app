@@ -18,27 +18,22 @@ export class TokenGuard implements CanActivate {
 
 		const token = this.userService.token;
 
-		// if (typeof token === 'undefined') {
 		if (!token) {
-			console.log('11111111111111');
 			this.userService.logout();
 			this.router.navigate(['/home']);
 			return false;
 		}
-
 
 		const payload = JSON.parse(atob(token.split('.')[1]));
-		console.log('TokenGuard:', payload);
 		const expirado = this.expirado(payload.exp);
-		if (expirado) {
-			console.log('1111122222222');
 
+		if (expirado) {
 			this.userService.logout();
 			this.router.navigate(['/home']);
 			return false;
 		}
-		// si no expiro, tengo que chequer si es hora de renovar el token
-		// Se renueva el token 1 hora o 3600 segundos antes de expirar
+
+		// el token no expiro, pero vierifica si esta próximo a vencer para renovar.
 		return this.verificaRenueva(payload.exp);
 	}
 
@@ -47,14 +42,16 @@ export class TokenGuard implements CanActivate {
 			const tokenExp = new Date(fechaExp * 1000);
 			const ahora = new Date();
 			const renueva = new Date();
+			
+			// 1 hora
 			renueva.setTime(ahora.getTime() + (1 * 60 * 60 * 1000));
 
 			const difRenueva = tokenExp.getTime() - renueva.getTime();
 			const difExpira = tokenExp.getTime() - ahora.getTime();
 
 			if (tokenExp.getTime() > renueva.getTime()) {
-				// si falta mas de una hora (definida en 'ahora + 3600') No es necesario renovar
-
+				
+				// no es necesario renovar
 				const horaRenueva = (difRenueva / 1000 / 3600).toFixed(3).split('.');
 				const horaExpira = (difExpira / 1000 / 3600).toFixed(3).split('.');
 
@@ -66,12 +63,12 @@ export class TokenGuard implements CanActivate {
 
 				resolve(true);
 			} else {
+
+				// debe renovar
 				this.userService.updateToken()
 					.subscribe(() => {
 						resolve(true);
 					}, () => {
-			console.log('33333333333333');
-
 						this.userService.logout();
 						this.router.navigate(['/home']);
 						reject(false);

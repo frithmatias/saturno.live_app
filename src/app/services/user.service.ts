@@ -25,19 +25,8 @@ export class UserService {
 			this.menu = JSON.parse(localStorage.getItem('menu'));
 			this.logueado = true;
 		} else {
-			this.clearClientSession();
+			this.logout();
 		}
-	}
-
-
-	clearClientSession(): void {
-		if (localStorage.getItem('token')) { localStorage.removeItem('token'); }
-		if (localStorage.getItem('usuario')) { localStorage.removeItem('usuario'); }
-		if (localStorage.getItem('menu')) { localStorage.removeItem('menu'); }
-		this.token = '';
-		this.usuario = null;
-		this.menu = [];
-		this.logueado = false;
 	}
 
 	registerUser(usuario: User) {
@@ -67,15 +56,9 @@ export class UserService {
 
 		return this.http.put(url, usuario, { headers }).pipe(
 			map((resp: any) => {
-				// this.usuario = resp.usuario;
+				this.usuario = resp.usuario;
 				const usuarioDB: User = resp.usuario;
 
-				// los datos estan actualizados en la bd, pero no voy a ver los cambios
-				// si no actualizo los datos en la localstorage
-
-				// Este if es porque SOLO guardo los datos en la localstorage si estoy
-				// actualizando datos PROPIOS. Si soy ADMIN y estoy cambiando datos en
-				// la lista de usuarios NO tengo que guardar nada en la localstorage.
 				if (usuario._id === this.usuario._id) {
 					this.setStorage(usuarioDB._id, this.token, usuarioDB, this.menu);
 				}
@@ -204,15 +187,13 @@ export class UserService {
 	}
 
 	logout() {
-		this.usuario = null;
+		if (localStorage.getItem('token')) { localStorage.removeItem('token'); }
+		if (localStorage.getItem('usuario')) { localStorage.removeItem('usuario'); }
+		if (localStorage.getItem('menu')) { localStorage.removeItem('menu'); }
 		this.token = '';
+		this.usuario = null;
 		this.menu = [];
 		this.logueado = false;
-
-		localStorage.removeItem('token');
-		localStorage.removeItem('usuario');
-		localStorage.removeItem('menu');
-
-		this.router.navigate(['/home']);
+		// this.router.navigate(['/home']);
 	}
 }

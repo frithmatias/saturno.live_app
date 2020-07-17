@@ -43,7 +43,6 @@ export class RegistroComponent implements OnInit {
 	}
 
 	registrarUsuario() {
-		console.log(this.forma);
 
 		if (this.forma.invalid) {
 			Swal.fire('Faltan datos', 'Verifique el el email sea correcto y que las contraseñas coincidadn.', 'warning');
@@ -66,7 +65,6 @@ export class RegistroComponent implements OnInit {
 			if ( data.ok ) {
 				this.router.navigate(['/login'])
 			}
-			console.log(data);
 		})
 	}
 
