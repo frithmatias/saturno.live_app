@@ -1,12 +1,27 @@
 ::-webkit-scrollbar {
     display: none;
 }
+
+.close-button {
+    position: absolute;
+    left: 5px;
+    top: 3px;
+    color: white;
+}
+
+.row-input-button {
+    position: fixed;
+    bottom: 0px;
+    left: 0px;
+    width: 100%;
+    margin: .5rem;
+}
 .send-button {
     color: white;
     background-color: seagreen;
     box-shadow: none;
 }
-.chat-textarea {
+.chat-input {
     border: 0px;
     background-color: white;
     width: -webkit-fill-available;

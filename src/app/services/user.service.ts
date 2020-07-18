@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import { User } from 'src/app/models/user.model';
+import { User } from 'src/app/interfaces/user.interface';
 import { catchError, map } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
+import { Desktop } from 'src/app/interfaces/desktop.interface';
 
 @Injectable({
 	providedIn: 'root'
@@ -19,18 +20,20 @@ export class UserService {
 
 	constructor(private http: HttpClient, private router: Router) {
 
-		if (localStorage.getItem('token') && localStorage.getItem('usuario') && localStorage.getItem('menu')) {
+		if (localStorage.getItem('token') && localStorage.getItem('user') && localStorage.getItem('menu')) {
 			this.token = localStorage.getItem('token');
-			this.usuario = JSON.parse(localStorage.getItem('usuario'));
+			this.usuario = JSON.parse(localStorage.getItem('user'));
 			this.menu = JSON.parse(localStorage.getItem('menu'));
 			this.logueado = true;
-		} else {
-			this.logout();
-		}
+		} 
 	}
 
+
+	// ========================================================
+	// User Methods
+	// ========================================================
+
 	registerUser(usuario: User) {
-		console.log(usuario);
 		const url = environment.url + '/u/register';
 		return this.http.post(url, usuario);
 	}
@@ -63,7 +66,7 @@ export class UserService {
 					this.setStorage(usuarioDB._id, this.token, usuarioDB, this.menu);
 				}
 
-				Swal.fire('Usuario actualizado', usuario.nombre, 'success');
+				Swal.fire('Usuario actualizado', usuario.tx_name, 'success');
 
 				return true;
 			}),
@@ -106,9 +109,73 @@ export class UserService {
 			)
 	}
 
+
+	// ========================================================
+	// Assistants Methods
+	// ========================================================
+	
+	createAssistant(assistant: User) {
+		const headers = new HttpHeaders({
+			'turnos-token': this.token
+		});
+		const url = environment.url + '/u/createassistant';
+		return this.http.post(url, assistant, {headers});
+	}
+
+	readAssistants(idCompany: string) {
+		const headers = new HttpHeaders({
+			'turnos-token': this.token
+		});
+		const url = environment.url + '/u/readassistants/' + idCompany;
+		return this.http.get(url, {headers});
+	}
+
+	deleteAssistant(idAssistant: string) {
+		const headers = new HttpHeaders({
+			'turnos-token': this.token
+		});
+		const url = environment.url + '/u/deleteassistant/' + idAssistant;
+		return this.http.delete(url, {headers});
+	}
+
+	
+	// ========================================================
+	// Desktop Methods
+	// ========================================================
+
+	createDesktop(desktop: Desktop) {
+		const headers = new HttpHeaders({
+			'turnos-token': this.token
+		});
+		const url = environment.url + '/u/createdesktop';
+		return this.http.post(url, desktop, {headers});
+	}
+
+	readDesktops(idCompany: string) {
+		const headers = new HttpHeaders({
+			'turnos-token': this.token
+		});
+		const url = environment.url + '/u/readdesktops/' + idCompany;
+		return this.http.get(url, {headers});
+	}
+
+	deleteDesktop(idDesktop: string) {
+		const headers = new HttpHeaders({
+			'turnos-token': this.token
+		});
+		const url = environment.url + '/u/deletedesktop/' + idDesktop;
+		return this.http.delete(url, {headers});
+	}
+
+
+	// ========================================================
+	// Session Methods
+	// ========================================================
+
+
 	loginUser(usuario: User, recordar: boolean = false) {
 		if (recordar) {
-			localStorage.setItem('email', usuario.email);
+			localStorage.setItem('email', usuario.tx_email);
 		} else {
 			localStorage.removeItem('email');
 		}
@@ -178,7 +245,7 @@ export class UserService {
 
 	setStorage(id: string, token: string, usuario: User, menu: any) {
 		localStorage.setItem('token', token);
-		localStorage.setItem('usuario', JSON.stringify(usuario));
+		localStorage.setItem('user', JSON.stringify(usuario));
 		localStorage.setItem('menu', JSON.stringify(menu));
 
 		this.usuario = usuario;
@@ -188,12 +255,12 @@ export class UserService {
 
 	logout() {
 		if (localStorage.getItem('token')) { localStorage.removeItem('token'); }
-		if (localStorage.getItem('usuario')) { localStorage.removeItem('usuario'); }
+		if (localStorage.getItem('user')) { localStorage.removeItem('user'); }
 		if (localStorage.getItem('menu')) { localStorage.removeItem('menu'); }
 		this.token = '';
 		this.usuario = null;
 		this.menu = [];
 		this.logueado = false;
-		// this.router.navigate(['/home']);
+		this.router.navigate(['/home']);
 	}
 }

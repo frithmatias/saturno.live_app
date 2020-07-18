@@ -12,7 +12,7 @@ import { TicketsService } from '../../services/tickets.service';
 export class ChatComponent implements OnInit {
   @Input() chatOpenStatus: boolean;
   @Output() unreadMessages: EventEmitter<number> = new EventEmitter();
-
+  @Output() toggleChat: EventEmitter<boolean> = new EventEmitter();
   chatOpen: boolean;
   constructor(
     private wsService: WebsocketService, 
@@ -73,6 +73,11 @@ export class ChatComponent implements OnInit {
       const chatref = document.getElementById('chatmessages');
       chatref.scrollTop = chatref.scrollHeight - chatref.clientHeight;
     })
+  }
+
+  closeChat(): void {
+    console.log("asdf")
+    this.toggleChat.emit(true);
   }
 
 }

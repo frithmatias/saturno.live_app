@@ -9,7 +9,7 @@
 
 
     <mat-drawer [(opened)]="opened" #chat id="chat" mode="over" position="end" class="mat-drawer-chat">
-        <app-chat [chatOpenStatus]="opened" (unreadMessages)="unreadMessages=$event"></app-chat>
+        <app-chat (toggleChat)="toggle( chat )" [chatOpenStatus]="opened" (unreadMessages)="unreadMessages=$event"></app-chat>
     </mat-drawer>
 
     <router-outlet></router-outlet>

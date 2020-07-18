@@ -1,1 +1,30 @@
-<p>desktops works!</p>
+<div class="m-4">
+
+
+    <div class="card bg-info lead text-white">
+        <div class="card-header">Ventanillas</div>
+        <div class="card-body">
+
+            <div class="my-2" *ngFor="let desktop of desktops">
+                <span>{{desktop?.id_desktop}}:{{desktop?.id_type}}</span>
+                <span style="float: right;">
+                <mat-icon style="color:lightgreen" (click)="editDesktop(desktop._id)">edit</mat-icon>
+                <mat-icon style="color:deeppink" (click)="deleteDesktop(desktop._id)">delete</mat-icon>
+
+                </span>
+            </div>
+
+        </div>
+
+        <div class="my-4"></div>
+
+        <div class="card lead">
+            <div class="card-header">Alta de Ventanillas</div>
+            <div class="card-body">
+
+                <app-desktop-create-form (desktopCreated)="desktopCreated($event)"></app-desktop-create-form>
+
+            </div>
+        </div>
+
+    </div>

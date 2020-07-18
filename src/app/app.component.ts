@@ -12,13 +12,12 @@ export class AppComponent {
   unreadMessages: number;
   constructor(private router: Router) {
 
-    
-    if (localStorage.getItem('turno')) {
-      this.router.navigate(['/publico/pantalla']);
+    if (localStorage.getItem('ticket')) {
+      this.router.navigate(['/publico']);
     } else {
-      if (localStorage.getItem('company')) {
-        let company = JSON.parse(localStorage.getItem('company'));
-        this.router.navigate(['/publico', company.empresa]);
+      if (localStorage.getItem('user')) {
+        let user = JSON.parse(localStorage.getItem('user'));
+        this.router.navigate(['/publico', user.id_company]);
       }
     }
 

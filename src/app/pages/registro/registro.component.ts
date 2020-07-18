@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { UserService } from '../../services/user.service';
-import { User } from 'src/app/models/user.model';
 import Swal from 'sweetalert2';
+import { User } from '../../interfaces/user.interface';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
 	selector: 'app-registro',
@@ -15,7 +16,8 @@ export class RegistroComponent implements OnInit {
 
 	constructor(
 		private userService: UserService,
-		private router: Router
+		private router: Router,
+		private snack: MatSnackBar
 	) { }
 
 	sonIguales(campo1: string, campo2: string) {
@@ -32,14 +34,25 @@ export class RegistroComponent implements OnInit {
 	}
 
 	ngOnInit() {
+
+		let defaults = {
+			name: 'Matias',
+			email: 'matias@matias.com',
+			company: 'webturnos',
+			password1: '123456',
+			password2: '123456'
+		}
 		this.forma = new FormGroup({
-			email: new FormControl(null, [Validators.required, Validators.email]),
-			nombre: new FormControl(null, Validators.required),
-			empresa: new FormControl(null, Validators.required),
-			password: new FormControl(null, Validators.required),
-			password2: new FormControl(null, Validators.required),
+			name: new FormControl(defaults.name, Validators.required),
+			email: new FormControl(defaults.email, [Validators.required, Validators.email]),
+			company: new FormControl(defaults.company, Validators.required),
+			password1: new FormControl(defaults.password1, Validators.required),
+			password2: new FormControl(defaults.password2, Validators.required),
 			condiciones: new FormControl(false)
-		}, { validators: this.sonIguales('password', 'password2') });
+		}, { validators: this.sonIguales('password1', 'password2') });
+
+
+		
 	}
 
 	registrarUsuario() {
@@ -54,18 +67,22 @@ export class RegistroComponent implements OnInit {
 			return;
 		}
 
-		const usuario = new User(
-			this.forma.value.nombre,
-			this.forma.value.email,
-			this.forma.value.password,
-			this.forma.value.empresa
-		);
-		
+		const usuario: User = {
+			tx_name: this.forma.value.name,
+			tx_email: this.forma.value.email,
+			tx_password: this.forma.value.password1,
+			id_company: this.forma.value.company
+		};
+
 		this.userService.registerUser(usuario).subscribe((data: any) => {
-			if ( data.ok ) {
+			if (data.ok) {
 				this.router.navigate(['/login'])
 			}
-		})
+		},
+		()=>{
+			this.snack.open('Error al registrar el usuario', 'Aceptar', {duration:5000});
+		}
+		)
 	}
 
 }

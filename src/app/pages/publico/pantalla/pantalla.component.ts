@@ -5,6 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Ticket } from '../../../interfaces/ticket.interface';
 import { Router } from '@angular/router';
 import { TicketResponse } from 'src/app/interfaces/ticket.interface';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
 	selector: 'app-pantalla',
@@ -18,20 +19,22 @@ export class PantallaComponent implements OnInit {
 	constructor(
 		private wsService: WebsocketService,
 		public ticketsService: TicketsService,
+		private userService: UserService,
 		private snack: MatSnackBar,
 		private router: Router
 	) { }
 
 	ngOnInit(): void {
+
 		this.coming = false;
 		const body = document.getElementsByTagName('body')[0];
 		body.classList.remove('container');
-
-		if(this.ticketsService.companyData){
-			// this.ticketsService.getTickets();
-		} else {
+		console.log('visit', this.ticketsService.companyData);
+		console.log('user', this.userService.usuario);
+		if (!this.userService.usuario && !this.ticketsService.companyData) {
+			this.ticketsService.getTickets();
 			this.router.navigate(['/publico']);
-			this.snack.open('Por favor ingrese una empresa primero!', null, { duration: 5000});
+			this.snack.open('Por favor ingrese una empresa primero!', null, { duration: 5000 });
 		}
 	}
 
@@ -46,9 +49,10 @@ export class PantallaComponent implements OnInit {
 
 	cancelTicket(): void {
 		this.ticketsService.cancelTicket(this.ticketsService.myTicket._id).subscribe((data: TicketResponse) => {
-			if(data.ok){
-				this.snack.open(data.msg, 'ACEPTAR', {duration: 5000});
+			if (data.ok) {
+				this.snack.open(data.msg, 'ACEPTAR', { duration: 5000 });
 				this.ticketsService.clearPublicSession();
+				this.router.navigate(['/publico']);
 			}
 		})
 	}

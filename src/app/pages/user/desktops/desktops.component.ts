@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { UserService } from '../../../services/user.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Desktop, DesktopsResponse, DesktopResponse } from '../../../interfaces/desktop.interface';
 
 @Component({
   selector: 'app-desktops',
@@ -6,10 +9,39 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./desktops.component.css']
 })
 export class DesktopsComponent implements OnInit {
-
-  constructor() { }
+  desktops: Desktop[];
+  constructor(
+    private userService: UserService,
+    private snack: MatSnackBar
+  ) { }
 
   ngOnInit(): void {
+    this.userService.readDesktops(this.userService.usuario._id).subscribe((data: DesktopsResponse) => {
+      this.desktops = data.desktops;
+      console.log(data);
+    },
+      (err) => {
+        console.log(err);
+      })
   }
 
+  editDesktop(idDesktop: string): void {
+
+  }
+  
+  deleteDesktop(idDesktop: string): void {
+    this.userService.deleteDesktop(idDesktop).subscribe((data: DesktopResponse) => {
+      this.snack.open(data.msg, null, { duration: 5000 });
+      this.desktops = this.desktops.filter(desktop => desktop._id != idDesktop);
+    },
+      (err: DesktopResponse) => {
+        this.snack.open(err.msg, null, { duration: 5000 });
+      }
+    )
+
+  }
+
+  desktopCreated(desktop: Desktop): void {
+    this.desktops.push(desktop);
+  }
 }

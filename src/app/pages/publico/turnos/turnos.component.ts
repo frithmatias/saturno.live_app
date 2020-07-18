@@ -24,6 +24,7 @@ export class TurnosComponent implements OnInit {
 	) { }
 
 	ngOnInit(): void {
+
 		if (this.ticketsService.myTicket) {
 			this.snack.open('Usted ya tiene un turno!', null, { duration: 5000 });
 			this.router.navigate(['/publico/pantalla']);
@@ -40,7 +41,7 @@ export class TurnosComponent implements OnInit {
 		this.ticketsService.nuevoTicket(this.wsService.idSocket, tipo_turno, this.ticketsService.companyData._id).subscribe(
 			(data: TicketResponse) => {
 				if (data.ok) {
-					localStorage.setItem('turno', JSON.stringify(data.ticket));
+					localStorage.setItem('ticket', JSON.stringify(data.ticket));
 					this.ticketsService.myTicket = data.ticket;
 					this.loading = false;
 					this.router.navigate(['/publico/pantalla']);

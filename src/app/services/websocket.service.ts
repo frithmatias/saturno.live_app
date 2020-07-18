@@ -57,15 +57,15 @@ export class WebsocketService {
 			this.snack.open('Conectado al servidor de turnos', null, { duration: 5000 });
 			// si había un ticket en la LS lo actualizo
 			this.idSocket = this.socket.ioSocket.id;
-			if (localStorage.getItem('turno')) {
-				const myTicket: Ticket = JSON.parse(localStorage.getItem('turno'));
+			if (localStorage.getItem('ticket')) {
+				const myTicket: Ticket = JSON.parse(localStorage.getItem('ticket'));
 				this.ticketsService.actualizarSocket(myTicket._id, this.idSocket).pipe(
 					catchError(this.manejaError)
 				).subscribe((data: any) => {
 					if (data.ok) {
 						// si lo actualizo el ticket en la BD actualizo en myTicket y en la LS
 						this.ticketsService.myTicket.id_socket = this.idSocket;
-						localStorage.setItem('turno', JSON.stringify(this.ticketsService.myTicket));
+						localStorage.setItem('ticket', JSON.stringify(this.ticketsService.myTicket));
 					}
 				});
 			} 

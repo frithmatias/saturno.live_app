@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { TicketsService } from 'src/app/services/tickets.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-publico',
@@ -14,6 +15,7 @@ export class PublicoComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
+    private snack: MatSnackBar,
     public ticketsService: TicketsService
   ) {
     this.ticketsService.userPreset = true;
@@ -22,16 +24,23 @@ export class PublicoComponent implements OnInit {
   ngOnInit(): void {
     this.route.params.subscribe((data: any) => {
       // /publico/nombreEmpresa
-      
+
       if (data.userCompanyName) {
         this.ticketsService.getUserData(data.userCompanyName).subscribe((resp: any) => {
-            if (resp.ok) {
-              this.ticketsService.companyData = resp.user;
-              this.ticketsService.getTickets();
-              localStorage.setItem('company', JSON.stringify(resp.user));
-              this.router.navigate(['/publico/turnos'])
-            }
-          });
+
+          if (resp.ok) {
+            this.ticketsService.companyData = resp.user;
+            this.ticketsService.getTickets();
+            localStorage.setItem('company', JSON.stringify(resp.user));
+            this.router.navigate(['/publico/turnos'])
+          }
+
+        },
+          (err) => {
+            this.snack.open('No existe la empresa ingresada', 'Aceptar', { duration: 5000 });
+            this.router.navigate(['/publico'])
+          }
+        );
       }
 
     });

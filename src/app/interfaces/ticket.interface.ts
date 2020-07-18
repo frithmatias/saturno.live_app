@@ -1,13 +1,6 @@
-export interface TicketsResponse {
-	ok: boolean;
-	tickets: Ticket[];
-}
-
-export interface TicketResponse {
-	ok: boolean;
-	msg: string;
-	ticket: Ticket | null;
-}
+// ========================================================
+// TICKET
+// ========================================================
 
 export interface Ticket {
 	id_ticket: number;
@@ -23,14 +16,17 @@ export interface Ticket {
 	_id: string;
 }
 
-// export class Ticket {
-// 	constructor(
-// 		public idTicket: number,
-// 		public idSocket: string,
-// 		public idDesk: number | null,
-// 		public txStatus: string,
-// 		public tmStart: number,
-// 		public tmAtt: number | null,
-// 		public tmEnd: number | null
-// 	) {}
-// }
+export interface TicketResponse {
+	ok: boolean;
+	msg: string;
+	ticket: Ticket | null;
+}
+
+
+export interface TicketsResponse {
+	ok: boolean;
+	tickets: Ticket[];
+}
+
+
+

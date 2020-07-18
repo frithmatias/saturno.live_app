@@ -38,18 +38,16 @@ export class TicketsService {
 		private router: Router
 	) {
 
-		console.log('Cargando local storage...')
-
-		if (localStorage.getItem('company')) { 
+		if (localStorage.getItem('company')) {
 			this.companyData = JSON.parse(localStorage.getItem('company'));
 			this.getTickets();
 		};
 
-		if (localStorage.getItem('turno')) { 
-			this.myTicket = JSON.parse(localStorage.getItem('turno'));
+		if (localStorage.getItem('ticket')) {
+			this.myTicket = JSON.parse(localStorage.getItem('ticket'));
 			if (this.myTicket.tm_end) { // si el ticket esta finalizado limpio la sesión
 				this.clearPublicSession();
-			} 
+			}
 		} else {
 			this.clearPublicSession();
 		}
@@ -65,9 +63,8 @@ export class TicketsService {
 		this.chatMessages = [];
 		this.myTicket = null;
 		this.companyData = null;
-		if (localStorage.getItem('turno')) { localStorage.removeItem('turno'); }
+		if (localStorage.getItem('ticket')) { localStorage.removeItem('ticket'); }
 		if (localStorage.getItem('company')) { localStorage.removeItem('company'); }
-		this.router.navigate(['/publico']);
 	}
 
 	actualizarSocket(idTicket: string, newSocket: string): Observable<object> {
@@ -76,12 +73,12 @@ export class TicketsService {
 	}
 
 	nuevoTicket(idSocket: string, typeTicket: string, idCompany: string): Observable<object> {
-		let data = {idSocket, typeTicket, idCompany};
-		return this.http.post(environment.url + '/t/nuevoticket/', data );
+		let data = { idSocket, typeTicket, idCompany };
+		return this.http.post(environment.url + '/t/nuevoticket/', data);
 	}
 
 	cancelTicket(idTicket: string) {
-		return this.http.get(environment.url + '/t/cancelticket/' + idTicket );
+		return this.http.get(environment.url + '/t/cancelticket/' + idTicket);
 	}
 
 	getPendingTicket(idDesk: number): Observable<object> {
@@ -112,38 +109,48 @@ export class TicketsService {
 	}
 
 	getTickets(): void {
-		if(!this.companyData){
+		let id_company: string;
+		if (this.companyData) {
+			id_company = this.companyData._id;
+		} else if (this.userService.usuario) {
+			id_company = this.userService.usuario._id;
+		}
+		if (!id_company) {
 			return;
 		}
-
-		const url = environment.url + '/t/gettickets/' + this.companyData._id;
+		console.log('obteniendo tickets para ', id_company);
+		const url = environment.url + '/t/gettickets/' + id_company;
 		const getError = (err: AjaxError) => {
 			return of([{ idDesk: 'err', id_ticket: 'err', status: 'err' }]);
 		};
-		
+
 		this.http.get(url).pipe(
 			map<TicketsResponse, Ticket[]>(data => data.tickets),
 			catchError(getError)
 		).subscribe((data: Ticket[]) => {
 			console.log(data);
+			if (data.length === 0) {
+				return;
+			}
 			// !obtiene los tickets antes de que el servicio de sockets pueda actualizar el id_socket
 			this.ticketsAll = data;
+			console.log(this.ticketsAll);
 			this.ticketsCall = data.filter(ticket => ticket.tm_att !== null);
 			this.ticketsTail = [...this.ticketsCall].sort((a: Ticket, b: Ticket) => -1).slice(0, TAIL_LENGTH);
 			this.lastTicket = this.ticketsTail[0];
-
+			console.log(this.ticketsTail);
 			// update ticket
-			if(this.myTicket){
+			if (this.myTicket) {
 				const myUpdatedTicket = this.ticketsCall.filter(ticket => ticket.id_ticket === this.myTicket.id_ticket && ticket.id_type === this.myTicket.id_type)[0];
 				if (myUpdatedTicket) {
 					this.myTicket = myUpdatedTicket;
-					localStorage.setItem('turno', JSON.stringify(this.myTicket));
+					localStorage.setItem('ticket', JSON.stringify(this.myTicket));
 				} else {
 					// rollback
 					this.myTicket.id_desk = null;
 					this.myTicket.id_socket_desk = null;
 					this.myTicket.tm_att = null;
-					localStorage.setItem('turno', JSON.stringify(this.myTicket));
+					localStorage.setItem('ticket', JSON.stringify(this.myTicket));
 				}
 
 				// El ticket finalizó.

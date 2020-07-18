@@ -15,6 +15,9 @@ import { ProfileComponent } from './profile/profile.component';
 import { AssistantsComponent } from './assistants/assistants.component';
 import { DesktopsComponent } from './desktops/desktops.component';
 import { TicketsComponent } from './tickets/tickets.component';
+import { AssistantCreateFormComponent } from './assistants/assistant-create-form/assistant-create-form.component';
+import { DesktopCreateFormComponent } from './desktops/desktop-create-form/desktop-create-form.component';
+
 
 @NgModule({
 	declarations: [
@@ -24,7 +27,9 @@ import { TicketsComponent } from './tickets/tickets.component';
 		ProfileComponent,
 		AssistantsComponent,
 		DesktopsComponent,
-		TicketsComponent
+		TicketsComponent,
+		AssistantCreateFormComponent,
+		DesktopCreateFormComponent
 	],
 	imports: [
 		CommonModule,

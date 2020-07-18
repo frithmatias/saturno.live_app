@@ -1,7 +1,14 @@
-<div class="h-100">
+<div class="h-100 chat-background">
+    <div class="row">
+        <div class="col">
+            <button class="btn btn-success m-2" (click)="closeChat()">Cerrar</button>
+
+        </div>
+        
+    </div>
 
     <!-- MESSAGES -->
-    <div class="row" #chatmessages id="chatmessages" style="height: 87%;overflow-y: auto;">
+    <div class="row" #chatmessages id="chatmessages">
         <div class="col">
             <div *ngFor="let message of ticketsService.chatMessages" class="message m-2"
                 [ngClass]="{'message-me': message.own}">
@@ -12,14 +19,12 @@
         </div>
     </div>
 
-
-
-    <div class="row p-1" style="position: absolute; width: 98%;">
+    <div class="row row-input-button">
         <!-- INPUT TEXT -->
         <div class="col-10" style="align-self: center">
 
             <!-- <mat-label>CONSULTA A INFORMES</mat-label> -->
-            <input type="text" autocomplete="off" class="chat-textarea" #textmsg matInput placeholder="INFORMES"
+            <input type="text" autocomplete="off" class="chat-input" #textmsg matInput placeholder="INFORMES"
                 (keydown.enter)="sendMessage( textmsg, chatmessages )">
 
         </div>

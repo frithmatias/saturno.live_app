@@ -13,7 +13,7 @@
 
 
       <div *ngIf="ticketsService.companyData">
-        <div *ngIf="!ticketsService.companyData.empresa">
+        <div *ngIf="!ticketsService.companyData.id_company">
           <p class="lead">
             Por favor ingrese la empresa para la cual desea obtener un turno.
           </p>
@@ -26,17 +26,17 @@
         </div>
 
 
-        <div *ngIf="ticketsService.companyData.empresa">
+        <div *ngIf="ticketsService.companyData.id_company">
           <p class="lead">
             Usted esta por sacar un turno para ser atendido en
           </p>
 
           <p style="color: red; font-size: 2rem; font-weight: 400;">
-            {{ ticketsService.companyData.empresa }}
+            {{ ticketsService.companyData.id_company }}
           </p>
 
           <p style="color: red; font-size: 1rem; font-weight: 400;">
-            {{ ticketsService.companyData.email }}
+            {{ ticketsService.companyData.tx_email }}
           </p>
 
           <span *ngIf="!hasTicket">

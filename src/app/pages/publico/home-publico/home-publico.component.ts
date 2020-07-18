@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -7,13 +7,16 @@ import { Router } from '@angular/router';
   styleUrls: ['./home-publico.component.css']
 })
 export class HomePublicoComponent implements OnInit {
-
   constructor(private router: Router) { }
 
   ngOnInit(): void {
+
   }
-
-
+  ngAfterViewInit(){
+    let refInput = document.getElementById('inputCompany');
+       refInput.focus();
+  }
+  
   findCompany(e: HTMLInputElement){
     console.log(e.value);
     if(e.value.length>0){

@@ -1,1 +1,30 @@
-<p>assistants works!</p>
+<div class="m-4">
+
+
+    <div class="card bg-primary lead text-white">
+        <div class="card-header">Asistentes</div>
+        <div class="card-body">
+
+            <div class="my-2" *ngFor="let assistant of assistants">
+                <span>{{assistant?.nombre}}</span>
+                <span style="float: right;">
+                <mat-icon style="color:lightgreen" (click)="editAssistant(assistant._id)">edit</mat-icon>
+                <mat-icon style="color:deeppink" (click)="deleteAssistant(assistant._id)">delete</mat-icon>
+
+                </span>
+            </div>
+
+        </div>
+
+        <div class="my-4"></div>
+
+        <div class="card lead">
+            <div class="card-header">Alta de asistente</div>
+            <div class="card-body">
+
+                <app-assistant-create-form (assistantCreated)="assistantCreated($event)"></app-assistant-create-form>
+
+            </div>
+        </div>
+
+    </div>

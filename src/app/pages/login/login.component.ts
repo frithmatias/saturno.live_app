@@ -2,10 +2,11 @@ import { NgForm } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { UserService } from '../../services/user.service';
-import { User } from '../../models/user.model';
+import { User } from 'src/app/interfaces/user.interface';
 import { environment } from 'src/environments/environment';
 
 import Swal from 'sweetalert2';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 declare const gapi: any;
 // 
@@ -24,7 +25,8 @@ export class LoginComponent implements OnInit {
 	constructor(
 		public router: Router,
 		public activatedRoute: ActivatedRoute,
-		public userService: UserService
+		public userService: UserService,
+		private snack: MatSnackBar
 	) { }
 
 	ngOnInit() {
@@ -70,19 +72,20 @@ export class LoginComponent implements OnInit {
 			return;
 		}
 
-		const usuario = new User(
-			null,
-			forma.value.email,
-			forma.value.password,
-			null
-		);
+		const usuario: User = {
+			tx_name: null,
+			tx_email: forma.value.email,
+			tx_password: forma.value.password,
+			id_company: null
+		};
 
 		this.userService.loginUser(usuario, forma.value.recuerdame).subscribe(
 			data => {
-				this.router.navigate(['/cliente']);
+				this.router.navigate(['/user']);
 			},
 			err => {
-				Swal.fire('Error de autenticación', 'Usuario o contraseña incorrecta', 'error');
+				console.log(err);
+				this.snack.open(err.error.mensaje , 'Aceptar', {duration: 5000});
 			});
 	}
 
