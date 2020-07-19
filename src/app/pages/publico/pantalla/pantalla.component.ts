@@ -29,8 +29,9 @@ export class PantallaComponent implements OnInit {
 		this.coming = false;
 		const body = document.getElementsByTagName('body')[0];
 		body.classList.remove('container');
-		console.log('visit', this.ticketsService.companyData);
-		console.log('user', this.userService.usuario);
+		console.log('ticketsService.companyData', this.ticketsService.companyData);
+		console.log('userService.usuario', this.userService.usuario);
+		
 		if (!this.userService.usuario && !this.ticketsService.companyData) {
 			this.ticketsService.getTickets();
 			this.router.navigate(['/publico']);

@@ -3,13 +3,13 @@
 
     <div class="card bg-info lead text-white">
         <div class="card-header">Ventanillas</div>
-        <div class="card-body">
+        <div class="card-body card-turnos-info">
 
             <div class="my-2" *ngFor="let desktop of desktops">
-                <span>{{desktop?.id_desktop}}:{{desktop?.id_type}}</span>
+                <span>{{desktop?.id_desktop}}</span>
                 <span style="float: right;">
-                <mat-icon style="color:lightgreen" (click)="editDesktop(desktop._id)">edit</mat-icon>
-                <mat-icon style="color:deeppink" (click)="deleteDesktop(desktop._id)">delete</mat-icon>
+                <mat-icon class="ml-2 list-crud-edit" (click)="editDesktop(desktop._id)">edit</mat-icon>
+                <mat-icon class="ml-2 list-crud-delete" (click)="deleteDesktop(desktop._id)">delete</mat-icon>
 
                 </span>
             </div>

@@ -3,14 +3,13 @@
 
     <div class="card bg-primary lead text-white">
         <div class="card-header">Asistentes</div>
-        <div class="card-body">
+        <div class="card-body card-turnos-primary">
 
             <div class="my-2" *ngFor="let assistant of assistants">
-                <span>{{assistant?.nombre}}</span>
+                <span>{{assistant?.tx_name}}</span>
                 <span style="float: right;">
-                <mat-icon style="color:lightgreen" (click)="editAssistant(assistant._id)">edit</mat-icon>
-                <mat-icon style="color:deeppink" (click)="deleteAssistant(assistant._id)">delete</mat-icon>
-
+                    <mat-icon class="ml-2 list-crud-edit" (click)="editAssistant(assistant._id)">edit</mat-icon>
+                    <mat-icon class="ml-2 list-crud-delete" (click)="deleteAssistant(assistant._id)">delete</mat-icon>
                 </span>
             </div>
 

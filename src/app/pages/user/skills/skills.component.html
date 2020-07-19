@@ -1,0 +1,30 @@
+<div class="m-4">
+
+
+    <div class="card bg-danger lead text-white">
+        <div class="card-header">Skills</div>
+        <div class="card-body card-turnos-danger">
+
+            <div class="my-2" *ngFor="let skill of skills">
+                <span>{{skill?.id_skill}}:{{skill?.tx_skill}}</span>
+                <span style="float: right;">
+                <mat-icon class="ml-2 list-crud-edit" (click)="editSkill(skill._id)">edit</mat-icon>
+                <mat-icon class="ml-2 list-crud-delete" (click)="deleteSkill(skill._id)">delete</mat-icon>
+
+                </span>
+            </div>
+
+        </div>
+
+        <div class="my-4"></div>
+
+        <div class="card lead">
+            <div class="card-header">Alta de Ventanillas</div>
+            <div class="card-body">
+
+                <app-skill-create-form (skillCreated)="skillCreated($event)"></app-skill-create-form>
+
+            </div>
+        </div>
+
+    </div>

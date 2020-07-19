@@ -1,4 +1,4 @@
-<form autocomplete="off" style="color: brown;" ngNativeValidate [formGroup]="forma" (ngSubmit)="createAssistant()">
+<form autocomplete="off" style="color: brown;" ngNativeValidate #formDirective="ngForm" [formGroup]="forma" (ngSubmit)="createAssistant(formDirective)">
 
     <mat-form-field color="warn" appearance="fill" class="w-100">
         <mat-label>Nombre</mat-label>

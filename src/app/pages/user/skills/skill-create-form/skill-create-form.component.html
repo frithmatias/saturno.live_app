@@ -1,0 +1,17 @@
+<form autocomplete="off" style="color: brown;" ngNativeValidate #formDirective="ngForm" [formGroup]="forma" (ngSubmit)="createSkill(formDirective)">
+
+    <mat-form-field color="warn" appearance="fill" class="w-100">
+        <mat-label>Identificador</mat-label>
+        <input matInput placeholder="Id Skill" formControlName="idSkill" name="idSkill" type="text" required>
+    </mat-form-field>
+
+    <mat-form-field color="warn" appearance="fill" class="w-100">
+        <mat-label>Descripcion</mat-label>
+        <input matInput placeholder="Skill" formControlName="txSkill" name="txSkill" type="text" required>
+    </mat-form-field>
+
+    <div class="form-group text-center">
+        <button class="btn btn-success btn-block text-uppercase waves-effect waves-light" type="submit">Alta de Skill</button>
+    </div>
+
+</form>

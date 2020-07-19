@@ -1,12 +1,16 @@
 import { Injectable } from '@angular/core';
-import { User } from 'src/app/interfaces/user.interface';
 import { catchError, map } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
+
+// Interfaces
 import { Desktop } from 'src/app/interfaces/desktop.interface';
+import { Skill } from '../interfaces/sill.interface';
+import { User } from 'src/app/interfaces/user.interface';
+import { Company } from '../interfaces/company.interface';
 
 @Injectable({
 	providedIn: 'root'
@@ -33,9 +37,10 @@ export class UserService {
 	// User Methods
 	// ========================================================
 
-	registerUser(usuario: User) {
+	registerUser(company: Company, user: User) {
+		let data = {company, user};
 		const url = environment.url + '/u/register';
-		return this.http.post(url, usuario);
+		return this.http.post(url, data);
 	}
 
 	getUser(uid: string) {
@@ -118,7 +123,7 @@ export class UserService {
 		const headers = new HttpHeaders({
 			'turnos-token': this.token
 		});
-		const url = environment.url + '/u/createassistant';
+		const url = environment.url + '/a/createassistant';
 		return this.http.post(url, assistant, {headers});
 	}
 
@@ -126,7 +131,7 @@ export class UserService {
 		const headers = new HttpHeaders({
 			'turnos-token': this.token
 		});
-		const url = environment.url + '/u/readassistants/' + idCompany;
+		const url = environment.url + '/a/readassistants/' + idCompany;
 		return this.http.get(url, {headers});
 	}
 
@@ -134,7 +139,7 @@ export class UserService {
 		const headers = new HttpHeaders({
 			'turnos-token': this.token
 		});
-		const url = environment.url + '/u/deleteassistant/' + idAssistant;
+		const url = environment.url + '/a/deleteassistant/' + idAssistant;
 		return this.http.delete(url, {headers});
 	}
 
@@ -147,7 +152,7 @@ export class UserService {
 		const headers = new HttpHeaders({
 			'turnos-token': this.token
 		});
-		const url = environment.url + '/u/createdesktop';
+		const url = environment.url + '/d/createdesktop';
 		return this.http.post(url, desktop, {headers});
 	}
 
@@ -155,7 +160,7 @@ export class UserService {
 		const headers = new HttpHeaders({
 			'turnos-token': this.token
 		});
-		const url = environment.url + '/u/readdesktops/' + idCompany;
+		const url = environment.url + '/d/readdesktops/' + idCompany;
 		return this.http.get(url, {headers});
 	}
 
@@ -163,7 +168,37 @@ export class UserService {
 		const headers = new HttpHeaders({
 			'turnos-token': this.token
 		});
-		const url = environment.url + '/u/deletedesktop/' + idDesktop;
+		const url = environment.url + '/d/deletedesktop/' + idDesktop;
+		return this.http.delete(url, {headers});
+	}
+
+
+
+	// ========================================================
+	// Skill Methods
+	// ========================================================
+
+	createSkill(skill: Skill) {
+		const headers = new HttpHeaders({
+			'turnos-token': this.token
+		});
+		const url = environment.url + '/s/createskill';
+		return this.http.post(url, skill, {headers});
+	}
+
+	readSkills(idCompany: string) {
+		const headers = new HttpHeaders({
+			'turnos-token': this.token
+		});
+		const url = environment.url + '/s/readskills/' + idCompany;
+		return this.http.get(url, {headers});
+	}
+
+	deleteSkill(idSkill: string) {
+		const headers = new HttpHeaders({
+			'turnos-token': this.token
+		});
+		const url = environment.url + '/s/deleteskill/' + idSkill;
 		return this.http.delete(url, {headers});
 	}
 

@@ -6,15 +6,27 @@
         <input #txtEscritorio (keyup.enter)="entrar( txtEscritorio.value )" name="escritorio" type="number"
             class="form-control" placeholder="Escritorio" required>
     </div>
+
     <div>
+        <!-- <mat-form-field appearance="fill">
+            <mat-label>Escritorios</mat-label>
+            <select matNativeControl required>
+              <option value="volvo">Volvo</option>
+              <option value="saab">Saab</option>
+              <option value="mercedes">Mercedes</option>
+              <option value="audi">Audi</option>
+            </select>
+          </mat-form-field> -->
+    </div>
 
-    <button class="btn btn-success btn-block" role="button" (click)="entrar( txtEscritorio.value )">Ingresar</button>
-
+    <div>
+        <button class="btn btn-success btn-block" role="button"
+            (click)="entrar( txtEscritorio.value )">Ingresar</button>
     </div>
 
     <hr class="my-4">
-    <p> Desde acá podes ingresar a una ventanilla de atención. Desde el chat podra ver las consultas de los 
-        clientes una vez se les haya asignado esta ventanilla. Si desea puede también atender consultas desde 
+    <p> Desde acá podes ingresar a una ventanilla de atención. Desde el chat podra ver las consultas de los
+        clientes una vez se les haya asignado esta ventanilla. Si desea puede también atender consultas desde
         la ventanilla de informes para todas las consultas que todavía permanecen en espera.
     </p>
 

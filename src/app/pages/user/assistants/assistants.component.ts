@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from 'src/app/services/user.service';
 import { User } from 'src/app/interfaces/user.interface';
 import { AssistantsResponse, Assistant, AssistantResponse } from '../../../interfaces/assistant.interface';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSnackBar, MatSnackBarRef, MatSnackBarDismiss } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-assistants',
@@ -30,14 +30,19 @@ export class AssistantsComponent implements OnInit {
 
   }
   deleteAssistant(idAssistant: string): void {
-    this.userService.deleteAssistant(idAssistant).subscribe((data: AssistantResponse) => {
-      this.snack.open(data.msg, null, { duration: 5000 });
-      this.assistants = this.assistants.filter(assistant => assistant._id != idAssistant);
-    },
-      (err: AssistantResponse) => {
-        this.snack.open(err.msg, null, { duration: 5000 });
+    this.snack.open('Desea eliminar el asistente?', 'ELIMINAR', {duration: 10000}).afterDismissed().subscribe((data: MatSnackBarDismiss) => {
+      if(data.dismissedByAction){
+        this.userService.deleteAssistant(idAssistant).subscribe((data: AssistantResponse) => {
+          this.snack.open(data.msg, null, { duration: 5000 });
+          this.assistants = this.assistants.filter(assistant => assistant._id != idAssistant);
+        },
+          (err: AssistantResponse) => {
+            this.snack.open(err.msg, null, { duration: 5000 });
+          }
+        )
       }
-    )
+    })
+
 
   }
 

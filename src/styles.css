@@ -6,6 +6,32 @@ button:focus { outline: none; }
 textarea:focus { outline: none; }
 input:focus { outline: none; }
 
+
+.list-crud-delete{
+    color:deeppink;
+    cursor: pointer;
+}
+
+.list-crud-edit{
+    color:lightgreen;
+    cursor: pointer;
+
+}
+
+.card-turnos-danger {
+    background-color: brown;
+}
+.card-turnos-primary {
+    background-color: darkslateblue;
+}
+.card-turnos-info {
+    background-color: darkslategrey;
+}
+
+
+
+
+
 .banner-title {
     font-size: x-large;
     font-family: unset;
