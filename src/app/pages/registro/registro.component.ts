@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import { User } from '../../interfaces/user.interface';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Company } from '../../interfaces/company.interface';
+import { GetidstringPipe } from '../../pipes/getidstring.pipe';
 
 @Component({
 	selector: 'app-registro',
@@ -14,31 +15,23 @@ import { Company } from '../../interfaces/company.interface';
 })
 export class RegistroComponent implements OnInit {
 	forma: FormGroup;
-
+	publicName: string;
 	constructor(
 		private userService: UserService,
 		private router: Router,
-		private snack: MatSnackBar
+		private snack: MatSnackBar,
+		private getidstring: GetidstringPipe,
 	) { }
 
-	sonIguales(campo1: string, campo2: string) {
-		return (group: FormGroup) => {
-			const pass1 = group.controls[campo1].value;
-			const pass2 = group.controls[campo2].value;
-			if (pass1 === pass2) {
-				return null;
-			}
-			return {
-				sonIguales: true
-			};
-		};
-	}
+
 
 	ngOnInit() {
-
+		// this.publicUrl = document.
+		// this.publicUrl = location.origin + '/#/publico/';
 		let defaults = {
 			company: 'WebTurnos',
 			addressStreet: 'Mercedes',
+			companyString: '',
 			addressNumber: '2325',
 			city: 'CABA',
 			name: 'Matias',
@@ -47,7 +40,8 @@ export class RegistroComponent implements OnInit {
 			password2: '123456'
 		}
 		this.forma = new FormGroup({
-			company: new FormControl(defaults.company, Validators.required),
+			company: new FormControl(defaults.company, [Validators.required, this.validatorSetId.bind(this)]),
+			companyString: new FormControl({value:'', disabled: true}),
 			addressStreet: new FormControl(defaults.addressStreet, Validators.required),
 			addressNumber: new FormControl(defaults.addressNumber, Validators.required),
 			city: new FormControl(defaults.city, Validators.required),
@@ -62,8 +56,29 @@ export class RegistroComponent implements OnInit {
 		
 	}
 
+	validatorSetId(control: FormControl): any {
+		// utilizo el pipe getidstring que limpia de acentos, ñ, espacios y me devuelve un tolower.
+		console.log(control);
+		this.publicName = this.getidstring.transform(control.value);
+		this.forma?.patchValue({ companyString: this.publicName });
+		return null;
+	}
+
+	sonIguales(campo1: string, campo2: string) {
+		return (group: FormGroup) => {
+			const pass1 = group.controls[campo1].value;
+			const pass2 = group.controls[campo2].value;
+			if (pass1 === pass2) {
+				return null;
+			}
+			return {
+				sonIguales: true
+			};
+		};
+	}
+
 	registrarUsuario() {
-		console.log(this.forma);
+
 		if (this.forma.invalid) {
 			Swal.fire('Faltan datos', 'Verifique el el email sea correcto y que las contraseñas coincidadn.', 'warning');
 			return;
@@ -76,10 +91,12 @@ export class RegistroComponent implements OnInit {
 
 		const company: Company = {
 			tx_company_name: this.forma.value.company,
+			tx_public_name: this.publicName,
 			tx_address_street: this.forma.value.addressStreet,
 			tx_address_number: this.forma.value.addressNumber,
 			cd_city: this.forma.value.city
 		}
+
 		const user: User = {
 			tx_name: this.forma.value.name,
 			tx_email: this.forma.value.email,

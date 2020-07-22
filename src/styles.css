@@ -5,14 +5,19 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 button:focus { outline: none; }
 textarea:focus { outline: none; }
 input:focus { outline: none; }
+div:focus { outline: none; }
 
 
+
+/* cruds */
 .list-crud-delete{
+    vertical-align: middle;
     color:deeppink;
     cursor: pointer;
 }
 
 .list-crud-edit{
+    vertical-align: middle;
     color:lightgreen;
     cursor: pointer;
 
@@ -28,6 +33,41 @@ input:focus { outline: none; }
     background-color: darkslategrey;
 }
 
+
+/* sidenav */
+.sidenav-title {
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.sidenav-title-icons {
+    font-size: 24px;
+    color: dimgray;
+    vertical-align: bottom;
+}
+
+.sidenav-title-text {
+    margin-left: .3rem;
+    font-weight: 100;
+    color: lightgray;
+}
+
+
+.sidenav-button {
+    cursor: pointer;
+    margin: .2rem;
+}
+
+.sidenav-button-icons {
+    font-size: 18px;
+    color: dimgray;
+    vertical-align: top;
+}
+
+.sidenav-button-text {
+    font-weight: 100;
+    color: lightgray;
+}
 
 
 
@@ -69,3 +109,34 @@ input:focus { outline: none; }
 .banner-content .xxxl {
     font-size: xxx-large;
 }
+
+
+/* animate */
+/* animaciones */
+.animated {
+    -webkit-animation-duration: 1s;
+    animation-duration: 1s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+  }
+  
+  .fast {
+    -webkit-animation-duration: 0.4s;
+    animation-duration: 0.4s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+  
+    to {
+      opacity: 1;
+    }
+  }
+  
+  .fadeIn {
+    animation-name: fadeIn;
+  }

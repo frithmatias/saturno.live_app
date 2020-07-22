@@ -32,6 +32,7 @@ import { ComponentsModule } from './components/components.module';
 import { AdminGuard } from './guards/admin.guard';
 import { TokenGuard } from './guards/token.guard';
 import { LoginGuard } from './guards/login.guard';
+import { GetidstringPipe } from './pipes/getidstring.pipe';
 
 
 
@@ -42,7 +43,8 @@ import { LoginGuard } from './guards/login.guard';
 		HomeComponent,
 		RegistroComponent,
 		LoginComponent,
-		NopagefoundComponent
+		NopagefoundComponent,
+		GetidstringPipe
 	],
 	imports: [
 		MaterialModule,

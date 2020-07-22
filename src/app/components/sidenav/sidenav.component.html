@@ -1,30 +1,45 @@
-<div class="m-2">
-    
-    <div>
-        <button mat-button routerLink="/publico">Home</button>
-    </div>
-    
-    <div>
-        <button mat-button routerLink="/publico/pantalla">Pantalla</button>
+<div class="p-2">
+
+    <!-- HOME -->
+    <div class="sidenav-button m-0 p-1 px-3 mr-4" style="text-align: left;" routerLink="/home">
+        <mat-icon class="sidenav-button-icons">home</mat-icon>
+        <span class="sidenav-button-text">Home</span>
     </div>
 
-    <div>
-        <button mat-button routerLink="/publico/turnos">Turnos</button>
+
+    <!-- SCREEN -->
+    <div class="sidenav-button m-0 p-1 px-3 mr-4" style="text-align: left;" routerLink="/publico/pantalla">
+        <mat-icon class="sidenav-button-icons">input</mat-icon>
+        <span class="sidenav-button-text">Pantalla</span>
     </div>
-    
 
 
+    <!-- TICKETS -->
+    <div class="sidenav-button m-0 p-1 px-3 mr-4" style="text-align: left;" routerLink="/publico/turnos">
+        <mat-icon class="sidenav-button-icons">turned_in</mat-icon>
+        <span class="sidenav-button-text">Turnos</span>
+    </div>
+
+
+    <!-- ASSISTANT / USER -->
     <div *ngFor="let item of userService.menu">
-        <div>
-            {{ item.titulo }}
+        <hr *ngIf="userService.menu" class="m-2" style="border-top: 1px solid dimgray;">
+        <div class="sidenav-title m-0 p-2 px-1">
+            <mat-icon class="sidenav-title-icons">face</mat-icon>
+            <span class="sidenav-title-text">{{ item.titulo}}</span>
         </div>
-        <div *ngFor="let sub of item.submenu">
-            <button mat-button routerLink="/{{sub.url}}">{{ sub.titulo}}</button>
+
+        <div *ngFor="let sub of item.submenu" routerLink="/{{sub.url}}" class="sidenav-button m-0 p-1 px-3 mr-4"
+            style="text-align: left;">
+            <mat-icon class="sidenav-button-icons">{{ sub.icon }}</mat-icon>
+            <span class="sidenav-button-text">{{ sub.titulo}}</span>
         </div>
+
     </div>
 
+    <!-- LOGOUT -->
     <div *ngIf="userService.logueado">
-        <button mat-button (click)="userService.logout()"> Salir </button>
+        <button class="btn btn-sm btn-block btn-danger" (click)="userService.logout()"> Salir </button>
     </div>
 
 </div>

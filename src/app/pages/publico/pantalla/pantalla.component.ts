@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { WebsocketService } from 'src/app/services/websocket.service';
 import { TicketsService } from '../../../services/tickets.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSnackBar, MatSnackBarDismiss } from '@angular/material/snack-bar';
 import { Ticket } from '../../../interfaces/ticket.interface';
 import { Router } from '@angular/router';
 import { TicketResponse } from 'src/app/interfaces/ticket.interface';
@@ -29,9 +29,7 @@ export class PantallaComponent implements OnInit {
 		this.coming = false;
 		const body = document.getElementsByTagName('body')[0];
 		body.classList.remove('container');
-		console.log('ticketsService.companyData', this.ticketsService.companyData);
-		console.log('userService.usuario', this.userService.usuario);
-		
+
 		if (!this.userService.usuario && !this.ticketsService.companyData) {
 			this.ticketsService.getTickets();
 			this.router.navigate(['/publico']);
@@ -45,17 +43,22 @@ export class PantallaComponent implements OnInit {
 
 	enCamino(): void {
 		this.coming = true;
-		this.wsService.emit('cliente-en-camino', this.ticketsService.myTicket);
+		let idSocketDesk = this.ticketsService.myTicket.id_socket_desk;
+		this.wsService.emit('cliente-en-camino', idSocketDesk);
 	}
 
 	cancelTicket(): void {
-		this.ticketsService.cancelTicket(this.ticketsService.myTicket._id).subscribe((data: TicketResponse) => {
-			if (data.ok) {
-				this.snack.open(data.msg, 'ACEPTAR', { duration: 5000 });
-				this.ticketsService.clearPublicSession();
-				this.router.navigate(['/publico']);
+		this.snack.open('Desea cancelar el turno?', 'SI, CANCELAR', { duration: 5000 }).afterDismissed().subscribe((data: MatSnackBarDismiss) => {
+			if (data.dismissedByAction) {
+				this.ticketsService.cancelTicket(this.ticketsService.myTicket._id).subscribe((data: TicketResponse) => {
+					if (data.ok) {
+						this.snack.open(data.msg, 'ACEPTAR', { duration: 5000 });
+						this.ticketsService.clearPublicSession();
+						this.router.navigate(['/publico']);
+					}
+				});
 			}
-		})
+		});
 	}
 }
 

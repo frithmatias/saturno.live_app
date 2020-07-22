@@ -4,7 +4,8 @@ import { TicketsService } from '../../../services/tickets.service';
 import { Router } from '@angular/router';
 import { TicketResponse } from '../../../interfaces/ticket.interface';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { IfStmt } from '@angular/compiler';
+import { Skill } from 'src/app/interfaces/skill.interface';
+import { SkillsResponse } from '../../../interfaces/skill.interface';
 
 @Component({
 	selector: 'app-turnos',
@@ -12,10 +13,8 @@ import { IfStmt } from '@angular/compiler';
 	styleUrls: ['./turnos.component.css']
 })
 export class TurnosComponent implements OnInit {
-	companyData: any;
 	loading: boolean;
-	ticketNum: number;
-	hasTicket = false;
+	skills: Skill[];
 	constructor(
 		private wsService: WebsocketService,
 		public ticketsService: TicketsService,
@@ -24,21 +23,25 @@ export class TurnosComponent implements OnInit {
 	) { }
 
 	ngOnInit(): void {
-
 		if (this.ticketsService.myTicket) {
 			this.snack.open('Usted ya tiene un turno!', null, { duration: 5000 });
 			this.router.navigate(['/publico/pantalla']);
 		} else {
 			if (!this.ticketsService.companyData) {
-				this.snack.open('Por favor ingrese una empresa primero!', null, { duration: 5000 });
+				this.snack.open('Por favor ingrese una empresa primero.', null, { duration: 5000 });
 				this.router.navigate(['/publico']);
+			} else {
+				this.ticketsService.readSkills(this.ticketsService.companyData._id).subscribe((data: SkillsResponse) => {
+					this.skills = data.skills;
+				})
 			}
 		}
 	}
 
-	nuevoTicket(tipo_turno: string): void {
+	nuevoTicket(idSkill: string): void {
+		console.log('idSkill:', idSkill);
 		this.loading = true;
-		this.ticketsService.nuevoTicket(this.wsService.idSocket, tipo_turno, this.ticketsService.companyData._id).subscribe(
+		this.ticketsService.nuevoTicket(this.wsService.idSocket, idSkill, this.ticketsService.companyData._id).subscribe(
 			(data: TicketResponse) => {
 				if (data.ok) {
 					localStorage.setItem('ticket', JSON.stringify(data.ticket));

@@ -7,6 +7,7 @@ import { AsistenteComponent } from './asistente.component';
 import { HomeComponent } from './home/home.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { DesktopComponent } from './desktop/desktop.component';
+import { MaterialModule } from 'src/app/modules/material.module';
 
 
 @NgModule({
@@ -18,6 +19,7 @@ import { DesktopComponent } from './desktop/desktop.component';
   ],
   imports: [
     CommonModule,
+    MaterialModule,
     AsistenteRoutingModule
   ]
 })

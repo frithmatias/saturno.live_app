@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TicketsService } from 'src/app/services/tickets.service';
 import { WebsocketService } from 'src/app/services/websocket.service';
@@ -6,6 +6,7 @@ import { TicketResponse, Ticket } from '../../../interfaces/ticket.interface';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { interval } from 'rxjs';
 import { take, takeUntil, tap, map } from 'rxjs/operators';
+import { UserService } from 'src/app/services/user.service';
 
 const DESK_TIMEOUT = 10; // 60 segundos
 const DESK_EXTRATIME = 20; // 120 segundos
@@ -15,12 +16,12 @@ const DESK_EXTRATIME = 20; // 120 segundos
 	templateUrl: './desktop.component.html',
 	styleUrls: ['./desktop.component.css']
 })
-export class DesktopComponent implements OnInit {
+export class DesktopComponent implements OnInit, OnDestroy {
 	waitForClient: boolean = false;
 	comingClient: boolean = false;
 	pendingTickets: number = 0;
 	timerCount: number = DESK_TIMEOUT;
-	idDesk: number;
+	idDesk: string;
 	ticket: Ticket;
 	tmWaiting: string = '--:--:--';
 	tmAttention: string = '--:--:--';
@@ -30,6 +31,7 @@ export class DesktopComponent implements OnInit {
 	constructor(
 		private activatedRoute: ActivatedRoute,
 		public ticketsService: TicketsService,
+		private userService: UserService,
 		private wsService: WebsocketService,
 		private snack: MatSnackBar
 	) {
@@ -39,24 +41,30 @@ export class DesktopComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
+
 		// obtengo la cantidad de turnos en cola al generar un nuevo turno.
 		this.wsService.escucharTurnos().subscribe(data => {
 			this.pendingTickets = Number(data);
 		});
-		// obtengo la cantidad de turnos en cola
-		this.ticketsService.getPendingTicket(this.idDesk).subscribe((data: any) => {
+
+		this.ticketsService.getPendingTicket(this.userService.usuario.id_company, this.idDesk).subscribe((data: TicketResponse) => {
+			this.snack.open(data.msg, null, {duration: 5000});
 			if (data.ok) {
 				this.ticket = data.ticket;
 			} else {
 				this.ticket = null;
 			}
-			this.pendingTickets = data.pending;
 		});
 	}
 
 	atenderTicket(): void {
+		
 		this.clearSession();
-		this.ticketsService.atenderTicket(this.idDesk, this.wsService.idSocket).subscribe(
+		let idDesk = this.idDesk;
+		let idAssistant = this.userService.usuario._id;
+		let idSocketDesk = this.wsService.idSocket;
+
+		this.ticketsService.atenderTicket(idDesk, idAssistant, idSocketDesk).subscribe(
 			(resp: TicketResponse) => {
 			if (!resp.ok) {
 				this.waitForClient = false;
@@ -125,7 +133,6 @@ export class DesktopComponent implements OnInit {
 		});
 	}
 
-
 	sendMessage(e: HTMLInputElement): void {
 		if (!this.wsService.idSocket) {
 			this.snack.open('Se perdió la conexión con el escritorio.', 'ACEPTAR', { duration: 5000 });
@@ -138,8 +145,9 @@ export class DesktopComponent implements OnInit {
 		}
 	}
 
+	atenderInformes(): void {
 
-	atenderInformes(): void {}
+	}
 
 	devolverTicket(): void {
 		this.clearSession();
@@ -147,6 +155,7 @@ export class DesktopComponent implements OnInit {
 			this.message = resp.msg;
 		})
 	}
+
 	finalizarTicket(): void {
 		this.clearSession();
 		this.ticketsService.finalizarTicket(this.idDesk).subscribe((resp: TicketResponse)=>{
@@ -159,5 +168,16 @@ export class DesktopComponent implements OnInit {
 		this.ticket = null;
 		this.tmWaiting = '--:--:--';
 		this.tmAttention = '--:--:--';
+	}
+
+	ngOnDestroy(){
+		console.log('finalizando escritorio');
+		let idCompany = this.userService.usuario.id_company;
+		let idAssistant = this.userService.usuario._id;
+	
+		this.userService.releaseDesktop(idCompany, this.idDesk, idAssistant).subscribe(data => {
+		  console.log(data);
+		})
+
 	}
 }

@@ -8,7 +8,7 @@ export interface Ticket {
 	id_socket_desk: string | null;
 	id_desk: number | null;
 	id_company: string;
-	id_type: string;
+	id_skill: string;
 	tx_status: string;
 	tm_start: number;
 	tm_att: number | null;

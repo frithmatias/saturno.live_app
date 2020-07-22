@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar, MatSnackBarDismiss } from '@angular/material/snack-bar';
 import { UserService } from 'src/app/services/user.service';
-import { Skill, SkillsResponse, SkillResponse } from '../../../interfaces/sill.interface';
+import { Skill, SkillsResponse, SkillResponse } from '../../../interfaces/skill.interface';
 
 @Component({
   selector: 'app-skills',
@@ -16,7 +16,7 @@ export class SkillsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.userService.readSkills(this.userService.usuario._id).subscribe((data: SkillsResponse) => {
+    this.userService.readSkills(this.userService.usuario.id_company).subscribe((data: SkillsResponse) => {
       this.skills = data.skills;
       console.log(data);
     },

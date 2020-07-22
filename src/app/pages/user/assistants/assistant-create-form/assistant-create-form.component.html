@@ -1,4 +1,5 @@
-<form autocomplete="off" style="color: brown;" ngNativeValidate #formDirective="ngForm" [formGroup]="forma" (ngSubmit)="createAssistant(formDirective)">
+<form autocomplete="off" style="color: brown;" ngNativeValidate #formDirective="ngForm" [formGroup]="forma"
+    (ngSubmit)="createAssistant(formDirective)">
 
     <mat-form-field color="warn" appearance="fill" class="w-100">
         <mat-label>Nombre</mat-label>
@@ -9,8 +10,8 @@
     <mat-form-field color="warn" appearance="fill" class="w-100">
         <mat-label>Email</mat-label>
         <input matInput placeholder="Email" formControlName="email" name="email" type="email" required
-            placeholder="Correo" >
-    </mat-form-field> 
+            placeholder="Correo">
+    </mat-form-field>
 
     <mat-form-field color="warn" appearance="fill" class="w-100">
         <mat-label>Clave</mat-label>
@@ -24,8 +25,20 @@
             placeholder="Confirma contraseña" autocomplete="new-password">
     </mat-form-field>
 
+
+    <mat-selection-list [ngModelOptions]="{standalone: true}" [(ngModel)]="selStrSkills">
+        <mat-list-option  name="selStrSkills" *ngFor="let skill of skills" (click)="setNewSkill(skill)" [value]="skill._id">
+            <span class="mat-select-option-nowarp" >{{skill.tx_skill}}</span>
+        </mat-list-option>
+    </mat-selection-list>
+
+
     <div class="form-group text-center">
-        <button class="btn btn-success btn-block text-uppercase waves-effect waves-light" type="submit">Alta de Asistente</button>
-    </div>
+        <button *ngIf="!assistantEdit" class="btn btn-success btn-block text-uppercase waves-effect waves-light" type="submit">Alta de
+            Asistente</button>
+        <button *ngIf="assistantEdit" class="btn btn-danger btn-block text-uppercase waves-effect waves-light" type="submit">Guardar Cambios
+        </button>
+        </div>
 
 </form>
+

@@ -13,45 +13,28 @@
 
 
       <div *ngIf="ticketsService.companyData">
-        <div *ngIf="!ticketsService.companyData.id_company">
-          <p class="lead">
-            Por favor ingrese la empresa para la cual desea obtener un turno.
-          </p>
-          <mat-form-field color="warn" appearance="fill" logincss class="w-100">
-            <mat-label>Ingrese su Email</mat-label>
-            <input #inputEmail matInput placeholder="sumail@dominio.com" [ngModel]="email" name="email">
-            <span class="input-icon" (click)="cleanEmail(inputEmail, inputPassword)"><i
-                class="mdi mdi-close"></i></span>
-          </mat-form-field>
-        </div>
 
-
-        <div *ngIf="ticketsService.companyData.id_company">
+        <div *ngIf="ticketsService.companyData">
           <p class="lead">
             Usted esta por sacar un turno para ser atendido en
           </p>
 
           <p style="color: red; font-size: 2rem; font-weight: 400;">
-            {{ ticketsService.companyData.id_company }}
+            {{ ticketsService.companyData.tx_company_name }}
           </p>
 
           <p style="color: red; font-size: 1rem; font-weight: 400;">
-            {{ ticketsService.companyData.tx_email }}
+            {{ ticketsService.companyData.tx_address_street }}
+            {{ ticketsService.companyData.tx_address_number }}
+            {{ ticketsService.companyData.cd_city }}
+
           </p>
 
-          <span *ngIf="!hasTicket">
-            <p class="card-text">Luego de obtener su turno será redireccionado a la pantalla de espera.</p>
-            <button class="btn btn-success btn-block btn-lg" (click)="nuevoTicket('A')">
-              PEDIATRIA
+            <button *ngFor="let skill of skills" class="btn btn-success btn-block btn-lg" (click)="nuevoTicket(skill.id_skill)">
+              {{skill.tx_skill}}
             </button>
-            <button class="btn btn-success btn-block btn-lg" (click)="nuevoTicket('B')">
-              CLINICA
-            </button>
-            <button class="btn btn-success btn-block btn-lg" (click)="nuevoTicket('C')">
-              TRAUMATOLOGÍA
-            </button>
-          </span>
-        </div>
+      
+
 
       </div>
 

@@ -6,8 +6,7 @@
 export interface Desktop {
 	id_company: string,
 	id_desktop: string,
-	fc_from: Date;
-	fc_to: Date;
+	id_assistant: string,
 	__v: number;
 	_id: string;
 }

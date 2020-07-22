@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from 'src/app/services/user.service';
-import { User } from 'src/app/interfaces/user.interface';
-import { AssistantsResponse, Assistant, AssistantResponse } from '../../../interfaces/assistant.interface';
 import { MatSnackBar, MatSnackBarRef, MatSnackBarDismiss } from '@angular/material/snack-bar';
+import { User, UsersResponse, UserResponse } from '../../../interfaces/user.interface';
+import { AssistantsResponse, Assistant } from '../../../interfaces/assistant.interface';
 
 @Component({
   selector: 'app-assistants',
@@ -11,42 +11,50 @@ import { MatSnackBar, MatSnackBarRef, MatSnackBarDismiss } from '@angular/materi
 })
 export class AssistantsComponent implements OnInit {
   assistants: Assistant[];
+  assistantEdit: User;
+  assistantUpdated: string;
   constructor(
     private userService: UserService,
     private snack: MatSnackBar
   ) { }
 
   ngOnInit(): void {
-    this.userService.readAssistants(this.userService.usuario._id).subscribe((data: AssistantsResponse) => {
-      this.assistants = data.assistants;
-    },
-      (err) => {
-        console.log(err);
-      })
+    this.readAssistants();
   }
 
 
-  editAssistant(idAssistant: string): void {
-
+  editAssistant(assistant: User): void {
+    this.assistantEdit = assistant
   }
+
   deleteAssistant(idAssistant: string): void {
     this.snack.open('Desea eliminar el asistente?', 'ELIMINAR', {duration: 10000}).afterDismissed().subscribe((data: MatSnackBarDismiss) => {
       if(data.dismissedByAction){
-        this.userService.deleteAssistant(idAssistant).subscribe((data: AssistantResponse) => {
+        this.userService.deleteAssistant(idAssistant).subscribe((data: UserResponse) => {
           this.snack.open(data.msg, null, { duration: 5000 });
           this.assistants = this.assistants.filter(assistant => assistant._id != idAssistant);
         },
-          (err: AssistantResponse) => {
+          (err: UserResponse) => {
             this.snack.open(err.msg, null, { duration: 5000 });
           }
         )
       }
     })
-
-
   }
 
-  assistantCreated(assistant: Assistant): void {
-    this.assistants.push(assistant);
+  updateAssistants(assistant: string): void {
+    this.assistantUpdated = assistant;
+    this.readAssistants();
+  }
+
+
+  readAssistants(): void {
+    this.userService.readAssistants(this.userService.usuario.id_company).subscribe((data: AssistantsResponse) => {
+      console.log(data)
+      this.assistants = data.assistants;
+    },
+      (err) => {
+        console.log(err);
+      })
   }
 }

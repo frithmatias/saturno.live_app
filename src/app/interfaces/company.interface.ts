@@ -4,6 +4,7 @@
 
 export interface Company {
 	tx_company_name: string;
+	tx_public_name: string;
     tx_address_street: string;
     tx_address_number: string;
     cd_city: string;

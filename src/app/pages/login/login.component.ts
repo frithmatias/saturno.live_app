@@ -85,7 +85,7 @@ export class LoginComponent implements OnInit {
 			},
 			err => {
 				console.log(err);
-				this.snack.open(err.error.mensaje , 'Aceptar', {duration: 5000});
+				this.snack.open(err.error.msg , 'Aceptar', {duration: 5000});
 			});
 	}
 

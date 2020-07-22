@@ -7,6 +7,7 @@ import { AjaxError } from 'rxjs/ajax';
 import { of, Observable, interval } from 'rxjs';
 import { UserService } from './user.service';
 import { Router } from '@angular/router';
+import { SkillsResponse } from '../interfaces/skill.interface';
 
 const TAIL_LENGTH = 4;
 
@@ -38,25 +39,16 @@ export class TicketsService {
 		private router: Router
 	) {
 
-		if (localStorage.getItem('company')) {
-			this.companyData = JSON.parse(localStorage.getItem('company'));
-			this.getTickets();
-		};
-
-		if (localStorage.getItem('ticket')) {
-			this.myTicket = JSON.parse(localStorage.getItem('ticket'));
-			if (this.myTicket.tm_end) { // si el ticket esta finalizado limpio la sesión
-				this.clearPublicSession();
-			}
-		} else {
-			this.clearPublicSession();
-		}
-
+		console.log('Cargando servicio tickets...')
 
 	}
 
-	getUserData(companyName: string): Observable<object> {
-		return this.http.get(environment.url + '/p/getuserdata/' + companyName);
+	readCompany(txPublicName: string): Observable<object> {
+		return this.http.get(environment.url + '/c/readcompany/' + txPublicName);
+	}
+
+	readSkills(idCompany): Observable<SkillsResponse> {
+		return this.http.get<SkillsResponse>(environment.url + '/s/readskills/' + idCompany);
 	}
 
 	clearPublicSession(): void {
@@ -72,8 +64,9 @@ export class TicketsService {
 		return this.http.put(environment.url + '/t/actualizarsocket', socketsData);
 	}
 
-	nuevoTicket(idSocket: string, typeTicket: string, idCompany: string): Observable<object> {
-		let data = { idSocket, typeTicket, idCompany };
+	nuevoTicket(idSocket: string, idSkill: string, idCompany: string): Observable<object> {
+		let data = { idSocket, idSkill, idCompany };
+		console.log(data);
 		return this.http.post(environment.url + '/t/nuevoticket/', data);
 	}
 
@@ -81,28 +74,34 @@ export class TicketsService {
 		return this.http.get(environment.url + '/t/cancelticket/' + idTicket);
 	}
 
-	getPendingTicket(idDesk: number): Observable<object> {
-		const url = environment.url + '/t/pendingticket/' + idDesk;
-		return this.http.get(url);
-	}
-
-	atenderTicket(idDesk: number, idDeskSocket: string): Observable<object> {
+	getPendingTicket(idCompany: string, idDesk: string): Observable<object> {
 		const headers = new HttpHeaders({
 			'turnos-token': this.userService.token
 		});
 
-		const deskData = { idDesk, idDeskSocket };
-		const url = environment.url + '/t/atenderticket';
+		const url = environment.url + `/t/pendingticket/${idCompany}/${idDesk}`;
+		return this.http.get(url, { headers });
+	}
+
+	atenderTicket(idDesk: string, idAssistant: string, idSocketDesk: string): Observable<object> {
+
+		const headers = new HttpHeaders({
+			'turnos-token': this.userService.token
+		});
+
+		const deskData = { idDesk, idAssistant, idSocketDesk};
+
+		const url = environment.url + `/t/taketicket/${deskData}`;
 		return this.http.post(url, deskData, { headers });
 	}
 
-	devolverTicket(idDesk: number): Observable<object> {
+	devolverTicket(idDesk: string): Observable<object> {
 		const deskData = { idDesk };
 		const url = environment.url + '/t/devolverticket';
 		return this.http.post(url, deskData);
 	}
 
-	finalizarTicket(idDesk: number): Observable<object> {
+	finalizarTicket(idDesk: string): Observable<object> {
 		const deskData = { idDesk };
 		const url = environment.url + '/t/finalizarticket';
 		return this.http.post(url, deskData);
@@ -113,7 +112,7 @@ export class TicketsService {
 		if (this.companyData) {
 			id_company = this.companyData._id;
 		} else if (this.userService.usuario) {
-			id_company = this.userService.usuario._id;
+			id_company = this.userService.usuario.id_company;
 		}
 		if (!id_company) {
 			return;
@@ -141,7 +140,7 @@ export class TicketsService {
 			console.log(this.ticketsTail);
 			// update ticket
 			if (this.myTicket) {
-				const myUpdatedTicket = this.ticketsCall.filter(ticket => ticket.id_ticket === this.myTicket.id_ticket && ticket.id_type === this.myTicket.id_type)[0];
+				const myUpdatedTicket = this.ticketsCall.filter(ticket => ticket.id_ticket === this.myTicket.id_ticket && ticket.id_skill === this.myTicket.id_skill)[0];
 				if (myUpdatedTicket) {
 					this.myTicket = myUpdatedTicket;
 					localStorage.setItem('ticket', JSON.stringify(this.myTicket));

@@ -2,7 +2,7 @@ import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { UserService } from 'src/app/services/user.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormGroup, FormControl, Validators, FormGroupDirective } from '@angular/forms';
-import { Skill, SkillResponse } from '../../../../interfaces/sill.interface';
+import { Skill, SkillResponse } from '../../../../interfaces/skill.interface';
 
 @Component({
   selector: 'app-skill-create-form',
@@ -33,7 +33,7 @@ export class SkillCreateFormComponent implements OnInit {
 		}
 
 		const skill: Skill = {
-			id_company: this.userService.usuario._id,
+			id_company: this.userService.usuario.id_company,
 			id_skill: this.forma.value.idSkill,
 			tx_skill: this.forma.value.txSkill,
 			__v: null,

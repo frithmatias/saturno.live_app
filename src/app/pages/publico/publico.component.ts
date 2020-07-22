@@ -22,16 +22,29 @@ export class PublicoComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    if (localStorage.getItem('ticket')) {
+      this.ticketsService.myTicket = JSON.parse(localStorage.getItem('ticket'));
+      this.router.navigate(['/publico/pantalla']);
+
+      if (this.ticketsService.myTicket.tm_end) { // si el ticket esta finalizado limpio la sesión
+        this.ticketsService.clearPublicSession();
+      }
+    } 
+
+    if (localStorage.getItem('company')) {
+      this.ticketsService.companyData = JSON.parse(localStorage.getItem('company'));
+      this.router.navigate(['/publico/turnos']);
+    };
+
     this.route.params.subscribe((data: any) => {
       // /publico/nombreEmpresa
 
       if (data.userCompanyName) {
-        this.ticketsService.getUserData(data.userCompanyName).subscribe((resp: any) => {
-
+        this.ticketsService.readCompany(data.userCompanyName).subscribe((resp: any) => {
           if (resp.ok) {
-            this.ticketsService.companyData = resp.user;
-            this.ticketsService.getTickets();
-            localStorage.setItem('company', JSON.stringify(resp.user));
+            localStorage.setItem('company', JSON.stringify(resp.company));
+            this.ticketsService.companyData = resp.company;
             this.router.navigate(['/publico/turnos'])
           }
 

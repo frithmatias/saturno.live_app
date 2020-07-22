@@ -1,30 +1,27 @@
-<div class="m-4">
-
+<div class="m-4 animated fadeIn">
 
     <div class="card bg-info lead text-white">
         <div class="card-header">Ventanillas</div>
         <div class="card-body card-turnos-info">
-
             <div class="my-2" *ngFor="let desktop of desktops">
                 <span>{{desktop?.id_desktop}}</span>
                 <span style="float: right;">
-                <mat-icon class="ml-2 list-crud-edit" (click)="editDesktop(desktop._id)">edit</mat-icon>
-                <mat-icon class="ml-2 list-crud-delete" (click)="deleteDesktop(desktop._id)">delete</mat-icon>
-
+                    <mat-icon class="ml-2 list-crud-edit" (click)="editDesktop(desktop._id)">edit</mat-icon>
+                    <mat-icon class="ml-2 list-crud-delete" (click)="deleteDesktop(desktop._id)">delete</mat-icon>
                 </span>
             </div>
-
         </div>
-
-        <div class="my-4"></div>
-
-        <div class="card lead">
-            <div class="card-header">Alta de Ventanillas</div>
-            <div class="card-body">
-
-                <app-desktop-create-form (desktopCreated)="desktopCreated($event)"></app-desktop-create-form>
-
-            </div>
-        </div>
-
     </div>
+
+    <div class="my-4"></div>
+
+    <div class="card lead">
+        <div class="card-header">Alta de Ventanillas</div>
+        <div class="card-body">
+
+            <app-desktop-create-form (desktopCreated)="desktopCreated($event)"></app-desktop-create-form>
+
+        </div>
+    </div>
+
+</div>

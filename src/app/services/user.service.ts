@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
 
 // Interfaces
 import { Desktop } from 'src/app/interfaces/desktop.interface';
-import { Skill } from '../interfaces/sill.interface';
+import { Skill } from '../interfaces/skill.interface';
 import { User } from 'src/app/interfaces/user.interface';
 import { Company } from '../interfaces/company.interface';
 
@@ -135,6 +135,14 @@ export class UserService {
 		return this.http.get(url, {headers});
 	}
 
+	updateAssistant(assistant: User) {
+		const headers = new HttpHeaders({
+			'turnos-token': this.token
+		});
+		const url = environment.url + '/a/updateassistant';
+		return this.http.post(url, assistant, {headers});
+	}
+	
 	deleteAssistant(idAssistant: string) {
 		const headers = new HttpHeaders({
 			'turnos-token': this.token
@@ -143,7 +151,6 @@ export class UserService {
 		return this.http.delete(url, {headers});
 	}
 
-	
 	// ========================================================
 	// Desktop Methods
 	// ========================================================
@@ -172,7 +179,26 @@ export class UserService {
 		return this.http.delete(url, {headers});
 	}
 
+	takeDesktop(idCompany: string, idDesktop: string, idAssistant: string) {
 
+		const headers = new HttpHeaders({
+			'turnos-token': this.token
+		});
+		let data = {idCompany, idDesktop, idAssistant}
+		const url = environment.url + '/d/takedesktop';
+		return this.http.post(url, data, {headers});
+	}
+	
+	releaseDesktop(idCompany: string, idDesktop: string, idAssistant: string) {
+
+		const headers = new HttpHeaders({
+			'turnos-token': this.token
+		});
+		let data = {idCompany, idDesktop, idAssistant}
+		console.log(data);
+		const url = environment.url + '/d/releasedesktop';
+		return this.http.post(url, data, {headers});
+	}
 
 	// ========================================================
 	// Skill Methods
@@ -294,7 +320,7 @@ export class UserService {
 		if (localStorage.getItem('menu')) { localStorage.removeItem('menu'); }
 		this.token = '';
 		this.usuario = null;
-		this.menu = [];
+		this.menu = null;
 		this.logueado = false;
 		this.router.navigate(['/home']);
 	}

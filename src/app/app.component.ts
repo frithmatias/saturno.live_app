@@ -12,13 +12,17 @@ export class AppComponent {
   unreadMessages: number;
   constructor(private router: Router) {
 
-    if (localStorage.getItem('ticket')) {
+    if (localStorage.getItem('ticket') || localStorage.getItem('company')) {
       this.router.navigate(['/publico']);
-    } else {
-      if (localStorage.getItem('user')) {
-        let user = JSON.parse(localStorage.getItem('user'));
-        this.router.navigate(['/publico', user.id_company]);
+    } else if (localStorage.getItem('user')) {
+      let user = JSON.parse(localStorage.getItem('user'));
+      if (user.id_role === 'ASSISTANT_ROLE') {
+        this.router.navigate(['/asistente']);
+      } else if (user.id_role === 'USER_ROLE') {
+        this.router.navigate(['/user']);
       }
+    } else {
+      this.router.navigate(['/home'])
     }
 
 
