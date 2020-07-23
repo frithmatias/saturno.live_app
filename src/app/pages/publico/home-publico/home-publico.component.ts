@@ -18,7 +18,7 @@ export class HomePublicoComponent implements OnInit {
   }
   
   findCompany(e: HTMLInputElement){
-    console.log(e.value);
+
     if(e.value.length>0){
       this.router.navigate(['/publico', e.value]);
     }

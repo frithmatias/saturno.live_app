@@ -6,6 +6,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { RegistroComponent } from './pages/registro/registro.component';
 import { LoginComponent } from './pages/login/login.component';
 import { NopagefoundComponent } from './pages/nopagefound/nopagefound.component';
+import { HelpComponent } from './pages/help/help.component';
 
 import { AdminComponent } from './pages/admin/admin.component';
 import { UserComponent } from './pages/user/user.component';
@@ -22,6 +23,7 @@ const appRoutes: Routes = [
 	{ path: 'home', component: HomeComponent },
 	{ path: 'login', component: LoginComponent },
 	{ path: 'registro', component: RegistroComponent },
+	{ path: 'help', component: HelpComponent },
 	
 	{ 	path: 'publico', 															
 		component: PublicoComponent, 	

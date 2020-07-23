@@ -38,10 +38,12 @@ export class TurnosComponent implements OnInit {
 		}
 	}
 
-	nuevoTicket(idSkill: string): void {
-		console.log('idSkill:', idSkill);
+	nuevoTicket(idSkill: string, cdSkill: string): void {
 		this.loading = true;
-		this.ticketsService.nuevoTicket(this.wsService.idSocket, idSkill, this.ticketsService.companyData._id).subscribe(
+		let idCompany = this.ticketsService.companyData._id;
+		let idSocket = this.wsService.idSocket;
+		
+		this.ticketsService.nuevoTicket(idCompany, idSkill, cdSkill, idSocket).subscribe(
 			(data: TicketResponse) => {
 				if (data.ok) {
 					localStorage.setItem('ticket', JSON.stringify(data.ticket));

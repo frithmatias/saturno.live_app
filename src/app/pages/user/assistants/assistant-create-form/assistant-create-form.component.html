@@ -1,6 +1,14 @@
 <form autocomplete="off" style="color: brown;" ngNativeValidate #formDirective="ngForm" [formGroup]="forma"
     (ngSubmit)="createAssistant(formDirective)">
 
+    <mat-form-field color="warn" appearance="fill" logincss class="w-100">
+        <mat-label>Rol</mat-label>
+        <mat-select formControlName="rol" name="rol" required>
+            <mat-option value="USER_ROLE"> Administrador y Asistente</mat-option>
+            <mat-option value="ASSISTANT_ROLE"> Asistente </mat-option>
+        </mat-select>
+    </mat-form-field>
+
     <mat-form-field color="warn" appearance="fill" class="w-100">
         <mat-label>Nombre</mat-label>
         <input matInput placeholder="Nombre" formControlName="nombre" name="nombre" type="text" required

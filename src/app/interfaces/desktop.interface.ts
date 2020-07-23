@@ -5,7 +5,7 @@
 
 export interface Desktop {
 	id_company: string,
-	id_desktop: string,
+	cd_desktop: string,
 	id_assistant: string,
 	__v: number;
 	_id: string;

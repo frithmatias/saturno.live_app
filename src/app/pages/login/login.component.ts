@@ -54,7 +54,6 @@ export class LoginComponent implements OnInit {
 			// googleUser google user data
 			this.userService.loginGoogle(token).subscribe(
 				data => {
-					console.log(data);
 					window.location.href = '#/cliente';
 				},
 				err => Swal.fire('Error', err.error.mensaje, 'error')
@@ -84,7 +83,6 @@ export class LoginComponent implements OnInit {
 				this.router.navigate(['/user']);
 			},
 			err => {
-				console.log(err);
 				this.snack.open(err.error.msg , 'Aceptar', {duration: 5000});
 			});
 	}

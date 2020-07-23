@@ -30,7 +30,7 @@
 
           </p>
 
-            <button *ngFor="let skill of skills" class="btn btn-success btn-block btn-lg" (click)="nuevoTicket(skill.id_skill)">
+            <button *ngFor="let skill of skills" class="btn btn-success btn-block btn-lg" (click)="nuevoTicket(skill._id, skill.cd_skill)">
               {{skill.tx_skill}}
             </button>
       

@@ -1,3 +1,4 @@
+import { Company } from './company.interface';
 
 // ========================================================
 // SKILLS
@@ -5,7 +6,7 @@
 
 export interface Skill {
 	id_company: string,
-	id_skill: string,
+	cd_skill: string,
 	tx_skill: string,
 	__v: number;
 	_id: string;
@@ -22,3 +23,4 @@ export interface SkillsResponse {
 	msg: string;
 	skills: Skill[] | null;
 }
+

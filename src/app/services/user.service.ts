@@ -11,6 +11,7 @@ import { Desktop } from 'src/app/interfaces/desktop.interface';
 import { Skill } from '../interfaces/skill.interface';
 import { User } from 'src/app/interfaces/user.interface';
 import { Company } from '../interfaces/company.interface';
+import { UserCompany } from '../interfaces/user.interface';
 
 @Injectable({
 	providedIn: 'root'
@@ -18,7 +19,8 @@ import { Company } from '../interfaces/company.interface';
 export class UserService {
 
 	token: string;
-	usuario: User;
+	usuario: UserCompany;
+	desktop: Desktop;
 	menu: any[] = [];
 	logueado = false;
 
@@ -156,6 +158,7 @@ export class UserService {
 	// ========================================================
 
 	createDesktop(desktop: Desktop) {
+
 		const headers = new HttpHeaders({
 			'turnos-token': this.token
 		});
@@ -189,15 +192,14 @@ export class UserService {
 		return this.http.post(url, data, {headers});
 	}
 	
-	releaseDesktop(idCompany: string, idDesktop: string, idAssistant: string) {
+	releaseDesktop(desktop: Desktop) {
 
 		const headers = new HttpHeaders({
 			'turnos-token': this.token
 		});
-		let data = {idCompany, idDesktop, idAssistant}
-		console.log(data);
+
 		const url = environment.url + '/d/releasedesktop';
-		return this.http.post(url, data, {headers});
+		return this.http.post(url, desktop, {headers});
 	}
 
 	// ========================================================
@@ -295,7 +297,7 @@ export class UserService {
 		// si el usuario se logueo en algun momento verifico la expiracion del token
 		const payload = JSON.parse(atob(this.token.split('.')[1]));
 		const ahora = new Date().getTime() / 1000;
-		console.log('estaLogueado', payload);
+
 		if (payload.exp < ahora) {
 			this.logout();
 			return false; // token expirado
@@ -318,6 +320,8 @@ export class UserService {
 		if (localStorage.getItem('token')) { localStorage.removeItem('token'); }
 		if (localStorage.getItem('user')) { localStorage.removeItem('user'); }
 		if (localStorage.getItem('menu')) { localStorage.removeItem('menu'); }
+		if (localStorage.getItem('desktop')) { localStorage.removeItem('desktop'); }
+
 		this.token = '';
 		this.usuario = null;
 		this.menu = null;

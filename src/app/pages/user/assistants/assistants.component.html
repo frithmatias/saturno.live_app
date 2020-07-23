@@ -8,6 +8,9 @@
                 <span *ngIf="assistant._id===assistantUpdated">
                     <mat-icon class="ml-2 list-crud-edit">check</mat-icon>
                 </span>
+                <span *ngIf="assistant.id_role==='USER_ROLE'">
+                    <mat-icon class="ml-2 list-crud-star">star</mat-icon>
+                </span>
                 <span style="float: right;">
                     <mat-icon class="ml-2 list-crud-edit" (click)="editAssistant(assistant)">edit</mat-icon>
                     <mat-icon class="ml-2 list-crud-delete" (click)="deleteAssistant(assistant._id)">delete</mat-icon>

@@ -37,11 +37,7 @@ export class TicketsService {
 		private http: HttpClient,
 		private userService: UserService,
 		private router: Router
-	) {
-
-		console.log('Cargando servicio tickets...')
-
-	}
+	) {}
 
 	readCompany(txPublicName: string): Observable<object> {
 		return this.http.get(environment.url + '/c/readcompany/' + txPublicName);
@@ -64,9 +60,9 @@ export class TicketsService {
 		return this.http.put(environment.url + '/t/actualizarsocket', socketsData);
 	}
 
-	nuevoTicket(idSocket: string, idSkill: string, idCompany: string): Observable<object> {
-		let data = { idSocket, idSkill, idCompany };
-		console.log(data);
+	nuevoTicket(idCompany: string, idSkill: string, cdSkill: string, idSocket: string ): Observable<object> {
+		let data = { idCompany, idSkill, cdSkill, idSocket };
+
 		return this.http.post(environment.url + '/t/nuevoticket/', data);
 	}
 
@@ -91,7 +87,7 @@ export class TicketsService {
 
 		const deskData = { idDesk, idAssistant, idSocketDesk};
 
-		const url = environment.url + `/t/taketicket/${deskData}`;
+		const url = environment.url + `/t/taketicket`;
 		return this.http.post(url, deskData, { headers });
 	}
 
@@ -117,7 +113,7 @@ export class TicketsService {
 		if (!id_company) {
 			return;
 		}
-		console.log('obteniendo tickets para ', id_company);
+		
 		const url = environment.url + '/t/gettickets/' + id_company;
 		const getError = (err: AjaxError) => {
 			return of([{ idDesk: 'err', id_ticket: 'err', status: 'err' }]);
@@ -127,17 +123,17 @@ export class TicketsService {
 			map<TicketsResponse, Ticket[]>(data => data.tickets),
 			catchError(getError)
 		).subscribe((data: Ticket[]) => {
-			console.log(data);
+
 			if (data.length === 0) {
 				return;
 			}
 			// !obtiene los tickets antes de que el servicio de sockets pueda actualizar el id_socket
 			this.ticketsAll = data;
-			console.log(this.ticketsAll);
+
 			this.ticketsCall = data.filter(ticket => ticket.tm_att !== null);
 			this.ticketsTail = [...this.ticketsCall].sort((a: Ticket, b: Ticket) => -1).slice(0, TAIL_LENGTH);
 			this.lastTicket = this.ticketsTail[0];
-			console.log(this.ticketsTail);
+
 			// update ticket
 			if (this.myTicket) {
 				const myUpdatedTicket = this.ticketsCall.filter(ticket => ticket.id_ticket === this.myTicket.id_ticket && ticket.id_skill === this.myTicket.id_skill)[0];
@@ -177,6 +173,12 @@ export class TicketsService {
 		let mStr = m.toString().length === 1 ? '0' + m : m;
 		let sStr = s.toString().length === 1 ? '0' + s : s;
 		return `${hStr}:${mStr}:${sStr}`;
+	}
+
+	sendContact(data: any) {
+
+		const url = environment.url + `/p/contact`;
+		return this.http.post(url, data);
 	}
 
 }

@@ -17,10 +17,11 @@ const config: SocketIoConfig = { url: environment.url, options: {} };
 
 
 // COMPONENTS
-import { HomeComponent } from './pages/home/home.component';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './pages/login/login.component';
 import { RegistroComponent } from './pages/registro/registro.component';
+import { HomeComponent } from './pages/home/home.component';
+import { HelpComponent } from './pages/help/help.component';
 import { NopagefoundComponent } from './pages/nopagefound/nopagefound.component';
 
 // MODULES
@@ -44,7 +45,8 @@ import { GetidstringPipe } from './pipes/getidstring.pipe';
 		RegistroComponent,
 		LoginComponent,
 		NopagefoundComponent,
-		GetidstringPipe
+		GetidstringPipe,
+		HelpComponent
 	],
 	imports: [
 		MaterialModule,

@@ -23,6 +23,12 @@ div:focus { outline: none; }
 
 }
 
+.list-crud-star{
+    vertical-align: middle;
+    color:yellow;
+    cursor: pointer;
+}
+
 .card-turnos-danger {
     background-color: brown;
 }

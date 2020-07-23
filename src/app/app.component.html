@@ -3,13 +3,15 @@
 
 <mat-drawer-container class="example-container h-100">
 
+    <!-- sidenav -->
     <mat-drawer #sidenav id="sidenav" mode="over" class="bg-dark">
         <app-sidenav></app-sidenav>
     </mat-drawer>
 
-
+    <!-- chat -->
     <mat-drawer [(opened)]="opened" #chat id="chat" mode="over" position="end" class="mat-drawer-chat">
-        <app-chat (toggleChat)="toggle( chat )" [chatOpenStatus]="opened" (unreadMessages)="unreadMessages=$event"></app-chat>
+        <app-chat (toggleChat)="toggle( chat )" [chatOpenStatus]="opened" (unreadMessages)="unreadMessages=$event">
+        </app-chat>
     </mat-drawer>
 
     <router-outlet></router-outlet>

@@ -18,11 +18,7 @@ export class DesktopsComponent implements OnInit {
   ngOnInit(): void {
     this.userService.readDesktops(this.userService.usuario.id_company).subscribe((data: DesktopsResponse) => {
       this.desktops = data.desktops;
-      console.log(data);
-    },
-      (err) => {
-        console.log(err);
-      })
+    });
   }
 
   editDesktop(idDesktop: string): void {

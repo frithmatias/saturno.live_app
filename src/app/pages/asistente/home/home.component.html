@@ -1,25 +1,39 @@
-<div class="jumbotron m-2">
+<div class="jumbotron m-4 animated fadeIn">
+
     <h1 class="display-4">Bienvenido a la web del asistente</h1>
     <p class="lead">Bienvenido, desde aquí puede sacar un turno y evitar la sala de esperas.</p>
 
-    <div class="my-4">
-        <!-- <input #txtEscritorio (keyup.enter)="entrar( txtEscritorio.value )" name="escritorio" type="number"
-            class="form-control" placeholder="Escritorio" required> -->
 
-            <mat-form-field appearance="fill">
-                <mat-label>Seleccione</mat-label>
-                <select #selectDesktop matNativeControl required>
-                  <option *ngFor="let desktop of desktops" [value]="desktop.id_desktop">{{desktop.id_desktop}}</option>
-                </select>
-              </mat-form-field>
- 
-
+    <div class="my-4" *ngIf="!myDesktop">
+        <mat-form-field appearance="fill">
+            <mat-label>Seleccione</mat-label>
+            <mat-select #selectDesktop matNativeControl required>
+                <mat-option *ngFor="let desktop of desktopsAvailable" [value]="desktop">{{desktop.cd_desktop}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <div>
+            <button class="btn btn-success" role="button" (click)="entrar( selectDesktop?.value )">Ingresar</button>
+        </div>
     </div>
 
-    <div>
-        <button class="btn btn-success" role="button"
-            (click)="entrar( selectDesktop.value )">Ingresar</button>
+
+
+    <div class="my-4" *ngIf="myDesktop">
+        Usted tiene tomado el escritorio {{ myDesktop.cd_desktop }}
+        <div>
+            <button class="btn btn-success m-1" role="button" (click)="entrar( myDesktop )">Ingresar</button>
+            <button class="btn btn-danger m-1" role="button" (click)="finalizar( myDesktop )">Finalizar</button>
+
+        </div>
     </div>
+
+    <div class="my-4" *ngIf="desktopsAvailable.length === 0">
+        Todos los escritorios estan tomados.
+        <div *ngFor="let desktop of desktops">
+            {{desktop.cd_desktop}} tomado por {{desktop.id_assistant}}
+        </div>
+    </div>
+
 
     <hr class="my-4">
     <p> Desde acá podes ingresar a una ventanilla de atención. Desde el chat podra ver las consultas de los

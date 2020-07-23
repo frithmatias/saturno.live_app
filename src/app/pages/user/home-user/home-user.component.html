@@ -1,7 +1,10 @@
-<div class="container animated fadeIn">
-    <div class="row">
-        <div class="col">
-            Bienvenido
-        </div>
-    </div>
-</div>
+<div class="jumbotron m-4 animated fadeIn">
+    <h1 class="display-4">Bienvenido {{ userService?.usuario.tx_name }}</h1>
+    <p class="lead">Desde aquí puede dar de alta a sus asistentes, los skills y los esctritorios.</p>
+    <hr class="my-4">
+    <p> Recuerde que sus clientes deben ingresar a obtener sus turnos a la dirección web pública en
+
+    </p>
+    
+    <a class="btn btn-primary btn-lg" routerLink="/publico" role="button">TURNOS</a>
+  </div>

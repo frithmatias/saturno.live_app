@@ -9,6 +9,7 @@ export interface Ticket {
 	id_desk: number | null;
 	id_company: string;
 	id_skill: string;
+	cd_skill: string;
 	tx_status: string;
 	tm_start: number;
 	tm_att: number | null;

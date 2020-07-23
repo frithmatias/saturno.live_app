@@ -30,8 +30,9 @@ export class AssistantCreateFormComponent implements OnInit, OnChanges{
 		// build reactive form
 
 		this.forma = new FormGroup({
-			email: new FormControl(null, [Validators.required, Validators.email]),
+			rol: new FormControl(null, Validators.required),
 			nombre: new FormControl(null, Validators.required),
+			email: new FormControl(null, [Validators.required, Validators.email]),
 			password: new FormControl(null, Validators.required),
 			password2: new FormControl(null, Validators.required),
 			condiciones: new FormControl(false)
@@ -48,12 +49,12 @@ export class AssistantCreateFormComponent implements OnInit, OnChanges{
 
 
 	ngOnChanges(changes: SimpleChanges): void {
-		console.log(changes);
 
 		// this.forma.controls.password.disable();
 		// this.forma.controls.password2.disable();
 		
 		this.forma?.patchValue({
+			rol: changes.assistantEdit.currentValue.id_role,
 			email: changes.assistantEdit.currentValue.tx_email,
 			nombre: changes.assistantEdit.currentValue.tx_name,
 			password: '******',
@@ -81,8 +82,7 @@ export class AssistantCreateFormComponent implements OnInit, OnChanges{
 	}
 
 	setNewSkill(skill: any): void {
-		console.log(skill);
-		console.log(this.selStrSkills);
+
 	}
 
 
@@ -105,15 +105,14 @@ export class AssistantCreateFormComponent implements OnInit, OnChanges{
 		if(this.assistantEdit){
 			const assistant: User = {
 				_id: this.assistantEdit._id,
+				id_role: this.forma.value.rol,
 				tx_name: this.forma.value.nombre,
 				tx_email: this.forma.value.email,
 				tx_password: this.forma.value.password,
 				id_skills: this.selStrSkills
 			};
-			console.log('editando', assistant);
 	
 			this.userService.updateAssistant(assistant).subscribe((data: AssistantResponse) => {
-				console.log(data);
 				this.assistantEdit = null;
 				this.updateAssistants.emit(data.assistant._id);
 				this.snack.open(data.msg, null, { duration: 5000 });
@@ -126,7 +125,6 @@ export class AssistantCreateFormComponent implements OnInit, OnChanges{
 			)
 
 		} else {
-			console.log('creando', this.forma.value);
 
 			const assistant: User = {
 				tx_name: this.forma.value.nombre,

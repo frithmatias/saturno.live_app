@@ -76,7 +76,6 @@ export class ChatComponent implements OnInit {
   }
 
   closeChat(): void {
-    console.log("asdf")
     this.toggleChat.emit(true);
   }
 

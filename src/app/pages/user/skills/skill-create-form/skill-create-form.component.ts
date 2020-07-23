@@ -19,7 +19,7 @@ export class SkillCreateFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.forma = new FormGroup({
-      idSkill: new FormControl(null, Validators.required),
+      cdSkill: new FormControl(null, Validators.required),
 			txSkill: new FormControl(null, Validators.required)
 		});
   }
@@ -34,14 +34,13 @@ export class SkillCreateFormComponent implements OnInit {
 
 		const skill: Skill = {
 			id_company: this.userService.usuario.id_company,
-			id_skill: this.forma.value.idSkill,
+			cd_skill: this.forma.value.cdSkill,
 			tx_skill: this.forma.value.txSkill,
 			__v: null,
 			_id: null
 		};
 
 		this.userService.createSkill(skill).subscribe((data: SkillResponse) => {
-			console.log(data);
 			this.skillCreated.emit(data.skill);
 			this.snack.open(data.msg, null, { duration: 5000 });
 			this.forma.reset();

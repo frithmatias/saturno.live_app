@@ -29,22 +29,22 @@ export class RegistroComponent implements OnInit {
 		// this.publicUrl = document.
 		// this.publicUrl = location.origin + '/#/publico/';
 		let defaults = {
-			company: 'WebTurnos',
-			addressStreet: 'Mercedes',
+			company: '',
+			addressStreet: '',
 			companyString: '',
-			addressNumber: '2325',
-			city: 'CABA',
-			name: 'Matias',
-			email: 'matias@matias.com',
-			password1: '123456',
-			password2: '123456'
+			addressNumber: '',
+			city: '',
+			name: '',
+			email: '',
+			password1: '',
+			password2: ''
 		}
 		this.forma = new FormGroup({
 			company: new FormControl(defaults.company, [Validators.required, this.validatorSetId.bind(this)]),
 			companyString: new FormControl({value:'', disabled: true}),
+			city: new FormControl(defaults.city, Validators.required),
 			addressStreet: new FormControl(defaults.addressStreet, Validators.required),
 			addressNumber: new FormControl(defaults.addressNumber, Validators.required),
-			city: new FormControl(defaults.city, Validators.required),
 			name: new FormControl(defaults.name, Validators.required),
 			email: new FormControl(defaults.email, [Validators.required, Validators.email]),
 			password1: new FormControl(defaults.password1, Validators.required),
@@ -58,7 +58,6 @@ export class RegistroComponent implements OnInit {
 
 	validatorSetId(control: FormControl): any {
 		// utilizo el pipe getidstring que limpia de acentos, ñ, espacios y me devuelve un tolower.
-		console.log(control);
 		this.publicName = this.getidstring.transform(control.value);
 		this.forma?.patchValue({ companyString: this.publicName });
 		return null;
@@ -80,12 +79,12 @@ export class RegistroComponent implements OnInit {
 	registrarUsuario() {
 
 		if (this.forma.invalid) {
-			Swal.fire('Faltan datos', 'Verifique el el email sea correcto y que las contraseñas coincidadn.', 'warning');
+			this.snack.open('Faltan datos por favor verifique.s', 'Aceptar', {duration:5000});
 			return;
 		}
 
 		if (!this.forma.value.condiciones) {
-			Swal.fire('Importante', 'Debe de aceptar las condiciones', 'warning');
+			this.snack.open('Debe aceptar las condiciones', 'Aceptar', {duration:5000});
 			return;
 		}
 
@@ -106,6 +105,7 @@ export class RegistroComponent implements OnInit {
 
 		this.userService.registerUser(company, user).subscribe((data: any) => {
 			if (data.ok) {
+				Swal.fire('Usuario creado', 'Por favor ahora ingrese con su usuario y contraseña', 'success');
 				this.router.navigate(['/login'])
 			}
 		},

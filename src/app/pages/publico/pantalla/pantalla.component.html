@@ -26,12 +26,9 @@
                 <!-- EN ESPERA -->
                 <!------------------------------>
 
-                <div>
-                    <span *ngIf="!ticketsService.myTicket?.id_ticket">
-                        espere...
-                    </span>
+                <div *ngIf="!ticketsService.myTicket?.id_desk">
                     <span class="xxxxl"> 
-                        {{ ticketsService.myTicket?.id_skill }}
+                        {{ ticketsService.myTicket?.cd_skill }}
                         {{ ticketsService.myTicket?.id_ticket }}
                     </span>
                 </div>
@@ -115,7 +112,7 @@
                 <!-- <div class="card-header p-1">{{n}}</div> -->
                 <div class="d-flex" *ngFor="let ticket of ticketsService.ticketsTail;">
                     <div class="d-flex justify-content-center text-white" style="width: 50%">
-                        <span *ngIf="ticketsService.ticketsTail">{{ ticket.id_skill }}{{ ticket.id_ticket }}</span>
+                        <span *ngIf="ticketsService.ticketsTail">{{ ticket.cd_skill }}{{ ticket.id_ticket }}</span>
                     </div>
 
                     <div class="d-flex justify-content-center text-white" style="width: 50%">

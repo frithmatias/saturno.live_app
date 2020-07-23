@@ -15,14 +15,8 @@
         </button>
 
         <!-- Login Button -->
-        <button *ngIf="!userService.usuario && !ticketsService.userPreset" class="btn btn-primary"
+        <button *ngIf="!userService.usuario" class="btn btn-primary"
             routerLink="/login">Login</button>
-
-        <!-- New Ticket -->
-        <button routerLink="/publico/turnos" *ngIf="!userService.usuario && ticketsService.userPreset && !ticketsService.myTicket" mat-mini-fab
-            style="color: #673ab7; background-color: whitesmoke;" aria-label="Example icon button with a bookmark icon">
-            <mat-icon>bookmark</mat-icon>
-        </button>
 
     </mat-toolbar-row>
 </mat-toolbar>

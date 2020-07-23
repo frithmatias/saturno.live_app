@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UserService } from '../../../services/user.service';
 
 @Component({
 	selector: 'app-home-user',
@@ -6,6 +7,9 @@ import { Component, OnInit } from '@angular/core';
 	styleUrls: [ './home-user.component.css' ]
 })
 export class HomeUserComponent implements OnInit {
-	constructor() {}
-	ngOnInit() {}
+	publicURL: string;
+	constructor(public userService: UserService) {}
+	ngOnInit() {
+		this.publicURL = `https://webturnos.herokuapp.com/${this.userService.usuario.id_company}`;
+	}
 }

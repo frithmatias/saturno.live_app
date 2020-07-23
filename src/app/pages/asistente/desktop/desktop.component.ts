@@ -16,7 +16,7 @@ const DESK_EXTRATIME = 20; // 120 segundos
 	templateUrl: './desktop.component.html',
 	styleUrls: ['./desktop.component.css']
 })
-export class DesktopComponent implements OnInit, OnDestroy {
+export class DesktopComponent implements OnInit {
 	waitForClient: boolean = false;
 	comingClient: boolean = false;
 	pendingTickets: number = 0;
@@ -36,7 +36,9 @@ export class DesktopComponent implements OnInit, OnDestroy {
 		private snack: MatSnackBar
 	) {
 		this.activatedRoute.params.subscribe((data) => {
-			this.idDesk = data.id;
+			if(data.id){
+				this.idDesk = data.id;
+			}
 		});
 	}
 
@@ -170,14 +172,4 @@ export class DesktopComponent implements OnInit, OnDestroy {
 		this.tmAttention = '--:--:--';
 	}
 
-	ngOnDestroy(){
-		console.log('finalizando escritorio');
-		let idCompany = this.userService.usuario.id_company;
-		let idAssistant = this.userService.usuario._id;
-	
-		this.userService.releaseDesktop(idCompany, this.idDesk, idAssistant).subscribe(data => {
-		  console.log(data);
-		})
-
-	}
 }

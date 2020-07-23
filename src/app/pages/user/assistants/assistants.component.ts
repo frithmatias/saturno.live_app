@@ -50,11 +50,7 @@ export class AssistantsComponent implements OnInit {
 
   readAssistants(): void {
     this.userService.readAssistants(this.userService.usuario.id_company).subscribe((data: AssistantsResponse) => {
-      console.log(data)
       this.assistants = data.assistants;
-    },
-      (err) => {
-        console.log(err);
-      })
+    });
   }
 }
