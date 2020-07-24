@@ -13,11 +13,11 @@ export class AppComponent {
   constructor(private router: Router) {
 
     if (localStorage.getItem('company')) {
-      this.router.navigate(['/publico']);
+      this.router.navigate(['/public']);
     } else if (localStorage.getItem('user')) {
       
       if (localStorage.getItem('desktop')) {
-        this.router.navigate(['/asistente']);
+        this.router.navigate(['/assistant']);
       } else {
         this.router.navigate(['/user']);
       }

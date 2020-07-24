@@ -3,15 +3,15 @@ import { RouterModule, Routes } from '@angular/router';
 
 // COMPONENTS
 import { HomeComponent } from './pages/home/home.component';
-import { RegistroComponent } from './pages/registro/registro.component';
+import { RegisterComponent } from './pages/register/register.component';
 import { LoginComponent } from './pages/login/login.component';
 import { NopagefoundComponent } from './pages/nopagefound/nopagefound.component';
 import { HelpComponent } from './pages/help/help.component';
 
 import { AdminComponent } from './pages/admin/admin.component';
 import { UserComponent } from './pages/user/user.component';
-import { AsistenteComponent } from './pages/asistente/asistente.component';
-import { PublicoComponent } from './pages/publico/publico.component';
+import { AssistantComponent } from './pages/assistant/assistant.component';
+import { PublicComponent } from './pages/public/public.component';
 
 // GUARDS
 import { LoginGuard } from './guards/login.guard';
@@ -22,17 +22,17 @@ const appRoutes: Routes = [
 
 	{ path: 'home', component: HomeComponent },
 	{ path: 'login', component: LoginComponent },
-	{ path: 'registro', component: RegistroComponent },
+	{ path: 'register', component: RegisterComponent },
 	{ path: 'help', component: HelpComponent },
 	
-	{ 	path: 'publico', 															
-		component: PublicoComponent, 	
-		loadChildren: () => import('./pages/publico/publico.module').then((m) => m.PublicoModule)},
+	{ 	path: 'public', 															
+		component: PublicComponent, 	
+		loadChildren: () => import('./pages/public/public.module').then((m) => m.PublicModule)},
 
-	{ 	path: 'asistente', 	
+	{ 	path: 'assistant', 	
 		canActivate: [LoginGuard, TokenGuard],				
-		component: AsistenteComponent, 	
-		loadChildren: () => import('./pages/asistente/asistente.module').then((m) => m.AsistenteModule)}, 
+		component: AssistantComponent, 	
+		loadChildren: () => import('./pages/assistant/assistant.module').then((m) => m.AssistantModule)}, 
 
 	{ 	path: 'user', 		
 		canActivate: [LoginGuard, TokenGuard], 				

@@ -5,11 +5,11 @@ import { TicketsService } from 'src/app/services/tickets.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
-  selector: 'app-publico',
-  templateUrl: './publico.component.html',
-  styleUrls: ['./publico.component.css']
+  selector: 'app-public',
+  templateUrl: './public.component.html',
+  styleUrls: ['./public.component.css']
 })
-export class PublicoComponent implements OnInit {
+export class PublicComponent implements OnInit {
   opened: boolean;
   unreadMessages: number;
   constructor(
@@ -25,7 +25,7 @@ export class PublicoComponent implements OnInit {
 
     if (localStorage.getItem('ticket')) {
       this.ticketsService.myTicket = JSON.parse(localStorage.getItem('ticket'));
-      this.router.navigate(['/publico/pantalla']);
+      this.router.navigate(['/public/screen']);
 
       if (this.ticketsService.myTicket.tm_end) { // si el ticket esta finalizado limpio la sesión
         this.ticketsService.clearPublicSession();
@@ -34,24 +34,24 @@ export class PublicoComponent implements OnInit {
 
     if (localStorage.getItem('company')) {
       this.ticketsService.companyData = JSON.parse(localStorage.getItem('company'));
-      this.router.navigate(['/publico/turnos']);
+      this.router.navigate(['/public/tickets']);
     };
 
     this.route.params.subscribe((data: any) => {
-      // /publico/nombreEmpresa
+      // /public/nombreEmpresa
 
       if (data.userCompanyName) {
         this.ticketsService.readCompany(data.userCompanyName).subscribe((resp: any) => {
           if (resp.ok) {
             localStorage.setItem('company', JSON.stringify(resp.company));
             this.ticketsService.companyData = resp.company;
-            this.router.navigate(['/publico/turnos'])
+            this.router.navigate(['/public/tickets'])
           }
 
         },
           (err) => {
             this.snack.open('No existe la empresa ingresada', 'Aceptar', { duration: 5000 });
-            this.router.navigate(['/publico'])
+            this.router.navigate(['/public'])
           }
         );
       }

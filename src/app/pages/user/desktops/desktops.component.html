@@ -2,14 +2,18 @@
 
     <div class="card bg-info lead text-white">
         <div class="card-header">Ventanillas</div>
-        <div class="card-body card-turnos-info">
-            <div class="my-2" *ngFor="let desktop of desktops">
-                <span>{{desktop?.cd_desktop}}</span>
-                <span style="float: right;">
-                    <mat-icon class="ml-2 list-crud-edit" (click)="editDesktop(desktop._id)">edit</mat-icon>
-                    <mat-icon class="ml-2 list-crud-delete" (click)="deleteDesktop(desktop._id)">delete</mat-icon>
-                </span>
-            </div>
+        <div class="card-body card-tickets-info table-responsive-sm">
+
+            <table class="table table-sm text-white">
+                    <tr *ngFor="let desktop of desktops">
+                        <td>{{desktop?.cd_desktop}}</td>
+                        <td style="text-align: right;">
+                            <mat-icon class="ml-2 list-crud-edit" (click)="editDesktop(desktop._id)">edit</mat-icon>
+                            <mat-icon class="ml-2 list-crud-delete" (click)="deleteDesktop(desktop._id)">delete</mat-icon>
+                        </td>
+                    </tr>
+            </table>
+
         </div>
     </div>
 

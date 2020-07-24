@@ -1,0 +1,53 @@
+<div class="turno-container p-4" style="text-align: -webkit-center;">
+    <div class="card bg-light mb-3" style="min-width: 18rem; max-width: 30rem;">
+
+        <div class="jumbotron m-4 animated fadeIn">
+
+            <h1 class="display-4">Bienvenido a la web del asistente</h1>
+            <p class="lead">Bienvenido, desde aquí puede sacar un turno y evitar la sala de esperas.</p>
+
+
+            <div class="my-4" *ngIf="!myDesktop">
+                <mat-form-field appearance="fill">
+                    <mat-label>Seleccione</mat-label>
+                    <mat-select #selectDesktop matNativeControl required>
+                        <mat-option *ngFor="let desktop of desktopsAvailable" [value]="desktop">{{desktop.cd_desktop}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <div>
+                    <button class="btn btn-success btn-lg btn-block" role="button"
+                        (click)="entrar( selectDesktop?.value )">Ingresar</button>
+                </div>
+            </div>
+
+
+
+            <div class="my-4" *ngIf="myDesktop">
+                Usted tiene tomado el escritorio {{ myDesktop.cd_desktop }}
+                <div>
+                    <button class="btn btn-success btn-lg m-1" role="button" (click)="entrar( myDesktop )">Ingresar</button>
+                    <button class="btn btn-danger btn-lg m-1" role="button" (click)="finalizar( myDesktop )">Finalizar</button>
+
+                </div>
+            </div>
+
+            <div class="my-4" *ngIf="desktopsAvailable.length === 0">
+                Todos los escritorios estan tomados.
+                <div *ngFor="let desktop of desktops">
+                    {{desktop.cd_desktop}} tomado por {{desktop.id_assistant}}
+                </div>
+            </div>
+
+
+            <hr class="my-4">
+            <p> Desde acá podes ingresar a una ventanilla de atención. Desde el chat podra ver las consultas de los
+                clientes una vez se les haya asignado esta ventanilla. Si desea puede también atender consultas desde
+                la ventanilla de informes para todas las consultas que todavía permanecen en espera.
+            </p>
+
+            <a class="btn btn-primary btn-lg btn-block" routerLink="/assistant/dashboard" role="button">Dashboard</a>
+        </div>
+
+    </div>
+</div>

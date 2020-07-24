@@ -50,7 +50,7 @@ export class ChatComponent implements OnInit {
 
   sendMessage(message: HTMLTextAreaElement, chatref: HTMLElement): void {
     if (!this.wsService.idSocket) {
-      this.snack.open('Se perdió la conexión con el escritorio.', 'ACEPTAR', { duration: 1000 });
+      this.snack.open('Se perdió la conexión con el asistente.', 'ACEPTAR', { duration: 1000 });
       return;
     }
 

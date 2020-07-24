@@ -45,7 +45,7 @@ export class DesktopComponent implements OnInit {
 
 	ngOnInit(): void {
 
-		// obtengo la cantidad de turnos en cola al generar un nuevo turno.
+		// obtengo la cantidad de tickets en cola al generar un nuevo turno.
 		this.wsService.escucharTurnos().subscribe(data => {
 			this.pendingTickets = Number(data);
 		});

@@ -1,10 +1,16 @@
-<div class="jumbotron m-4 animated fadeIn">
-    <h1 class="display-4">Bienvenido {{ userService?.usuario.tx_name }}</h1>
-    <p class="lead">Desde aquí puede dar de alta a sus asistentes, los skills y los esctritorios.</p>
-    <hr class="my-4">
-    <p> Recuerde que sus clientes deben ingresar a obtener sus turnos a la dirección web pública en
+<div class="turno-container p-4" style="text-align: -webkit-center;">
+  <div class="card bg-light mb-3" style="min-width: 18rem; max-width: 30rem;">
 
-    </p>
-    
-    <a class="btn btn-primary btn-lg" routerLink="/publico" role="button">TURNOS</a>
+    <div class="jumbotron m-4 animated fadeIn">
+      <h1 class="display-4">Bienvenido {{ userService?.usuario.tx_name }}</h1>
+      <p class="lead">Desde aquí puede dar de alta a sus asistentes, los skills y los esctritorios.</p>
+      <hr class="my-4">
+      <p> Recuerde que sus clientes deben ingresar a obtener sus turnos a la dirección web pública en
+
+      </p>
+
+      <a class="btn btn-primary btn-lg btn-block" routerLink="/public" role="button">TURNOS</a>
+    </div>
+
   </div>
+</div>

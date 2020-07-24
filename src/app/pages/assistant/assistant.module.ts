@@ -1,18 +1,18 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { AsistenteRoutingModule } from './asistente-routing.module';
+import { AssistantRoutingModule } from './assistant-routing.module';
 
-import { AsistenteComponent } from './asistente.component';
+import { AssistantComponent } from './assistant.component';
 import { HomeComponent } from './home/home.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { DesktopComponent } from './desktop/desktop.component';
-import { MaterialModule } from 'src/app/modules/material.module';
+import { MaterialModule } from '../../modules/material.module';
 
 
 @NgModule({
   declarations: [
-    AsistenteComponent, 
+    AssistantComponent, 
     HomeComponent,
     DashboardComponent, 
     DesktopComponent
@@ -20,7 +20,7 @@ import { MaterialModule } from 'src/app/modules/material.module';
   imports: [
     CommonModule,
     MaterialModule,
-    AsistenteRoutingModule
+    AssistantRoutingModule
   ]
 })
-export class AsistenteModule { }
+export class AssistantModule { }

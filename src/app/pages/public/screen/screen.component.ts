@@ -1,18 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { WebsocketService } from 'src/app/services/websocket.service';
+import { WebsocketService } from '../../../services/websocket.service';
 import { TicketsService } from '../../../services/tickets.service';
 import { MatSnackBar, MatSnackBarDismiss } from '@angular/material/snack-bar';
-import { Ticket } from '../../../interfaces/ticket.interface';
 import { Router } from '@angular/router';
-import { TicketResponse } from 'src/app/interfaces/ticket.interface';
-import { UserService } from 'src/app/services/user.service';
+import { TicketResponse } from '../../../interfaces/ticket.interface';
+import { UserService } from '../../../services/user.service';
 
 @Component({
-	selector: 'app-pantalla',
-	templateUrl: './pantalla.component.html',
-	styleUrls: ['./pantalla.component.css']
+	selector: 'app-screen',
+	templateUrl: './screen.component.html',
+	styleUrls: ['./screen.component.css']
 })
-export class PantallaComponent implements OnInit {
+export class ScreenComponent implements OnInit {
 	dni: number;
 	loading = false;
 	coming: boolean = false;
@@ -32,7 +31,7 @@ export class PantallaComponent implements OnInit {
 
 		if (!this.userService.usuario && !this.ticketsService.companyData) {
 			this.ticketsService.getTickets();
-			this.router.navigate(['/publico']);
+			this.router.navigate(['/public']);
 			this.snack.open('Por favor ingrese una empresa primero!', null, { duration: 5000 });
 		}
 	}
@@ -54,7 +53,7 @@ export class PantallaComponent implements OnInit {
 					if (data.ok) {
 						this.snack.open(data.msg, 'ACEPTAR', { duration: 5000 });
 						this.ticketsService.clearPublicSession();
-						this.router.navigate(['/publico']);
+						this.router.navigate(['/public']);
 					}
 				});
 			}

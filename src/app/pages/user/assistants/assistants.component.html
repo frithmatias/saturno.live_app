@@ -2,30 +2,41 @@
 
     <div class="card bg-primary lead text-white">
         <div class="card-header">Asistentes</div>
-        <div class="card-body card-turnos-primary">
-            <div class="my-2" *ngFor="let assistant of assistants">
-                <span>{{assistant?.tx_name}} <span style="font-size: small;">[ {{assistant?.tx_email}} ]</span></span>
-                <span *ngIf="assistant._id===assistantUpdated">
-                    <mat-icon class="ml-2 list-crud-edit">check</mat-icon>
-                </span>
-                <span *ngIf="assistant.id_role==='USER_ROLE'">
-                    <mat-icon class="ml-2 list-crud-star">star</mat-icon>
-                </span>
-                <span style="float: right;">
-                    <mat-icon class="ml-2 list-crud-edit" (click)="editAssistant(assistant)">edit</mat-icon>
-                    <mat-icon class="ml-2 list-crud-delete" (click)="deleteAssistant(assistant._id)">delete</mat-icon>
-                </span>
-            </div>
+        <div class="card-body card-tickets-info table-responsive-sm">
+
+            <table class="table table-sm text-white">
+                <tr *ngFor="let assistant of assistants">
+
+                    <td>{{assistant?.tx_name}} </td>
+                    <td>
+                        <span *ngIf="assistant._id===assistantUpdated">
+                            <mat-icon class="ml-2 list-crud-edit">check</mat-icon>
+                        </span>
+                    </td>
+                    <td>
+                        <span *ngIf="assistant.id_role==='USER_ROLE'">
+                            <mat-icon class="ml-2 list-crud-star">star</mat-icon>
+                        </span>
+                    </td>
+                    <td style="text-align: right;">
+                        <mat-icon class="ml-2 list-crud-edit" (click)="editAssistant(assistant)">edit</mat-icon>
+                        <mat-icon class="ml-2 list-crud-delete" (click)="deleteAssistant(assistant._id)">delete
+                        </mat-icon>
+                    </td>
+                </tr>
+            </table>
+
         </div>
     </div>
 
     <div class="my-4"></div>
-    
+
     <div class="card lead">
         <div class="card-header bg-success">Alta de asistente</div>
         <div class="card-body">
 
-            <app-assistant-create-form [assistantEdit]="assistantEdit" (updateAssistants)="updateAssistants($event)"></app-assistant-create-form>
+            <app-assistant-create-form [assistantEdit]="assistantEdit" (updateAssistants)="updateAssistants($event)">
+            </app-assistant-create-form>
 
         </div>
     </div>

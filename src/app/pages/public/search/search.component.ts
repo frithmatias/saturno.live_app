@@ -2,11 +2,11 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-home-publico',
-  templateUrl: './home-publico.component.html',
-  styleUrls: ['./home-publico.component.css']
+  selector: 'app-search',
+  templateUrl: './search.component.html',
+  styleUrls: ['./search.component.css']
 })
-export class HomePublicoComponent implements OnInit {
+export class SearchComponent implements OnInit {
   constructor(private router: Router) { }
 
   ngOnInit(): void {
@@ -20,7 +20,7 @@ export class HomePublicoComponent implements OnInit {
   findCompany(e: HTMLInputElement){
 
     if(e.value.length>0){
-      this.router.navigate(['/publico', e.value]);
+      this.router.navigate(['/public', e.value]);
     }
   }
 

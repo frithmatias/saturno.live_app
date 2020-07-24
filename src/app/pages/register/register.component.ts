@@ -9,11 +9,11 @@ import { Company } from '../../interfaces/company.interface';
 import { GetidstringPipe } from '../../pipes/getidstring.pipe';
 
 @Component({
-	selector: 'app-registro',
-	templateUrl: './registro.component.html',
-	styleUrls: ['./registro.component.css']
+	selector: 'app-register',
+	templateUrl: './register.component.html',
+	styleUrls: ['./register.component.css']
 })
-export class RegistroComponent implements OnInit {
+export class RegisterComponent implements OnInit {
 	forma: FormGroup;
 	publicName: string;
 	constructor(
@@ -27,7 +27,7 @@ export class RegistroComponent implements OnInit {
 
 	ngOnInit() {
 		// this.publicUrl = document.
-		// this.publicUrl = location.origin + '/#/publico/';
+		// this.publicUrl = location.origin + '/#/public/';
 		let defaults = {
 			company: '',
 			addressStreet: '',

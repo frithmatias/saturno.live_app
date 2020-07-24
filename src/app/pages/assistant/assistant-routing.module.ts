@@ -7,9 +7,9 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 
 const assistantRoutes: Routes = [
   { path: 'home', component: HomeComponent },
-  { path: 'escritorio/:id', component: DesktopComponent },
+  { path: 'desktop/:id', component: DesktopComponent },
   { path: 'dashboard', component: DashboardComponent },
-	{ path: '', redirectTo: '/asistente/home', pathMatch: 'full' },
+	{ path: '', redirectTo: '/assistant/home', pathMatch: 'full' },
   { path: '**', component: NopagefoundComponent}
 ];
 
@@ -19,4 +19,4 @@ const assistantRoutes: Routes = [
   imports: [RouterModule.forChild(assistantRoutes)], 
   exports: [RouterModule]
 })
-export class AsistenteRoutingModule { }
+export class AssistantRoutingModule { }

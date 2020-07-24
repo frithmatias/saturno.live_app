@@ -4,15 +4,15 @@ import { TicketsService } from '../../../services/tickets.service';
 import { Router } from '@angular/router';
 import { TicketResponse } from '../../../interfaces/ticket.interface';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Skill } from 'src/app/interfaces/skill.interface';
+import { Skill } from '../../../interfaces/skill.interface';
 import { SkillsResponse } from '../../../interfaces/skill.interface';
 
 @Component({
-	selector: 'app-turnos',
-	templateUrl: './turnos.component.html',
-	styleUrls: ['./turnos.component.css']
+	selector: 'app-tickets',
+	templateUrl: './tickets.component.html',
+	styleUrls: ['./tickets.component.css']
 })
-export class TurnosComponent implements OnInit {
+export class TicketsComponent implements OnInit {
 	loading: boolean = false;
 	skills: Skill[];
 	constructor(
@@ -25,11 +25,11 @@ export class TurnosComponent implements OnInit {
 	ngOnInit(): void {
 		if (this.ticketsService.myTicket) {
 			this.snack.open('Usted ya tiene un turno!', null, { duration: 5000 });
-			this.router.navigate(['/publico/pantalla']);
+			this.router.navigate(['/public/screen']);
 		} else {
 			if (!this.ticketsService.companyData) {
 				this.snack.open('Por favor ingrese una empresa primero.', null, { duration: 5000 });
-				this.router.navigate(['/publico']);
+				this.router.navigate(['/public']);
 			} else {
 				this.ticketsService.readSkills(this.ticketsService.companyData._id).subscribe((data: SkillsResponse) => {
 					this.skills = data.skills;
@@ -49,7 +49,7 @@ export class TurnosComponent implements OnInit {
 					localStorage.setItem('ticket', JSON.stringify(data.ticket));
 					this.ticketsService.myTicket = data.ticket;
 					this.loading = false;
-					this.router.navigate(['/publico/pantalla']);
+					this.router.navigate(['/public/screen']);
 				}
 			}
 		);
@@ -57,7 +57,7 @@ export class TurnosComponent implements OnInit {
 
 	salir(): void {
 		if (localStorage.getItem('company')) { localStorage.removeItem('company'); }
-		this.router.navigate(['/publico'])
+		this.router.navigate(['/public'])
 	}
 
 }

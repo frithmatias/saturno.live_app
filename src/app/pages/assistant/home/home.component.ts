@@ -40,7 +40,7 @@ export class HomeComponent implements OnInit {
       if (data.ok) {
         this.userService.desktop = data.desktop;
         localStorage.setItem('desktop', JSON.stringify(data.desktop));
-        this.router.navigate(['/asistente/escritorio', desktop.cd_desktop]);
+        this.router.navigate(['/assistant/desktop', desktop.cd_desktop]);
       } else {
         this.snack.open('No se pudo tomar un escritorio', null, { duration: 2000 });
 
