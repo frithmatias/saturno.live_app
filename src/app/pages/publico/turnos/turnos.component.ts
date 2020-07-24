@@ -13,7 +13,7 @@ import { SkillsResponse } from '../../../interfaces/skill.interface';
 	styleUrls: ['./turnos.component.css']
 })
 export class TurnosComponent implements OnInit {
-	loading: boolean;
+	loading: boolean = false;
 	skills: Skill[];
 	constructor(
 		private wsService: WebsocketService,
@@ -55,5 +55,9 @@ export class TurnosComponent implements OnInit {
 		);
 	}
 
+	salir(): void {
+		if (localStorage.getItem('company')) { localStorage.removeItem('company'); }
+		this.router.navigate(['/publico'])
+	}
 
 }

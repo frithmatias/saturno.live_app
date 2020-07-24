@@ -10,7 +10,7 @@
         <span class="example-spacer"></span>
 
         <!-- Chat Icon -->
-        <button (click)="toggle('chat')" mat-mini-fab *ngIf="userService.usuario || ticketsService.myTicket">
+        <button (click)="toggle('chat')" mat-mini-fab *ngIf="ticketsService.myTicket">
             <mat-icon [matBadge]="unreadMessages" [matBadgeHidden]="hiddenBadge" matBadgeColor="warn">chat</mat-icon>
         </button>
 

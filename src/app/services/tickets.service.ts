@@ -16,7 +16,7 @@ const TAIL_LENGTH = 4;
 })
 export class TicketsService {
 	companyData: any;
-	userPreset = false;
+	publicMode: boolean;
 	ticketsAll: Ticket[] = [];
 	ticketsCall: Ticket[] = [];
 	ticketsTail: Ticket[] = [];
@@ -55,8 +55,8 @@ export class TicketsService {
 		if (localStorage.getItem('company')) { localStorage.removeItem('company'); }
 	}
 
-	actualizarSocket(idTicket: string, newSocket: string): Observable<object> {
-		const socketsData = { idTicket, newSocket };
+	actualizarSocket(idTicket: string, oldSocket: string, newSocket: string): Observable<object> {
+		const socketsData = { idTicket, oldSocket, newSocket };
 		return this.http.put(environment.url + '/t/actualizarsocket', socketsData);
 	}
 
@@ -70,22 +70,22 @@ export class TicketsService {
 		return this.http.get(environment.url + '/t/cancelticket/' + idTicket);
 	}
 
-	getPendingTicket(idCompany: string, idDesk: string): Observable<object> {
+	getPendingTicket(idDesk: string): Observable<object> {
 		const headers = new HttpHeaders({
 			'turnos-token': this.userService.token
 		});
 
-		const url = environment.url + `/t/pendingticket/${idCompany}/${idDesk}`;
+		const url = environment.url + `/t/pendingticket/${idDesk}`;
 		return this.http.get(url, { headers });
 	}
 
-	atenderTicket(idDesk: string, idAssistant: string, idSocketDesk: string): Observable<object> {
+	atenderTicket(cdDesk: string, idDesk: string, idAssistant: string, idSocketDesk: string): Observable<object> {
 
 		const headers = new HttpHeaders({
 			'turnos-token': this.userService.token
 		});
 
-		const deskData = { idDesk, idAssistant, idSocketDesk};
+		const deskData = { cdDesk, idDesk, idAssistant, idSocketDesk};
 
 		const url = environment.url + `/t/taketicket`;
 		return this.http.post(url, deskData, { headers });

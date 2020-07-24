@@ -21,6 +21,7 @@ export class DesktopComponent implements OnInit {
 	comingClient: boolean = false;
 	pendingTickets: number = 0;
 	timerCount: number = DESK_TIMEOUT;
+	cdDesk: string;
 	idDesk: string;
 	ticket: Ticket;
 	tmWaiting: string = '--:--:--';
@@ -37,7 +38,7 @@ export class DesktopComponent implements OnInit {
 	) {
 		this.activatedRoute.params.subscribe((data) => {
 			if(data.id){
-				this.idDesk = data.id;
+				this.cdDesk = data.id;
 			}
 		});
 	}
@@ -49,33 +50,41 @@ export class DesktopComponent implements OnInit {
 			this.pendingTickets = Number(data);
 		});
 
-		this.ticketsService.getPendingTicket(this.userService.usuario.id_company, this.idDesk).subscribe((data: TicketResponse) => {
+		let idDesk = this.userService.desktop._id;
+
+		this.ticketsService.getPendingTicket(idDesk).subscribe((data: TicketResponse) => {
 			this.snack.open(data.msg, null, {duration: 5000});
 			if (data.ok) {
 				this.ticket = data.ticket;
+				this.ticketsService.myTicket = data.ticket;
+				localStorage.setItem('ticket', JSON.stringify(data.ticket));
 			} else {
-				this.ticket = null;
+				this.clearSession();
 			}
 		});
 	}
 
 	atenderTicket(): void {
 		
-		this.clearSession();
-		let idDesk = this.idDesk;
+		let cdDesk = this.cdDesk;
+		let idDesk = this.userService.desktop._id;
 		let idAssistant = this.userService.usuario._id;
 		let idSocketDesk = this.wsService.idSocket;
 
-		this.ticketsService.atenderTicket(idDesk, idAssistant, idSocketDesk).subscribe(
+		this.ticketsService.atenderTicket(cdDesk, idDesk, idAssistant, idSocketDesk).subscribe(
 			(resp: TicketResponse) => {
+				console.log(resp);
 			if (!resp.ok) {
 				this.waitForClient = false;
 				this.message = resp.msg;
-				this.snack.open(resp.msg, 'ACEPTAR', { duration: 2000 });
+				this.clearSession();
 			} else {
 				this.waitForClient = true;
 				this.message = '';
+
 				this.ticket = resp.ticket;
+				this.ticketsService.myTicket = resp.ticket;
+				localStorage.setItem('ticket', JSON.stringify(resp.ticket));
 
 				// Seteo el tiempo que el cliente estuvo en espera desde que saco su turno hasta que fué atendido
 				this.tmWaiting = this.ticketsService.getTimeInterval(resp.ticket.tm_start, resp.ticket.tm_att);
@@ -135,39 +144,29 @@ export class DesktopComponent implements OnInit {
 		});
 	}
 
-	sendMessage(e: HTMLInputElement): void {
-		if (!this.wsService.idSocket) {
-			this.snack.open('Se perdió la conexión con el escritorio.', 'ACEPTAR', { duration: 5000 });
-			return;
-		}
-
-		if (e.value.length > 0) {
-			this.wsService.emit('mensaje-privado', { mensaje: e.value });
-			e.value = '';
-		}
-	}
-
 	atenderInformes(): void {
 
 	}
 
 	devolverTicket(): void {
 		this.clearSession();
-		this.ticketsService.devolverTicket(this.idDesk).subscribe((resp: TicketResponse)=>{
+		this.ticketsService.devolverTicket(this.cdDesk).subscribe((resp: TicketResponse)=>{
 			this.message = resp.msg;
 		})
 	}
 
 	finalizarTicket(): void {
 		this.clearSession();
-		this.ticketsService.finalizarTicket(this.idDesk).subscribe((resp: TicketResponse)=>{
+		this.ticketsService.finalizarTicket(this.cdDesk).subscribe((resp: TicketResponse)=>{
 			this.message = resp.msg;
 		})
 	}
 
 	clearSession(){
-		this.ticketsService.chatMessages = [];
 		this.ticket = null;
+		this.ticketsService.myTicket = null;
+		if (localStorage.getItem('ticket')) { localStorage.removeItem('ticket'); }
+		this.ticketsService.chatMessages = [];
 		this.tmWaiting = '--:--:--';
 		this.tmAttention = '--:--:--';
 	}

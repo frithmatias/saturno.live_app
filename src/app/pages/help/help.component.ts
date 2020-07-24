@@ -34,7 +34,7 @@ export class HelpComponent implements OnInit {
     
     this.ticketsService.sendContact(contact).subscribe( (resp: any) => {
       f.reset();
-      this.snack.open(`Gracias, su mensaje fue recibido correctamente.`, null, { duration: 10000 });
+      this.snack.open(`Gracias, su mensaje fue recibido correctamente.`, null, { duration: 5000 });
     })
   }
 

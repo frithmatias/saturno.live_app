@@ -14,6 +14,7 @@ export class ChatComponent implements OnInit {
   @Output() unreadMessages: EventEmitter<number> = new EventEmitter();
   @Output() toggleChat: EventEmitter<boolean> = new EventEmitter();
   chatOpen: boolean;
+  
   constructor(
     private wsService: WebsocketService, 
     private snack: MatSnackBar, 
@@ -34,7 +35,7 @@ export class ChatComponent implements OnInit {
       let message = {
         own: false,
         time: new Date(),
-        message: data.mensaje,
+        message: data.msg,
         viewed: this.chatOpen ? true : false,
       }
       this.ticketsService.chatMessages.push(message);
@@ -49,7 +50,7 @@ export class ChatComponent implements OnInit {
 
   sendMessage(message: HTMLTextAreaElement, chatref: HTMLElement): void {
     if (!this.wsService.idSocket) {
-      this.snack.open('Se perdió la conexión con el escritorio.', 'ACEPTAR', { duration: 5000 });
+      this.snack.open('Se perdió la conexión con el escritorio.', 'ACEPTAR', { duration: 1000 });
       return;
     }
 
@@ -60,7 +61,14 @@ export class ChatComponent implements OnInit {
         message: message.value,
         viewed: true
       });
-      this.wsService.emit('mensaje-privado', { mensaje: message.value });
+
+      let to: string;
+      if(this.ticketsService.myTicket.id_socket === this.wsService.idSocket){
+        to = this.ticketsService.myTicket.id_socket_desk;
+      } else {
+        to = this.ticketsService.myTicket.id_socket;
+      } 
+      this.wsService.emit('mensaje-privado', { to, msg: message.value });
       this.scrollTop();
       message.value = '';
       message.focus();

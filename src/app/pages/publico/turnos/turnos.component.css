@@ -6,3 +6,9 @@
     background-color: white;
 }
 
+.text-company {
+    color: darkred; 
+    font-size: 2.5rem; 
+    line-height: 2rem;
+    font-weight: 400; 
+}

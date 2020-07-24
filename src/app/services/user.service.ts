@@ -321,6 +321,7 @@ export class UserService {
 		if (localStorage.getItem('user')) { localStorage.removeItem('user'); }
 		if (localStorage.getItem('menu')) { localStorage.removeItem('menu'); }
 		if (localStorage.getItem('desktop')) { localStorage.removeItem('desktop'); }
+		if (localStorage.getItem('ticket')) { localStorage.removeItem('ticket'); }
 
 		this.token = '';
 		this.usuario = null;

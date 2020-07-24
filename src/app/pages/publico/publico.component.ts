@@ -18,7 +18,7 @@ export class PublicoComponent implements OnInit {
     private snack: MatSnackBar,
     public ticketsService: TicketsService
   ) {
-    this.ticketsService.userPreset = true;
+    this.ticketsService.publicMode = true;
   }
 
   ngOnInit(): void {

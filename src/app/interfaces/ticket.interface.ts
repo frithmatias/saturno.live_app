@@ -6,7 +6,9 @@ export interface Ticket {
 	id_ticket: number;
 	id_socket: string;
 	id_socket_desk: string | null;
-	id_desk: number | null;
+	id_desk: string | null;
+	cd_desk: string | null;
+	id_assistant: string | null;
 	id_company: string;
 	id_skill: string;
 	cd_skill: string;

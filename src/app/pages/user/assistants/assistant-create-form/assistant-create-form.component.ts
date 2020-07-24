@@ -90,13 +90,13 @@ export class AssistantCreateFormComponent implements OnInit, OnChanges{
 
 	createAssistant(formDirective: FormGroupDirective) {
 
-		if (this.selStrSkills.length === 0) {
+		if (!this.selStrSkills || this.selStrSkills.length === 0) {
 			this.snack.open('Seleccione al menos un skill', 'ACEPTAR', {duration: 5000});
 			return;
 		}
 
 		if (this.forma.invalid) {
-			if(this.forma.errors.password){
+			if(this.forma.errors?.password){
 				this.snack.open(this.forma.errors.password, 'ACEPTAR', {duration: 5000});
 			}
 			return;
