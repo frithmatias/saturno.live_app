@@ -11,6 +11,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatListModule } from '@angular/material/list';
 import { MatSelectModule } from '@angular/material/select';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 @NgModule({
 	declarations: [],
@@ -24,7 +25,8 @@ import { MatSelectModule } from '@angular/material/select';
 		MatInputModule,
 		MatBadgeModule,
 		MatListModule,
-		MatSelectModule
+		MatSelectModule,
+		MatAutocompleteModule
 	],
 	exports: [
 		CommonModule,
@@ -36,7 +38,8 @@ import { MatSelectModule } from '@angular/material/select';
 		MatInputModule,
 		MatBadgeModule,
 		MatListModule,
-		MatSelectModule
+		MatSelectModule,
+		MatAutocompleteModule
 	]
 })
 export class MaterialModule { }

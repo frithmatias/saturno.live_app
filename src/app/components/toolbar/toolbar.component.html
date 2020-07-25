@@ -15,7 +15,7 @@
         </button>
 
         <!-- Login Button -->
-        <button *ngIf="!userService.usuario" class="btn btn-primary"
+        <button *ngIf="!userService.usuario && !ticketsService.publicMode" class="btn btn-primary"
             routerLink="/login">Login</button>
 
     </mat-toolbar-row>

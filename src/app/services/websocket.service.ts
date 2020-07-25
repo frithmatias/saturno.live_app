@@ -35,8 +35,11 @@ export class WebsocketService {
 			this.snack.open('Conectado al servidor de turnos', null, { duration: 5000 });
 			// si había un ticket en la LS lo actualizo
 			this.idSocket = this.socket.ioSocket.id;
-			if (localStorage.getItem('ticket')) {
-				const myTicket: Ticket = JSON.parse(localStorage.getItem('ticket'));
+			if (localStorage.getItem('ticket') !== 'undefined') {
+				let myTicket = JSON.parse(localStorage.getItem('ticket'));
+				if (!myTicket) {
+					return;
+				}
 				this.ticketsService.myTicket = myTicket;
 
 				let idTicket = myTicket._id;

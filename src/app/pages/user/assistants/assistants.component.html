@@ -1,43 +1,49 @@
-<div class="m-4 animated fadeIn">
+<div class="turno-container p-4" style="text-align: -webkit-center;">
+    <div class="card bg-light mb-3" style="min-width: 18rem; max-width: 30rem;">
 
-    <div class="card bg-primary lead text-white">
-        <div class="card-header">Asistentes</div>
-        <div class="card-body card-tickets-info table-responsive-sm">
+        <div class="m-4 animated fadeIn">
 
-            <table class="table table-sm text-white">
-                <tr *ngFor="let assistant of assistants">
+            <div class="card bg-primary lead text-white">
+                <div class="card-header">Asistentes</div>
+                <div class="card-body card-tickets-info table-responsive-sm">
 
-                    <td>{{assistant?.tx_name}} </td>
-                    <td>
-                        <span *ngIf="assistant._id===assistantUpdated">
-                            <mat-icon class="ml-2 list-crud-edit">check</mat-icon>
-                        </span>
-                    </td>
-                    <td>
-                        <span *ngIf="assistant.id_role==='USER_ROLE'">
-                            <mat-icon class="ml-2 list-crud-star">star</mat-icon>
-                        </span>
-                    </td>
-                    <td style="text-align: right;">
-                        <mat-icon class="ml-2 list-crud-edit" (click)="editAssistant(assistant)">edit</mat-icon>
-                        <mat-icon class="ml-2 list-crud-delete" (click)="deleteAssistant(assistant._id)">delete
-                        </mat-icon>
-                    </td>
-                </tr>
-            </table>
+                    <table class="table table-sm text-white">
+                        <tr *ngFor="let assistant of assistants">
 
-        </div>
-    </div>
+                            <td>{{assistant?.tx_name}} </td>
+                            <td>
+                                <span *ngIf="assistant._id===assistantUpdated">
+                                    <mat-icon class="ml-2 list-crud-edit">check</mat-icon>
+                                </span>
+                            </td>
+                            <td>
+                                <span *ngIf="assistant.id_role==='USER_ROLE'">
+                                    <mat-icon class="ml-2 list-crud-star">star</mat-icon>
+                                </span>
+                            </td>
+                            <td style="text-align: right;">
+                                <mat-icon class="ml-2 list-crud-edit" (click)="editAssistant(assistant)">edit</mat-icon>
+                                <mat-icon class="ml-2 list-crud-delete" (click)="deleteAssistant(assistant._id)">delete
+                                </mat-icon>
+                            </td>
+                        </tr>
+                    </table>
 
-    <div class="my-4"></div>
+                </div>
+            </div>
 
-    <div class="card lead">
-        <div class="card-header bg-success">Alta de asistente</div>
-        <div class="card-body">
+            <div class="my-4"></div>
 
-            <app-assistant-create-form [assistantEdit]="assistantEdit" (updateAssistants)="updateAssistants($event)">
-            </app-assistant-create-form>
+            <div class="card lead">
+                <div class="card-header bg-success">Alta de asistente</div>
+                <div class="card-body">
 
+                    <app-assistant-create-form [assistantEdit]="assistantEdit"
+                        (updateAssistants)="updateAssistants($event)">
+                    </app-assistant-create-form>
+
+                </div>
+            </div>
         </div>
     </div>
 </div>

@@ -63,7 +63,7 @@
         <!-- ======================================================== -->
         
         <div class="mb-4">
-            <button class="btn btn-danger btn-lg text-uppercase" (click)="cancelTicket()" *ngIf="ticketsService.myTicket">Cancelar Turno</button>
+            <button class="btn btn-danger btn-lg btn-block text-uppercase" (click)="cancelTicket()" *ngIf="ticketsService.myTicket">Cancelar Turno</button>
         </div>
 
         <!-- ======================================================== -->
@@ -116,7 +116,7 @@
                     </div>
 
                     <div class="d-flex justify-content-center text-white" style="width: 50%">
-                        <span *ngIf="ticketsService.ticketsTail">{{ ticket.id_desk }}</span>
+                        <span *ngIf="ticketsService.ticketsTail">{{ ticket.cd_desk }}</span>
                     </div>
                 </div>
             </div>

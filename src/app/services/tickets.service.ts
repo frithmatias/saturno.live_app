@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment.prod';
 import { map, catchError, take } from 'rxjs/operators';
@@ -16,7 +16,7 @@ const TAIL_LENGTH = 4;
 })
 export class TicketsService {
 	companyData: any;
-	publicMode: boolean;
+	publicMode: boolean = false;
 	ticketsAll: Ticket[] = [];
 	ticketsCall: Ticket[] = [];
 	ticketsTail: Ticket[] = [];
@@ -41,6 +41,11 @@ export class TicketsService {
 
 	readCompany(txPublicName: string): Observable<object> {
 		return this.http.get(environment.url + '/c/readcompany/' + txPublicName);
+	}
+
+	
+	findCompany(pattern: string): Observable<object> {
+		return this.http.get(environment.url + '/c/findcompany/' + pattern);
 	}
 
 	readSkills(idCompany): Observable<SkillsResponse> {
@@ -180,5 +185,6 @@ export class TicketsService {
 		const url = environment.url + `/p/contact`;
 		return this.http.post(url, data);
 	}
+
 
 }
