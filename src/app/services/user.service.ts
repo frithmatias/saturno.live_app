@@ -11,7 +11,6 @@ import { Desktop } from 'src/app/interfaces/desktop.interface';
 import { Skill } from '../interfaces/skill.interface';
 import { User } from 'src/app/interfaces/user.interface';
 import { Company } from '../interfaces/company.interface';
-import { UserCompany } from '../interfaces/user.interface';
 
 @Injectable({
 	providedIn: 'root'
@@ -19,7 +18,7 @@ import { UserCompany } from '../interfaces/user.interface';
 export class UserService {
 
 	token: string;
-	usuario: UserCompany;
+	usuario: User;
 	desktop: Desktop;
 	menu: any[] = [];
 	logueado = false;

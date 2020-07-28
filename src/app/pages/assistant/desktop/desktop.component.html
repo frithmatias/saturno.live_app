@@ -1,16 +1,22 @@
 <div class="m-4 row animated fadeIn">
-  <!-- DESKTOP SCREEN -->
+
+
+  <!-- ======================================================== -->
+  <!-- DESKTOP -->
+  <!-- ======================================================== -->
+
+
   <div class="col-lg-6">
-    <div class="card text-white bg-danger mb-4">
+    <div class="card bg-light mb-4">
       <div class="card-header banner-title">
         <span>
           ESCRITORIO {{ cdDesk }}
         </span>
         <span *ngIf="comingClient">
-          <mat-icon style="float: right; color: yellow; font-size: x-large;">directions_walk</mat-icon>
+          <mat-icon style="float: right; color: blueviolet; font-size: x-large;">directions_walk</mat-icon>
         </span>
       </div>
-      <div class="banner-content" style="background-color: rgb(141, 51, 51)">
+      <div class="banner-content">
 
         <div class="container">
 
@@ -18,7 +24,7 @@
           <!-- EN ATENCIÓN -->
           <!------------------------------>
 
-          <div *ngIf="ticket">
+          <div *ngIf="ticketsService.myTicket">
             <div class="row">
               <div class="col">
                 Atendiendo turno
@@ -26,21 +32,17 @@
             </div>
             <div class="row">
               <div class="col xxxxl">
-                {{ ticket.id_ticket }}
+                {{ ticketsService.myTicket.cd_skill }}
+                {{ ticketsService.myTicket.id_ticket }}
               </div>
             </div>
           </div>
 
           <!------------------------------>
-          <!-- EN ESPERA -->
+          <!-- OCIOSO -->
           <!------------------------------>
-          <div *ngIf="!ticket" class="my-4">
-            <span *ngIf="!loading">
-              Disponible para atender
-            </span>
-          </div>
 
-          <div class="card bg-danger text-white my-4 py-2" *ngIf='message'>{{message}}</div>
+          <div class="card text-white my-4 p-2" style="background-color: darkcyan;" *ngIf='message'>{{message}}</div>
 
           <!------------------------------>
           <!-- TIEMPOS DE ATENCION -->
@@ -60,48 +62,83 @@
             </div>
             <div class="col p-0">
               <div>TC</div>
-              <div>{{pendingTickets}}</div>
+              <div>{{pendingTicketsCount}}</div>
             </div>
           </div>
 
-        </div>
 
-      </div>
-    </div>
-  </div>
-  <!-- ACTION BUTTONS -->
-  <div class="col-lg-6">
-    <div class="card bg-light mb-4">
-      <div class="card-header banner-title"> Panel </div>
-      <div class="banner-content">
+          <div class="content">
+            <hr class="my-1">
+            <div class="row" style="justify-content: space-between;">
 
-        <div class="container">
-          <div class="row py-2">
-            <div class="my-2 col-md-6 col-sm-12">
-              <button class="btn btn-info btn-block btn-lg" (click)="atenderInformes()" [disabled]="waitForClient">
-                Informes
-              </button>
-            </div>
-            <div class="my-2 col-md-6 col-sm-12">
-              <button class="btn btn-success btn-block btn-lg" (click)="atenderTicket()" [disabled]="waitForClient">
-                Siguiente
-              </button>
-            </div>
-            <div class="my-2 col-md-6 col-sm-12">
-              <button class="btn btn-primary btn-block btn-lg" (click)="devolverTicket()" [disabled]="waitForClient">
-                Devolver
-              </button>
-            </div>
-            <div class="my-2 col-md-6 col-sm-12">
-              <button class="btn btn-danger btn-block btn-lg" (click)="finalizarTicket()" [disabled]="waitForClient">
-                Finalizar
-              </button>
-            </div>
+              <div class="col col-6 col-md-3 p-1">
+                <button class="btn btn-block btn-danger" (click)="devolverTicket()" [disabled]="waitForClient">
+                  Devolver
+                </button>
+              </div>
+
+              <div class="col col-6 col-md-3 p-1">
+                <button class="btn btn-block btn-info" (click)="atenderInformes()" [disabled]="waitForClient">
+                  Informes
+                </button>
+              </div>
+
+              <div class="col col-6 col-md-3 p-1">
+                <button class="btn btn-block btn-primary" (click)="finalizarTicket()" [disabled]="waitForClient">
+                  Finalizar
+                </button>
+              </div>
+
+              <div class="col col-6 col-md-3 p-1">
+                <button class="btn btn-block btn-success" (click)="atenderTicket()" [disabled]="waitForClient">
+                  Siguiente
+                </button>
+              </div>
+
+        
           </div>
         </div>
 
 
+
       </div>
+
     </div>
   </div>
+</div>
+
+
+
+
+<!-- ======================================================== -->
+<!-- TAIL WAIT -->
+<!-- ======================================================== -->
+
+
+<div class="col-lg-6">
+  <div class="card bg-primary mb-4">
+    <div class="card-content table-responsive-sm  p-2">
+
+      <table class="table table-sm text-white text-center" style="font-size: large;">
+
+        <tr style="border-top: 0px; color: yellow;">
+          <td style="text-align: left; border: none;"> Skill </td>
+          <td style="text-align: center; border: none;"> Cola </td>
+        </tr>
+
+        <tr *ngFor="let waiting of pendingTicketsBySkill">
+          <td style="text-align: left;">
+            {{ waiting.tx_skill }}
+          </td>
+          <td style="text-align: center;">
+            {{ waiting.tickets.length }}
+          </td>
+        </tr>
+      </table>
+
+    </div>
+  </div>
+</div>
+
+
 </div>

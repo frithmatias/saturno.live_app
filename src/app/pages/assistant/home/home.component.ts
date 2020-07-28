@@ -32,7 +32,7 @@ export class HomeComponent implements OnInit {
     }
 
     let idDesktop = desktop._id;
-    let idCompany = this.userService.usuario.id_company;
+    let idCompany = this.userService.usuario.id_company._id;
     let idAssistant = this.userService.usuario._id;
 
     this.userService.takeDesktop(idCompany, idDesktop, idAssistant).subscribe((data: DesktopResponse) => {
@@ -49,8 +49,8 @@ export class HomeComponent implements OnInit {
   }
 
   obtenerEscritorios(): void {
-    this.userService.readDesktops(this.userService.usuario.id_company).subscribe((data: DesktopsResponse) => {
 
+    this.userService.readDesktops(this.userService.usuario.id_company._id).subscribe((data: DesktopsResponse) => {
       this.desktops = data.desktops;
       this.desktopsAvailable = this.desktops.filter(desktop => desktop.id_assistant === null);
       this.myDesktop = this.desktops.filter(desktop => desktop.id_assistant === this.userService.usuario._id)[0]

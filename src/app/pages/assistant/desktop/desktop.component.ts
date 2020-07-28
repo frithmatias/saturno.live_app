@@ -19,16 +19,17 @@ const DESK_EXTRATIME = 20; // 120 segundos
 export class DesktopComponent implements OnInit {
 	waitForClient: boolean = false;
 	comingClient: boolean = false;
-	pendingTickets: number = 0;
+
+	pendingTicketsCount: number = 0;
+	pendingTicketsBySkill: any[] = [];
+
 	timerCount: number = DESK_TIMEOUT;
 	cdDesk: string;
 	idDesk: string;
-	ticket: Ticket;
 	tmWaiting: string = '--:--:--';
 	tmAttention: string = '--:--:--';
-
 	message: string;
-	loading = false;
+
 	constructor(
 		private activatedRoute: ActivatedRoute,
 		public ticketsService: TicketsService,
@@ -37,35 +38,52 @@ export class DesktopComponent implements OnInit {
 		private snack: MatSnackBar
 	) {
 		this.activatedRoute.params.subscribe((data) => {
-			if(data.id){
+			if (data.id) {
 				this.cdDesk = data.id;
 			}
 		});
 	}
 
-	ngOnInit(): void {
-
+	ngOnInit() {
+		this.getTickets();
 		// obtengo la cantidad de tickets en cola al generar un nuevo turno.
 		this.wsService.escucharTurnos().subscribe(data => {
-			this.pendingTickets = Number(data);
+			this.getTickets();
 		});
 
-		let idDesk = this.userService.desktop._id;
+	}
 
-		this.ticketsService.getPendingTicket(idDesk).subscribe((data: TicketResponse) => {
-			this.snack.open(data.msg, null, {duration: 5000});
-			if (data.ok) {
-				this.ticket = data.ticket;
-				this.ticketsService.myTicket = data.ticket;
-				localStorage.setItem('ticket', JSON.stringify(data.ticket));
-			} else {
-				this.clearSession();
-			}
-		});
+	async getTickets() {
+		// traigo todos los tickets
+		const tickets = await this.ticketsService.getTickets();
+
+		// verifico si existe un ticket pendiente
+		const pending = tickets.filter(ticket => ticket.cd_desk === this.cdDesk && ticket.tm_end === null)[0]
+
+		if (pending) {
+			this.message = 'Existe un ticket pendiente de resolución'
+			this.snack.open('Existe un ticket pendiente', null, { duration: 2000 });
+			// this.ticketsService.myTicket = pending;
+			localStorage.setItem('ticket', JSON.stringify(pending));
+		} 
+
+		const waiting = tickets.filter(ticket => ticket.tm_end === null);
+		this.pendingTicketsCount = waiting.length;
+
+		if (waiting.length > 0) { this.message = `Hay ${waiting.length} tickets en espera`;}
+		const skills = this.userService.usuario.id_skills;
+		this.pendingTicketsBySkill = [];
+		for (let skill of skills) {
+			this.pendingTicketsBySkill.push({
+				'cd_skill': skill.cd_skill,
+				'tx_skill': skill.tx_skill,
+				'tickets': waiting.filter(ticket => ticket.id_skill === skill._id && ticket.tm_end === null)
+			});
+		}
 	}
 
 	atenderTicket(): void {
-		
+
 		let cdDesk = this.cdDesk;
 		let idDesk = this.userService.desktop._id;
 		let idAssistant = this.userService.usuario._id;
@@ -73,75 +91,81 @@ export class DesktopComponent implements OnInit {
 
 		this.ticketsService.atenderTicket(cdDesk, idDesk, idAssistant, idSocketDesk).subscribe(
 			(resp: TicketResponse) => {
-				console.log(resp);
-			if (!resp.ok) {
-				this.waitForClient = false;
-				this.message = resp.msg;
-				this.clearSession();
-			} else {
-				this.waitForClient = true;
-				this.message = '';
+				
+				this.snack.open(resp.msg, null, { duration: 2000 });
 
-				this.ticket = resp.ticket;
-				this.ticketsService.myTicket = resp.ticket;
-				localStorage.setItem('ticket', JSON.stringify(resp.ticket));
+				if (!resp.ok) {
 
-				// Seteo el tiempo que el cliente estuvo en espera desde que saco su turno hasta que fué atendido
-				this.tmWaiting = this.ticketsService.getTimeInterval(resp.ticket.tm_start, resp.ticket.tm_att);
+					this.waitForClient = false;
+					this.message = resp.msg;
+					this.clearSession();
+				
+				} else {
 
-				// DESKTOP WAITING TIMERS
-				const encamino$ = this.wsService.escucharEnCamino();
-				const timer_timeout$ = interval(1000).pipe(map(num => num + 1),take(DESK_TIMEOUT));
-				let timeIsOut = false;
-				timer_timeout$.pipe(
-					tap(num => this.timerCount = DESK_TIMEOUT - num),
-					takeUntil(encamino$)
-				).subscribe(
-				data => {	// next
-					if (data >= DESK_TIMEOUT - 1) {timeIsOut = true;}
-				},
-				undefined, 	// error
-				()=> { 		// complete
+					this.waitForClient = true;
+					this.message = '';
+					this.ticketsService.myTicket = resp.ticket;
+					localStorage.setItem('ticket', JSON.stringify(resp.ticket));
+
+					// Seteo el tiempo que el cliente estuvo en espera desde que saco su turno hasta que fué atendido
+					this.tmWaiting = this.ticketsService.getTimeInterval(resp.ticket.tm_start, resp.ticket.tm_att);
+
+					// DESKTOP WAITING TIMERS
+					const encamino$ = this.wsService.escucharEnCamino();
+					const timer_timeout$ = interval(1000).pipe(map(num => num + 1), take(DESK_TIMEOUT));
+					let timeIsOut = false;
+					timer_timeout$.pipe(
+						tap(num => this.timerCount = DESK_TIMEOUT - num),
+						takeUntil(encamino$)
+					).subscribe(
+						data => {	// next
+							if (data >= DESK_TIMEOUT - 1) { timeIsOut = true; }
+						},
+						undefined, 	// error
+						() => { 		// complete
 
 
-					const timerEnd = new Promise((resolve)=>{
+							const timerEnd = new Promise((resolve) => {
 
-						if(timeIsOut){ // Cliente no envió en camino, el operador puede cerrar el turno. 
-							this.waitForClient = false;
-							this.comingClient = false;
-							resolve(); 
-						} else {
-							// Cliente envió en camino, corre un segundo observable que adiciona tiempo de espera.
-							this.waitForClient = true;
-							this.comingClient = true;
-							const timer_extratime$ = interval(1000).pipe(map(num => num + 1),take(DESK_EXTRATIME));
-							timer_extratime$.subscribe(
-								num => this.timerCount = DESK_EXTRATIME - num,  // next
-								undefined, 	// error
-								()=> { 		// complete
+								if (timeIsOut) { // Cliente no envió en camino, el operador puede cerrar el turno. 
 									this.waitForClient = false;
 									this.comingClient = false;
 									resolve();
+								} else {
+									// Cliente envió en camino, corre un segundo observable que adiciona tiempo de espera.
+									this.waitForClient = true;
+									this.comingClient = true;
+									const timer_extratime$ = interval(1000).pipe(map(num => num + 1), take(DESK_EXTRATIME));
+									timer_extratime$.subscribe(
+										num => this.timerCount = DESK_EXTRATIME - num,  // next
+										undefined, 	// error
+										() => { 		// complete
+											this.waitForClient = false;
+											this.comingClient = false;
+											resolve();
+										});
+								}
+
 							});
-						}
 
-					});
-
-					timerEnd.then(() => {
-						// finalizo el tiempo de espera del cliente, comienza el tiempo del cliente.
-						const timer_cliente$ = interval(1000);
-						const start_cliente = new Date().getTime();
-						const sub_cliente = timer_cliente$.subscribe(() => {
-							if (!this.ticket) {
-								sub_cliente.unsubscribe();
-							} else {
-								this.tmAttention = this.ticketsService.getTimeInterval(start_cliente, + new Date());
-							}
+							timerEnd.then(() => {
+								// finalizo el tiempo de espera del cliente, comienza el tiempo del cliente.
+								const timer_cliente$ = interval(1000);
+								const start_cliente = new Date().getTime();
+								const sub_cliente = timer_cliente$.subscribe(() => {
+									if (!this.ticketsService.myTicket) {
+										sub_cliente.unsubscribe();
+									} else {
+										this.tmAttention = this.ticketsService.getTimeInterval(start_cliente, + new Date());
+									}
+								});
+							});
 						});
-					});
-				});
-			}
-		});
+				}
+			});
+
+		this.getTickets();
+
 	}
 
 	atenderInformes(): void {
@@ -150,20 +174,19 @@ export class DesktopComponent implements OnInit {
 
 	devolverTicket(): void {
 		this.clearSession();
-		this.ticketsService.devolverTicket(this.cdDesk).subscribe((resp: TicketResponse)=>{
+		this.ticketsService.devolverTicket(this.cdDesk).subscribe((resp: TicketResponse) => {
 			this.message = resp.msg;
 		})
 	}
 
 	finalizarTicket(): void {
 		this.clearSession();
-		this.ticketsService.finalizarTicket(this.cdDesk).subscribe((resp: TicketResponse)=>{
+		this.ticketsService.finalizarTicket(this.cdDesk).subscribe((resp: TicketResponse) => {
 			this.message = resp.msg;
 		})
 	}
 
-	clearSession(){
-		this.ticket = null;
+	clearSession() {
 		this.ticketsService.myTicket = null;
 		if (localStorage.getItem('ticket')) { localStorage.removeItem('ticket'); }
 		this.ticketsService.chatMessages = [];

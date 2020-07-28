@@ -15,6 +15,7 @@ export class ScreenComponent implements OnInit {
 	dni: number;
 	loading = false;
 	coming: boolean = false;
+	publicMode: boolean = false;
 	constructor(
 		private wsService: WebsocketService,
 		public ticketsService: TicketsService,
@@ -29,11 +30,17 @@ export class ScreenComponent implements OnInit {
 		const body = document.getElementsByTagName('body')[0];
 		body.classList.remove('container');
 
-		if (!this.userService.usuario && !this.ticketsService.companyData) {
-			this.ticketsService.getTickets();
-			this.router.navigate(['/public']);
-			this.snack.open('Por favor ingrese una empresa primero!', null, { duration: 5000 });
+		if (!this.userService.usuario) {
+			
+			if (!this.ticketsService.companyData) {
+				this.router.navigate(['/public']);
+				this.snack.open('Por favor ingrese una empresa primero!', null, { duration: 5000 });
+			}
+			
+			this.publicMode = true;
 		}
+		
+		this.ticketsService.getTickets();
 	}
 
 	toggle(chat): void {

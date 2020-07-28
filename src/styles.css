@@ -1,5 +1,4 @@
 /* You can add global styles to this file, and also import other style files */
-
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 button:focus { outline: none; }
@@ -7,6 +6,11 @@ textarea:focus { outline: none; }
 input:focus { outline: none; }
 div:focus { outline: none; }
 
+/* list no warp */
+.mat-select-option-nowarp {
+    float: left;
+    width: max-content;
+  }
 
 /* banner company search & welcome */
 .text-company {

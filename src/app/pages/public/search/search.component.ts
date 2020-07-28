@@ -34,7 +34,6 @@ export class SearchComponent implements OnInit {
           e.value = '';
           this.snack.open('No existen resultados.', null, { duration: 1000 });
         } else {
-          console.log(data);
           this.companies =  data.companies;
         }
       }, () => {
@@ -49,7 +48,6 @@ export class SearchComponent implements OnInit {
     }
   }
   setCompany(e: any):void {
-    console.log(e);
     this.companySelected = e;
   }
 

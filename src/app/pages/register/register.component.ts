@@ -96,7 +96,7 @@ export class RegisterComponent implements OnInit {
 			cd_city: this.forma.value.city
 		}
 
-		const user: User = {
+		const user: any = {
 			tx_name: this.forma.value.name,
 			tx_email: this.forma.value.email,
 			tx_password: this.forma.value.password1,

@@ -10,6 +10,7 @@ export class HomeUserComponent implements OnInit {
 	publicURL: string;
 	constructor(public userService: UserService) {}
 	ngOnInit() {
-		this.publicURL = `https://webturnos.herokuapp.com/${this.userService.usuario.id_company}`;
+		console.log(this.userService.usuario.id_company._id)
+		this.publicURL = `https://webturnos.herokuapp.com/${this.userService.usuario.id_company._id}`;
 	}
 }

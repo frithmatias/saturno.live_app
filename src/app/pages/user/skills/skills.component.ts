@@ -16,7 +16,7 @@ export class SkillsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.userService.readSkills(this.userService.usuario.id_company).subscribe((data: SkillsResponse) => {
+    this.userService.readSkills(this.userService.usuario.id_company._id).subscribe((data: SkillsResponse) => {
       this.skills = data.skills;
     });
   }

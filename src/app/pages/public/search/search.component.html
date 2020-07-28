@@ -1,7 +1,7 @@
 <div class="turno-container p-2" style="text-align: -webkit-center;">
     <div class="card bg-light mb-3" style="min-width: 18rem; max-width: 30rem;">
 
-        <div class="jumbotron m-2">
+        <div *ngIf="!companySelected" class="jumbotron m-2">
             <h1 class="display-4">Ingrese la empresa</h1>
 
             <p class="p-3" style="background-color: whitesmoke; border-radius: .2rem;">
@@ -25,37 +25,29 @@
                         {{company.tx_company_name}}
                     </mat-option>
                 </mat-autocomplete>
-
-
             </div>
-
-            <div *ngIf="companySelected">
-
-                <p class="lead">
-                    Usted esta por ir hacia la recepción de turnos de
-                </p>
-
-                <div class="card border-success py-4 my-4">
-
-                    <p class="text-company">
-                        {{ companySelected.tx_company_name }}
-                    </p>
-
-
-                    <p style="color: darkblue; font-size: 1rem; font-weight: 400;">
-                        {{ companySelected.tx_address_street }}
-                        {{ companySelected.tx_address_number }}
-                        {{ companySelected.cd_city }}
-                    </p>
-                </div>
-            </div>
-
-            <div *ngIf="companySelected">
-                <button class="btn btn-success btn-lg btn-block" (click)="goToCompany()">Ir hacia
-                    {{companySelected.tx_company_name}}</button>
-            </div>
-
         </div>
 
+        <div *ngIf="companySelected"  class="jumbotron m-2">
+            <p class="lead">
+                Usted esta por ir hacia la recepción de turnos de
+            </p>
+            <div class="card border-success py-4 my-4">
+                <p class="text-company">
+                    {{ companySelected.tx_company_name }}
+                </p>
+                <p style="color: darkblue; font-size: 1rem; font-weight: 400;">
+                    {{ companySelected.tx_address_street }}
+                    {{ companySelected.tx_address_number }}
+                    {{ companySelected.cd_city }}
+                </p>
+            </div>
+            <button class="btn btn-success btn-lg btn-block" (click)="goToCompany()">Ir hacia
+                {{companySelected.tx_company_name}}
+            </button>
+            <button class="btn btn-danger btn-lg btn-block" (click)="companySelected=null">
+                Volver
+            </button>
+        </div>
     </div>
 </div>

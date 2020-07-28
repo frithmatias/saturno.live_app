@@ -39,7 +39,7 @@ export class AssistantCreateFormComponent implements OnInit, OnChanges{
 		}, { validators: this.sonIguales('password', 'password2') });
 
 
-		this.userService.readSkills(this.userService.usuario.id_company).subscribe((data: SkillsResponse) => {
+		this.userService.readSkills(this.userService.usuario.id_company._id).subscribe((data: SkillsResponse) => {
 			this.skills = data.skills;
 		})
 
@@ -103,7 +103,7 @@ export class AssistantCreateFormComponent implements OnInit, OnChanges{
 		}
 
 		if(this.assistantEdit){
-			const assistant: User = {
+			const assistant: any = {
 				_id: this.assistantEdit._id,
 				id_role: this.forma.value.rol,
 				tx_name: this.forma.value.nombre,
@@ -126,11 +126,11 @@ export class AssistantCreateFormComponent implements OnInit, OnChanges{
 
 		} else {
 
-			const assistant: User = {
+			const assistant: any = {
 				tx_name: this.forma.value.nombre,
 				tx_email: this.forma.value.email,
 				tx_password: this.forma.value.password,
-				id_company: this.userService.usuario.id_company,
+				id_company: this.userService.usuario.id_company._id,
 				id_skills: this.selStrSkills
 			};
 			

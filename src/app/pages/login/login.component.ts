@@ -71,7 +71,7 @@ export class LoginComponent implements OnInit {
 			return;
 		}
 
-		const usuario: User = {
+		const usuario: any = {
 			tx_name: null,
 			tx_email: forma.value.email,
 			tx_password: forma.value.password,

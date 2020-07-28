@@ -2,32 +2,19 @@
     <div class="col-md-6">
 
         <!-- ======================================================== -->
-        <!-- SU TURNO FINALIZADO -->
-        <!-- ======================================================== -->
-
-        <div class="card text-white bg-danger mb-4" *ngIf="!ticketsService.myTicket && ticketsService.myTicket_end">
-            <div class="card-header banner-title">TURNO FINALIZADO </div>
-            <div class="banner-content" style="background-color: rgb(141, 51, 51)">
-                <div class="container">
-                    <div class="card bg-danger text-white my-4 py-2">Su turno ha finalizado</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- ======================================================== -->
         <!-- SU TURNO -->
         <!-- ======================================================== -->
 
-        <div class="card text-white bg-danger mb-4">
-            <div class="card-header banner-title">TURNO {{ticketsService.myTicket?.id_ticket}} </div>
-            <div class="banner-content" style="background-color: rgb(141, 51, 51)">
+        <div class="card text-white bg-success mb-4" *ngIf="ticketsService.myTicket">
+            <div class="card-header banner-title">SU TURNO</div>
+            <div class="banner-content" style="background-color: rgb(51, 141, 51)">
 
                 <!------------------------------>
                 <!-- EN ESPERA -->
                 <!------------------------------>
 
                 <div *ngIf="!ticketsService.myTicket?.id_desk">
-                    <span class="xxxxl"> 
+                    <span class="xxxxl">
                         {{ ticketsService.myTicket?.cd_skill }}
                         {{ ticketsService.myTicket?.id_ticket }}
                     </span>
@@ -48,28 +35,54 @@
                             {{ ticketsService.myTicket?.cd_desk }}
                         </div>
                     </div>
-                    <div class="row" *ngIf="!coming">
-                        <div class="col">
-                            <button class="btn btn-primary btn-lg" (click)="enCamino()">Estoy en camino!</button>
-                        </div>
+                </div>
+
+                <!------------------------------>
+                <!-- FINALIZADO -->
+                <!------------------------------>
+
+                <div *ngIf="!ticketsService.myTicket && ticketsService.myTicket_end" class="banner-content">
+                    <div class="container">
+                        <div class="text-white my-4 py-2">Su turno ha finalizado</div>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ======================================================== -->
+        <!-- EN CAMINO / CANCELAR TURNO -->
+        <!-- ======================================================== -->
+        
+        <div class="text-center mb-4">
+            <span *ngIf="ticketsService.myTicket" class="btn btn-danger text-uppercase m-2"
+                (click)="cancelTicket()">Cancelar Turno</span>
+            <span *ngIf="ticketsService.myTicket?.id_desk && !coming"
+                class="btn btn-success text-uppercase m-2" (click)="enCamino()">en
+                camino</span>
+        </div>
+
+        <!-- ======================================================== -->
+        <!-- ULTIMO TURNO -->
+        <!-- ======================================================== -->
+
+        <div class="card text-white bg-danger mb-4">
+            <div class="card-header banner-title">ULTIMO TURNO</div>
+            <div class="banner-content" style="background-color: rgb(141, 51, 51)">
+
+                <div>
+                    <span class="xxxxl">
+                        {{ ticketsService.lastTicket?.cd_skill }}
+                        {{ ticketsService.lastTicket?.id_ticket }}
+                    </span>
                 </div>
 
             </div>
         </div>
 
         <!-- ======================================================== -->
-        <!-- CANCELAR TURNO -->
-        <!-- ======================================================== -->
-        
-        <div class="mb-4">
-            <button class="btn btn-danger btn-lg btn-block text-uppercase" (click)="cancelTicket()" *ngIf="ticketsService.myTicket">Cancelar Turno</button>
-        </div>
-
-        <!-- ======================================================== -->
         <!-- PUBLICIDAD -->
         <!-- ======================================================== -->
-        
+
         <div>
             <!-- <iframe width="100%" height="480px" [src]="'-FV0KKDdysw?rel=0&autoplay=1&mute=0&fullscreen=1&loop=1&playlist=-FV0KKDdysw' | domseguro: 'https://www.youtube.com/embed/'" frameborder="0" allowtransparency="true" allow="accelerometer; autoplay; loop; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> -->
         </div>
@@ -86,19 +99,6 @@
         <div class="card text-white bg-primary mb-4">
             <div class="card-header banner-title">HISTORIAL DE LLAMADOS</div>
 
-            <div class="card-text d-flex banner-subtitle">
-                <!-- <div class="card-header p-1">{{n}}</div> -->
-
-                <div class="d-flex justify-content-center text-white" style="width: 50%">
-                    Turno
-                </div>
-
-                <div class="d-flex justify-content-center text-white" style="width: 50%">
-                    Escritorio
-                </div>
-
-            </div>
-
             <div class="rounded d-flex banner-content" style="background-color: rgb(54, 77, 194)"
                 *ngIf="ticketsService.ticketsTail.length===0">
                 <div class="d-flex justify-content-center text-white banner-title" style="width: 100%">
@@ -107,22 +107,32 @@
             </div>
 
 
-            <div class="rounded banner-content" style="background-color: rgb(54, 77, 194)"
+            <div class="card-body card-tickets-info table-responsive-sm" style="background-color: rgb(54, 77, 194)"
                 *ngIf="ticketsService.ticketsTail.length>0">
-                <!-- <div class="card-header p-1">{{n}}</div> -->
-                <div class="d-flex" *ngFor="let ticket of ticketsService.ticketsTail;">
-                    <div class="d-flex justify-content-center text-white" style="width: 50%">
-                        <span *ngIf="ticketsService.ticketsTail">{{ ticket.cd_skill }}{{ ticket.id_ticket }}</span>
-                    </div>
 
-                    <div class="d-flex justify-content-center text-white" style="width: 50%">
-                        <span *ngIf="ticketsService.ticketsTail">{{ ticket.cd_desk }}</span>
-                    </div>
-                </div>
+                <table class="table table text-white text-center" style="font-size: x-large;">
+
+                    <tr>
+                        <td> Turno </td>
+                        <td> </td>
+                        <td> Escritorio </td>
+                    </tr>
+
+                    <tr *ngFor="let ticket of ticketsService.ticketsTail;">
+                        <td style="text-align: center; width: 50%;">
+                            {{ ticket.cd_skill }}{{ ticket.id_ticket }}</td>
+                        <td style="padding: 0; vertical-align: middle;">
+                            <span *ngIf="ticket.tm_end" style="color: greenyellow">
+                                <mat-icon>check</mat-icon>
+                            </span>
+                        </td>
+                        <td style="text-align: center;  width: 50%;">{{ ticket.cd_desk }}</td>
+                    </tr>
+
+                </table>
+
             </div>
         </div>
-        
-
 
     </div>
 </div>

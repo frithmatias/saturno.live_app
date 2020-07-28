@@ -49,7 +49,7 @@ export class AssistantsComponent implements OnInit {
 
 
   readAssistants(): void {
-    this.userService.readAssistants(this.userService.usuario.id_company).subscribe((data: AssistantsResponse) => {
+    this.userService.readAssistants(this.userService.usuario.id_company._id).subscribe((data: AssistantsResponse) => {
       this.assistants = data.assistants;
     });
   }

@@ -37,13 +37,13 @@ export class TicketsService {
 		private http: HttpClient,
 		private userService: UserService,
 		private router: Router
-	) {}
+	) { }
 
 	readCompany(txPublicName: string): Observable<object> {
 		return this.http.get(environment.url + '/c/readcompany/' + txPublicName);
 	}
 
-	
+
 	findCompany(pattern: string): Observable<object> {
 		return this.http.get(environment.url + '/c/findcompany/' + pattern);
 	}
@@ -65,7 +65,7 @@ export class TicketsService {
 		return this.http.put(environment.url + '/t/actualizarsocket', socketsData);
 	}
 
-	nuevoTicket(idCompany: string, idSkill: string, cdSkill: string, idSocket: string ): Observable<object> {
+	nuevoTicket(idCompany: string, idSkill: string, cdSkill: string, idSocket: string): Observable<object> {
 		let data = { idCompany, idSkill, cdSkill, idSocket };
 
 		return this.http.post(environment.url + '/t/nuevoticket/', data);
@@ -75,22 +75,13 @@ export class TicketsService {
 		return this.http.get(environment.url + '/t/cancelticket/' + idTicket);
 	}
 
-	getPendingTicket(idDesk: string): Observable<object> {
-		const headers = new HttpHeaders({
-			'turnos-token': this.userService.token
-		});
-
-		const url = environment.url + `/t/pendingticket/${idDesk}`;
-		return this.http.get(url, { headers });
-	}
-
 	atenderTicket(cdDesk: string, idDesk: string, idAssistant: string, idSocketDesk: string): Observable<object> {
 
 		const headers = new HttpHeaders({
 			'turnos-token': this.userService.token
 		});
 
-		const deskData = { cdDesk, idDesk, idAssistant, idSocketDesk};
+		const deskData = { cdDesk, idDesk, idAssistant, idSocketDesk };
 
 		const url = environment.url + `/t/taketicket`;
 		return this.http.post(url, deskData, { headers });
@@ -108,62 +99,71 @@ export class TicketsService {
 		return this.http.post(url, deskData);
 	}
 
-	getTickets(): void {
-		let id_company: string;
-		if (this.companyData) {
-			id_company = this.companyData._id;
-		} else if (this.userService.usuario) {
-			id_company = this.userService.usuario.id_company;
-		}
-		if (!id_company) {
-			return;
-		}
-		
-		const url = environment.url + '/t/gettickets/' + id_company;
-		const getError = (err: AjaxError) => {
-			return of([{ idDesk: 'err', id_ticket: 'err', status: 'err' }]);
-		};
+	getTickets(): Promise<any> {
+		return new Promise((resolve, reject) => {
 
-		this.http.get(url).pipe(
-			map<TicketsResponse, Ticket[]>(data => data.tickets),
-			catchError(getError)
-		).subscribe((data: Ticket[]) => {
+			let id_company: string;
 
-			if (data.length === 0) {
+			if (this.companyData) {
+				id_company = this.companyData._id;
+			} else if (this.userService.usuario) {
+				id_company = this.userService.usuario.id_company._id;
+			}
+			if (!id_company) {
 				return;
 			}
-			// !obtiene los tickets antes de que el servicio de sockets pueda actualizar el id_socket
-			this.ticketsAll = data;
 
-			this.ticketsCall = data.filter(ticket => ticket.tm_att !== null);
-			this.ticketsTail = [...this.ticketsCall].sort((a: Ticket, b: Ticket) => -1).slice(0, TAIL_LENGTH);
-			this.lastTicket = this.ticketsTail[0];
+			const url = environment.url + '/t/gettickets/' + id_company;
+			const getError = (err: AjaxError) => {
+				reject();
+				return of([{ idDesk: 'err', id_ticket: 'err', status: 'err' }]);
+			};
 
-			// update ticket
-			if (this.myTicket) {
-				const myUpdatedTicket = this.ticketsCall.filter(ticket => ticket.id_ticket === this.myTicket.id_ticket && ticket.id_skill === this.myTicket.id_skill)[0];
-				if (myUpdatedTicket) {
-					this.myTicket = myUpdatedTicket;
-					localStorage.setItem('ticket', JSON.stringify(this.myTicket));
-				} else {
-					// rollback
-					this.myTicket.id_desk = null;
-					this.myTicket.id_socket_desk = null;
-					this.myTicket.tm_att = null;
-					localStorage.setItem('ticket', JSON.stringify(this.myTicket));
+			this.http.get(url).pipe(
+				map<TicketsResponse, Ticket[]>(data => data.tickets),
+				catchError(getError)
+			).subscribe((data: Ticket[]) => {
+
+				
+				if (data.length === 0) {
+					return;
+				}
+				// !obtiene los tickets antes de que el servicio de sockets pueda actualizar el id_socket
+				this.ticketsAll = data;
+
+				this.ticketsCall = data.filter(ticket => ticket.tm_att !== null);
+				this.ticketsTail = [...this.ticketsCall].sort((a: Ticket, b: Ticket) => -1).slice(0, TAIL_LENGTH);
+				this.lastTicket = this.ticketsTail[0];
+
+				resolve(data);
+
+				// update ticket
+				if (this.myTicket) {
+					const myUpdatedTicket = this.ticketsCall.filter(ticket => ticket.id_ticket === this.myTicket.id_ticket && ticket.id_skill === this.myTicket.id_skill)[0];
+
+					if (myUpdatedTicket) {
+						this.myTicket = myUpdatedTicket;
+						localStorage.setItem('ticket', JSON.stringify(this.myTicket));
+					} else {
+						// rollback
+						this.myTicket.id_desk = null;
+						this.myTicket.id_socket_desk = null;
+						this.myTicket.tm_att = null;
+						localStorage.setItem('ticket', JSON.stringify(this.myTicket));
+					}
+
+					// El ticket finalizó.
+					if (this.myTicket.tm_end !== null) {
+						this.myTicket_end = this.myTicket.tm_end;
+						this.clearPublicSession();
+					}
 				}
 
-				// El ticket finalizó.
-				if (this.myTicket.tm_end !== null) {
-					this.myTicket_end = this.myTicket.tm_end;
-					this.clearPublicSession();
+				if (this.lastTicket === undefined) {
+					// todavía no se llamó a ningún ticket.
+					return;
 				}
-			}
-
-			if (this.lastTicket === undefined) {
-				// todavía no se llamó a ningún ticket.
-				return;
-			}
+			});
 		});
 	}
 
