@@ -1,4 +1,4 @@
-<div class="turno-container p-4" style="text-align: -webkit-center;">
+<div class="turno-container p-2" style="text-align: -webkit-center;">
     <div class="card bg-light mb-3" style="min-width: 18rem; max-width: 30rem;">
 
         <form autocomplete="off" class="form-container m-3" ngNativeValidate [formGroup]="forma"
@@ -8,8 +8,9 @@
 
             <mat-form-field color="warn" appearance="fill" logincss class="w-100">
                 <mat-label>Nombre de la Empresa</mat-label>
+                <mat-error>Esta Empresa ya se encuentra registrada!</mat-error>
                 <input matInput placeholder="Nombre de la empresa" formControlName="company" name="company" type="text"
-                    required>
+                    required (keyup)="checkCompanyExists()">
             </mat-form-field>
 
             <mat-form-field color="warn" appearance="fill" logincss class="w-100">
@@ -41,13 +42,15 @@
 
             <mat-form-field color="warn" appearance="fill" logincss class="w-100">
                 <mat-label>Tu Nombre</mat-label>
+
                 <input matInput placeholder="Diego Perez" formControlName="name" name="name" type="text" required>
             </mat-form-field>
 
             <mat-form-field color="warn" appearance="fill" logincss class="w-100">
                 <mat-label>Email</mat-label>
+                <mat-error *ngIf="forma.errors?.emailExists">Este Email ya se encuentra registrado!</mat-error>
                 <input matInput placeholder="diego@perez.com" formControlName="email" name="email" type="email"
-                    required>
+                    (keyup)="checkEmailExists()" required>
             </mat-form-field>
 
             <mat-form-field color="warn" appearance="fill" logincss class="w-100">
@@ -73,9 +76,8 @@
                     </div>
                 </div>
             </div>
-
+            <!-- [disabled]="!forma.valid" -->
             <div class="form-group text-center">
-
                 <button [disabled]="!forma.valid" class="btn btn-info btn-block text-uppercase waves-effect waves-light"
                     type="submit">Registrarme</button>
 

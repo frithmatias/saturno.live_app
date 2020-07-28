@@ -93,6 +93,7 @@ export class DesktopComponent implements OnInit {
 			(resp: TicketResponse) => {
 				
 				this.snack.open(resp.msg, null, { duration: 2000 });
+				this.getTickets();
 
 				if (!resp.ok) {
 
@@ -101,7 +102,7 @@ export class DesktopComponent implements OnInit {
 					this.clearSession();
 				
 				} else {
-
+				
 					this.waitForClient = true;
 					this.message = '';
 					this.ticketsService.myTicket = resp.ticket;
@@ -122,24 +123,24 @@ export class DesktopComponent implements OnInit {
 							if (data >= DESK_TIMEOUT - 1) { timeIsOut = true; }
 						},
 						undefined, 	// error
-						() => { 		// complete
-
-
+						() => { 	// complete
 							const timerEnd = new Promise((resolve) => {
-
 								if (timeIsOut) { // Cliente no envió en camino, el operador puede cerrar el turno. 
 									this.waitForClient = false;
 									this.comingClient = false;
 									resolve();
-								} else {
-									// Cliente envió en camino, corre un segundo observable que adiciona tiempo de espera.
+								} else { // Cliente envió en camino, corre un segundo observable que adiciona tiempo de espera.
 									this.waitForClient = true;
 									this.comingClient = true;
-									const timer_extratime$ = interval(1000).pipe(map(num => num + 1), take(DESK_EXTRATIME));
+									const timer_extratime$ = interval(1000).pipe(
+										map(num => num + 1), 
+										take(DESK_EXTRATIME)
+										);
+
 									timer_extratime$.subscribe(
 										num => this.timerCount = DESK_EXTRATIME - num,  // next
 										undefined, 	// error
-										() => { 		// complete
+										() => { 	// complete
 											this.waitForClient = false;
 											this.comingClient = false;
 											resolve();
@@ -149,7 +150,7 @@ export class DesktopComponent implements OnInit {
 							});
 
 							timerEnd.then(() => {
-								// finalizo el tiempo de espera del cliente, comienza el tiempo del cliente.
+								// finalizo el tiempo de espera del cliente, comienza el tiempo del asistente.
 								const timer_cliente$ = interval(1000);
 								const start_cliente = new Date().getTime();
 								const sub_cliente = timer_cliente$.subscribe(() => {

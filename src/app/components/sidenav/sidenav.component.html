@@ -45,6 +45,7 @@
 
     <!-- LOGOUT -->
     <div *ngIf="userService.logueado">
+        <hr class="m-2" style="border-top: 1px solid dimgray;">
         <button class="btn btn-sm btn-block btn-danger" (click)="userService.logout()"> Salir </button>
     </div>
 

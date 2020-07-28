@@ -7,6 +7,7 @@ import { environment } from 'src/environments/environment';
 
 import Swal from 'sweetalert2';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { WebsocketService } from '../../services/websocket.service';
 
 declare const gapi: any;
 // 
@@ -26,6 +27,7 @@ export class LoginComponent implements OnInit {
 		public router: Router,
 		public activatedRoute: ActivatedRoute,
 		public userService: UserService,
+		private wsService: WebsocketService,
 		private snack: MatSnackBar
 	) { }
 
@@ -80,6 +82,7 @@ export class LoginComponent implements OnInit {
 
 		this.userService.loginUser(usuario, forma.value.recuerdame).subscribe(
 			data => {
+				this.wsService.emit('enterCompany', data.usuario.id_company._id);
 				this.router.navigate(['/user']);
 			},
 			err => {

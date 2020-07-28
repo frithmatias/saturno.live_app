@@ -2,11 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { UserService } from '../../services/user.service';
-import Swal from 'sweetalert2';
-import { User } from '../../interfaces/user.interface';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Company } from '../../interfaces/company.interface';
 import { GetidstringPipe } from '../../pipes/getidstring.pipe';
+import Swal from 'sweetalert2';
 
 @Component({
 	selector: 'app-register',
@@ -17,8 +16,8 @@ export class RegisterComponent implements OnInit {
 	forma: FormGroup;
 	publicName: string;
 	constructor(
-		private userService: UserService,
 		private router: Router,
+		private userService: UserService,
 		private snack: MatSnackBar,
 		private getidstring: GetidstringPipe,
 	) { }
@@ -41,7 +40,7 @@ export class RegisterComponent implements OnInit {
 		}
 		this.forma = new FormGroup({
 			company: new FormControl(defaults.company, [Validators.required, this.validatorSetId.bind(this)]),
-			companyString: new FormControl({value:'', disabled: true}),
+			companyString: new FormControl({ value: '', disabled: true }),
 			city: new FormControl(defaults.city, Validators.required),
 			addressStreet: new FormControl(defaults.addressStreet, Validators.required),
 			addressNumber: new FormControl(defaults.addressNumber, Validators.required),
@@ -50,10 +49,9 @@ export class RegisterComponent implements OnInit {
 			password1: new FormControl(defaults.password1, Validators.required),
 			password2: new FormControl(defaults.password2, Validators.required),
 			condiciones: new FormControl(false)
-		}, { validators: this.sonIguales('password1', 'password2') });
-
-
-		
+		}, { validators: [
+			this.sonIguales('password1', 'password2')] 
+		});
 	}
 
 	validatorSetId(control: FormControl): any {
@@ -71,20 +69,45 @@ export class RegisterComponent implements OnInit {
 				return null;
 			}
 			return {
-				sonIguales: true
+				passwordsDiffer: true
 			};
 		};
 	}
 
-	registrarUsuario() {
+	checkCompanyExists() {
+		let pattern = this.publicName;
+		if (this.publicName.length > 3) {
+			this.userService.checkCompanyExists(pattern).subscribe((data: any) => {
+				if (!data.ok) {
+					this.forma.controls['company'].setErrors({'incorrect': true});
+					this.forma.setErrors({'companyExists': true})
+				}
+			});
+		}
+	}
 
+
+	checkEmailExists() {
+		let pattern = this.forma.value.email;
+		if (this.forma.value.email.length > 6)
+			this.userService.checkEmailExists(pattern).subscribe((data: any) => {
+				if (!data.ok) {
+					this.forma.controls['email'].setErrors({'incorrect': true});
+					this.forma.setErrors({'emailExists': true})
+				}	
+			});
+	}
+
+
+	registrarUsuario() {
+		console.log('errores:', this.forma.errors);
 		if (this.forma.invalid) {
-			this.snack.open('Faltan datos por favor verifique.s', 'Aceptar', {duration:5000});
+			this.snack.open('Faltan datos por favor verifique', 'Aceptar', { duration: 5000 });
 			return;
 		}
 
 		if (!this.forma.value.condiciones) {
-			this.snack.open('Debe aceptar las condiciones', 'Aceptar', {duration:5000});
+			this.snack.open('Debe aceptar las condiciones', 'Aceptar', { duration: 5000 });
 			return;
 		}
 
@@ -109,9 +132,9 @@ export class RegisterComponent implements OnInit {
 				this.router.navigate(['/login'])
 			}
 		},
-		()=>{
-			this.snack.open('Error al registrar el usuario', 'Aceptar', {duration:5000});
-		}
+			() => {
+				this.snack.open('Error al registrar el usuario', 'Aceptar', { duration: 5000 });
+			}
 		)
 	}
 

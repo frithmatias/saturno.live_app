@@ -4,10 +4,8 @@ import { Observable, of } from 'rxjs';
 import { TicketsService } from './tickets.service';
 import { AjaxError } from 'rxjs/ajax';
 import { catchError, take } from 'rxjs/operators';
-import { Ticket } from '../interfaces/ticket.interface';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UserService } from './user.service';
-import { TicketResponse } from '../../../../../../$RECYCLE.BIN/S-1-5-21-1132739339-1443363597-4154816046-1001/$RRYEBZ6/interfaces/ticket.interface';
 
 @Injectable({
 	providedIn: 'root'
@@ -19,7 +17,6 @@ export class WebsocketService {
 	constructor(
 		private socket: Socket,
 		private ticketsService: TicketsService,
-		private userService: UserService,
 		private snack: MatSnackBar,
 	) {
 		this.escucharConexiones();
@@ -32,9 +29,11 @@ export class WebsocketService {
 	escucharConexiones(): void {
 
 		this.socket.on('connect', () => {
-			this.snack.open('Conectado al servidor de turnos', null, { duration: 5000 });
+			this.snack.open('Conectado al servidor de turnos', null, { duration: 2000 });
+
 			// si había un ticket en la LS lo actualizo
 			this.idSocket = this.socket.ioSocket.id;
+			
 			if (localStorage.getItem('ticket') !== 'undefined') {
 				let myTicket = JSON.parse(localStorage.getItem('ticket'));
 				if (!myTicket) {
@@ -71,7 +70,7 @@ export class WebsocketService {
 		});
 
 		this.socket.on('disconnect', () => {
-			this.snack.open('Desconectado del servidor de turnos.', null, { duration: 5000 });
+			this.snack.open('Desconectado del servidor de turnos.', null, { duration: 2000 });
 			this.socketStatus = false;
 		});
 	}

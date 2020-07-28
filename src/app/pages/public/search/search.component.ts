@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { TicketsService } from '../../../services/tickets.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Company, CompanysResponse, CompanyResponse } from '../../../interfaces/company.interface';
+import { WebsocketService } from 'src/app/services/websocket.service';
 
 @Component({
   selector: 'app-search',
@@ -16,6 +17,7 @@ export class SearchComponent implements OnInit {
   constructor(
     private router: Router,
     private ticketsService: TicketsService,
+    private wsService: WebsocketService,
     private snack: MatSnackBar) { }
 
   ngOnInit(): void {
@@ -44,6 +46,7 @@ export class SearchComponent implements OnInit {
   }
   goToCompany(): void {
     if(this.companySelected){
+      this.wsService.emit('enterCompany', this.companySelected._id);
       this.router.navigate(['/public/', this.companySelected.tx_public_name]);
     }
   }

@@ -11,6 +11,7 @@ import { Desktop } from 'src/app/interfaces/desktop.interface';
 import { Skill } from '../interfaces/skill.interface';
 import { User } from 'src/app/interfaces/user.interface';
 import { Company } from '../interfaces/company.interface';
+import { MatStepper } from '@angular/material/stepper';
 
 @Injectable({
 	providedIn: 'root'
@@ -41,6 +42,18 @@ export class UserService {
 	registerUser(company: Company, user: User) {
 		let data = {company, user};
 		const url = environment.url + '/u/register';
+		return this.http.post(url, data);
+	}
+
+	checkCompanyExists(pattern: string) {
+		let data = {pattern}
+		const url = environment.url + '/u/checkcompanyexists';
+		return this.http.post(url, data);
+	}
+
+	checkEmailExists(pattern: string) {
+		let data = {pattern}
+		const url = environment.url + '/u/checkemailexists';
 		return this.http.post(url, data);
 	}
 
@@ -247,7 +260,7 @@ export class UserService {
 			map((resp: any) => {
 				this.setStorage(resp.id, resp.token, resp.usuario, resp.menu);
 				this.logueado = true;
-				return true;
+				return resp;
 			}),
 			// clase 222 seccion 17, manejo de errores
 			catchError(err => {
@@ -327,5 +340,24 @@ export class UserService {
 		this.menu = null;
 		this.logueado = false;
 		this.router.navigate(['/home']);
+	}
+
+
+	scrollTop() {
+		document.body.scrollTop = 0; // Safari
+		document.documentElement.scrollTop = 0; // Other
+	}
+
+	stepperGoBack(stepper: MatStepper) {
+		stepper.previous();
+	}
+
+	stepperGoNext(stepper: MatStepper) {
+		this.scrollTop();
+		stepper.next();
+	}
+
+	stepperReset(stepper: MatStepper) {
+		stepper.reset();
 	}
 }

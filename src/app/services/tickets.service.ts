@@ -124,13 +124,12 @@ export class TicketsService {
 				catchError(getError)
 			).subscribe((data: Ticket[]) => {
 
-				
+
 				if (data.length === 0) {
 					return;
 				}
 				// !obtiene los tickets antes de que el servicio de sockets pueda actualizar el id_socket
 				this.ticketsAll = data;
-
 				this.ticketsCall = data.filter(ticket => ticket.tm_att !== null);
 				this.ticketsTail = [...this.ticketsCall].sort((a: Ticket, b: Ticket) => -1).slice(0, TAIL_LENGTH);
 				this.lastTicket = this.ticketsTail[0];
@@ -139,16 +138,10 @@ export class TicketsService {
 
 				// update ticket
 				if (this.myTicket) {
-					const myUpdatedTicket = this.ticketsCall.filter(ticket => ticket.id_ticket === this.myTicket.id_ticket && ticket.id_skill === this.myTicket.id_skill)[0];
+					const myUpdatedTicket = this.ticketsCall.filter(ticket => ticket._id === this.myTicket._id)[0];
 
 					if (myUpdatedTicket) {
 						this.myTicket = myUpdatedTicket;
-						localStorage.setItem('ticket', JSON.stringify(this.myTicket));
-					} else {
-						// rollback
-						this.myTicket.id_desk = null;
-						this.myTicket.id_socket_desk = null;
-						this.myTicket.tm_att = null;
 						localStorage.setItem('ticket', JSON.stringify(this.myTicket));
 					}
 

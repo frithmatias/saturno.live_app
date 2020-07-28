@@ -1,16 +1,64 @@
-<div class="turno-container p-4" style="text-align: -webkit-center;">
-  <div class="card bg-light mb-3" style="min-width: 18rem; max-width: 30rem;">
+<mat-horizontal-stepper labelPosition="bottom" class="p-0" linear #stepper>
+  <mat-step>
+    <div class="turno-container p-2" style="text-align: -webkit-center;">
+      <div class="card bg-light mb-3" style="min-width: 18rem; max-width: 30rem;">
 
-    <div class="jumbotron m-4 animated fadeIn">
-      <h1 class="display-4">Bienvenido {{ userService?.usuario.tx_name }}</h1>
-      <p class="lead">Desde aquí puede dar de alta a sus asistentes, los skills y los esctritorios.</p>
-      <hr class="my-4">
-      <p> Recuerde que sus clientes deben ingresar a obtener sus turnos a la dirección web pública en
+        <div class="jumbotron m-1 animated fadeIn">
+          <h1 class="display-2">Bienvenido {{ userService?.usuario.tx_name }}!</h1>
+          <p>
 
-      </p>
+            Para comenzar a atender turnos debe dar de alta escritorios, habilidades y opcionalmente
+            puede dar de alta asistentes. Usted como usuario administrador de su cuenta puede también
+            atender turnos tomando un escritorio desde el "Escritorio" del menú "Asistente".
+          </p>
+          <p>
+            Los escritorios sólo necesitan un identificador como "1", "2" ó "Caja 1", "Caja 2", etc.
+            Los skills son las habilidades como "Ventas", "Postventa" o cualquier segmento de su
+            negocio. Las habilidades estan asociadas a los usuarios por lo tanto debe asignarlas
+            ANTES de dar de alta asistentes o de comenzar a atender turnos con su rol de Administrador.
+          </p>
+          <hr class="my-4">
+          <p> Recuerde que para que sus clientes puedan obtener sus turnos, usted puede facilitarle la dirección
+            web pública mediante URL o imprimiendo el código QR de su web pública y ofreciendola en su local para
+            que pueda ser escaneada por el dispositivo del cliente.</p>
+          <p style="font-weight: 500; font-size: larger;">
+              <a href="{{publicURL}}">
+                {{publicURL}}
+              </a>
+          </p>
+          <button class="btn btn-primary btn-block btn-lg" matStepperNext>Comenzar</button>
 
-      <a class="btn btn-primary btn-lg btn-block" routerLink="/assistant/home" role="button">Inicio</a>
+        </div>
+
+      </div>
     </div>
+  </mat-step>
 
-  </div>
-</div>
+
+  <mat-step>
+    <app-skills></app-skills>
+    <div class="row mx-2" style="justify-content: space-between;">
+      <button class="btn btn-danger col-5" matStepperPrevious> Volver </button>
+      <button class="btn btn-primary col-5" matStepperNext> Siguiente </button>
+    </div>
+  </mat-step>
+
+  <mat-step>
+    <app-desktops></app-desktops>
+    <div class="row mx-2" style="justify-content: space-between;">
+      <button class="btn btn-danger col-5" matStepperPrevious> Volver </button>
+      <button class="btn btn-primary col-5" matStepperNext> Siguiente </button>
+    </div>
+  </mat-step>
+
+  <mat-step>
+    <app-assistants></app-assistants>
+    <div class="row mx-2" style="justify-content: space-between;">
+      <button class="btn btn-danger col-5" matStepperPrevious> Volver </button>
+      <button class="btn btn-primary col-5" routerLink="/assistant/home">
+        Finalizar
+      </button>
+    </div>
+  </mat-step>
+
+</mat-horizontal-stepper>
