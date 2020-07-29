@@ -4,12 +4,12 @@
         <div class="jumbotron m-2 animated fadeIn">
 
             <h1 class="display-4">Bienvenido a la web del asistente</h1>
-            <p class="lead">Bienvenido, desde aquí puede sacar un turno y evitar la sala de esperas.</p>
+            <p class="lead">Bienvenido, desde aquí puede tomar escritorios y atender turnos.</p>
 
 
             <div class="my-4" *ngIf="!myDesktop">
                 <mat-form-field appearance="fill">
-                    <mat-label>Seleccione</mat-label>
+                    <mat-label>Seleccione un escritorio</mat-label>
                     <mat-select #selectDesktop matNativeControl required>
                         <mat-option *ngFor="let desktop of desktopsAvailable" [value]="desktop">{{desktop.cd_desktop}}
                         </mat-option>
@@ -17,7 +17,7 @@
                 </mat-form-field>
                 <div>
                     <button class="btn btn-success btn-lg btn-block" role="button"
-                        (click)="entrar( selectDesktop?.value )">Ingresar</button>
+                        (click)="takeDesktop( selectDesktop?.value )">Ingresar</button>
                 </div>
             </div>
 
@@ -26,8 +26,8 @@
             <div class="my-4" *ngIf="myDesktop">
                 Usted tiene tomado el escritorio {{ myDesktop.cd_desktop }}
                 <div>
-                    <button class="btn btn-success btn-lg m-1" role="button" (click)="entrar( myDesktop )">Ingresar</button>
-                    <button class="btn btn-danger btn-lg m-1" role="button" (click)="finalizar( myDesktop )">Finalizar</button>
+                    <button class="btn btn-success btn-lg m-1" role="button" (click)="takeDesktop( myDesktop )">Ingresar</button>
+                    <button class="btn btn-danger btn-lg m-1" role="button" (click)="releaseDesktop( myDesktop )">Finalizar</button>
 
                 </div>
             </div>
@@ -41,9 +41,9 @@
 
 
             <hr class="my-4">
-            <p> Desde acá podes ingresar a una ventanilla de atención. Desde el chat podra ver las consultas de los
-                clientes una vez se les haya asignado esta ventanilla. Si desea puede también atender consultas desde
-                la ventanilla de informes para todas las consultas que todavía permanecen en espera.
+            <p> Recuerde que si se ausenta del escritorio debe finalizar la sesión del escritorio. Si usted 
+                finaliza la sesión de usuario se finalizará también la sesión del escritorio. Si la sesión 
+                del escritorio tenía asignada una sesión de turno, este turno finalizará. 
             </p>
 
             <a class="btn btn-primary btn-lg btn-block" routerLink="/assistant/dashboard" role="button">Dashboard</a>

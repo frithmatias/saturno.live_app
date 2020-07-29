@@ -1,5 +1,5 @@
-import { Component, OnInit, EventEmitter, Output, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { TicketsService } from 'src/app/services/tickets.service';
 import { WebsocketService } from 'src/app/services/websocket.service';
 import { TicketResponse, Ticket } from '../../../interfaces/ticket.interface';
@@ -7,6 +7,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { interval } from 'rxjs';
 import { take, takeUntil, tap, map } from 'rxjs/operators';
 import { UserService } from 'src/app/services/user.service';
+import { DesktopResponse } from 'src/app/interfaces/desktop.interface';
 
 const DESK_TIMEOUT = 10; // 60 segundos
 const DESK_EXTRATIME = 20; // 120 segundos
@@ -31,20 +32,22 @@ export class DesktopComponent implements OnInit {
 	message: string;
 
 	constructor(
-		private activatedRoute: ActivatedRoute,
 		public ticketsService: TicketsService,
 		private userService: UserService,
 		private wsService: WebsocketService,
-		private snack: MatSnackBar
-	) {
-		this.activatedRoute.params.subscribe((data) => {
-			if (data.id) {
-				this.cdDesk = data.id;
-			}
-		});
-	}
+		private snack: MatSnackBar,
+		private router: Router
+	) { }
 
 	ngOnInit() {
+
+		if (this.userService.desktop?.cd_desktop) {
+			this.cdDesk = this.userService.desktop.cd_desktop;
+		} else {
+			this.snack.open('No tiene un escritorio asignado', null, { duration: 2000 })
+			this.router.navigate(['/assistant/home']);
+		}
+
 		this.getTickets();
 		// obtengo la cantidad de tickets en cola al generar un nuevo turno.
 		this.wsService.escucharTurnos().subscribe(data => {
@@ -54,6 +57,7 @@ export class DesktopComponent implements OnInit {
 	}
 
 	async getTickets() {
+
 		// traigo todos los tickets
 		const tickets = await this.ticketsService.getTickets();
 
@@ -65,14 +69,16 @@ export class DesktopComponent implements OnInit {
 			this.snack.open('Existe un ticket pendiente', null, { duration: 2000 });
 			// this.ticketsService.myTicket = pending;
 			localStorage.setItem('ticket', JSON.stringify(pending));
-		} 
+		}
 
 		const waiting = tickets.filter(ticket => ticket.tm_end === null);
 		this.pendingTicketsCount = waiting.length;
 
-		if (waiting.length > 0) { this.message = `Hay ${waiting.length} tickets en espera`;}
+		if (waiting.length > 0) { this.message = `Hay ${waiting.length} tickets en espera`; }
+
 		const skills = this.userService.usuario.id_skills;
 		this.pendingTicketsBySkill = [];
+
 		for (let skill of skills) {
 			this.pendingTicketsBySkill.push({
 				'cd_skill': skill.cd_skill,
@@ -82,16 +88,16 @@ export class DesktopComponent implements OnInit {
 		}
 	}
 
-	atenderTicket(): void {
+	takeTicket(): void {
 
 		let cdDesk = this.cdDesk;
 		let idDesk = this.userService.desktop._id;
 		let idAssistant = this.userService.usuario._id;
 		let idSocketDesk = this.wsService.idSocket;
 
-		this.ticketsService.atenderTicket(cdDesk, idDesk, idAssistant, idSocketDesk).subscribe(
+		this.ticketsService.takeTicket(cdDesk, idDesk, idAssistant, idSocketDesk).subscribe(
 			(resp: TicketResponse) => {
-				
+
 				this.snack.open(resp.msg, null, { duration: 2000 });
 				this.getTickets();
 
@@ -100,9 +106,9 @@ export class DesktopComponent implements OnInit {
 					this.waitForClient = false;
 					this.message = resp.msg;
 					this.clearSession();
-				
+
 				} else {
-				
+
 					this.waitForClient = true;
 					this.message = '';
 					this.ticketsService.myTicket = resp.ticket;
@@ -133,9 +139,9 @@ export class DesktopComponent implements OnInit {
 									this.waitForClient = true;
 									this.comingClient = true;
 									const timer_extratime$ = interval(1000).pipe(
-										map(num => num + 1), 
+										map(num => num + 1),
 										take(DESK_EXTRATIME)
-										);
+									);
 
 									timer_extratime$.subscribe(
 										num => this.timerCount = DESK_EXTRATIME - num,  // next
@@ -169,21 +175,25 @@ export class DesktopComponent implements OnInit {
 
 	}
 
-	atenderInformes(): void {
+	assignTicket(): void {
 
 	}
 
-	devolverTicket(): void {
-		this.clearSession();
-		this.ticketsService.devolverTicket(this.cdDesk).subscribe((resp: TicketResponse) => {
-			this.message = resp.msg;
+	releaseTicket(): void {
+		this.ticketsService.releaseTicket(this.ticketsService.myTicket._id).subscribe((resp: TicketResponse) => {
+			if (resp.ok) {
+				this.clearSession();
+				this.message = resp.msg;
+			}
 		})
 	}
 
-	finalizarTicket(): void {
-		this.clearSession();
-		this.ticketsService.finalizarTicket(this.cdDesk).subscribe((resp: TicketResponse) => {
-			this.message = resp.msg;
+	endTicket(): void {
+		this.ticketsService.endTicket(this.ticketsService.myTicket._id).subscribe((resp: TicketResponse) => {
+			if (resp.ok) {
+				this.clearSession();
+				this.message = resp.msg;
+			}
 		})
 	}
 
@@ -195,4 +205,12 @@ export class DesktopComponent implements OnInit {
 		this.tmAttention = '--:--:--';
 	}
 
+	releaseDesktop(): void {
+		let idDesktop = this.userService.desktop._id
+		this.userService.releaseDesktop(idDesktop).subscribe((data: DesktopResponse) => {
+			if (data.ok) {
+				this.router.navigate(['assistant/home']);
+			}
+		})
+	}
 }

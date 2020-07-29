@@ -33,7 +33,9 @@ export class PublicComponent implements OnInit {
     } 
 
     if (localStorage.getItem('company')) {
-      this.ticketsService.companyData = JSON.parse(localStorage.getItem('company'));
+      if (!this.ticketsService.companyData){
+        this.ticketsService.companyData = JSON.parse(localStorage.getItem('company'));
+      }
       this.router.navigate(['/public/tickets']);
     };
 

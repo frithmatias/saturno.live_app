@@ -1,5 +1,6 @@
 .example-button-container {
-    display: flex;
-    justify-content: right;
-    width: 120px;
-  }
+  display        : flex;
+  justify-content: right;
+  width          : 120px;
+}
+

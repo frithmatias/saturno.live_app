@@ -7,7 +7,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 
 const assistantRoutes: Routes = [
   { path: 'home', component: HomeComponent },
-  { path: 'desktop/:id', component: DesktopComponent },
+  { path: 'desktop', component: DesktopComponent },
   { path: 'dashboard', component: DashboardComponent },
 	{ path: '', redirectTo: '/assistant/home', pathMatch: 'full' },
   { path: '**', component: NopagefoundComponent}

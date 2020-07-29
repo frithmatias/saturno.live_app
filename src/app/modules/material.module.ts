@@ -14,6 +14,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatSelectModule } from '@angular/material/select';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @NgModule({
 	declarations: [],
@@ -31,6 +32,7 @@ import { MatMenuModule } from '@angular/material/menu';
 		MatSelectModule,
 		MatAutocompleteModule,
 		MatMenuModule,
+		MatSlideToggleModule
 	],
 	exports: [
 		MatStepperModule,
@@ -46,6 +48,7 @@ import { MatMenuModule } from '@angular/material/menu';
 		MatSelectModule,
 		MatAutocompleteModule,
 		MatMenuModule,
+		MatSlideToggleModule
 	]
 })
 export class MaterialModule { }

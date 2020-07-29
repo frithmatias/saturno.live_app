@@ -194,24 +194,22 @@ export class UserService {
 		return this.http.delete(url, {headers});
 	}
 
-	takeDesktop(idCompany: string, idDesktop: string, idAssistant: string) {
-
+	takeDesktop(idDesktop: string, idAssistant: string) {
 		const headers = new HttpHeaders({
 			'turnos-token': this.token
 		});
-		let data = {idCompany, idDesktop, idAssistant}
+		let data = {idDesktop, idAssistant}
 		const url = environment.url + '/d/takedesktop';
 		return this.http.post(url, data, {headers});
 	}
 	
-	releaseDesktop(desktop: Desktop) {
-
+	releaseDesktop(idDesktop: string) {
 		const headers = new HttpHeaders({
 			'turnos-token': this.token
 		});
-
+		let data = { idDesktop }
 		const url = environment.url + '/d/releasedesktop';
-		return this.http.post(url, desktop, {headers});
+		return this.http.post(url, data, {headers});
 	}
 
 	// ========================================================

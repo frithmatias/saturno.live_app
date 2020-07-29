@@ -12,7 +12,6 @@ import { UserService } from './user.service';
 })
 export class WebsocketService {
 	public socketStatus = false;
-	public usuario = null;
 	public idSocket = null;
 	constructor(
 		private socket: Socket,
@@ -55,7 +54,11 @@ export class WebsocketService {
 					catchError(this.manejaError)
 				).subscribe((data: any) => {
 					if (data.ok) {
-						// si lo actualizo el ticket en la BD actualizo en myTicket y en la LS
+						
+						// entra a la sala de la empresa asignada en el ticket
+						this.emit('enterCompany', data.ticket.id_company);
+
+						// si actualizo el ticket en la BD actualizo en myTicket y en la LS
 						if (localStorage.getItem('desktop')) {
 							this.ticketsService.myTicket.id_socket_desk = this.idSocket;
 						} else {

@@ -1,10 +1,8 @@
 <div class="m-4 row animated fadeIn">
 
-
   <!-- ======================================================== -->
   <!-- DESKTOP -->
   <!-- ======================================================== -->
-
 
   <div class="col-lg-6">
     <div class="card bg-light mb-4">
@@ -66,79 +64,86 @@
             </div>
           </div>
 
-
           <div class="content">
             <hr class="my-1">
             <div class="row" style="justify-content: space-between;">
 
               <div class="col col-6 col-md-3 p-1">
-                <button class="btn btn-block btn-danger" (click)="devolverTicket()" [disabled]="waitForClient">
-                  Devolver
+                <button class="btn btn-block btn-danger" (click)="releaseTicket()" [disabled]="waitForClient">
+                  Soltar
                 </button>
               </div>
 
               <div class="col col-6 col-md-3 p-1">
-                <button class="btn btn-block btn-info" (click)="atenderInformes()" [disabled]="waitForClient">
-                  Informes
+                <button class="btn btn-block btn-info" (click)="assignTicket()" [disabled]="true">
+                  Reasignar
                 </button>
               </div>
 
               <div class="col col-6 col-md-3 p-1">
-                <button class="btn btn-block btn-primary" (click)="finalizarTicket()" [disabled]="waitForClient">
+                <button class="btn btn-block btn-primary" (click)="endTicket()"
+                  [disabled]="!ticketsService.myTicket || waitForClient">
                   Finalizar
                 </button>
               </div>
 
               <div class="col col-6 col-md-3 p-1">
-                <button class="btn btn-block btn-success" (click)="atenderTicket()" [disabled]="waitForClient">
+                <button class="btn btn-block btn-success" (click)="takeTicket()" [disabled]="waitForClient">
                   Siguiente
                 </button>
               </div>
 
-        
+            </div>
           </div>
+
         </div>
 
+      </div>
+    </div>
+  </div>
 
+  <!-- ======================================================== -->
+  <!-- SKILL TABLE -->
+  <!-- ======================================================== -->
+
+
+  <div class="col-lg-6">
+    <div class="card bg-primary mb-4">
+      <div class="card-content table-responsive-sm  p-2">
+
+        <table class="table table-sm text-white text-center" style="font-size: large;">
+
+          <tr style="border-top: 0px; color: yellow;">
+            <td style="text-align: left; border: none;"> Skill </td>
+            <td style="text-align: center; border: none;"> Cola </td>
+          </tr>
+
+          <tr *ngFor="let waiting of pendingTicketsBySkill">
+            <td style="text-align: left;">
+              {{ waiting.tx_skill }}
+            </td>
+            <td style="text-align: center;">
+              {{ waiting.tickets.length }}
+            </td>
+          </tr>
+        </table>
 
       </div>
-
     </div>
   </div>
+
 </div>
 
+<div class="row">
+  <div class="col">
 
+      <!-- ======================================================== -->
+      <!-- DESKTOP PANEL -->
+      <!-- ======================================================== -->
 
+      <div class="text-center footer-panel">
+          <button class="btn btn-danger text-uppercase m-2" (click)="releaseDesktop()">Abandonar Escritorio</button>
+      </div>
 
-<!-- ======================================================== -->
-<!-- TAIL WAIT -->
-<!-- ======================================================== -->
-
-
-<div class="col-lg-6">
-  <div class="card bg-primary mb-4">
-    <div class="card-content table-responsive-sm  p-2">
-
-      <table class="table table-sm text-white text-center" style="font-size: large;">
-
-        <tr style="border-top: 0px; color: yellow;">
-          <td style="text-align: left; border: none;"> Skill </td>
-          <td style="text-align: center; border: none;"> Cola </td>
-        </tr>
-
-        <tr *ngFor="let waiting of pendingTicketsBySkill">
-          <td style="text-align: left;">
-            {{ waiting.tx_skill }}
-          </td>
-          <td style="text-align: center;">
-            {{ waiting.tickets.length }}
-          </td>
-        </tr>
-      </table>
-
-    </div>
   </div>
-</div>
-
-
 </div>

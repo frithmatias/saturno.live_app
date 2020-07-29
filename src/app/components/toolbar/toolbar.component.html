@@ -6,8 +6,8 @@
         <span class="example-spacer"></span>
 
         <!-- Title -->
-        <span *ngIf="userService.usuario">{{userService.usuario.id_company.tx_company_name}}</span>
-        <span *ngIf="!userService.usuario">WebTurnos 0.0.1</span>
+        <span *ngIf="userService.usuario || ticketsService.companyData">{{userService.usuario?.id_company.tx_company_name || ticketsService.companyData.tx_company_name}}</span>
+        <span *ngIf="!userService.usuario && !ticketsService.companyData">WebTurnos 0.0.1</span>
         <span class="example-spacer"></span>
 
         <!-- Chat Icon -->

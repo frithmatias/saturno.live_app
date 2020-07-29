@@ -1,64 +1,120 @@
-<mat-horizontal-stepper labelPosition="bottom" class="p-0" linear #stepper>
-  <mat-step>
-    <div class="turno-container p-2" style="text-align: -webkit-center;">
-      <div class="card bg-light mb-3" style="min-width: 18rem; max-width: 30rem;">
+<div class="turno-container p-2 animated fadeIn" style="text-align: -webkit-center;">
+  <div class="card bg-light mb-3" style="min-width: 18rem; max-width: 30rem;">
 
-        <div class="jumbotron m-1 animated fadeIn">
+    <div *ngIf="!showIntro">
+      <div class="jumbotron m-1">
+        <h1 class="display-2">Bienvenido {{ userService?.usuario.tx_name }}!</h1>
+
+        <button class="btn btn-primary btn-block btn-lg" routerLink="/assistant/home">Atender</button>
+
+        <hr class="my-4">
+        <p class="lead"> Web Pública </p>
+
+        <p style="font-weight: 500; font-size: larger;">
+          <a href="{{publicURL}}">
+            {{publicURL}}
+          </a>
+        </p>
+      </div>
+    </div>
+
+    <mat-horizontal-stepper *ngIf="showIntro" labelPosition="bottom" class="p-0 animated fadeIn" linear #stepper>
+      <mat-step>
+
+        <div class="jumbotron m-1">
           <h1 class="display-2">Bienvenido {{ userService?.usuario.tx_name }}!</h1>
-          <p>
-
+          <p class="lead">
             Para comenzar a atender turnos debe dar de alta escritorios, habilidades y opcionalmente
-            puede dar de alta asistentes. Usted como usuario administrador de su cuenta puede también
-            atender turnos tomando un escritorio desde el "Escritorio" del menú "Asistente".
+            puede dar de alta asistentes. Desde este asistente puede hacer todo.
           </p>
-          <p>
-            Los escritorios sólo necesitan un identificador como "1", "2" ó "Caja 1", "Caja 2", etc.
-            Los skills son las habilidades como "Ventas", "Postventa" o cualquier segmento de su
-            negocio. Las habilidades estan asociadas a los usuarios por lo tanto debe asignarlas
-            ANTES de dar de alta asistentes o de comenzar a atender turnos con su rol de Administrador.
-          </p>
+
           <hr class="my-4">
-          <p> Recuerde que para que sus clientes puedan obtener sus turnos, usted puede facilitarle la dirección
+          <p class="lead"> Recuerde que para que sus clientes puedan obtener sus turnos, usted puede facilitarle la
+            dirección
             web pública mediante URL o imprimiendo el código QR de su web pública y ofreciendola en su local para
             que pueda ser escaneada por el dispositivo del cliente.</p>
+
           <p style="font-weight: 500; font-size: larger;">
-              <a href="{{publicURL}}">
-                {{publicURL}}
-              </a>
+            <a href="{{publicURL}}">
+              {{publicURL}}
+            </a>
           </p>
+
           <button class="btn btn-primary btn-block btn-lg" matStepperNext>Comenzar</button>
 
         </div>
 
-      </div>
+
+      </mat-step>
+
+      <mat-step>
+        <div class="jumbotron">
+          <p class="lead">
+            Los skills son habilidades que se asignan a los asistentes. Estas pueden ser etiquetas que
+            que identifiquen cualquier segmento de su negocio como "Ventas", "Repuestos", "Informes", etc.
+          </p>
+          <p class="lead">
+            Las habilidades estan asociadas a los usuarios por lo tanto debe crearlas ANTES de dar de alta
+            asistentes o de comenzar a atender turnos.
+          </p>
+        </div>
+
+        <div class="row mx-2 mt-4" style="justify-content: space-between;">
+          <button class="btn btn-danger col-5" matStepperPrevious> Volver </button>
+          <button class="btn btn-primary col-5" matStepperNext> Siguiente </button>
+        </div>
+        <hr>
+
+        <app-skills></app-skills>
+
+      </mat-step>
+
+      <mat-step>
+        <div class="jumbotron">
+          <p class="lead">
+            Los escritorios sólo necesitan un identificador o etiqueta, pueden ser letras o números
+            ej. "1", "2", "A", "B" etc.
+          </p>
+          <p class="lead">
+            Este identificador debe colocarlo en cada escritorio de forma
+            bien visible para que el usuario pueda identificarlo fácilmente cuando le sea asignado
+            un escritorio.
+          </p>
+        </div>
+
+        <div class="row mx-2 mt-4" style="justify-content: space-between;">
+          <button class="btn btn-danger col-5" matStepperPrevious> Volver </button>
+          <button class="btn btn-primary col-5" matStepperNext> Siguiente </button>
+        </div>
+        <hr>
+
+        <app-desktops></app-desktops>
+
+      </mat-step>
+
+      <mat-step>
+        <div class="jumbotron">
+          <p class="lead">
+            Usted con su cuenta puede atender turnos sin necesidad de crear asistentes,
+            sólo debe tomar un escritorio desde "Escritorio" en el menú de "Asistente".
+          </p>
+        </div>
+
+        <div class="row mx-2 mt-4" style="justify-content: space-between;">
+          <button class="btn btn-danger col-5" matStepperPrevious> Volver </button>
+          <button class="btn btn-primary col-5" routerLink="/assistant/home"> Finalizar </button>
+        </div>
+        <hr>
+
+        <app-assistants></app-assistants>
+
+      </mat-step>
+
+    </mat-horizontal-stepper>
+
+    <div class="m-2">
+      <mat-slide-toggle [(ngModel)]="showIntro" (click)="toggleIntro()"> Ver asistente </mat-slide-toggle>
     </div>
-  </mat-step>
 
-
-  <mat-step>
-    <app-skills></app-skills>
-    <div class="row mx-2" style="justify-content: space-between;">
-      <button class="btn btn-danger col-5" matStepperPrevious> Volver </button>
-      <button class="btn btn-primary col-5" matStepperNext> Siguiente </button>
-    </div>
-  </mat-step>
-
-  <mat-step>
-    <app-desktops></app-desktops>
-    <div class="row mx-2" style="justify-content: space-between;">
-      <button class="btn btn-danger col-5" matStepperPrevious> Volver </button>
-      <button class="btn btn-primary col-5" matStepperNext> Siguiente </button>
-    </div>
-  </mat-step>
-
-  <mat-step>
-    <app-assistants></app-assistants>
-    <div class="row mx-2" style="justify-content: space-between;">
-      <button class="btn btn-danger col-5" matStepperPrevious> Volver </button>
-      <button class="btn btn-primary col-5" routerLink="/assistant/home">
-        Finalizar
-      </button>
-    </div>
-  </mat-step>
-
-</mat-horizontal-stepper>
+  </div>
+</div>

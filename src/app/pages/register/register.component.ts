@@ -100,7 +100,7 @@ export class RegisterComponent implements OnInit {
 
 
 	registrarUsuario() {
-		console.log('errores:', this.forma.errors);
+
 		if (this.forma.invalid) {
 			this.snack.open('Faltan datos por favor verifique', 'Aceptar', { duration: 5000 });
 			return;

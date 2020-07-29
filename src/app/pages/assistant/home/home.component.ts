@@ -20,27 +20,26 @@ export class HomeComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.obtenerEscritorios();
+    this.readDesktops();
   }
 
 
 
-  entrar(desktop: Desktop): void {
+  takeDesktop(desktop: Desktop): void {
 
     if (!desktop) {
       return;
     }
 
     let idDesktop = desktop._id;
-    let idCompany = this.userService.usuario.id_company._id;
     let idAssistant = this.userService.usuario._id;
 
-    this.userService.takeDesktop(idCompany, idDesktop, idAssistant).subscribe((data: DesktopResponse) => {
+    this.userService.takeDesktop(idDesktop, idAssistant).subscribe((data: DesktopResponse) => {
       this.snack.open(data.msg, null, { duration: 2000 });
       if (data.ok) {
         this.userService.desktop = data.desktop;
         localStorage.setItem('desktop', JSON.stringify(data.desktop));
-        this.router.navigate(['/assistant/desktop', desktop.cd_desktop]);
+        this.router.navigate(['/assistant/desktop']);
       } else {
         this.snack.open('No se pudo tomar un escritorio', null, { duration: 2000 });
 
@@ -48,9 +47,9 @@ export class HomeComponent implements OnInit {
     })
   }
 
-  obtenerEscritorios(): void {
-
-    this.userService.readDesktops(this.userService.usuario.id_company._id).subscribe((data: DesktopsResponse) => {
+  readDesktops(): void {
+    let idCompany = this.userService.usuario.id_company._id;
+    this.userService.readDesktops(idCompany).subscribe((data: DesktopsResponse) => {
       this.desktops = data.desktops;
       this.desktopsAvailable = this.desktops.filter(desktop => desktop.id_assistant === null);
       this.myDesktop = this.desktops.filter(desktop => desktop.id_assistant === this.userService.usuario._id)[0]
@@ -66,9 +65,10 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  finalizar(desktop: Desktop): void {
-    this.userService.releaseDesktop(desktop).subscribe(data => {
-      this.obtenerEscritorios();
+  releaseDesktop(desktop: Desktop): void {
+    let idDesktop = desktop._id;
+    this.userService.releaseDesktop(idDesktop).subscribe(data => {
+      this.readDesktops();
     })
   }
 }

@@ -46,7 +46,8 @@ export class SearchComponent implements OnInit {
   }
   goToCompany(): void {
     if(this.companySelected){
-      this.wsService.emit('enterCompany', this.companySelected._id);
+      localStorage.setItem('company', JSON.stringify(this.companySelected));
+      this.ticketsService.companyData = this.companySelected;
       this.router.navigate(['/public/', this.companySelected.tx_public_name]);
     }
   }

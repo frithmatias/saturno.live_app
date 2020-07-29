@@ -15,14 +15,16 @@ const TAIL_LENGTH = 4;
 	providedIn: 'root'
 })
 export class TicketsService {
+	
 	companyData: any;
 	publicMode: boolean = false;
+	
+	myTicket: Ticket;
+	myTicket_end: number;
+	
 	ticketsAll: Ticket[] = [];
 	ticketsCall: Ticket[] = [];
 	ticketsTail: Ticket[] = [];
-	obsTicket: Observable<Ticket>;
-	myTicket: Ticket;
-	myTicket_end: number;
 	lastTicket: Ticket;
 
 	chatMessages: {
@@ -39,10 +41,11 @@ export class TicketsService {
 		private router: Router
 	) { }
 
+	// public methods
+
 	readCompany(txPublicName: string): Observable<object> {
 		return this.http.get(environment.url + '/c/readcompany/' + txPublicName);
 	}
-
 
 	findCompany(pattern: string): Observable<object> {
 		return this.http.get(environment.url + '/c/findcompany/' + pattern);
@@ -75,7 +78,14 @@ export class TicketsService {
 		return this.http.get(environment.url + '/t/cancelticket/' + idTicket);
 	}
 
-	atenderTicket(cdDesk: string, idDesk: string, idAssistant: string, idSocketDesk: string): Observable<object> {
+	sendContact(data: any) {
+		const url = environment.url + `/p/contact`;
+		return this.http.post(url, data);
+	}
+
+	// desktop methods
+
+	takeTicket(cdDesk: string, idDesk: string, idAssistant: string, idSocketDesk: string): Observable<object> {
 
 		const headers = new HttpHeaders({
 			'turnos-token': this.userService.token
@@ -87,16 +97,22 @@ export class TicketsService {
 		return this.http.post(url, deskData, { headers });
 	}
 
-	devolverTicket(idDesk: string): Observable<object> {
-		const deskData = { idDesk };
-		const url = environment.url + '/t/devolverticket';
-		return this.http.post(url, deskData);
+	releaseTicket(idTicket: string): Observable<object> {
+		const data = { idTicket };
+		const headers = new HttpHeaders({
+			'turnos-token': this.userService.token
+		});
+		const url = environment.url + '/t/releaseticket';
+		return this.http.post(url, data, { headers });
 	}
 
-	finalizarTicket(idDesk: string): Observable<object> {
-		const deskData = { idDesk };
-		const url = environment.url + '/t/finalizarticket';
-		return this.http.post(url, deskData);
+	endTicket(idTicket: string): Observable<object> {
+		const data = { idTicket };
+		const headers = new HttpHeaders({
+			'turnos-token': this.userService.token
+		});
+		const url = environment.url + '/t/endticket';
+		return this.http.post(url, data, { headers });
 	}
 
 	getTickets(): Promise<any> {
@@ -110,6 +126,7 @@ export class TicketsService {
 				id_company = this.userService.usuario.id_company._id;
 			}
 			if (!id_company) {
+				
 				return;
 			}
 
@@ -133,12 +150,12 @@ export class TicketsService {
 				this.ticketsCall = data.filter(ticket => ticket.tm_att !== null);
 				this.ticketsTail = [...this.ticketsCall].sort((a: Ticket, b: Ticket) => -1).slice(0, TAIL_LENGTH);
 				this.lastTicket = this.ticketsTail[0];
-
-				resolve(data);
-
+				
+				
+				
 				// update ticket
 				if (this.myTicket) {
-					const myUpdatedTicket = this.ticketsCall.filter(ticket => ticket._id === this.myTicket._id)[0];
+					const myUpdatedTicket = this.ticketsAll.filter(ticket => ticket._id === this.myTicket._id)[0];
 
 					if (myUpdatedTicket) {
 						this.myTicket = myUpdatedTicket;
@@ -152,10 +169,7 @@ export class TicketsService {
 					}
 				}
 
-				if (this.lastTicket === undefined) {
-					// todavía no se llamó a ningún ticket.
-					return;
-				}
+				resolve(data);
 			});
 		});
 	}
@@ -173,11 +187,7 @@ export class TicketsService {
 		return `${hStr}:${mStr}:${sStr}`;
 	}
 
-	sendContact(data: any) {
 
-		const url = environment.url + `/p/contact`;
-		return this.http.post(url, data);
-	}
 
 
 }
