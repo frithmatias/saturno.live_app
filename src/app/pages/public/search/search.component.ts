@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { TicketsService } from '../../../services/tickets.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Company, CompanysResponse, CompanyResponse } from '../../../interfaces/company.interface';
+import { Company, CompaniesResponse, CompanyResponse } from '../../../interfaces/company.interface';
 import { WebsocketService } from 'src/app/services/websocket.service';
 
 @Component({
@@ -31,7 +31,7 @@ export class SearchComponent implements OnInit {
   findCompany(e: HTMLInputElement) {
 
     if (e.value.length > 1) {
-      this.ticketsService.findCompany(e.value).subscribe((data: CompanysResponse) => {
+      this.ticketsService.findCompany(e.value).subscribe((data: CompaniesResponse) => {
         if (!data.ok) {
           e.value = '';
           this.snack.open('No existen resultados.', null, { duration: 1000 });

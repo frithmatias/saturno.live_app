@@ -57,35 +57,39 @@ export class DesktopComponent implements OnInit {
 	}
 
 	async getTickets() {
-
 		// traigo todos los tickets
-		const tickets = await this.ticketsService.getTickets();
+		await this.ticketsService.getTickets().then(tickets => {
+			// verifico si existe un ticket pendiente
+			const pending = tickets.filter(ticket => ticket.cd_desk === this.cdDesk && ticket.tm_end === null)[0]
 
-		// verifico si existe un ticket pendiente
-		const pending = tickets.filter(ticket => ticket.cd_desk === this.cdDesk && ticket.tm_end === null)[0]
+			if (pending) {
+				this.message = 'Existe un ticket pendiente de resolución'
+				this.snack.open('Existe un ticket pendiente', null, { duration: 2000 });
+				// this.ticketsService.myTicket = pending;
+				localStorage.setItem('ticket', JSON.stringify(pending));
+			}
 
-		if (pending) {
-			this.message = 'Existe un ticket pendiente de resolución'
-			this.snack.open('Existe un ticket pendiente', null, { duration: 2000 });
-			// this.ticketsService.myTicket = pending;
-			localStorage.setItem('ticket', JSON.stringify(pending));
-		}
+			const waiting = tickets.filter(ticket => ticket.tm_end === null);
+			this.pendingTicketsCount = waiting.length;
 
-		const waiting = tickets.filter(ticket => ticket.tm_end === null);
-		this.pendingTicketsCount = waiting.length;
+			if (waiting.length > 0) { this.message = `Hay ${waiting.length} tickets en espera`; }
 
-		if (waiting.length > 0) { this.message = `Hay ${waiting.length} tickets en espera`; }
+			const skills = this.userService.usuario.id_skills;
 
-		const skills = this.userService.usuario.id_skills;
-		this.pendingTicketsBySkill = [];
+			this.pendingTicketsBySkill = [];
 
-		for (let skill of skills) {
-			this.pendingTicketsBySkill.push({
-				'cd_skill': skill.cd_skill,
-				'tx_skill': skill.tx_skill,
-				'tickets': waiting.filter(ticket => ticket.id_skill === skill._id && ticket.tm_end === null)
-			});
-		}
+			for (let skill of skills) {
+				this.pendingTicketsBySkill.push({
+					'cd_skill': skill.cd_skill,
+					'tx_skill': skill.tx_skill,
+					'tickets': waiting.filter(ticket => ticket.id_skill === skill._id && ticket.tm_end === null)
+				});
+			}
+		})
+			.catch(() => {
+				this.message = 'no existen tickets pendientes';
+			})
+
 	}
 
 	takeTicket(): void {

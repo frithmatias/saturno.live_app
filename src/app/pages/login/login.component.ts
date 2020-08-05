@@ -54,11 +54,10 @@ export class LoginComponent implements OnInit {
 		this.auth2.attachClickHandler(element, {}, googleUser => {
 			const token = googleUser.getAuthResponse().id_token;
 			// googleUser google user data
-			this.userService.loginGoogle(token).subscribe(
-				data => {
-					window.location.href = '#/cliente';
-				},
-				err => Swal.fire('Error', err.error.mensaje, 'error')
+			this.userService.loginGoogle(token).subscribe(data => {
+				window.location.href = '#/user';
+				// this.router.navigate(['/user']);				
+			},
 			);
 		});
 	}
@@ -80,13 +79,14 @@ export class LoginComponent implements OnInit {
 			id_company: null
 		};
 
-		this.userService.loginUser(usuario, forma.value.recuerdame).subscribe(
-			data => {
-				this.wsService.emit('enterCompany', data.usuario.id_company._id);
-				this.router.navigate(['/user']);
-			},
+		this.userService.loginUser(usuario, forma.value.recuerdame).subscribe(data => {
+
+			// sólo los asistentes ingresan a una sala de mensajes
+			if (data.usuario.id_role === 'ASSISTANT_ROLE') { this.wsService.emit('enterCompany', data.usuario.id_company._id) };
+			this.router.navigate(['/user']);
+		},
 			err => {
-				this.snack.open(err.error.msg , 'Aceptar', {duration: 5000});
+				this.snack.open(err.error.msg, 'Aceptar', { duration: 5000 });
 			});
 	}
 

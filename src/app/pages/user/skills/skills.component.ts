@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 import { MatSnackBar, MatSnackBarDismiss } from '@angular/material/snack-bar';
 import { UserService } from 'src/app/services/user.service';
 import { Skill, SkillsResponse, SkillResponse } from '../../../interfaces/skill.interface';
+import { MatStepper } from '@angular/material/stepper';
 
 @Component({
   selector: 'app-skills',
@@ -9,6 +10,7 @@ import { Skill, SkillsResponse, SkillResponse } from '../../../interfaces/skill.
   styleUrls: ['./skills.component.css']
 })
 export class SkillsComponent implements OnInit {
+
   skills: Skill[];
   constructor(
     private userService: UserService,
@@ -16,11 +18,8 @@ export class SkillsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.userService.readSkills(this.userService.usuario.id_company._id).subscribe((data: SkillsResponse) => {
-      this.skills = data.skills;
-    });
+    this.readSkills();
   }
-
 
   editSkill(idSkill: string): void {
 
@@ -49,4 +48,10 @@ export class SkillsComponent implements OnInit {
     this.skills.push(skill);
   }
 
+  readSkills() {
+    let idUser = this.userService.usuario._id;
+    this.userService.readSkills(idUser).subscribe((data: SkillsResponse) => {
+      this.skills = data.skills;
+    });
+  }
 }

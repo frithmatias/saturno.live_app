@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { UserService } from '../../../services/user.service';
 import { MatSnackBar, MatSnackBarDismiss } from '@angular/material/snack-bar';
 import { Desktop, DesktopsResponse, DesktopResponse } from '../../../interfaces/desktop.interface';
@@ -16,9 +16,7 @@ export class DesktopsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.userService.readDesktops(this.userService.usuario.id_company._id).subscribe((data: DesktopsResponse) => {
-      this.desktops = data.desktops;
-    });
+    this.readDesktops();
   }
 
   editDesktop(idDesktop: string): void {
@@ -42,5 +40,12 @@ export class DesktopsComponent implements OnInit {
 
   desktopCreated(desktop: Desktop): void {
     this.desktops.push(desktop);
+  }
+
+  readDesktops(){
+    let idUser = this.userService.usuario._id;
+    this.userService.readDesktops(idUser).subscribe((data: DesktopsResponse) => {
+      this.desktops = data.desktops;
+    });
   }
 }

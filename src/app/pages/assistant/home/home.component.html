@@ -6,7 +6,6 @@
             <h1 class="display-4">Bienvenido a la web del asistente</h1>
             <p class="lead">Bienvenido, desde aquí puede tomar escritorios y atender turnos.</p>
 
-
             <div class="my-4" *ngIf="!myDesktop">
                 <mat-form-field appearance="fill">
                     <mat-label>Seleccione un escritorio</mat-label>
@@ -20,8 +19,6 @@
                         (click)="takeDesktop( selectDesktop?.value )">Ingresar</button>
                 </div>
             </div>
-
-
 
             <div class="my-4" *ngIf="myDesktop">
                 Usted tiene tomado el escritorio {{ myDesktop.cd_desktop }}
@@ -39,14 +36,15 @@
                 </div>
             </div>
 
-
             <hr class="my-4">
+
             <p> Recuerde que si se ausenta del escritorio debe finalizar la sesión del escritorio. Si usted 
                 finaliza la sesión de usuario se finalizará también la sesión del escritorio. Si la sesión 
                 del escritorio tenía asignada una sesión de turno, este turno finalizará. 
             </p>
 
             <a class="btn btn-primary btn-lg btn-block" routerLink="/assistant/dashboard" role="button">Dashboard</a>
+
         </div>
 
     </div>

@@ -51,9 +51,14 @@ export class TicketsService {
 		return this.http.get(environment.url + '/c/findcompany/' + pattern);
 	}
 
-	readSkills(idCompany): Observable<SkillsResponse> {
-		return this.http.get<SkillsResponse>(environment.url + '/s/readskills/' + idCompany);
+	readSkills(idUser: string): Observable<SkillsResponse> {
+		return this.http.get<SkillsResponse>(environment.url + '/s/readskills/' + idUser);
 	}
+
+	readSkillsCompany(idCompany): Observable<SkillsResponse> {
+		return this.http.get<SkillsResponse>(environment.url + '/s/readskillscompany/' + idCompany);
+	}
+
 
 	clearPublicSession(): void {
 		this.chatMessages = [];
@@ -125,6 +130,7 @@ export class TicketsService {
 			} else if (this.userService.usuario) {
 				id_company = this.userService.usuario.id_company._id;
 			}
+
 			if (!id_company) {
 				
 				return;
@@ -141,8 +147,8 @@ export class TicketsService {
 				catchError(getError)
 			).subscribe((data: Ticket[]) => {
 
-
 				if (data.length === 0) {
+					reject();
 					return;
 				}
 				// !obtiene los tickets antes de que el servicio de sockets pueda actualizar el id_socket

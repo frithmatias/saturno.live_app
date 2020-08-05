@@ -8,7 +8,7 @@
         <button class="btn btn-primary btn-block btn-lg" routerLink="/assistant/home">Atender</button>
 
         <hr class="my-4">
-        <p class="lead"> Web Pública </p>
+        <p class="card-text"> Web Pública </p>
 
         <p style="font-weight: 500; font-size: larger;">
           <a href="{{publicURL}}">
@@ -19,95 +19,134 @@
     </div>
 
     <mat-horizontal-stepper *ngIf="showIntro" labelPosition="bottom" class="p-0 animated fadeIn" linear #stepper>
+
+      <!-- Welcome Step -->
       <mat-step>
 
         <div class="jumbotron m-1">
           <h1 class="display-2">Bienvenido {{ userService?.usuario.tx_name }}!</h1>
-          <p class="lead">
-            Para comenzar a atender turnos debe dar de alta escritorios, habilidades y opcionalmente
+          <p class="card-text">
+            Para comenzar a atender turnos debe dar de alta empresas o comercios, escritorios, habilidades y
+            opcionalmente
             puede dar de alta asistentes. Desde este asistente puede hacer todo.
           </p>
 
           <hr class="my-4">
-          <p class="lead"> Recuerde que para que sus clientes puedan obtener sus turnos, usted puede facilitarle la
-            dirección
-            web pública mediante URL o imprimiendo el código QR de su web pública y ofreciendola en su local para
-            que pueda ser escaneada por el dispositivo del cliente.</p>
+          <p class="card-text"> Recuerde que para que sus clientes puedan obtener los turnos de su comercio, usted debe
+            facilitarle la dirección web pública mediante URL. El sistema le ofrecera también un código QR de acceso a 
+            su web pública, usted puede imprimirlo y ofrecerlo a sus clientes para que pueda ser escaneado con sus 
+            dispositivos.</p>
 
-          <p style="font-weight: 500; font-size: larger;">
-            <a href="{{publicURL}}">
-              {{publicURL}}
-            </a>
+            
+          <p class="card-text">Usted tendrá disponible el link de acceso a su web pública recién cuando haya finalizado 
+            el proceso de registrar sus comercios. Las URL de acceso al público terminan con el nombre de su comercio. 
           </p>
 
-          <button class="btn btn-primary btn-block btn-lg" matStepperNext>Comenzar</button>
+          <p class="card-text">Por ej: https://webturnos.com/#/public/SUEMPRESA</p>
 
+          <button class="btn btn-success btn-block btn-lg" matStepperNext>Comenzar</button>
         </div>
-
-
       </mat-step>
 
+      <!-- Company Step -->
       <mat-step>
-        <div class="jumbotron">
-          <p class="lead">
-            Los skills son habilidades que se asignan a los asistentes. Estas pueden ser etiquetas que
-            que identifiquen cualquier segmento de su negocio como "Ventas", "Repuestos", "Informes", etc.
-          </p>
-          <p class="lead">
-            Las habilidades estan asociadas a los usuarios por lo tanto debe crearlas ANTES de dar de alta
-            asistentes o de comenzar a atender turnos.
-          </p>
+        <div class="p-2" style="text-align: -webkit-center;">
+          <div class="card text-white bg-info mb-2" style="min-width: 18rem; max-width: 30rem;">
+            <div class="card-header">Negocios</div>
+            <div class="card-body">
+              <p class="card-text">
+                Aquí usted debe registrar su comercio, puede registrar varios si tiene sucursales. Es necesario 
+                que usted ingrese la dirección exacta. Esta dirección será visible para sus clientes desde el menú 
+                de turnos y le asegura a su cliente que esta obteniendo un turno en el comercio correcto. 
+              </p>
+              <p class="card-text">
+                Los asistentes que usted podrá dar de alta mas adelante, tendrán asignado uno de sus comercios por lo 
+                tanto sólo estarán disponibles, para ese asistente, los escritorios y habilidades registradas para el 
+                comercio o empresa que le fue asignada. Usted puede cambiar a un asistente de empresa editandolo desde 
+                el menú de Asistentes. Por este motivo las empresas deben crearse ANTES de crear asistentes.
+              </p>
+              <div class="row mx-2 mt-4" style="justify-content: space-between;">
+                <button class="btn btn-danger col-5" matStepperPrevious> Volver </button>
+                <button class="btn btn-success col-5" matStepperNext> Siguiente </button>
+              </div>
+            </div>
+          </div>
         </div>
-
-        <div class="row mx-2 mt-4" style="justify-content: space-between;">
-          <button class="btn btn-danger col-5" matStepperPrevious> Volver </button>
-          <button class="btn btn-primary col-5" matStepperNext> Siguiente </button>
-        </div>
-        <hr>
-
-        <app-skills></app-skills>
-
+        <app-companies></app-companies>
       </mat-step>
 
+      <!-- Skills Step -->
       <mat-step>
-        <div class="jumbotron">
-          <p class="lead">
-            Los escritorios sólo necesitan un identificador o etiqueta, pueden ser letras o números
-            ej. "1", "2", "A", "B" etc.
-          </p>
-          <p class="lead">
-            Este identificador debe colocarlo en cada escritorio de forma
-            bien visible para que el usuario pueda identificarlo fácilmente cuando le sea asignado
-            un escritorio.
-          </p>
+        <div class="p-2" style="text-align: -webkit-center;">
+          <div class="card text-white bg-info mb-2" style="min-width: 18rem; max-width: 30rem;">
+            <div class="card-header">Skills</div>
+            <div class="card-body">
+              <p class="card-text">
+                Los skills son habilidades que se asignan a los asistentes. Estas pueden ser etiquetas que
+                que identifiquen cualquier segmento de su negocio como "Ventas", "Repuestos", "Informes", etc.
+              </p>
+              <p class="card-text">
+                Debe seleccionar una letra que tenga un sentido semántico a la habilidad por ejemplo una letra 
+                V y la descripción "Ventas". Para el abreviado puede usar sólo hasta 2 letras. La palabra "Ventas" 
+                y el resto de las habilidades se mostrarán en el menú de la web pública de su empresa a su cliente 
+                para obtener el turno. El abreviado lo vera en el ticket obtenido y en la pantalla. 
+              </p>
+              <p class="card-text">
+                De la misma forma que las empresas, las habilidades estan asociadas a los usuarios por lo tanto 
+                deben ser creadas ANTES de crear asistentes o de comenzar a atender turnos. 
+              </p>
+              <div class="row mx-2 mt-4" style="justify-content: space-between;">
+                <button class="btn btn-danger col-5" matStepperPrevious> Volver </button>
+                <button class="btn btn-success col-5" matStepperNext> Siguiente </button>
+              </div>
+            </div>
+          </div>
         </div>
-
-        <div class="row mx-2 mt-4" style="justify-content: space-between;">
-          <button class="btn btn-danger col-5" matStepperPrevious> Volver </button>
-          <button class="btn btn-primary col-5" matStepperNext> Siguiente </button>
-        </div>
-        <hr>
-
-        <app-desktops></app-desktops>
-
+        <app-skills [selectedIndex]="selectedIndex"></app-skills>
       </mat-step>
 
+      <!-- Desktops Step -->
       <mat-step>
-        <div class="jumbotron">
-          <p class="lead">
-            Usted con su cuenta puede atender turnos sin necesidad de crear asistentes,
-            sólo debe tomar un escritorio desde "Escritorio" en el menú de "Asistente".
-          </p>
+        <div class="p-2" style="text-align: -webkit-center;">
+          <div class="card text-white bg-info mb-2" style="min-width: 18rem; max-width: 30rem;">
+            <div class="card-header">Escritorios</div>
+            <div class="card-body">
+              <p class="card-text">
+                Los escritorios sólo necesitan un identificador o etiqueta, pueden ser letras o números
+                ej. "1", "2", "A", "B" etc.
+              </p>
+              <p class="card-text">
+                Este identificador debe colocarlo en cada escritorio de forma bien visible para que el usuario 
+                pueda identificar fácilmente el escritorio para el cual fue llamado.
+              </p>
+              <div class="row mx-2 mt-4" style="justify-content: space-between;">
+                <button class="btn btn-danger col-5" matStepperPrevious> Volver </button>
+                <button class="btn btn-success col-5" matStepperNext> Siguiente </button>
+              </div>
+            </div>
+          </div>
         </div>
+        <app-desktops [selectedIndex]="selectedIndex"></app-desktops>
+      </mat-step>
 
-        <div class="row mx-2 mt-4" style="justify-content: space-between;">
-          <button class="btn btn-danger col-5" matStepperPrevious> Volver </button>
-          <button class="btn btn-primary col-5" routerLink="/assistant/home"> Finalizar </button>
+      <!-- Assistants Step -->
+      <mat-step>
+        <div class="p-2" style="text-align: -webkit-center;">
+          <div class="card text-white bg-info mb-2" style="min-width: 18rem; max-width: 30rem;">
+            <div class="card-header">Escritorios</div>
+            <div class="card-body">
+              <p class="card-text">
+                Usted con su cuenta puede atender turnos sin necesidad de crear asistentes,
+                sólo debe tomar un escritorio desde "Escritorio" en el menú de "Asistente".
+              </p>
+              <div class="row mx-2 mt-4" style="justify-content: space-between;">
+                <button class="btn btn-danger col-5" matStepperPrevious> Volver </button>
+                <button class="btn btn-primary col-5" routerLink="/user/home"> Finalizar </button>
+              </div>
+            </div>
+          </div>
         </div>
-        <hr>
-
-        <app-assistants></app-assistants>
-
+        <app-assistants [selectedIndex]="selectedIndex"></app-assistants>
       </mat-step>
 
     </mat-horizontal-stepper>

@@ -15,7 +15,7 @@ export class HomeComponent implements OnInit {
   myDesktop: Desktop;
   constructor(
     private router: Router,
-    private userService: UserService,
+    public userService: UserService,
     private snack: MatSnackBar
   ) { }
 
@@ -49,7 +49,7 @@ export class HomeComponent implements OnInit {
 
   readDesktops(): void {
     let idCompany = this.userService.usuario.id_company._id;
-    this.userService.readDesktops(idCompany).subscribe((data: DesktopsResponse) => {
+    this.userService.readDesktopsCompany(idCompany).subscribe((data: DesktopsResponse) => {
       this.desktops = data.desktops;
       this.desktopsAvailable = this.desktops.filter(desktop => desktop.id_assistant === null);
       this.myDesktop = this.desktops.filter(desktop => desktop.id_assistant === this.userService.usuario._id)[0]

@@ -31,8 +31,9 @@ export class TicketsComponent implements OnInit {
 				this.snack.open('Por favor ingrese una empresa primero.', null, { duration: 5000 });
 				this.router.navigate(['/public']);
 			} else {
-				this.wsService.emit('enterCompany', this.ticketsService.companyData._id);
-				this.ticketsService.readSkills(this.ticketsService.companyData._id).subscribe((data: SkillsResponse) => {
+				let idCompany = this.ticketsService.companyData._id;
+				this.wsService.emit('enterCompany', idCompany);
+				this.ticketsService.readSkillsCompany(idCompany).subscribe((data: SkillsResponse) => {
 					this.skills = data.skills;
 				})
 			}

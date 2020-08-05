@@ -1,39 +1,38 @@
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, Input, SimpleChanges } from '@angular/core';
 import { UserService } from 'src/app/services/user.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormGroup, FormControl, Validators, FormGroupDirective } from '@angular/forms';
 import { Skill, SkillResponse } from '../../../../interfaces/skill.interface';
+import { Company, CompaniesResponse } from '../../../../interfaces/company.interface';
 
 @Component({
-  selector: 'app-skill-create-form',
-  templateUrl: './skill-create-form.component.html',
-  styleUrls: ['./skill-create-form.component.css']
+	selector: 'app-skill-create-form',
+	templateUrl: './skill-create-form.component.html',
+	styleUrls: ['./skill-create-form.component.css']
 })
 export class SkillCreateFormComponent implements OnInit {
-  @Output() skillCreated: EventEmitter<Skill> = new EventEmitter();
-  forma: FormGroup;
-  constructor(
-		private userService: UserService,
-		private snack: MatSnackBar,
-  ) { }
+	@Output() skillCreated: EventEmitter<Skill> = new EventEmitter();
 
-  ngOnInit(): void {
-    this.forma = new FormGroup({
-      cdSkill: new FormControl(null, Validators.required),
+	forma: FormGroup;
+	constructor(
+		public userService: UserService,
+		private snack: MatSnackBar,
+	) { }
+
+	ngOnInit(): void {
+		this.forma = new FormGroup({
+			idCompany: new FormControl(null, Validators.required),
+			cdSkill: new FormControl(null, Validators.required),
 			txSkill: new FormControl(null, Validators.required)
 		});
-  }
+	}
 
 	createSkill(formDirective: FormGroupDirective) {
-		
-		
-
 		if (this.forma.invalid) {
 			return;
 		}
-
 		const skill: Skill = {
-			id_company: this.userService.usuario.id_company._id,
+			id_company: this.forma.value.idCompany,
 			cd_skill: this.forma.value.cdSkill,
 			tx_skill: this.forma.value.txSkill,
 			__v: null,

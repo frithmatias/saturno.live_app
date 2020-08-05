@@ -1,8 +1,9 @@
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, Input, SimpleChanges } from '@angular/core';
 import { UserService } from 'src/app/services/user.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormGroup, FormControl, Validators, FormGroupDirective } from '@angular/forms';
 import { Desktop, DesktopResponse } from '../../../../interfaces/desktop.interface';
+import { Company, CompaniesResponse } from '../../../../interfaces/company.interface';
 
 @Component({
 	selector: 'app-desktop-create-form',
@@ -12,13 +13,16 @@ import { Desktop, DesktopResponse } from '../../../../interfaces/desktop.interfa
 export class DesktopCreateFormComponent implements OnInit {
 	@Output() desktopCreated: EventEmitter<Desktop> = new EventEmitter();
 	forma: FormGroup;
+
 	constructor(
-		private userService: UserService,
+		public userService: UserService,
 		private snack: MatSnackBar
 	) { }
 
 	ngOnInit(): void {
+
 		this.forma = new FormGroup({
+			idCompany: new FormControl(null, Validators.required),
 			cdDesktop: new FormControl(null, Validators.required),
 			idType: new FormControl(null)
 		});
@@ -31,7 +35,7 @@ export class DesktopCreateFormComponent implements OnInit {
 		}
 
 		const desktop: Desktop = {
-			id_company: this.userService.usuario.id_company._id,
+			id_company: this.forma.value.idCompany,
 			cd_desktop: this.forma.value.cdDesktop,
 			id_assistant: null,
 			__v: null,

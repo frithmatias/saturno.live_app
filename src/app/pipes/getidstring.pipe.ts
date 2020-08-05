@@ -9,6 +9,9 @@ import { Pipe, PipeTransform, Injectable } from '@angular/core';
 export class GetidstringPipe implements PipeTransform {
 
 	transform(value: string): any {
+		if(!value){
+			return;
+		}
 		const strid = value
 			.replace(/á/gi, 'a')
 			.replace(/é/gi, 'e')

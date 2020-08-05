@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { UserService } from 'src/app/services/user.service';
 import { MatSnackBar, MatSnackBarRef, MatSnackBarDismiss } from '@angular/material/snack-bar';
 import { User, UsersResponse, UserResponse } from '../../../interfaces/user.interface';
@@ -47,9 +47,9 @@ export class AssistantsComponent implements OnInit {
     this.readAssistants();
   }
 
-
   readAssistants(): void {
-    this.userService.readAssistants(this.userService.usuario.id_company._id).subscribe((data: AssistantsResponse) => {
+    let idUser = this.userService.usuario._id;
+    this.userService.readAssistants(idUser).subscribe((data: AssistantsResponse) => {
       this.assistants = data.assistants;
     });
   }

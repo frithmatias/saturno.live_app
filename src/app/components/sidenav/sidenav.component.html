@@ -1,51 +1,74 @@
-<div class="p-2">
+<div>
 
-    <!-- HELP -->
-    <div class="sidenav-button m-0 p-1 px-3 mr-4" style="text-align: left;" routerLink="/help">
-        <mat-icon class="sidenav-button-icons">help</mat-icon>
-        <span class="sidenav-button-text">Ayuda</span>
-    </div>
+    <mat-form-field *ngIf="userService.usuario" color="warn" appearance="fill" class="w-100">
+        <mat-label>Seleccione una empresa</mat-label>
+        <mat-select formControlName="idCompany" name="idCompany" #selectDesktop matNativeControl required>
+            <mat-option *ngFor="let company of userService.companies" [value]="userService.usuario.id_company._id" (click)="companySelected(company)">
+                {{company.tx_company_name}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
 
-    <!-- HOME -->
-    <div class="sidenav-button m-0 p-1 px-3 mr-4" style="text-align: left;" routerLink="/home">
-        <mat-icon class="sidenav-button-icons">home</mat-icon>
-        <span class="sidenav-button-text">Home</span>
-    </div>
+    <mat-accordion multi>
+        <mat-expansion-panel>
 
+            <mat-expansion-panel-header>
+                <mat-panel-title style="align-items: center; color: darkred;">
+                    <mat-icon>face</mat-icon>
+                    <span class="mx-2">Público</span>
+                </mat-panel-title>
+            </mat-expansion-panel-header>
 
-    <!-- SCREEN -->
-    <div class="sidenav-button m-0 p-1 px-3 mr-4" style="text-align: left;" routerLink="/public/screen">
-        <mat-icon class="sidenav-button-icons">input</mat-icon>
-        <span class="sidenav-button-text">Pantalla</span>
-    </div>
+            <!-- HELP -->
+            <div class="sidenav-item" routerLink="/help">
+                <mat-icon class="sidenav-item-icons">help</mat-icon>
+                <span class="sidenav-item-text">Ayuda</span>
+            </div>
 
+            <!-- HOME -->
+            <div class="sidenav-item" routerLink="/home">
+                <mat-icon class="sidenav-item-icons">home</mat-icon>
+                <span class="sidenav-item-text">Home</span>
+            </div>
 
-    <!-- TICKETS -->
-    <div class="sidenav-button m-0 p-1 px-3 mr-4" style="text-align: left;" routerLink="/public/tickets">
-        <mat-icon class="sidenav-button-icons">turned_in</mat-icon>
-        <span class="sidenav-button-text">Turnos</span>
-    </div>
+            <!-- SCREEN -->
+            <div class="sidenav-item" routerLink="/public/screen">
+                <mat-icon class="sidenav-item-icons">input</mat-icon>
+                <span class="sidenav-item-text">Pantalla</span>
+            </div>
 
+            <!-- TICKETS -->
+            <div class="sidenav-item" routerLink="/public/tickets">
+                <mat-icon class="sidenav-item-icons">turned_in</mat-icon>
+                <span class="sidenav-item-text">Turnos</span>
+            </div>
 
-    <!-- ASSISTANT / USER -->
-    <div *ngFor="let item of userService.menu">
-        <hr *ngIf="userService.menu" class="m-2" style="border-top: 1px solid dimgray;">
-        <div class="sidenav-title m-0 p-2 px-1">
-            <mat-icon class="sidenav-title-icons">face</mat-icon>
-            <span class="sidenav-title-text">{{ item.titulo}}</span>
+        </mat-expansion-panel>
+        <!-- *ngIf="userService.usuario?.id_role === 'USER_ROLE'" -->
+
+        <!-- ASSISTANT / USER -->
+        <div *ngFor="let item of userService.menu">
+            <mat-expansion-panel>
+
+                <mat-expansion-panel-header>
+                    <mat-panel-title style="align-items: center; color: darkred;">
+                        <mat-icon>{{ item.icon }}</mat-icon>
+                        <span class="mx-2">{{ item.titulo }}</span>
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <div *ngFor="let sub of item.submenu" routerLink="/{{sub.url}}" class="sidenav-item">
+                    <mat-icon class="sidenav-item-icons">{{ sub.icon }}</mat-icon>
+                    <span class="sidenav-item-text">{{ sub.titulo}}</span>
+                </div>
+
+            </mat-expansion-panel>
         </div>
 
-        <div *ngFor="let sub of item.submenu" routerLink="/{{sub.url}}" class="sidenav-button m-0 p-1 px-3 mr-4"
-            style="text-align: left;">
-            <mat-icon class="sidenav-button-icons">{{ sub.icon }}</mat-icon>
-            <span class="sidenav-button-text">{{ sub.titulo}}</span>
-        </div>
-
-    </div>
+    </mat-accordion>
 
     <!-- LOGOUT -->
-    <div *ngIf="userService.logueado">
-        <hr class="m-2" style="border-top: 1px solid dimgray;">
+    <div class="p-2 pt-3" *ngIf="userService.logueado">
         <button class="btn btn-sm btn-block btn-danger" (click)="userService.logout()"> Salir </button>
     </div>
 

@@ -14,57 +14,61 @@ import { AssistantResponse } from '../../../../interfaces/assistant.interface';
 	templateUrl: './assistant-create-form.component.html',
 	styleUrls: ['./assistant-create-form.component.css']
 })
-export class AssistantCreateFormComponent implements OnInit, OnChanges{
+export class AssistantCreateFormComponent implements OnInit, OnChanges {
 	@Input() assistantEdit: User;
 	@Output() updateAssistants: EventEmitter<string> = new EventEmitter();
-	selStrSkills: string[] = [];
+	selStrSkills: string[];
 	forma: FormGroup;
 	skills: Skill[] = [];
-
 	constructor(
-		private userService: UserService,
+		public userService: UserService,
 		private snack: MatSnackBar
 	) { }
 
 	ngOnInit(): void {
 		// build reactive form
-
 		this.forma = new FormGroup({
 			rol: new FormControl(null, Validators.required),
+			idCompany: new FormControl(null, Validators.required),
 			nombre: new FormControl(null, Validators.required),
 			email: new FormControl(null, [Validators.required, Validators.email]),
 			password: new FormControl(null, Validators.required),
-			password2: new FormControl(null, Validators.required),
-			condiciones: new FormControl(false)
+			password2: new FormControl(null, Validators.required)
 		}, { validators: this.sonIguales('password', 'password2') });
-
-
-		this.userService.readSkills(this.userService.usuario.id_company._id).subscribe((data: SkillsResponse) => {
-			this.skills = data.skills;
-		})
-
-
-
 	}
 
+	ngOnChanges(changes: SimpleChanges) {
+		this.forma?.enable();
+		// USER_ROLE -> id_company: null
+		if (changes.assistantEdit.currentValue?.id_role === 'USER_ROLE') {
+			this.forma.controls['rol'].disable();
+			this.forma.controls['email'].disable();
+		} else {
+			if (changes.assistantEdit.currentValue?.id_company._id) {
+				this.getSkills(changes.assistantEdit.currentValue.id_company._id)
+			}
+		}
 
-	ngOnChanges(changes: SimpleChanges): void {
 
-		// this.forma.controls.password.disable();
-		// this.forma.controls.password2.disable();
-		
+		if (changes.assistantEdit.currentValue?.id_company?._id) {
+			this.forma?.patchValue({ idCompany: changes.assistantEdit.currentValue.id_company._id });
+		}
+
 		this.forma?.patchValue({
 			rol: changes.assistantEdit.currentValue.id_role,
 			email: changes.assistantEdit.currentValue.tx_email,
 			nombre: changes.assistantEdit.currentValue.tx_name,
 			password: '******',
 			password2: '******'
-
 		})
 
 		this.selStrSkills = changes.assistantEdit?.currentValue?.id_skills;
+	}
 
-
+	getSkills(idCompany: string) {
+		this.userService.readSkillsCompany(idCompany).subscribe((data: SkillsResponse) => {
+			this.skills = data.skills;
+		})
 	}
 
 	// validators
@@ -81,67 +85,58 @@ export class AssistantCreateFormComponent implements OnInit, OnChanges{
 		};
 	}
 
+
 	setNewSkill(skill: any): void {
 
 	}
 
-
-
-
 	createAssistant(formDirective: FormGroupDirective) {
 
 		if (!this.selStrSkills || this.selStrSkills.length === 0) {
-			this.snack.open('Seleccione al menos un skill', 'ACEPTAR', {duration: 5000});
+			this.snack.open('Seleccione al menos un skill', 'ACEPTAR', { duration: 5000 });
 			return;
 		}
 
 		if (this.forma.invalid) {
-			if(this.forma.errors?.password){
-				this.snack.open(this.forma.errors.password, 'ACEPTAR', {duration: 5000});
+			if (this.forma.errors?.password) {
+				this.snack.open(this.forma.errors.password, 'ACEPTAR', { duration: 5000 });
 			}
 			return;
 		}
 
-		if(this.assistantEdit){
-			const assistant: any = {
-				_id: this.assistantEdit._id,
-				id_role: this.forma.value.rol,
-				tx_name: this.forma.value.nombre,
-				tx_email: this.forma.value.email,
-				tx_password: this.forma.value.password,
-				id_skills: this.selStrSkills
-			};
-	
+		const assistant: any = {
+			// para acceder a los datos de un control disabled puedo traerlos desde forma.controls 
+			// o con el método this.forma.getRawValue()
+			id_role: this.forma.controls.rol.value,
+			id_company: this.forma.value.idCompany,
+			tx_name: this.forma.value.nombre,
+			tx_email: this.forma.controls.email.value,
+			tx_password: this.forma.value.password,
+			id_skills: this.selStrSkills
+		};
+
+		if (this.assistantEdit) {
+			assistant._id = this.assistantEdit._id;
+
 			this.userService.updateAssistant(assistant).subscribe((data: AssistantResponse) => {
 				this.assistantEdit = null;
 				this.updateAssistants.emit(data.assistant._id);
 				this.snack.open(data.msg, null, { duration: 5000 });
 				this.forma.reset();
 				formDirective.resetForm();
-			},
-				(err: HttpErrorResponse) => {
-					this.snack.open(err.error.msg, null, { duration: 5000 });
-				}
-			)
+			}, (err: HttpErrorResponse) => {
+				this.snack.open(err.error.msg, null, { duration: 5000 });
+			})
 
 		} else {
 
-			const assistant: any = {
-				tx_name: this.forma.value.nombre,
-				tx_email: this.forma.value.email,
-				tx_password: this.forma.value.password,
-				id_company: this.userService.usuario.id_company._id,
-				id_skills: this.selStrSkills
-			};
-			
 			this.userService.createAssistant(assistant).subscribe(
 				(data: AssistantResponse) => {
-				this.updateAssistants.emit(data.assistant._id);
-				this.snack.open(data.msg, null, { duration: 5000 });
-				this.forma.reset();
-				formDirective.resetForm();
-				},
-				(err: HttpErrorResponse) => {
+					this.updateAssistants.emit(data.assistant._id);
+					this.snack.open(data.msg, null, { duration: 5000 });
+					this.forma.reset();
+					formDirective.resetForm();
+				}, (err: HttpErrorResponse) => {
 					this.snack.open(err.error.msg, null, { duration: 5000 });
 				}
 			)
@@ -150,6 +145,14 @@ export class AssistantCreateFormComponent implements OnInit, OnChanges{
 	}
 
 	manejaError = (err: AjaxError) => {
-		return of<AjaxError>(err);  
+		return of<AjaxError>(err);
+	}
+
+
+	resetForm(formDirective: FormGroupDirective) {
+		this.assistantEdit = null;
+		this.forma.enable();
+		this.forma.reset();
+		formDirective.resetForm();
 	}
 }

@@ -4,39 +4,6 @@
         <form autocomplete="off" class="form-container m-3" ngNativeValidate [formGroup]="forma"
             (ngSubmit)="registrarUsuario()" id="loginform" action="index.html">
 
-            <!-- Company -->
-
-            <mat-form-field color="warn" appearance="fill" logincss class="w-100">
-                <mat-label>Nombre de la Empresa</mat-label>
-                <mat-error>Esta Empresa ya se encuentra registrada!</mat-error>
-                <input matInput placeholder="Nombre de la empresa" formControlName="company" name="company" type="text"
-                    required (keyup)="checkCompanyExists()">
-            </mat-form-field>
-
-            <mat-form-field color="warn" appearance="fill" logincss class="w-100">
-                <mat-label>Nombre público</mat-label>
-                <input matInput placeholder="Nombre de la empresa" formControlName="companyString" name="companyString"
-                    type="text" required>
-            </mat-form-field>
-
-            <mat-form-field color="warn" appearance="fill" logincss class="w-100">
-                <mat-label>Ciudad</mat-label>
-                <input matInput placeholder="Ciudad" formControlName="city" name="city" type="text" required>
-            </mat-form-field>
-
-            <mat-form-field color="warn" appearance="fill" logincss class="w-100">
-                <mat-label>Calle</mat-label>
-                <input matInput placeholder="Calle" formControlName="addressStreet" name="addressStreet" type="text"
-                    required>
-            </mat-form-field>
-
-            <mat-form-field color="warn" appearance="fill" logincss class="w-100">
-                <mat-label>Altura</mat-label>
-                <input matInput placeholder="1234" formControlName="addressNumber" name="addressNumber" type="text"
-                    required>
-            </mat-form-field>
-
-
 
             <!-- User -->
 

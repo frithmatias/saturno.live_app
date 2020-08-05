@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 import { Desktop } from 'src/app/interfaces/desktop.interface';
 import { Skill } from '../interfaces/skill.interface';
 import { User } from 'src/app/interfaces/user.interface';
-import { Company } from '../interfaces/company.interface';
+import { Company, CompaniesResponse } from '../interfaces/company.interface';
 import { MatStepper } from '@angular/material/stepper';
 
 @Injectable({
@@ -18,20 +18,30 @@ import { MatStepper } from '@angular/material/stepper';
 })
 export class UserService {
 
+	//assistant || user
 	token: string;
 	usuario: User;
-	desktop: Desktop;
 	menu: any[] = [];
 	logueado = false;
+	
+	//assistant
+	desktop: Desktop;
+	
+	//user
+	companies: Company[] = [];
 
 	constructor(private http: HttpClient, private router: Router) {
-
+		console.log(this)
 		if (localStorage.getItem('token') && localStorage.getItem('user') && localStorage.getItem('menu')) {
 			this.token = localStorage.getItem('token');
 			this.usuario = JSON.parse(localStorage.getItem('user'));
 			this.menu = JSON.parse(localStorage.getItem('menu'));
 			this.logueado = true;
-		} 
+
+			this.readCompanies(this.usuario._id).subscribe((data: CompaniesResponse) => {
+				this.companies = data.companies;
+			})
+		}
 	}
 
 
@@ -39,20 +49,14 @@ export class UserService {
 	// User Methods
 	// ========================================================
 
-	registerUser(company: Company, user: User) {
-		let data = {company, user};
+	createUser(user: User) {
+		let data = { user };
 		const url = environment.url + '/u/register';
 		return this.http.post(url, data);
 	}
 
-	checkCompanyExists(pattern: string) {
-		let data = {pattern}
-		const url = environment.url + '/u/checkcompanyexists';
-		return this.http.post(url, data);
-	}
-
 	checkEmailExists(pattern: string) {
-		let data = {pattern}
+		let data = { pattern }
 		const url = environment.url + '/u/checkemailexists';
 		return this.http.post(url, data);
 	}
@@ -82,7 +86,7 @@ export class UserService {
 				const usuarioDB: User = resp.usuario;
 
 				if (usuario._id === this.usuario._id) {
-					this.setStorage(usuarioDB._id, this.token, usuarioDB, this.menu);
+					this.setStorage(this.token, usuarioDB, this.menu);
 				}
 
 				Swal.fire('Usuario actualizado', usuario.tx_name, 'success');
@@ -128,25 +132,79 @@ export class UserService {
 			)
 	}
 
+	// ========================================================
+	// Companies Methods
+	// ========================================================
+
+	createCompany(company: Company) {
+		const headers = new HttpHeaders({
+			'turnos-token': this.token
+		});
+		let data = { company };
+		const url = environment.url + '/c/create';
+		return this.http.post(url, data, { headers });
+	}
+
+	attachCompany(company: Company) {
+		// return new user object with populated company
+		const headers = new HttpHeaders({
+			'turnos-token': this.token
+		});
+		let data = { company };
+		let idUser = this.usuario._id;
+		const url = environment.url + '/u/attach/' + idUser;
+		return this.http.post(url, data, { headers });
+	}
+
+	checkCompanyExists(pattern: string) {
+		let data = { pattern }
+		const url = environment.url + '/c/checkcompanyexists';
+		return this.http.post(url, data);
+	}
+
+	readCompanies(idUser: string) {
+		const headers = new HttpHeaders({
+			'turnos-token': this.token
+		});
+		const url = environment.url + '/c/readcompanies/' + idUser;
+		return this.http.get(url, { headers });
+	}
+
+	updateCompany(company: Company) {
+		const headers = new HttpHeaders({
+			'turnos-token': this.token
+		});
+		const url = environment.url + '/c/update';
+		return this.http.post(url, company, { headers });
+	}
+
+	deleteCompany(idCompany: string) {
+		const headers = new HttpHeaders({
+			'turnos-token': this.token
+		});
+		const url = environment.url + '/c/deletecompany/' + idCompany;
+		return this.http.delete(url, { headers });
+	}
+
 
 	// ========================================================
 	// Assistants Methods
 	// ========================================================
-	
+
 	createAssistant(assistant: User) {
 		const headers = new HttpHeaders({
 			'turnos-token': this.token
 		});
 		const url = environment.url + '/a/createassistant';
-		return this.http.post(url, assistant, {headers});
+		return this.http.post(url, assistant, { headers });
 	}
 
-	readAssistants(idCompany: string) {
+	readAssistants(idUser: string) {
 		const headers = new HttpHeaders({
 			'turnos-token': this.token
 		});
-		const url = environment.url + '/a/readassistants/' + idCompany;
-		return this.http.get(url, {headers});
+		const url = environment.url + '/a/readassistants/' + idUser;
+		return this.http.get(url, { headers });
 	}
 
 	updateAssistant(assistant: User) {
@@ -154,15 +212,15 @@ export class UserService {
 			'turnos-token': this.token
 		});
 		const url = environment.url + '/a/updateassistant';
-		return this.http.post(url, assistant, {headers});
+		return this.http.post(url, assistant, { headers });
 	}
-	
+
 	deleteAssistant(idAssistant: string) {
 		const headers = new HttpHeaders({
 			'turnos-token': this.token
 		});
 		const url = environment.url + '/a/deleteassistant/' + idAssistant;
-		return this.http.delete(url, {headers});
+		return this.http.delete(url, { headers });
 	}
 
 	// ========================================================
@@ -175,15 +233,23 @@ export class UserService {
 			'turnos-token': this.token
 		});
 		const url = environment.url + '/d/createdesktop';
-		return this.http.post(url, desktop, {headers});
+		return this.http.post(url, desktop, { headers });
 	}
 
-	readDesktops(idCompany: string) {
+	readDesktops(idUser: string) {
 		const headers = new HttpHeaders({
 			'turnos-token': this.token
 		});
-		const url = environment.url + '/d/readdesktops/' + idCompany;
-		return this.http.get(url, {headers});
+		const url = environment.url + '/d/readdesktops/' + idUser;
+		return this.http.get(url, { headers });
+	}
+
+	readDesktopsCompany(idCompany: string) {
+		const headers = new HttpHeaders({
+			'turnos-token': this.token
+		});
+		const url = environment.url + '/d/readdesktopscompany/' + idCompany;
+		return this.http.get(url, { headers });
 	}
 
 	deleteDesktop(idDesktop: string) {
@@ -191,25 +257,25 @@ export class UserService {
 			'turnos-token': this.token
 		});
 		const url = environment.url + '/d/deletedesktop/' + idDesktop;
-		return this.http.delete(url, {headers});
+		return this.http.delete(url, { headers });
 	}
 
 	takeDesktop(idDesktop: string, idAssistant: string) {
 		const headers = new HttpHeaders({
 			'turnos-token': this.token
 		});
-		let data = {idDesktop, idAssistant}
+		let data = { idDesktop, idAssistant }
 		const url = environment.url + '/d/takedesktop';
-		return this.http.post(url, data, {headers});
+		return this.http.post(url, data, { headers });
 	}
-	
+
 	releaseDesktop(idDesktop: string) {
 		const headers = new HttpHeaders({
 			'turnos-token': this.token
 		});
 		let data = { idDesktop }
 		const url = environment.url + '/d/releasedesktop';
-		return this.http.post(url, data, {headers});
+		return this.http.post(url, data, { headers });
 	}
 
 	// ========================================================
@@ -221,15 +287,23 @@ export class UserService {
 			'turnos-token': this.token
 		});
 		const url = environment.url + '/s/createskill';
-		return this.http.post(url, skill, {headers});
+		return this.http.post(url, skill, { headers });
 	}
 
-	readSkills(idCompany: string) {
+	readSkills(idUser: string) {
 		const headers = new HttpHeaders({
 			'turnos-token': this.token
 		});
-		const url = environment.url + '/s/readskills/' + idCompany;
-		return this.http.get(url, {headers});
+		const url = environment.url + '/s/readskills/' + idUser;
+		return this.http.get(url, { headers });
+	}
+
+	readSkillsCompany(idCompany: string) {
+		const headers = new HttpHeaders({
+			'turnos-token': this.token
+		});
+		const url = environment.url + '/s/readskillscompany/' + idCompany;
+		return this.http.get(url, { headers });
 	}
 
 	deleteSkill(idSkill: string) {
@@ -237,7 +311,7 @@ export class UserService {
 			'turnos-token': this.token
 		});
 		const url = environment.url + '/s/deleteskill/' + idSkill;
-		return this.http.delete(url, {headers});
+		return this.http.delete(url, { headers });
 	}
 
 
@@ -256,7 +330,7 @@ export class UserService {
 		const url = environment.url + '/u/login';
 		return this.http.post(url, usuario).pipe(
 			map((resp: any) => {
-				this.setStorage(resp.id, resp.token, resp.usuario, resp.menu);
+				this.setStorage(resp.token, resp.usuario, resp.menu);
 				this.logueado = true;
 				return resp;
 			}),
@@ -269,13 +343,11 @@ export class UserService {
 
 	loginGoogle(token: string) {
 		const url = environment.url + '/u/google';
-		return this.http.post(url, { token }).pipe(
-			map((resp: any) => {
-				this.setStorage(resp.id, resp.token, resp.usuario, resp.menu);
-				this.logueado = true;
-				return true;
-			}),
-			// clase 222 seccion 17, manejo de errores
+		return this.http.post(url, { token }).pipe(map((resp: any) => {
+			this.setStorage(resp.token, resp.usuario, resp.menu);
+			this.logueado = true;
+			return true;
+		}),
 			catchError(err => {
 				return throwError(err);
 			})
@@ -316,7 +388,7 @@ export class UserService {
 		}
 	}
 
-	setStorage(id: string, token: string, usuario: User, menu: any) {
+	setStorage(token: string, usuario: User, menu: any) {
 		localStorage.setItem('token', token);
 		localStorage.setItem('user', JSON.stringify(usuario));
 		localStorage.setItem('menu', JSON.stringify(menu));
@@ -339,7 +411,6 @@ export class UserService {
 		this.logueado = false;
 		this.router.navigate(['/home']);
 	}
-
 
 	scrollTop() {
 		document.body.scrollTop = 0; // Safari

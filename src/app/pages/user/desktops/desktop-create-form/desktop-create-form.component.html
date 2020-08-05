@@ -1,6 +1,15 @@
 <form autocomplete="off" style="color: brown;" ngNativeValidate #formDirective="ngForm" [formGroup]="forma" (ngSubmit)="createDesktop(formDirective)">
 
     <mat-form-field color="warn" appearance="fill" class="w-100">
+        <mat-label>Seleccione una empresa</mat-label>
+        <mat-select  formControlName="idCompany" #selectDesktop matNativeControl required>
+            <mat-option *ngFor="let company of userService.companies" [value]="company._id">
+                {{company.tx_company_name}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field color="warn" appearance="fill" class="w-100">
         <mat-label>ID Escritorio</mat-label>
         <input matInput placeholder="Identificador de escritorio" formControlName="cdDesktop" name="cdDesktop" type="text" required>
     </mat-form-field>

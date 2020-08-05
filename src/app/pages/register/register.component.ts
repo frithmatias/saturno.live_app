@@ -3,8 +3,6 @@ import { Router } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { UserService } from '../../services/user.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Company } from '../../interfaces/company.interface';
-import { GetidstringPipe } from '../../pipes/getidstring.pipe';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -14,12 +12,11 @@ import Swal from 'sweetalert2';
 })
 export class RegisterComponent implements OnInit {
 	forma: FormGroup;
-	publicName: string;
+
 	constructor(
 		private router: Router,
 		private userService: UserService,
-		private snack: MatSnackBar,
-		private getidstring: GetidstringPipe,
+		private snack: MatSnackBar
 	) { }
 
 
@@ -28,22 +25,12 @@ export class RegisterComponent implements OnInit {
 		// this.publicUrl = document.
 		// this.publicUrl = location.origin + '/#/public/';
 		let defaults = {
-			company: '',
-			addressStreet: '',
-			companyString: '',
-			addressNumber: '',
-			city: '',
 			name: '',
 			email: '',
 			password1: '',
 			password2: ''
 		}
 		this.forma = new FormGroup({
-			company: new FormControl(defaults.company, [Validators.required, this.validatorSetId.bind(this)]),
-			companyString: new FormControl({ value: '', disabled: true }),
-			city: new FormControl(defaults.city, Validators.required),
-			addressStreet: new FormControl(defaults.addressStreet, Validators.required),
-			addressNumber: new FormControl(defaults.addressNumber, Validators.required),
 			name: new FormControl(defaults.name, Validators.required),
 			email: new FormControl(defaults.email, [Validators.required, Validators.email]),
 			password1: new FormControl(defaults.password1, Validators.required),
@@ -52,13 +39,6 @@ export class RegisterComponent implements OnInit {
 		}, { validators: [
 			this.sonIguales('password1', 'password2')] 
 		});
-	}
-
-	validatorSetId(control: FormControl): any {
-		// utilizo el pipe getidstring que limpia de acentos, ñ, espacios y me devuelve un tolower.
-		this.publicName = this.getidstring.transform(control.value);
-		this.forma?.patchValue({ companyString: this.publicName });
-		return null;
 	}
 
 	sonIguales(campo1: string, campo2: string) {
@@ -74,19 +54,6 @@ export class RegisterComponent implements OnInit {
 		};
 	}
 
-	checkCompanyExists() {
-		let pattern = this.publicName;
-		if (this.publicName.length > 3) {
-			this.userService.checkCompanyExists(pattern).subscribe((data: any) => {
-				if (!data.ok) {
-					this.forma.controls['company'].setErrors({'incorrect': true});
-					this.forma.setErrors({'companyExists': true})
-				}
-			});
-		}
-	}
-
-
 	checkEmailExists() {
 		let pattern = this.forma.value.email;
 		if (this.forma.value.email.length > 6)
@@ -97,7 +64,6 @@ export class RegisterComponent implements OnInit {
 				}	
 			});
 	}
-
 
 	registrarUsuario() {
 
@@ -111,14 +77,6 @@ export class RegisterComponent implements OnInit {
 			return;
 		}
 
-		const company: Company = {
-			tx_company_name: this.forma.value.company,
-			tx_public_name: this.publicName,
-			tx_address_street: this.forma.value.addressStreet,
-			tx_address_number: this.forma.value.addressNumber,
-			cd_city: this.forma.value.city
-		}
-
 		const user: any = {
 			tx_name: this.forma.value.name,
 			tx_email: this.forma.value.email,
@@ -126,7 +84,7 @@ export class RegisterComponent implements OnInit {
 			id_company: this.forma.value.company
 		};
 
-		this.userService.registerUser(company, user).subscribe((data: any) => {
+		this.userService.createUser(user).subscribe((data: any) => {
 			if (data.ok) {
 				Swal.fire('Usuario creado', 'Por favor ahora ingrese con su usuario y contraseña', 'success');
 				this.router.navigate(['/login'])

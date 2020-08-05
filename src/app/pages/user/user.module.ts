@@ -19,6 +19,8 @@ import { AssistantCreateFormComponent } from './assistants/assistant-create-form
 import { DesktopCreateFormComponent } from './desktops/desktop-create-form/desktop-create-form.component';
 import { SkillsComponent } from './skills/skills.component';
 import { SkillCreateFormComponent } from './skills/skill-create-form/skill-create-form.component';
+import { CompaniesComponent } from './companies/companies.component';
+import { CompanyCreateComponent } from './companies/company-create/company-create.component';
 
 
 @NgModule({
@@ -33,7 +35,9 @@ import { SkillCreateFormComponent } from './skills/skill-create-form/skill-creat
 		AssistantCreateFormComponent,
 		DesktopCreateFormComponent,
 		SkillsComponent,
-		SkillCreateFormComponent
+		SkillCreateFormComponent,
+		CompaniesComponent,
+		CompanyCreateComponent
 	],
 	imports: [
 		CommonModule,

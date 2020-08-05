@@ -79,21 +79,22 @@ div:focus { outline: none; }
     color: lightgray;
 }
 
-
-.sidenav-button {
+.sidenav-item {
     cursor: pointer;
     margin: .2rem;
 }
 
-.sidenav-button-icons {
-    font-size: 18px;
-    color: dimgray;
+.sidenav-item-icons {
+    color: cornflowerblue;
     vertical-align: top;
 }
 
-.sidenav-button-text {
+.sidenav-item-text {
     font-weight: 100;
-    color: lightgray;
+    color: black;
+    font-size: medium;
+    vertical-align: bottom;
+    margin-left: .5rem;
 }
 
 
@@ -163,4 +164,9 @@ div:focus { outline: none; }
   
   .fadeIn {
     animation-name: fadeIn;
+  }
+
+/* angular material re styling */
+  .mat-horizontal-content-container {
+      padding: 0px !important;
   }

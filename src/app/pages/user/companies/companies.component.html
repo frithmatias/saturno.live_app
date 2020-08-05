@@ -1,0 +1,44 @@
+<div class="turno-container p-2" style="text-align: -webkit-center;">
+    <div class="card bg-light mb-3" style="min-width: 18rem; max-width: 30rem;">
+
+        <div class="m-2 animated fadeIn">
+
+            <div class="card bg-success lead text-white">
+                <div class="card-header">Empresas</div>
+                <div class="card-body card-tickets-info table-responsive-sm">
+
+                    <table class="table table-sm text-white">
+                        <tr *ngFor="let company of companies">
+
+                            <td> {{company?.tx_company_name}} </td>
+                            <td>
+                                <span *ngIf="company._id===companyUpdated?._id">
+                                    <mat-icon class="ml-2 list-crud-edit">check</mat-icon>
+                                </span>
+                            </td>
+                            <td style="text-align: right;">
+                                <mat-icon class="ml-2 list-crud-edit" (click)="editCompany(company)">edit</mat-icon>
+                                <mat-icon class="ml-2 list-crud-delete" (click)="deleteCompany(company._id)">delete
+                                </mat-icon>
+                            </td>
+                        </tr>
+                    </table>
+
+                </div>
+            </div>
+
+            <div class="my-4"></div>
+
+            <div class="card lead">
+                <div class="card-header bg-success">Alta de empresa</div>
+                <div class="card-body">
+
+                    <app-company-create [companyEdit]="companyEdit"
+                        (newCompany)="newCompany($event)">
+                    </app-company-create>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

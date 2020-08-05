@@ -3,6 +3,7 @@
 // ========================================================
 
 export interface Company {
+	id_user: string;
 	tx_company_name: string;
 	tx_public_name: string;
     cd_city: string;
@@ -18,7 +19,7 @@ export interface CompanyResponse {
 	company: Company | null;
 }
 
-export interface CompanysResponse {
+export interface CompaniesResponse {
 	ok: boolean;
 	msg: string;
 	companies: Company[] | null;
