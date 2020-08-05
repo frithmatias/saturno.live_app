@@ -22,7 +22,6 @@ export class DesktopCreateFormComponent implements OnInit {
 	ngOnInit(): void {
 
 		this.forma = new FormGroup({
-			idCompany: new FormControl(null, Validators.required),
 			cdDesktop: new FormControl(null, Validators.required),
 			idType: new FormControl(null)
 		});
@@ -35,7 +34,7 @@ export class DesktopCreateFormComponent implements OnInit {
 		}
 
 		const desktop: Desktop = {
-			id_company: this.forma.value.idCompany,
+			id_company: this.userService.usuario.id_company._id,
 			cd_desktop: this.forma.value.cdDesktop,
 			id_assistant: null,
 			__v: null,

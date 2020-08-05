@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { catchError, map } from 'rxjs/operators';
-import { throwError } from 'rxjs';
+import { catchError, map, tap } from 'rxjs/operators';
+import { throwError, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import Swal from 'sweetalert2';
@@ -23,23 +23,27 @@ export class UserService {
 	usuario: User;
 	menu: any[] = [];
 	logueado = false;
-	
 	//assistant
 	desktop: Desktop;
-	
-	//user
-	companies: Company[] = [];
+	public companies: Company[];
+
+	public companiesSource = new Subject<Company[]>();
+	companies$ = this.companiesSource.asObservable();
+
+	public userSource = new Subject<User>();
+	user$ = this.userSource.asObservable();
+
 
 	constructor(private http: HttpClient, private router: Router) {
-		console.log(this)
 		if (localStorage.getItem('token') && localStorage.getItem('user') && localStorage.getItem('menu')) {
 			this.token = localStorage.getItem('token');
 			this.usuario = JSON.parse(localStorage.getItem('user'));
+			this.userSource.next(this.usuario);
 			this.menu = JSON.parse(localStorage.getItem('menu'));
 			this.logueado = true;
-
 			this.readCompanies(this.usuario._id).subscribe((data: CompaniesResponse) => {
 				this.companies = data.companies;
+				this.companiesSource.next(data.companies);
 			})
 		}
 	}
@@ -83,6 +87,7 @@ export class UserService {
 		return this.http.put(url, usuario, { headers }).pipe(
 			map((resp: any) => {
 				this.usuario = resp.usuario;
+				this.userSource.next(resp.usuario);
 				const usuarioDB: User = resp.usuario;
 
 				if (usuario._id === this.usuario._id) {
@@ -167,7 +172,11 @@ export class UserService {
 			'turnos-token': this.token
 		});
 		const url = environment.url + '/c/readcompanies/' + idUser;
-		return this.http.get(url, { headers });
+		return this.http.get(url, { headers }).pipe(tap( (data: CompaniesResponse) => {
+		this.companies = data.companies;
+
+		
+		}));
 	}
 
 	updateCompany(company: Company) {
@@ -199,11 +208,11 @@ export class UserService {
 		return this.http.post(url, assistant, { headers });
 	}
 
-	readAssistants(idUser: string) {
+	readAssistants(idCompany: string) {
 		const headers = new HttpHeaders({
 			'turnos-token': this.token
 		});
-		const url = environment.url + '/a/readassistants/' + idUser;
+		const url = environment.url + '/a/readassistants/' + idCompany;
 		return this.http.get(url, { headers });
 	}
 
@@ -236,19 +245,19 @@ export class UserService {
 		return this.http.post(url, desktop, { headers });
 	}
 
-	readDesktops(idUser: string) {
+	readDesktops(idCompany: string) {
 		const headers = new HttpHeaders({
 			'turnos-token': this.token
 		});
-		const url = environment.url + '/d/readdesktops/' + idUser;
+		const url = environment.url + '/d/readdesktops/' + idCompany;
 		return this.http.get(url, { headers });
 	}
 
-	readDesktopsCompany(idCompany: string) {
+	readDesktopsUser(idUser: string) {
 		const headers = new HttpHeaders({
 			'turnos-token': this.token
 		});
-		const url = environment.url + '/d/readdesktopscompany/' + idCompany;
+		const url = environment.url + '/d/readdesktopsuser/' + idUser;
 		return this.http.get(url, { headers });
 	}
 
@@ -290,19 +299,19 @@ export class UserService {
 		return this.http.post(url, skill, { headers });
 	}
 
-	readSkills(idUser: string) {
+	readSkills(idCompany: string) {
 		const headers = new HttpHeaders({
 			'turnos-token': this.token
 		});
-		const url = environment.url + '/s/readskills/' + idUser;
+		const url = environment.url + '/s/readskills/' + idCompany;
 		return this.http.get(url, { headers });
 	}
 
-	readSkillsCompany(idCompany: string) {
+	readSkillsUser(idUser: string) {
 		const headers = new HttpHeaders({
 			'turnos-token': this.token
 		});
-		const url = environment.url + '/s/readskillscompany/' + idCompany;
+		const url = environment.url + '/s/readskillsuser/' + idUser;
 		return this.http.get(url, { headers });
 	}
 
@@ -389,13 +398,13 @@ export class UserService {
 	}
 
 	setStorage(token: string, usuario: User, menu: any) {
+		this.usuario = usuario;
+		this.userSource.next(usuario);
+		this.token = token;
+		this.menu = menu;
 		localStorage.setItem('token', token);
 		localStorage.setItem('user', JSON.stringify(usuario));
 		localStorage.setItem('menu', JSON.stringify(menu));
-
-		this.usuario = usuario;
-		this.token = token;
-		this.menu = menu;
 	}
 
 	logout() {
@@ -407,6 +416,7 @@ export class UserService {
 
 		this.token = '';
 		this.usuario = null;
+		this.userSource.next(null)
 		this.menu = null;
 		this.logueado = false;
 		this.router.navigate(['/home']);

@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormGroupDirective } from '@angular/forms';
-import { Router } from '@angular/router';
 import { UserService } from '../../../../services/user.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { GetidstringPipe } from '../../../../pipes/getidstring.pipe';
@@ -19,7 +18,6 @@ export class CompanyCreateComponent implements OnInit {
 	publicName: string;
 
 	constructor(
-		private router: Router,
 		private userService: UserService,
 		private snack: MatSnackBar,
 		private getidstring: GetidstringPipe
@@ -62,6 +60,15 @@ export class CompanyCreateComponent implements OnInit {
 	}
 
 	checkCompanyExists() {
+
+		if(this.companyEdit && (this.publicName === this.companyEdit.tx_public_name)){
+			// Cuando se edita el nombre de una empresa, no debe hacer la verificacion si 
+			// existe esa empresa. Esto es porque me devuelve que existe si yo cambio el nombre real 
+			// pero el nombre público no cambia (FereterriaNorte a Ferreteria Norte, el nombre 
+			// público es el mismo)
+			return;
+		}
+		
 		let pattern = this.publicName;
 		if (pattern?.length > 3) {
 			this.userService.checkCompanyExists(pattern).subscribe((data: any) => {

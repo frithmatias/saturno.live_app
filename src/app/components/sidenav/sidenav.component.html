@@ -1,9 +1,8 @@
 <div>
-
     <mat-form-field *ngIf="userService.usuario" color="warn" appearance="fill" class="w-100">
         <mat-label>Seleccione una empresa</mat-label>
-        <mat-select formControlName="idCompany" name="idCompany" #selectDesktop matNativeControl required>
-            <mat-option *ngFor="let company of userService.companies" [value]="userService.usuario.id_company._id" (click)="companySelected(company)">
+        <mat-select formControlName="idCompany" [value]="user.id_company._id" name="idCompany" #selectDesktop matNativeControl required>
+            <mat-option *ngFor="let company of companies" [value]="company._id" (click)="companySelected(company)">
                 {{company.tx_company_name}}
             </mat-option>
         </mat-select>

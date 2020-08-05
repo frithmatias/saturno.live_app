@@ -3,7 +3,6 @@ import { UserService } from 'src/app/services/user.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormGroup, FormControl, Validators, FormGroupDirective } from '@angular/forms';
 import { Skill, SkillResponse } from '../../../../interfaces/skill.interface';
-import { Company, CompaniesResponse } from '../../../../interfaces/company.interface';
 
 @Component({
 	selector: 'app-skill-create-form',
@@ -21,7 +20,6 @@ export class SkillCreateFormComponent implements OnInit {
 
 	ngOnInit(): void {
 		this.forma = new FormGroup({
-			idCompany: new FormControl(null, Validators.required),
 			cdSkill: new FormControl(null, Validators.required),
 			txSkill: new FormControl(null, Validators.required)
 		});
@@ -32,7 +30,7 @@ export class SkillCreateFormComponent implements OnInit {
 			return;
 		}
 		const skill: Skill = {
-			id_company: this.forma.value.idCompany,
+			id_company: this.userService.usuario.id_company._id,
 			cd_skill: this.forma.value.cdSkill,
 			tx_skill: this.forma.value.txSkill,
 			__v: null,

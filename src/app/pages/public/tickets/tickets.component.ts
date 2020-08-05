@@ -33,7 +33,7 @@ export class TicketsComponent implements OnInit {
 			} else {
 				let idCompany = this.ticketsService.companyData._id;
 				this.wsService.emit('enterCompany', idCompany);
-				this.ticketsService.readSkillsCompany(idCompany).subscribe((data: SkillsResponse) => {
+				this.ticketsService.readSkills(idCompany).subscribe((data: SkillsResponse) => {
 					this.skills = data.skills;
 				})
 			}

@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { UserService } from '../../../services/user.service';
 import { MatSnackBar, MatSnackBarDismiss } from '@angular/material/snack-bar';
 import { Desktop, DesktopsResponse, DesktopResponse } from '../../../interfaces/desktop.interface';
+import { User } from 'src/app/interfaces/user.interface';
 
 @Component({
   selector: 'app-desktops',
@@ -10,13 +11,20 @@ import { Desktop, DesktopsResponse, DesktopResponse } from '../../../interfaces/
 })
 export class DesktopsComponent implements OnInit {
   desktops: Desktop[];
+  user: User;
   constructor(
     private userService: UserService,
     private snack: MatSnackBar
   ) { }
 
   ngOnInit(): void {
-    this.readDesktops();
+    this.user = this.userService.usuario;
+    let idCompany = this.user.id_company._id;
+    this.readDesktops(idCompany);
+    this.userService.user$.subscribe(data => {
+      this.user = data;
+      this.readDesktops(data.id_company._id)
+    })
   }
 
   editDesktop(idDesktop: string): void {
@@ -42,9 +50,8 @@ export class DesktopsComponent implements OnInit {
     this.desktops.push(desktop);
   }
 
-  readDesktops(){
-    let idUser = this.userService.usuario._id;
-    this.userService.readDesktops(idUser).subscribe((data: DesktopsResponse) => {
+  readDesktops(idCompany: string){
+    this.userService.readDesktops(idCompany).subscribe((data: DesktopsResponse) => {
       this.desktops = data.desktops;
     });
   }

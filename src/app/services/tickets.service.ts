@@ -51,12 +51,12 @@ export class TicketsService {
 		return this.http.get(environment.url + '/c/findcompany/' + pattern);
 	}
 
-	readSkills(idUser: string): Observable<SkillsResponse> {
-		return this.http.get<SkillsResponse>(environment.url + '/s/readskills/' + idUser);
+	readSkills(idCompany: string): Observable<SkillsResponse> {
+		return this.http.get<SkillsResponse>(environment.url + '/s/readskills/' + idCompany);
 	}
 
-	readSkillsCompany(idCompany): Observable<SkillsResponse> {
-		return this.http.get<SkillsResponse>(environment.url + '/s/readskillscompany/' + idCompany);
+	readSkillsUser(idUser): Observable<SkillsResponse> {
+		return this.http.get<SkillsResponse>(environment.url + '/s/readskillsuser/' + idUser);
 	}
 
 

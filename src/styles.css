@@ -81,7 +81,7 @@ div:focus { outline: none; }
 
 .sidenav-item {
     cursor: pointer;
-    margin: .2rem;
+    margin: 1rem;
 }
 
 .sidenav-item-icons {
@@ -169,4 +169,7 @@ div:focus { outline: none; }
 /* angular material re styling */
   .mat-horizontal-content-container {
       padding: 0px !important;
+  }
+  .mat-expansion-panel-body {
+      padding: .5rem !important;
   }

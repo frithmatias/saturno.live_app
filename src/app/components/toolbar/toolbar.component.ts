@@ -1,7 +1,8 @@
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import { TicketsService } from '../../services/tickets.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
+import { User } from 'src/app/interfaces/user.interface';
 
 @Component({
   selector: 'app-toolbar',
@@ -13,14 +14,19 @@ export class ToolbarComponent implements OnInit {
   @Output() toggleChat: EventEmitter<boolean> = new EventEmitter();
   @Input() unreadMessages: number;
   hiddenBadge: boolean;
-
+  user: User;
   constructor(
     public userService: UserService,
     public ticketsService: TicketsService,
     public router: Router
     ) { }
 
-  ngOnInit(): void { }
+  ngOnInit(): void { 
+    this.user = this.userService.usuario;
+    this.userService.user$.subscribe(data => {
+      this.user = data;
+    })
+  }
 
   ngOnChanges(changes: any) {
     this.hiddenBadge = false;

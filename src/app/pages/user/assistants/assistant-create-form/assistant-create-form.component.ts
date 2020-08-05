@@ -8,6 +8,7 @@ import { AjaxError } from 'rxjs/ajax';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Skill, SkillsResponse } from '../../../../interfaces/skill.interface';
 import { AssistantResponse } from '../../../../interfaces/assistant.interface';
+import { Company, CompaniesResponse } from '../../../../interfaces/company.interface';
 
 @Component({
 	selector: 'app-assistant-create-form',
@@ -20,6 +21,7 @@ export class AssistantCreateFormComponent implements OnInit, OnChanges {
 	selStrSkills: string[];
 	forma: FormGroup;
 	skills: Skill[] = [];
+
 	constructor(
 		public userService: UserService,
 		private snack: MatSnackBar
@@ -35,6 +37,7 @@ export class AssistantCreateFormComponent implements OnInit, OnChanges {
 			password: new FormControl(null, Validators.required),
 			password2: new FormControl(null, Validators.required)
 		}, { validators: this.sonIguales('password', 'password2') });
+
 	}
 
 	ngOnChanges(changes: SimpleChanges) {
@@ -45,7 +48,7 @@ export class AssistantCreateFormComponent implements OnInit, OnChanges {
 			this.forma.controls['email'].disable();
 		} else {
 			if (changes.assistantEdit.currentValue?.id_company._id) {
-				this.getSkills(changes.assistantEdit.currentValue.id_company._id)
+				this.getSkills(changes.assistantEdit.currentValue.id_company._id);
 			}
 		}
 
@@ -66,7 +69,7 @@ export class AssistantCreateFormComponent implements OnInit, OnChanges {
 	}
 
 	getSkills(idCompany: string) {
-		this.userService.readSkillsCompany(idCompany).subscribe((data: SkillsResponse) => {
+		this.userService.readSkills(idCompany).subscribe((data: SkillsResponse) => {
 			this.skills = data.skills;
 		})
 	}

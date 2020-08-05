@@ -8,11 +8,11 @@
         <button class="btn btn-primary btn-block btn-lg" routerLink="/assistant/home">Atender</button>
 
         <hr class="my-4">
-        <p class="card-text"> Web Pública </p>
-
-        <p style="font-weight: 500; font-size: larger;">
-          <a href="{{publicURL}}">
-            {{publicURL}}
+        
+        <p *ngIf="userService.usuario.id_company" class="card-text"> Web Pública 
+          
+          <a target="_blank" href="http://webturnos.herokuapp.com/#/public/{{userService.usuario.id_company.tx_public_name}}">
+            http://webturnos.herokuapp.com/#/public/{{userService.usuario.id_company.tx_public_name}}
           </a>
         </p>
       </div>
@@ -27,22 +27,15 @@
           <h1 class="display-2">Bienvenido {{ userService?.usuario.tx_name }}!</h1>
           <p class="card-text">
             Para comenzar a atender turnos debe dar de alta empresas o comercios, escritorios, habilidades y
-            opcionalmente
-            puede dar de alta asistentes. Desde este asistente puede hacer todo.
+            opcionalmente puede dar de alta asistentes. Desde este asistente puede hacer todo.
           </p>
 
           <hr class="my-4">
-          <p class="card-text"> Recuerde que para que sus clientes puedan obtener los turnos de su comercio, usted debe
-            facilitarle la dirección web pública mediante URL. El sistema le ofrecera también un código QR de acceso a 
-            su web pública, usted puede imprimirlo y ofrecerlo a sus clientes para que pueda ser escaneado con sus 
-            dispositivos.</p>
 
-            
-          <p class="card-text">Usted tendrá disponible el link de acceso a su web pública recién cuando haya finalizado 
-            el proceso de registrar sus comercios. Las URL de acceso al público terminan con el nombre de su comercio. 
-          </p>
+          <p class="card-text">Usted debe ofrecerle a sus clientes la URL pública de acceso al portal de turnos, estas URL 
+            estarán disponibles cuando haya terminado de crear sus empresas/comercios.</p>
 
-          <p class="card-text">Por ej: https://webturnos.com/#/public/SUEMPRESA</p>
+          <p>Por ej: https://webturnos.com/#/public/SUEMPRESA</p>
 
           <button class="btn btn-success btn-block btn-lg" matStepperNext>Comenzar</button>
         </div>
@@ -54,20 +47,50 @@
           <div class="card text-white bg-info mb-2" style="min-width: 18rem; max-width: 30rem;">
             <div class="card-header">Negocios</div>
             <div class="card-body">
-              <p class="card-text">
-                Aquí usted debe registrar su comercio, puede registrar varios si tiene sucursales. Es necesario 
-                que usted ingrese la dirección exacta. Esta dirección será visible para sus clientes desde el menú 
-                de turnos y le asegura a su cliente que esta obteniendo un turno en el comercio correcto. 
-              </p>
-              <p class="card-text">
-                Los asistentes que usted podrá dar de alta mas adelante, tendrán asignado uno de sus comercios por lo 
-                tanto sólo estarán disponibles, para ese asistente, los escritorios y habilidades registradas para el 
-                comercio o empresa que le fue asignada. Usted puede cambiar a un asistente de empresa editandolo desde 
-                el menú de Asistentes. Por este motivo las empresas deben crearse ANTES de crear asistentes.
-              </p>
+
+              <!-- no companies, no attached company -->
+              <div *ngIf="!userService.companies?.length > 0">
+                <p class="card-text">
+                  Usted no tiene ningún comercio registrado, desde aquí usted debe registrar al menos un comercio.
+                  
+                  Es necesario que usted ingrese la dirección exacta. Esta dirección será visible para sus clientes 
+                  desde el menú público de turnos y le asegura a su cliente que esta obteniendo un turno en el comercio 
+                  correcto.
+                </p>
+              </div>
+
+              <!-- companies, but not attached company -->
+              <div *ngIf="userService.companies?.length > 0 && !userService.usuario?.id_company?._id">
+                <h1>¡Perfecto!</h1>
+                <p class="card-text card-text">
+                  Ya tiene creada al menos una empresa. Para continuar registrando habilidades, escritorios y asistentes es 
+                  necesario que seleccione primero una de sus empresas ó comercios desde el menú principal.
+                </p>
+              </div>
+
+              <!-- companies and attached company -->
+              <div *ngIf="userService.companies?.length > 0 && userService.usuario?.id_company?._id">
+                <h1>¡Excelente!</h1>
+                <p class="card-text">
+                  Puede continúar creando habilidades, escritorios y asistentes. 
+                </p>
+                <hr>
+                <p class="card-text">
+                  Recuerde que las habilidades, escritorios o asistentes que registre a partir de ahora, serán 
+                  asignados a la empresa 
+                  <span style="color:yellow;">
+                    {{userService.usuario.id_company.tx_company_name}}
+                  </span>. 
+                  Si usted desea dar de alta de otra empresa o comercio, debe darla de alta primero y seleccionarla desde el menú 
+                  principal.
+                </p>
+              </div>
+
               <div class="row mx-2 mt-4" style="justify-content: space-between;">
                 <button class="btn btn-danger col-5" matStepperPrevious> Volver </button>
-                <button class="btn btn-success col-5" matStepperNext> Siguiente </button>
+                <button class="btn btn-success col-5"
+                  [disabled]="!userService.companies?.length > 0 || !userService.usuario?.id_company?._id"
+                  matStepperNext> Siguiente </button>
               </div>
             </div>
           </div>
@@ -85,15 +108,10 @@
                 Los skills son habilidades que se asignan a los asistentes. Estas pueden ser etiquetas que
                 que identifiquen cualquier segmento de su negocio como "Ventas", "Repuestos", "Informes", etc.
               </p>
+              <hr>
               <p class="card-text">
-                Debe seleccionar una letra que tenga un sentido semántico a la habilidad por ejemplo una letra 
-                V y la descripción "Ventas". Para el abreviado puede usar sólo hasta 2 letras. La palabra "Ventas" 
-                y el resto de las habilidades se mostrarán en el menú de la web pública de su empresa a su cliente 
-                para obtener el turno. El abreviado lo vera en el ticket obtenido y en la pantalla. 
-              </p>
-              <p class="card-text">
-                De la misma forma que las empresas, las habilidades estan asociadas a los usuarios por lo tanto 
-                deben ser creadas ANTES de crear asistentes o de comenzar a atender turnos. 
+                De la misma forma que las empresas, las habilidades estan asociadas a los usuarios por lo tanto
+                deben ser creadas ANTES de crear asistentes o de comenzar a atender turnos.
               </p>
               <div class="row mx-2 mt-4" style="justify-content: space-between;">
                 <button class="btn btn-danger col-5" matStepperPrevious> Volver </button>
@@ -112,11 +130,15 @@
             <div class="card-header">Escritorios</div>
             <div class="card-body">
               <p class="card-text">
-                Los escritorios sólo necesitan un identificador o etiqueta, pueden ser letras o números
-                ej. "1", "2", "A", "B" etc.
+                Los escritorios sólo necesitan un identificador que es simplemente una etiqueta. Estos 
+                identificadores pueden ser letras o números por ejemplo
               </p>
               <p class="card-text">
-                Este identificador debe colocarlo en cada escritorio de forma bien visible para que el usuario 
+                  "1", "2", "VR", "B1"
+              </p>
+              <hr>
+              <p class="card-text">
+                Este identificador debe colocarlo en cada escritorio de forma bien visible para que el usuario
                 pueda identificar fácilmente el escritorio para el cual fue llamado.
               </p>
               <div class="row mx-2 mt-4" style="justify-content: space-between;">
@@ -136,12 +158,18 @@
             <div class="card-header">Escritorios</div>
             <div class="card-body">
               <p class="card-text">
-                Usted con su cuenta puede atender turnos sin necesidad de crear asistentes,
-                sólo debe tomar un escritorio desde "Escritorio" en el menú de "Asistente".
+                ¡Usted ya puede puede atender turnos! sin embargo puede crear otros usuarios con rol de 
+                asistentes y asignarle las habilidades creadas anteriormente. 
+              </p>
+              <hr>
+              <p class="card-text">
+                Los asistentes deben ingresar 
+                desde el login principal y puden comenzar a atender turnos tomando un escritorio 
+                desde el menú "Escritorio" en el menú del "Asistente".
               </p>
               <div class="row mx-2 mt-4" style="justify-content: space-between;">
                 <button class="btn btn-danger col-5" matStepperPrevious> Volver </button>
-                <button class="btn btn-primary col-5" routerLink="/user/home"> Finalizar </button>
+                <button class="btn btn-primary col-5" routerLink="/user/home" (click)="endWizard()"> Finalizar </button>
               </div>
             </div>
           </div>

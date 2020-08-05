@@ -13,13 +13,20 @@ export class AssistantsComponent implements OnInit {
   assistants: Assistant[];
   assistantEdit: User;
   assistantUpdated: string;
+  user: User;
   constructor(
     private userService: UserService,
     private snack: MatSnackBar
   ) { }
 
   ngOnInit(): void {
-    this.readAssistants();
+    this.user = this.userService.usuario;
+    let idCompany = this.user.id_company._id;
+    this.readAssistants(idCompany);
+    this.userService.user$.subscribe(data => {
+      this.user = data;
+      this.readAssistants(data.id_company._id)
+    })
   }
 
 
@@ -44,12 +51,11 @@ export class AssistantsComponent implements OnInit {
 
   updateAssistants(assistant: string): void {
     this.assistantUpdated = assistant;
-    this.readAssistants();
+    this.readAssistants(this.userService.usuario.id_company._id);
   }
 
-  readAssistants(): void {
-    let idUser = this.userService.usuario._id;
-    this.userService.readAssistants(idUser).subscribe((data: AssistantsResponse) => {
+  readAssistants(idCompany: string): void {
+    this.userService.readAssistants(idCompany).subscribe((data: AssistantsResponse) => {
       this.assistants = data.assistants;
     });
   }

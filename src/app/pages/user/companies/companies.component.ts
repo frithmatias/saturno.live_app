@@ -38,6 +38,10 @@ export class CompaniesComponent implements OnInit {
           this.snack.open(data.msg, null, { duration: 2000 });
           this.companies = this.companies.filter(company => company._id != idCompany);
           this.userService.companies = this.companies;
+          if(idCompany === this.userService.usuario.id_company?._id){
+            this.userService.usuario.id_company = null;
+            localStorage.setItem('user', JSON.stringify(this.userService.usuario));
+          }
         },(err: CompanyResponse) => {
             this.snack.open(err.msg, null, { duration: 2000 });
           }
@@ -45,8 +49,6 @@ export class CompaniesComponent implements OnInit {
       }
     })
   }
-
-
 
   readCompanies(): void {
     let idUser = this.userService.usuario._id;
