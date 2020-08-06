@@ -174,6 +174,7 @@ export class UserService {
 		const url = environment.url + '/c/readcompanies/' + idUser;
 		return this.http.get(url, { headers }).pipe(tap( (data: CompaniesResponse) => {
 		this.companies = data.companies;
+		this.companiesSource.next(data.companies);
 
 		
 		}));

@@ -22,8 +22,10 @@ export class DesktopsComponent implements OnInit {
     let idCompany = this.user.id_company._id;
     this.readDesktops(idCompany);
     this.userService.user$.subscribe(data => {
-      this.user = data;
-      this.readDesktops(data.id_company._id)
+      if(data){
+        this.user = data;
+        this.readDesktops(data.id_company._id)
+      }
     })
   }
 

@@ -24,8 +24,10 @@ export class AssistantsComponent implements OnInit {
     let idCompany = this.user.id_company._id;
     this.readAssistants(idCompany);
     this.userService.user$.subscribe(data => {
-      this.user = data;
-      this.readAssistants(data.id_company._id)
+      if(data){
+        this.user = data;
+        this.readAssistants(data.id_company._id)
+      }
     })
   }
 

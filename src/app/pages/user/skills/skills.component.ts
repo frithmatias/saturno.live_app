@@ -24,8 +24,10 @@ export class SkillsComponent implements OnInit {
     let idCompany = this.user.id_company._id;
     this.readSkills(idCompany);
     this.userService.user$.subscribe(data => {
-      this.user = data;
-      this.readSkills(data.id_company._id)
+      if(data){
+        this.user = data;
+        this.readSkills(data.id_company._id)
+      }
     })
   }
 
