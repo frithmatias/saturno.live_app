@@ -37,6 +37,7 @@ export class AssistantsComponent implements OnInit {
         }
       })
     }
+    
   }
 
 
