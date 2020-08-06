@@ -20,15 +20,24 @@ export class SkillsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.user = this.userService.usuario;
-    let idCompany = this.user.id_company._id;
-    this.readSkills(idCompany);
-    this.userService.user$.subscribe(data => {
-      if(data){
-        this.user = data;
-        this.readSkills(data.id_company._id)
+
+    if (this.userService.usuario) {
+
+      this.user = this.userService.usuario;
+
+      if (this.user.id_company) {
+        let idCompany = this.user.id_company._id;
+        this.readSkills(idCompany);
       }
-    })
+
+      this.userService.user$.subscribe(data => {
+        if (data) {
+          this.user = data;
+          if (data.id_company) { this.readSkills(data.id_company._id); }
+        }
+      });
+
+    }
   }
 
   editSkill(idSkill: string): void {

@@ -18,15 +18,24 @@ export class DesktopsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.user = this.userService.usuario;
-    let idCompany = this.user.id_company._id;
-    this.readDesktops(idCompany);
-    this.userService.user$.subscribe(data => {
-      if(data){
-        this.user = data;
-        this.readDesktops(data.id_company._id)
+
+    if (this.userService.usuario) {
+
+      this.user = this.userService.usuario;
+
+      if (this.user.id_company) {
+        let idCompany = this.user.id_company._id;
+        this.readDesktops(idCompany);
       }
-    })
+
+      this.userService.user$.subscribe(data => {
+        if (data) {
+          this.user = data;
+          if (data.id_company) { this.readDesktops(data.id_company._id); }
+        }
+      });
+
+    }
   }
 
   editDesktop(idDesktop: string): void {
@@ -52,7 +61,7 @@ export class DesktopsComponent implements OnInit {
     this.desktops.push(desktop);
   }
 
-  readDesktops(idCompany: string){
+  readDesktops(idCompany: string) {
     this.userService.readDesktops(idCompany).subscribe((data: DesktopsResponse) => {
       this.desktops = data.desktops;
     });

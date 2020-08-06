@@ -20,15 +20,23 @@ export class AssistantsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.user = this.userService.usuario;
-    let idCompany = this.user.id_company._id;
-    this.readAssistants(idCompany);
-    this.userService.user$.subscribe(data => {
-      if(data){
-        this.user = data;
-        this.readAssistants(data.id_company._id)
+
+    if (this.userService.usuario) {
+
+      this.user = this.userService.usuario;
+
+      if (this.user.id_company) {
+        let idCompany = this.user.id_company._id;
+        this.readAssistants(idCompany);
       }
-    })
+
+      this.userService.user$.subscribe(data => {
+        if (data) {
+          this.user = data;
+          if (data.id_company) { this.readAssistants(data.id_company._id); }
+        }
+      })
+    }
   }
 
 
@@ -37,8 +45,8 @@ export class AssistantsComponent implements OnInit {
   }
 
   deleteAssistant(idAssistant: string): void {
-    this.snack.open('Desea eliminar el asistente?', 'ELIMINAR', {duration: 10000}).afterDismissed().subscribe((data: MatSnackBarDismiss) => {
-      if(data.dismissedByAction){
+    this.snack.open('Desea eliminar el asistente?', 'ELIMINAR', { duration: 10000 }).afterDismissed().subscribe((data: MatSnackBarDismiss) => {
+      if (data.dismissedByAction) {
         this.userService.deleteAssistant(idAssistant).subscribe((data: UserResponse) => {
           this.snack.open(data.msg, null, { duration: 5000 });
           this.assistants = this.assistants.filter(assistant => assistant._id != idAssistant);
