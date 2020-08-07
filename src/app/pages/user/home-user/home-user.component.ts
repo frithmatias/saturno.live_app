@@ -3,6 +3,7 @@ import { UserService } from '../../../services/user.service';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { MatStepper } from '@angular/material/stepper/stepper';
 import { Company, CompaniesResponse } from '../../../interfaces/company.interface';
+import { User } from 'src/app/interfaces/user.interface';
 
 @Component({
 	selector: 'app-home-user',
@@ -17,15 +18,22 @@ export class HomeUserComponent implements OnInit {
 	publicURL: string;
 	showIntro: boolean = true;
 	config: any = {};
-	selectedIndex: number;
-
+	user: User;
 	constructor(public userService: UserService) { }
 	ngOnInit() {
+		if (this.userService.user) { this.user = this.userService.user; }
+
+		this.userService.user$.subscribe(data => {
+			if (data) {
+			  this.user = data;
+			}
+		});
 
 		if (localStorage.getItem('config')) {
 			this.config = JSON.parse(localStorage.getItem('config'));
 			this.showIntro = this.config.intro;
 		}
+
 	}
 
 	toggleIntro() {

@@ -37,22 +37,25 @@
                     <div class="p-2 rounded">
 
                         <input formControlName="condiciones" name="condiciones" id="checkbox-signup" type="checkbox"
-                            class="checkbox checkbox-primary">
-                        <label for="checkbox-signup" style="font-size: 12px;"> Estoy de acuerdo con los términos</label>
+                            class="checkbox checkbox-primary m-2" required>
+                        <label for="checkbox-signup" style="font-size: 12px;">Estoy de acuerdo con las
+                            condiciones</label>
 
                     </div>
                 </div>
             </div>
             <!-- [disabled]="!forma.valid" -->
             <div class="form-group text-center">
-                <button [disabled]="!forma.valid" class="btn btn-info btn-block text-uppercase waves-effect waves-light"
-                    type="submit">Registrarme</button>
+                <button [disabled]="!forma.valid" class="btn btn-lg btn-dark btn-block text-uppercase"
+                    type="submit">Registrarme
+                </button>
 
             </div>
 
             <div class="form-group m-b-0">
                 <div class="col-sm-12 text-center">
-                    <p>¿Tienes una cuenta? <a routerLink="/login" class="text-info m-l-5"><b>Ingresa ahora</b></a>
+                    <p>Ya tenes una cuenta? | <a routerLink="/login" class="text-dark text-uppercase m-l-5"><b>Ingresa
+                                ahora</b></a>
                     </p>
                 </div>
             </div>

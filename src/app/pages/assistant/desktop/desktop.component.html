@@ -5,7 +5,7 @@
   <!-- ======================================================== -->
 
   <div class="col-lg-6">
-    <div class="card bg-light mb-4">
+    <div class="card bg-light mb-4" style="min-width: 18rem; max-width: 30rem;">
       <div class="card-header banner-title">
         <span>
           ESCRITORIO {{ cdDesk }}
@@ -69,7 +69,7 @@
             <div class="row" style="justify-content: space-between;">
 
               <div class="col col-6 col-md-3 p-1">
-                <button class="btn btn-block btn-danger" (click)="releaseTicket()" [disabled]="waitForClient">
+                <button class="btn btn-block btn-danger" (click)="releaseTicket()" [disabled]="waitForClient || !ticketsService.myTicket">
                   Soltar
                 </button>
               </div>
@@ -108,7 +108,7 @@
 
 
   <div class="col-lg-6">
-    <div class="card bg-primary mb-4">
+    <div class="card bg-primary mb-4" style="min-width: 18rem; max-width: 30rem;">
       <div class="card-content table-responsive-sm  p-2">
 
         <table class="table table-sm text-white text-center" style="font-size: large;">

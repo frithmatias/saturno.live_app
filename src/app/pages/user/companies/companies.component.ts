@@ -22,9 +22,10 @@ export class CompaniesComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.user = this.userService.usuario;
+    this.user = this.userService.user;
 
     if (this.user._id) {
+      
       let idUser = this.user._id;
       this.readCompanies(idUser);
     }

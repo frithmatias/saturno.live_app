@@ -35,7 +35,7 @@ export class RegisterComponent implements OnInit {
 			email: new FormControl(defaults.email, [Validators.required, Validators.email]),
 			password1: new FormControl(defaults.password1, Validators.required),
 			password2: new FormControl(defaults.password2, Validators.required),
-			condiciones: new FormControl(false)
+			condiciones: new FormControl(false, Validators.required)
 		}, { validators: [
 			this.sonIguales('password1', 'password2')] 
 		});
@@ -73,7 +73,7 @@ export class RegisterComponent implements OnInit {
 		}
 
 		if (!this.forma.value.condiciones) {
-			this.snack.open('Debe aceptar las condiciones', 'Aceptar', { duration: 5000 });
+			this.snack.open('Debe aceptar las condiciones.', 'Aceptar', { duration: 5000 });
 			return;
 		}
 

@@ -30,7 +30,7 @@ export class ScreenComponent implements OnInit {
 		const body = document.getElementsByTagName('body')[0];
 		body.classList.remove('container');
 
-		if (!this.userService.usuario) {
+		if (!this.userService.user) {
 			
 			if (!this.ticketsService.companyData) {
 				this.router.navigate(['/public']);
@@ -54,11 +54,11 @@ export class ScreenComponent implements OnInit {
 	}
 
 	cancelTicket(): void {
-		this.snack.open('Desea cancelar el turno?', 'SI, CANCELAR', { duration: 5000 }).afterDismissed().subscribe((data: MatSnackBarDismiss) => {
+		this.snack.open('Desea cancelar el turno?', 'SI, CANCELAR', { duration: 10000 }).afterDismissed().subscribe((data: MatSnackBarDismiss) => {
 			if (data.dismissedByAction) {
 				this.ticketsService.cancelTicket(this.ticketsService.myTicket._id).subscribe((data: TicketResponse) => {
 					if (data.ok) {
-						this.snack.open(data.msg, 'ACEPTAR', { duration: 5000 });
+						this.snack.open(data.msg, 'ACEPTAR', { duration: 2000 });
 						this.ticketsService.clearPublicSession();
 						this.router.navigate(['/public']);
 					}

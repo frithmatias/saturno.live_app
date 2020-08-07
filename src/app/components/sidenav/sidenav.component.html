@@ -1,5 +1,5 @@
 <div>
-    <mat-form-field *ngIf="userService.usuario" color="warn" appearance="fill" class="w-100">
+    <mat-form-field *ngIf="companies?.length > 0 && user?.id_company" color="warn" appearance="fill" class="w-100">
         <mat-label>Seleccione una empresa</mat-label>
         <mat-select formControlName="idCompany" [value]="user.id_company?._id" name="idCompany" #selectDesktop matNativeControl required>
             <mat-option *ngFor="let company of companies" [value]="company._id" (click)="companySelected(company)">
@@ -9,7 +9,7 @@
     </mat-form-field>
 
     <mat-accordion multi>
-        <mat-expansion-panel>
+        <mat-expansion-panel expanded>
 
             <mat-expansion-panel-header>
                 <mat-panel-title style="align-items: center; color: darkred;">
@@ -43,7 +43,7 @@
             </div>
 
         </mat-expansion-panel>
-        <!-- *ngIf="userService.usuario?.id_role === 'USER_ROLE'" -->
+        <!-- *ngIf="userService.user?.id_role === 'USER_ROLE'" -->
 
         <!-- ASSISTANT / USER -->
         <div *ngFor="let item of userService.menu">
@@ -70,5 +70,4 @@
     <div class="p-2 pt-3" *ngIf="userService.logueado">
         <button class="btn btn-sm btn-block btn-danger" (click)="userService.logout()"> Salir </button>
     </div>
-
 </div>

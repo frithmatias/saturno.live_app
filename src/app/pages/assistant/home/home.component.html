@@ -3,45 +3,68 @@
 
         <div class="jumbotron m-2 animated fadeIn">
 
-            <h1 class="display-4">Bienvenido a la web del asistente</h1>
-            
             <p class="lead">Bienvenido, desde aquí puede tomar escritorios y atender turnos.</p>
 
-            <div class="my-4" *ngIf="!myDesktop">
-                <mat-form-field appearance="fill">
-                    <mat-label>Seleccione un escritorio</mat-label>
-                    <mat-select #selectDesktop matNativeControl required>
-                        <mat-option *ngFor="let desktop of desktopsAvailable" [value]="desktop">{{desktop.cd_desktop}}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
-                <div>
-                    <button class="btn btn-success btn-lg btn-block" role="button"
-                        (click)="takeDesktop( selectDesktop?.value )">Ingresar</button>
-                </div>
+            <!-- no desktops -->
+            <div *ngIf="desktops?.length === 0" class="card bg-danger text-white p-2 my-4">
+                La empresa seleccionada no tiene escritorios creados.
             </div>
 
-            <div class="my-4" *ngIf="myDesktop">
-                Usted tiene tomado el escritorio {{ myDesktop.cd_desktop }}
-                <div>
-                    <button class="btn btn-success btn-lg m-1" role="button" (click)="takeDesktop( myDesktop )">Ingresar</button>
-                    <button class="btn btn-danger btn-lg m-1" role="button" (click)="releaseDesktop( myDesktop )">Finalizar</button>
+            <div *ngIf="desktops?.length > 0">
+
+                <div class="my-4" *ngIf="myDesktop">
+
+                    Usted tiene tomado el escritorio {{ myDesktop.cd_desktop }}
+                    <div>
+                        <button class="btn btn-success btn-lg m-1" role="button"
+                            (click)="takeDesktop( myDesktop )">Ingresar</button>
+                        <button class="btn btn-danger btn-lg m-1" role="button"
+                            (click)="releaseDesktop( myDesktop )">Finalizar</button>
+                    </div>
 
                 </div>
-            </div>
 
-            <div class="my-4" *ngIf="desktopsAvailable.length === 0">
-                Todos los escritorios estan tomados.
+                <div class="my-4" *ngIf="!myDesktop">
+                    <div *ngIf="desktopsAvailable.length === 0" class="card bg-danger text-white p-2 my-4">
+                        Todos los escritorios estan tomados.
+                    </div>
+
+                    <div class="my-4" *ngIf="desktopsAvailable.length > 0">
+
+                        <mat-form-field appearance="fill">
+                            <mat-label>Seleccione un escritorio</mat-label>
+                            <mat-select #selectDesktop matNativeControl required>
+                                <mat-option *ngFor="let desktop of desktopsAvailable" [value]="desktop">
+                                    {{desktop.cd_desktop}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <div>
+                            <button class="btn btn-success btn-lg btn-block" role="button"
+                                (click)="takeDesktop( selectDesktop?.value )">
+                                Ingresar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
                 <div *ngFor="let desktop of desktops">
-                    {{desktop.cd_desktop}} tomado por {{desktop.id_assistant}}
+                    <div *ngIf="desktop.id_assistant">
+                        Escritorio {{desktop.cd_desktop}} tomado por {{desktop.id_assistant?.tx_name}}
+                    </div>
+                    <div *ngIf="!desktop.id_assistant">
+                        Escritorio {{desktop.cd_desktop}} libre
+                    </div>
                 </div>
+
             </div>
 
             <hr class="my-4">
 
-            <p> Recuerde que si se ausenta del escritorio debe finalizar la sesión del escritorio. Si usted 
-                finaliza la sesión de usuario se finalizará también la sesión del escritorio. Si la sesión 
-                del escritorio tenía asignada una sesión de turno, este turno finalizará. 
+            <p> Recuerde que si se ausenta del escritorio debe finalizar la sesión del escritorio. Si usted
+                finaliza la sesión de user se finalizará también la sesión del escritorio. Si la sesión
+                del escritorio tenía asignada una sesión de turno, este turno finalizará.
             </p>
 
             <a class="btn btn-primary btn-lg btn-block" routerLink="/assistant/dashboard" role="button">Dashboard</a>

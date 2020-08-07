@@ -4,8 +4,8 @@ import { TicketsService } from 'src/app/services/tickets.service';
 import { WebsocketService } from 'src/app/services/websocket.service';
 import { TicketResponse, Ticket } from '../../../interfaces/ticket.interface';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { interval } from 'rxjs';
-import { take, takeUntil, tap, map } from 'rxjs/operators';
+import { interval, Subscriber, Subscription } from 'rxjs';
+import { take, takeUntil, tap, map, takeWhile } from 'rxjs/operators';
 import { UserService } from 'src/app/services/user.service';
 import { DesktopResponse } from 'src/app/interfaces/desktop.interface';
 
@@ -29,7 +29,9 @@ export class DesktopComponent implements OnInit {
 	idDesk: string;
 	tmWaiting: string = '--:--:--';
 	tmAttention: string = '--:--:--';
+	tmRun: Subscription;
 	message: string;
+	
 
 	constructor(
 		public ticketsService: TicketsService,
@@ -74,7 +76,7 @@ export class DesktopComponent implements OnInit {
 
 			if (waiting.length > 0) { this.message = `Hay ${waiting.length} tickets en espera`; }
 
-			const skills = this.userService.usuario.id_skills;
+			const skills = this.userService.user.id_skills;
 
 			this.pendingTicketsBySkill = [];
 
@@ -87,18 +89,40 @@ export class DesktopComponent implements OnInit {
 			}
 		})
 			.catch(() => {
-				this.message = 'no existen tickets pendientes';
+				this.message = 'Error al obtener los tickets';
 			})
 
 	}
 
-	takeTicket(): void {
+
+	askForEndTicket(): Promise<boolean> {
+		return new Promise((resolve, reject) => {
+			this.snack.open('Desea finalizar el ticket en curso?', 'ACEPTAR', { duration: 10000 }).afterDismissed().subscribe(data => {
+				if (data.dismissedByAction) {
+					this.ticketsService.endTicket(this.ticketsService.myTicket._id).subscribe((resp: TicketResponse) => {
+						this.message = resp.msg;
+						resp.ok ? resolve() : reject();
+					});
+				}
+			});
+		})
+	}
+
+	async takeTicket() {
+
+		if (this.ticketsService.myTicket) {
+			await this.askForEndTicket().then(() => {
+				this.clearSession();
+			}).catch(() => {
+				return;
+			})
+		}
 
 		let cdDesk = this.cdDesk;
 		let idDesk = this.userService.desktop._id;
-		let idAssistant = this.userService.usuario._id;
+		let idAssistant = this.userService.user._id;
 		let idSocketDesk = this.wsService.idSocket;
-
+		
 		this.ticketsService.takeTicket(cdDesk, idDesk, idAssistant, idSocketDesk).subscribe(
 			(resp: TicketResponse) => {
 
@@ -163,12 +187,8 @@ export class DesktopComponent implements OnInit {
 								// finalizo el tiempo de espera del cliente, comienza el tiempo del asistente.
 								const timer_cliente$ = interval(1000);
 								const start_cliente = new Date().getTime();
-								const sub_cliente = timer_cliente$.subscribe(() => {
-									if (!this.ticketsService.myTicket) {
-										sub_cliente.unsubscribe();
-									} else {
-										this.tmAttention = this.ticketsService.getTimeInterval(start_cliente, + new Date());
-									}
+								this.tmRun = timer_cliente$.subscribe((data) => {
+									this.tmAttention = this.ticketsService.getTimeInterval(start_cliente, + new Date());
 								});
 							});
 						});
@@ -207,12 +227,14 @@ export class DesktopComponent implements OnInit {
 		this.ticketsService.chatMessages = [];
 		this.tmWaiting = '--:--:--';
 		this.tmAttention = '--:--:--';
+		this.tmRun.unsubscribe();
 	}
 
 	releaseDesktop(): void {
 		let idDesktop = this.userService.desktop._id
 		this.userService.releaseDesktop(idDesktop).subscribe((data: DesktopResponse) => {
 			if (data.ok) {
+				this.clearSession();
 				this.router.navigate(['assistant/home']);
 			}
 		})

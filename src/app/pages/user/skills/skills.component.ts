@@ -21,9 +21,9 @@ export class SkillsComponent implements OnInit {
 
   ngOnInit(): void {
 
-    if (this.userService.usuario) {
+    if (this.userService.user) {
 
-      this.user = this.userService.usuario;
+      this.user = this.userService.user;
 
       if (this.user.id_company) {
         let idCompany = this.user.id_company._id;

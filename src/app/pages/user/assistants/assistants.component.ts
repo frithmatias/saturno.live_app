@@ -21,9 +21,9 @@ export class AssistantsComponent implements OnInit {
 
   ngOnInit(): void {
 
-    if (this.userService.usuario) {
+    if (this.userService.user) {
 
-      this.user = this.userService.usuario;
+      this.user = this.userService.user;
 
       if (this.user.id_company) {
         let idCompany = this.user.id_company._id;
@@ -62,7 +62,7 @@ export class AssistantsComponent implements OnInit {
 
   updateAssistants(assistant: string): void {
     this.assistantUpdated = assistant;
-    this.readAssistants(this.userService.usuario.id_company._id);
+    this.readAssistants(this.userService.user.id_company._id);
   }
 
   readAssistants(idCompany: string): void {

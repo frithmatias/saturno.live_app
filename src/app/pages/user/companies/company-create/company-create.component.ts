@@ -88,7 +88,7 @@ export class CompanyCreateComponent implements OnInit {
 		}
 
 		const company: any = {
-			id_user: this.userService.usuario._id,
+			id_user: this.userService.user._id,
 			tx_company_name: this.forma.value.company,
 			tx_public_name: this.publicName,
 			cd_city: this.forma.value.city,
@@ -114,14 +114,16 @@ export class CompanyCreateComponent implements OnInit {
 
 			this.userService.createCompany(company).subscribe((data: any) => {
 				this.newCompany.emit(data.company);
-				this.snack.open(data.msg, null, { duration: 5000 });
 				this.forma.reset();
 				formDirective.resetForm();
 				if (data.ok) {
-					this.snack.open('Empresa creada correctamente', 'Aceptar', { duration: 2000 });
+					this.userService.scrollTop();
+					this.snack.open('Empresa creada correctamente', null, { duration: 2000 });
+				} else {
+					this.snack.open(data.msg, null, { duration: 5000 });
 				}
 			},	() => {
-					this.snack.open('Error al crear la empresa', 'Aceptar', { duration: 2000 });
+					this.snack.open('Error al crear la empresa', null, { duration: 2000 });
 				});
 		}
 	}

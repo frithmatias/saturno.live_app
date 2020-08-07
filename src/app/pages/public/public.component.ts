@@ -52,7 +52,7 @@ export class PublicComponent implements OnInit {
 
         },
           (err) => {
-            this.snack.open('No existe la empresa ingresada', 'Aceptar', { duration: 5000 });
+            this.snack.open('No existe la empresa ingresada', 'Aceptar', { duration: 2000 });
             this.router.navigate(['/public'])
           }
         );

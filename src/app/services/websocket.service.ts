@@ -82,7 +82,7 @@ export class WebsocketService {
 		this.listen('actualizar-pantalla').subscribe(data => {
 			this.ticketsService.getTickets();
 			const audio = new Audio();
-			audio.src = '../../assets/new-ticket.mp3';
+			audio.src = '../../assets/bell.wav';
 			audio.load();
 			audio.play();
 		});

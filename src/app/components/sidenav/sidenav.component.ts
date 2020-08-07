@@ -17,23 +17,31 @@ export class SidenavComponent implements OnInit {
   constructor(public userService: UserService) { }
 
   ngOnInit(): void {
-    
-    this.user = this.userService.usuario;
+
+
+    this.user = this.userService.user;
     this.userService.user$.subscribe(data => {
       this.user = data;
     })
 
-    this.companies = this.userService.companies;
-    this.userService.companies$.subscribe(data => {
-      this.companies = data;
-    })
+
+    if(this.user){
+      this.userService.readCompanies(this.user._id)
+      this.companies = this.userService.companies;
+      this.userService.companies$.subscribe(data => {
+        this.companies = data;
+      })
+    }
   }
 
   companySelected(company: Company) {
     this.userService.attachCompany(company).subscribe((data: UserResponse) => {
-      this.userService.usuario = data.user;
-      this.userService.userSource.next(data.user);
-      localStorage.setItem('user', JSON.stringify(data.user));
+      // obtengo el usuario con el nuevo id_company populado
+      if (data.ok) {
+        this.userService.user = data.user;
+        this.userService.userSource.next(data.user);
+        localStorage.setItem('user', JSON.stringify(data.user));
+      }
     })
   }
 

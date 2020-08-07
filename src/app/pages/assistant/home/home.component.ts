@@ -14,6 +14,7 @@ export class HomeComponent implements OnInit {
   desktops: Desktop[] = [];
   desktopsAvailable: Desktop[] = [];
   myDesktop: Desktop;
+  
   user: User;
   constructor(
     private router: Router,
@@ -22,11 +23,13 @@ export class HomeComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    if (this.userService.usuario.id_company._id) {
-      let idCompany = this.userService.usuario.id_company._id;
+
+    if (this.userService.user.id_company._id) {
+      let idCompany = this.userService.user.id_company._id;
       this.readDesktops(idCompany);
     }
 
+    
     this.userService.user$.subscribe(data => {
       if (data) {
         this.readDesktops(data.id_company._id);
@@ -40,8 +43,13 @@ export class HomeComponent implements OnInit {
       return;
     }
 
+    if(this.userService.desktop){
+      this.router.navigate(['/assistant/desktop']);
+      return;
+    }
+
     let idDesktop = desktop._id;
-    let idAssistant = this.userService.usuario._id;
+    let idAssistant = this.userService.user._id;
 
     this.userService.takeDesktop(idDesktop, idAssistant).subscribe((data: DesktopResponse) => {
       this.snack.open(data.msg, null, { duration: 2000 });
@@ -51,7 +59,6 @@ export class HomeComponent implements OnInit {
         this.router.navigate(['/assistant/desktop']);
       } else {
         this.snack.open('No se pudo tomar un escritorio', null, { duration: 2000 });
-
       }
     })
   }
@@ -61,7 +68,7 @@ export class HomeComponent implements OnInit {
       if(data.ok){
         this.desktops = data.desktops;
         this.desktopsAvailable = this.desktops.filter(desktop => desktop.id_assistant === null);
-        this.myDesktop = this.desktops.filter(desktop => desktop.id_assistant === this.userService.usuario._id)[0]
+        this.myDesktop = this.desktops.filter(desktop => desktop.id_assistant?._id === this.userService.user._id)[0]
       }
 
       if (this.myDesktop) {
@@ -77,7 +84,7 @@ export class HomeComponent implements OnInit {
 
   releaseDesktop(desktop: Desktop): void {
     let idDesktop = desktop._id;
-    let idCompany = this.userService.usuario.id_company._id;
+    let idCompany = this.userService.user.id_company._id;
     this.userService.releaseDesktop(idDesktop).subscribe(data => {
       this.readDesktops(idCompany);
     })

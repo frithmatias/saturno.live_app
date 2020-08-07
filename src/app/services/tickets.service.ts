@@ -127,8 +127,8 @@ export class TicketsService {
 
 			if (this.companyData) {
 				id_company = this.companyData._id;
-			} else if (this.userService.usuario) {
-				id_company = this.userService.usuario.id_company._id;
+			} else if (this.userService.user) {
+				id_company = this.userService.user.id_company._id;
 			}
 
 			if (!id_company) {

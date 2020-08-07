@@ -22,7 +22,7 @@ export class ToolbarComponent implements OnInit {
     ) { }
 
   ngOnInit(): void { 
-    this.user = this.userService.usuario;
+    this.user = this.userService.user;
     this.userService.user$.subscribe(data => {
       this.user = data;
     })

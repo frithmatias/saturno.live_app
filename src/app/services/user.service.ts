@@ -20,31 +20,35 @@ export class UserService {
 
 	//assistant || user
 	token: string;
-	usuario: User;
+	user: User;
 	menu: any[] = [];
 	logueado = false;
 	//assistant
 	desktop: Desktop;
-	public companies: Company[];
+	public companies: Company[] = [];
 
 	public companiesSource = new Subject<Company[]>();
 	companies$ = this.companiesSource.asObservable();
-
+	
 	public userSource = new Subject<User>();
 	user$ = this.userSource.asObservable();
 
 
 	constructor(private http: HttpClient, private router: Router) {
 		if (localStorage.getItem('token') && localStorage.getItem('user') && localStorage.getItem('menu')) {
-			this.token = localStorage.getItem('token');
-			this.usuario = JSON.parse(localStorage.getItem('user'));
-			this.userSource.next(this.usuario);
+			this.token = JSON.parse(localStorage.getItem('token'));
 			this.menu = JSON.parse(localStorage.getItem('menu'));
+			let user = JSON.parse(localStorage.getItem('user'));
+			this.pushUser(user);
+
+			if (this.user.id_role === 'USER_ROLE') {
+				this.readCompanies(this.user._id).subscribe(data => {
+					this.companies = data.companies;
+					this.companiesSource.next(data.companies);
+				})
+			}
+
 			this.logueado = true;
-			this.readCompanies(this.usuario._id).subscribe((data: CompaniesResponse) => {
-				this.companies = data.companies;
-				this.companiesSource.next(data.companies);
-			})
 		}
 	}
 
@@ -52,6 +56,12 @@ export class UserService {
 	// ========================================================
 	// User Methods
 	// ========================================================
+
+	pushUser(user: User) {
+		localStorage.setItem('user', JSON.stringify(user));
+		this.user = user;
+		this.userSource.next(this.user);
+	}
 
 	createUser(user: User) {
 		let data = { user };
@@ -66,36 +76,29 @@ export class UserService {
 	}
 
 	getUser(uid: string) {
-		const url = environment.url + '/u/usuarios/' + uid;
+		const url = environment.url + '/u/users/' + uid;
 		const headers = new HttpHeaders({
 			'turnos-token': this.token
 		});
 		return this.http.get(url, { headers }).pipe(
 			map((resp: any) => {
-				return resp.usuario;
+				return resp.user;
 			})
 		);
 	}
 
-	updateUser(usuario: User) {
-		const url = environment.url + '/u/usuarios/' + usuario._id;
+	updateUser(user: User) {
+		const url = environment.url + '/u/users/' + user._id;
 
 		const headers = new HttpHeaders({
 			'turnos-token': this.token
 		});
 
-		return this.http.put(url, usuario, { headers }).pipe(
+		return this.http.put(url, user, { headers }).pipe(
 			map((resp: any) => {
-				this.usuario = resp.usuario;
-				this.userSource.next(resp.usuario);
-				const usuarioDB: User = resp.usuario;
-
-				if (usuario._id === this.usuario._id) {
-					this.setStorage(this.token, usuarioDB, this.menu);
+				if (user._id === this.user._id) {
+					this.pushUser(resp.user);
 				}
-
-				Swal.fire('Usuario actualizado', usuario.tx_name, 'success');
-
 				return true;
 			}),
 			// seccion 17 clase 222, capturo el error con throwError en PROFILE.COMPONENT.TS
@@ -117,7 +120,7 @@ export class UserService {
 			map(resp => {
 				Swal.fire(
 					'Usuario borrado',
-					'El usuario a sido eliminado correctamente',
+					'El user a sido eliminado correctamente',
 					'success'
 				);
 				return true;
@@ -156,7 +159,7 @@ export class UserService {
 			'turnos-token': this.token
 		});
 		let data = { company };
-		let idUser = this.usuario._id;
+		let idUser = this.user._id;
 		const url = environment.url + '/u/attach/' + idUser;
 		return this.http.post(url, data, { headers });
 	}
@@ -172,11 +175,9 @@ export class UserService {
 			'turnos-token': this.token
 		});
 		const url = environment.url + '/c/readcompanies/' + idUser;
-		return this.http.get(url, { headers }).pipe(tap( (data: CompaniesResponse) => {
-		this.companies = data.companies;
-		this.companiesSource.next(data.companies);
-
-		
+		return this.http.get(url, { headers }).pipe(tap((data: CompaniesResponse) => {
+			this.companies = data.companies;
+			this.companiesSource.next(data.companies);
 		}));
 	}
 
@@ -330,17 +331,21 @@ export class UserService {
 	// ========================================================
 
 
-	loginUser(usuario: User, recordar: boolean = false) {
+	loginUser(user: User, recordar: boolean = false) {
 		if (recordar) {
-			localStorage.setItem('email', usuario.tx_email);
+			localStorage.setItem('email', user.tx_email);
 		} else {
 			localStorage.removeItem('email');
 		}
 
 		const url = environment.url + '/u/login';
-		return this.http.post(url, usuario).pipe(
+		return this.http.post(url, user).pipe(
 			map((resp: any) => {
-				this.setStorage(resp.token, resp.usuario, resp.menu);
+				this.token = resp.token;
+				localStorage.setItem('token', JSON.stringify(resp.token));
+				this.menu = resp.menu;
+				localStorage.setItem('menu', JSON.stringify(resp.menu));
+				this.pushUser(resp.user);
 				this.logueado = true;
 				return resp;
 			}),
@@ -354,7 +359,11 @@ export class UserService {
 	loginGoogle(token: string) {
 		const url = environment.url + '/u/google';
 		return this.http.post(url, { token }).pipe(map((resp: any) => {
-			this.setStorage(resp.token, resp.usuario, resp.menu);
+			this.token = resp.token;
+			localStorage.setItem('token', JSON.stringify(resp.token));
+			this.menu = resp.menu;
+			localStorage.setItem('menu', JSON.stringify(resp.menu));
+			this.pushUser(resp.user);
 			this.logueado = true;
 			return true;
 		}),
@@ -382,11 +391,11 @@ export class UserService {
 	}
 
 	estaLogueado() {
-		// si no hay token el usuario no esta logueado
+		// si no hay token el user no esta logueado
 		if ((this.token.length < 5) || (typeof this.token === 'undefined') || (this.token === 'undefined')) {
 			return false;
 		}
-		// si el usuario se logueo en algun momento verifico la expiracion del token
+		// si el user se logueo en algun momento verifico la expiracion del token
 		const payload = JSON.parse(atob(this.token.split('.')[1]));
 		const ahora = new Date().getTime() / 1000;
 
@@ -398,16 +407,6 @@ export class UserService {
 		}
 	}
 
-	setStorage(token: string, usuario: User, menu: any) {
-		this.usuario = usuario;
-		this.userSource.next(usuario);
-		this.token = token;
-		this.menu = menu;
-		localStorage.setItem('token', token);
-		localStorage.setItem('user', JSON.stringify(usuario));
-		localStorage.setItem('menu', JSON.stringify(menu));
-	}
-
 	logout() {
 		if (localStorage.getItem('token')) { localStorage.removeItem('token'); }
 		if (localStorage.getItem('user')) { localStorage.removeItem('user'); }
@@ -416,10 +415,11 @@ export class UserService {
 		if (localStorage.getItem('ticket')) { localStorage.removeItem('ticket'); }
 
 		this.token = '';
-		this.usuario = null;
+		this.user = null;
 		this.userSource.next(null)
 		this.menu = null;
 		this.logueado = false;
+		this.companies = null;
 		this.router.navigate(['/home']);
 	}
 

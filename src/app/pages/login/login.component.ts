@@ -72,21 +72,21 @@ export class LoginComponent implements OnInit {
 			return;
 		}
 
-		const usuario: any = {
+		const user: any = {
 			tx_name: null,
 			tx_email: forma.value.email,
 			tx_password: forma.value.password,
 			id_company: null
 		};
 
-		this.userService.loginUser(usuario, forma.value.recuerdame).subscribe(data => {
-
-			// sólo los asistentes ingresan a una sala de mensajes
-			if (data.usuario.id_role === 'ASSISTANT_ROLE') { this.wsService.emit('enterCompany', data.usuario.id_company._id) };
-			this.router.navigate(['/user']);
+		this.userService.loginUser(user, forma.value.recuerdame).subscribe(data => {
+				if(data.ok){
+					if(data.id_company) { this.wsService.emit('enterCompany', data.user.id_company._id); }
+					this.router.navigate([data.home]);
+				}
 		},
 			err => {
-				this.snack.open(err.error.msg, 'Aceptar', { duration: 5000 });
+				this.snack.open(err.error.msg, null, { duration: 2000 });
 			});
 	}
 
