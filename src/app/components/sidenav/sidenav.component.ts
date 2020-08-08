@@ -18,20 +18,20 @@ export class SidenavComponent implements OnInit {
 
   ngOnInit(): void {
 
-
     this.user = this.userService.user;
     this.userService.user$.subscribe(data => {
       this.user = data;
+      if(this.user){
+        this.userService.readCompanies(this.user._id)
+      }
+    })
+
+    this.companies = this.userService.companies;
+    this.userService.companies$.subscribe(data => {
+      this.companies = data;
     })
 
 
-    if(this.user){
-      this.userService.readCompanies(this.user._id)
-      this.companies = this.userService.companies;
-      this.userService.companies$.subscribe(data => {
-        this.companies = data;
-      })
-    }
   }
 
   companySelected(company: Company) {

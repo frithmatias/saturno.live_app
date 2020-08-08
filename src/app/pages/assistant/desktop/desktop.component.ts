@@ -31,7 +31,7 @@ export class DesktopComponent implements OnInit {
 	tmAttention: string = '--:--:--';
 	tmRun: Subscription;
 	message: string;
-	
+
 
 	constructor(
 		public ticketsService: TicketsService,
@@ -60,31 +60,29 @@ export class DesktopComponent implements OnInit {
 
 	async getTickets() {
 		// traigo todos los tickets
-		await this.ticketsService.getTickets().then(tickets => {
+		await this.ticketsService.getTickets().then((tickets: Ticket[]) => {
 			// verifico si existe un ticket pendiente
 			const pending = tickets.filter(ticket => ticket.cd_desk === this.cdDesk && ticket.tm_end === null)[0]
 
 			if (pending) {
 				this.message = 'Existe un ticket pendiente de resolución'
-				this.snack.open('Existe un ticket pendiente', null, { duration: 2000 });
+				this.snack.open('Existe un ticket pendiente!', null, { duration: 2000 });
 				// this.ticketsService.myTicket = pending;
 				localStorage.setItem('ticket', JSON.stringify(pending));
 			}
 
-			const waiting = tickets.filter(ticket => ticket.tm_end === null);
-			this.pendingTicketsCount = waiting.length;
+			const ticketsWaiting = tickets.filter(ticket => ticket.tm_end === null);
+			this.pendingTicketsCount = ticketsWaiting.length;
 
-			if (waiting.length > 0) { this.message = `Hay ${waiting.length} tickets en espera`; }
-
-			const skills = this.userService.user.id_skills;
-
+			if (ticketsWaiting.length > 0) { this.message = `Hay ${ticketsWaiting.length} tickets en espera`; }
 			this.pendingTicketsBySkill = [];
 
-			for (let skill of skills) {
+			const idSkills = this.userService.user.id_skills;
+			for (let skill of idSkills) {
 				this.pendingTicketsBySkill.push({
 					'cd_skill': skill.cd_skill,
 					'tx_skill': skill.tx_skill,
-					'tickets': waiting.filter(ticket => ticket.id_skill === skill._id && ticket.tm_end === null)
+					'tickets': ticketsWaiting.filter(ticket => ticket.id_skill === skill._id && ticket.tm_end === null)
 				});
 			}
 		})
@@ -122,7 +120,7 @@ export class DesktopComponent implements OnInit {
 		let idDesk = this.userService.desktop._id;
 		let idAssistant = this.userService.user._id;
 		let idSocketDesk = this.wsService.idSocket;
-		
+
 		this.ticketsService.takeTicket(cdDesk, idDesk, idAssistant, idSocketDesk).subscribe(
 			(resp: TicketResponse) => {
 
@@ -222,12 +220,13 @@ export class DesktopComponent implements OnInit {
 	}
 
 	clearSession() {
+		this.getTickets();
 		this.ticketsService.myTicket = null;
 		if (localStorage.getItem('ticket')) { localStorage.removeItem('ticket'); }
 		this.ticketsService.chatMessages = [];
 		this.tmWaiting = '--:--:--';
 		this.tmAttention = '--:--:--';
-		this.tmRun.unsubscribe();
+		if (this.tmRun) { this.tmRun.unsubscribe(); }
 	}
 
 	releaseDesktop(): void {

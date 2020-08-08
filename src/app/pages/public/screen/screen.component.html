@@ -1,4 +1,9 @@
-<div class="row p-3 animated fadeIn">
+<!-- ======================================================== -->
+<!-- TICKETS SCREEN -->
+<!-- ======================================================== -->
+
+<div class="row p-2 animated fadeIn">
+
     <div class="col-md-6" style="min-width: 18rem;">
 
         <!-- ======================================================== -->
@@ -124,15 +129,15 @@
         </div>
 
     </div>
+
 </div>
 
+<!-- ======================================================== -->
+<!-- PUBLIC BUTTONS -->
+<!-- ======================================================== -->
 
 <div class="row">
     <div class="col">
-
-        <!-- ======================================================== -->
-        <!-- PUBLIC PANEL -->
-        <!-- ======================================================== -->
 
         <div *ngIf="ticketsService.myTicket" class="text-center footer-panel">
             <button class="btn btn-danger text-uppercase m-2" (click)="cancelTicket()">Cancelar Turno</button>

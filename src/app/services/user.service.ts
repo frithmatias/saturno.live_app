@@ -331,41 +331,21 @@ export class UserService {
 	// ========================================================
 
 
-	loginUser(user: User, recordar: boolean = false) {
-		if (recordar) {
-			localStorage.setItem('email', user.tx_email);
-		} else {
-			localStorage.removeItem('email');
-		}
+	login(gtoken: string, user: User, recordar: boolean = false) {
+		recordar ? localStorage.setItem('email', user.tx_email) : localStorage.removeItem('email');
+		
+		const api = gtoken ? '/u/google' : '/u/login' 
+		const data = gtoken ? {gtoken} : user;
+		const url = environment.url + api;
 
-		const url = environment.url + '/u/login';
-		return this.http.post(url, user).pipe(
-			map((resp: any) => {
-				this.token = resp.token;
-				localStorage.setItem('token', JSON.stringify(resp.token));
-				this.menu = resp.menu;
-				localStorage.setItem('menu', JSON.stringify(resp.menu));
-				this.pushUser(resp.user);
-				this.logueado = true;
-				return resp;
-			}),
-			// clase 222 seccion 17, manejo de errores
-			catchError(err => {
-				return throwError(err);
-			})
-		);
-	}
-
-	loginGoogle(token: string) {
-		const url = environment.url + '/u/google';
-		return this.http.post(url, { token }).pipe(map((resp: any) => {
+		return this.http.post(url, data).pipe(map((resp: any) => {
 			this.token = resp.token;
-			localStorage.setItem('token', JSON.stringify(resp.token));
 			this.menu = resp.menu;
+			localStorage.setItem('token', JSON.stringify(resp.token));
 			localStorage.setItem('menu', JSON.stringify(resp.menu));
 			this.pushUser(resp.user);
 			this.logueado = true;
-			return true;
+			return resp;
 		}),
 			catchError(err => {
 				return throwError(err);

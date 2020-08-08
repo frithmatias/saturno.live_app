@@ -7,8 +7,6 @@ import { of } from 'rxjs';
 import { AjaxError } from 'rxjs/ajax';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Skill, SkillsResponse } from '../../../../interfaces/skill.interface';
-import { AssistantResponse } from '../../../../interfaces/assistant.interface';
-import { Company, CompaniesResponse } from '../../../../interfaces/company.interface';
 
 @Component({
 	selector: 'app-assistant-create-form',
@@ -46,12 +44,11 @@ export class AssistantCreateFormComponent implements OnInit, OnChanges {
 		if (changes.assistantEdit.currentValue?.id_role === 'USER_ROLE') {
 			this.forma.controls['rol'].disable();
 			this.forma.controls['email'].disable();
-		} else {
-			if (changes.assistantEdit.currentValue?.id_company._id) {
-				this.getSkills(changes.assistantEdit.currentValue.id_company._id);
-			}
 		}
 
+		if (changes.assistantEdit.currentValue?.id_company._id) {
+			this.getSkills(changes.assistantEdit.currentValue.id_company._id);
+		}
 
 		if (changes.assistantEdit.currentValue?.id_company?._id) {
 			this.forma?.patchValue({ idCompany: changes.assistantEdit.currentValue.id_company._id });
@@ -121,12 +118,18 @@ export class AssistantCreateFormComponent implements OnInit, OnChanges {
 		if (this.assistantEdit) {
 			assistant._id = this.assistantEdit._id;
 
-			this.userService.updateAssistant(assistant).subscribe((data: AssistantResponse) => {
-				this.assistantEdit = null;
-				this.updateAssistants.emit(data.assistant._id);
-				this.snack.open(data.msg, null, { duration: 5000 });
-				this.forma.reset();
-				formDirective.resetForm();
+			this.userService.updateAssistant(assistant).subscribe((data: UserResponse) => {
+				if (data.ok) {
+					if (data.user._id === this.userService.user._id) {
+						// push my user edited
+						this.userService.pushUser(data.user)
+					}
+					this.assistantEdit = null;
+					this.updateAssistants.emit(data.user._id);
+					this.snack.open(data.msg, null, { duration: 5000 });
+					this.forma.reset();
+					formDirective.resetForm();
+				}
 			}, (err: HttpErrorResponse) => {
 				this.snack.open(err.error.msg, null, { duration: 5000 });
 			})
@@ -134,8 +137,8 @@ export class AssistantCreateFormComponent implements OnInit, OnChanges {
 		} else {
 
 			this.userService.createAssistant(assistant).subscribe(
-				(data: AssistantResponse) => {
-					this.updateAssistants.emit(data.assistant._id);
+				(data: UserResponse) => {
+					this.updateAssistants.emit(data.user._id);
 					this.snack.open(data.msg, null, { duration: 5000 });
 					this.forma.reset();
 					formDirective.resetForm();

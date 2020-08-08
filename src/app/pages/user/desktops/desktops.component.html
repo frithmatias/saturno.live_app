@@ -1,35 +1,32 @@
-<div class="turno-container p-2" style="text-align: -webkit-center;">
-    <div class="card bg-light mb-3" style="min-width: 18rem; max-width: 30rem;">
-        <div class="m-2 animated fadeIn">
+<div class="animated fadeIn p-2" style="min-width: 18rem; max-width: 30rem;text-align: -webkit-center;">
 
-            <div class="card bg-info lead text-white">
-                <div class="card-header">Escritorios</div>
-                <div class="card-body card-tickets-info table-responsive-sm">
+    <div class="card bg-info lead text-white">
+        <div class="card-header">Escritorios</div>
+        <div class="card-body card-tickets-info table-responsive-sm">
 
-                    <table class="table table-sm text-white">
-                        <tr *ngFor="let desktop of desktops">
-                            <td>{{desktop?.cd_desktop}}</td>
-                            <td style="text-align: right;">
-                                <mat-icon class="ml-2 list-crud-edit" (click)="editDesktop(desktop._id)">edit</mat-icon>
-                                <mat-icon class="ml-2 list-crud-delete" (click)="deleteDesktop(desktop._id)">delete
-                                </mat-icon>
-                            </td>
-                        </tr>
-                    </table>
+            <table class="table table-sm text-white">
+                <tr *ngFor="let desktop of desktops">
+                    <td>{{desktop?.cd_desktop}}</td>
+                    <td style="text-align: right;">
+                        <mat-icon class="ml-2 list-crud-edit" (click)="editDesktop(desktop._id)">edit</mat-icon>
+                        <mat-icon class="ml-2 list-crud-delete" (click)="deleteDesktop(desktop._id)">delete
+                        </mat-icon>
+                    </td>
+                </tr>
+            </table>
 
-                </div>
-            </div>
-
-            <div class="my-4"></div>
-
-            <div class="card lead">
-                <div class="card-header">Alta de Escritorios para {{user.id_company?.tx_company_name}}</div>
-                <div class="card-body">
-
-                    <app-desktop-create-form (desktopCreated)="desktopCreated($event)"></app-desktop-create-form>
-
-                </div>
-            </div>
         </div>
     </div>
+
+    <div class="my-4"></div>
+
+    <div class="card lead">
+        <div class="card-header">Alta de Escritorios para {{user.id_company?.tx_company_name}}</div>
+        <div class="card-body">
+
+            <app-desktop-create-form (desktopCreated)="desktopCreated($event)"></app-desktop-create-form>
+
+        </div>
+    </div>
+
 </div>

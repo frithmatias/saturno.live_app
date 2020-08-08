@@ -1,8 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { UserService } from 'src/app/services/user.service';
-import { MatSnackBar, MatSnackBarRef, MatSnackBarDismiss } from '@angular/material/snack-bar';
+import { MatSnackBar, MatSnackBarDismiss } from '@angular/material/snack-bar';
 import { User, UsersResponse, UserResponse } from '../../../interfaces/user.interface';
-import { AssistantsResponse, Assistant } from '../../../interfaces/assistant.interface';
 
 @Component({
   selector: 'app-assistants',
@@ -10,7 +9,7 @@ import { AssistantsResponse, Assistant } from '../../../interfaces/assistant.int
   styleUrls: ['./assistants.component.css']
 })
 export class AssistantsComponent implements OnInit {
-  assistants: Assistant[];
+  assistants: User[];
   assistantEdit: User;
   assistantUpdated: string;
   user: User;
@@ -20,16 +19,15 @@ export class AssistantsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-
     if (this.userService.user) {
-
+      
       this.user = this.userService.user;
-
+      
       if (this.user.id_company) {
         let idCompany = this.user.id_company._id;
         this.readAssistants(idCompany);
       }
-
+      
       this.userService.user$.subscribe(data => {
         if (data) {
           this.user = data;
@@ -66,8 +64,8 @@ export class AssistantsComponent implements OnInit {
   }
 
   readAssistants(idCompany: string): void {
-    this.userService.readAssistants(idCompany).subscribe((data: AssistantsResponse) => {
-      this.assistants = data.assistants;
+    this.userService.readAssistants(idCompany).subscribe((data: UsersResponse) => {
+      this.assistants = data.users;
     });
   }
 }

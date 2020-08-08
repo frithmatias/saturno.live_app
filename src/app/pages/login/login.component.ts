@@ -52,11 +52,13 @@ export class LoginComponent implements OnInit {
 
 	attachSignin(element) {
 		this.auth2.attachClickHandler(element, {}, googleUser => {
-			const token = googleUser.getAuthResponse().id_token;
-			// googleUser google user data
-			this.userService.loginGoogle(token).subscribe(data => {
-				window.location.href = '#/user';
-				// this.router.navigate(['/user']);				
+			const gtoken = googleUser.getAuthResponse().id_token;
+			this.userService.login(gtoken, null, false).subscribe(data => {
+				if(data.ok){
+					if(data.user.id_company) { this.wsService.emit('enterCompany', data.user.id_company._id); }
+					window.location.href = '#/user';
+					// this.router.navigate(['/user']);				
+				}
 			},
 			);
 		});
@@ -79,9 +81,9 @@ export class LoginComponent implements OnInit {
 			id_company: null
 		};
 
-		this.userService.loginUser(user, forma.value.recuerdame).subscribe(data => {
+		this.userService.login(null , user, forma.value.recuerdame).subscribe(data => {
 				if(data.ok){
-					if(data.id_company) { this.wsService.emit('enterCompany', data.user.id_company._id); }
+					if(data.user.id_company) { this.wsService.emit('enterCompany', data.user.id_company._id); }
 					this.router.navigate([data.home]);
 				}
 		},
