@@ -4,7 +4,7 @@ import { TicketsService } from 'src/app/services/tickets.service';
 import { WebsocketService } from 'src/app/services/websocket.service';
 import { TicketResponse, Ticket } from '../../../interfaces/ticket.interface';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { interval, Subscriber, Subscription } from 'rxjs';
+import { interval, Subscription } from 'rxjs';
 import { take, takeUntil, tap, map, takeWhile } from 'rxjs/operators';
 import { UserService } from 'src/app/services/user.service';
 import { DesktopResponse } from 'src/app/interfaces/desktop.interface';
@@ -59,6 +59,7 @@ export class DesktopComponent implements OnInit {
 	}
 
 	async getTickets() {
+
 		// traigo todos los tickets
 		await this.ticketsService.getTickets().then((tickets: Ticket[]) => {
 			// verifico si existe un ticket pendiente
@@ -66,8 +67,6 @@ export class DesktopComponent implements OnInit {
 
 			if (pending) {
 				this.message = 'Existe un ticket pendiente de resolución'
-				this.snack.open('Existe un ticket pendiente!', null, { duration: 2000 });
-				// this.ticketsService.myTicket = pending;
 				localStorage.setItem('ticket', JSON.stringify(pending));
 			}
 
@@ -78,6 +77,7 @@ export class DesktopComponent implements OnInit {
 			this.pendingTicketsBySkill = [];
 
 			const idSkills = this.userService.user.id_skills;
+
 			for (let skill of idSkills) {
 				this.pendingTicketsBySkill.push({
 					'cd_skill': skill.cd_skill,

@@ -394,12 +394,15 @@ export class UserService {
 		if (localStorage.getItem('desktop')) { localStorage.removeItem('desktop'); }
 		if (localStorage.getItem('ticket')) { localStorage.removeItem('ticket'); }
 
+		this.logueado = false;
 		this.token = '';
+		this.menu = null;
+		
 		this.user = null;
 		this.userSource.next(null)
-		this.menu = null;
-		this.logueado = false;
 		this.companies = null;
+		this.companiesSource.next(null);
+		
 		this.router.navigate(['/home']);
 	}
 

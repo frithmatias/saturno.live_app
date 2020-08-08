@@ -36,8 +36,6 @@ import { LoginGuard } from './guards/login.guard';
 import { GetidstringPipe } from './pipes/getidstring.pipe';
 
 
-
-
 @NgModule({
 	declarations: [
 		AppComponent,

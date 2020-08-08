@@ -1,13 +1,13 @@
-<div class="animated fadeIn p-2" style="min-width: 18rem; max-width: 30rem;text-align: -webkit-center;">
+<div class="animated fadeIn p-2" style="min-width: 18rem; max-width: 30rem;">
 
     <div class="card bg-primary lead text-white">
         <div class="card-header">Asistentes</div>
         <div class="card-body card-tickets-info table-responsive-sm">
 
-            <table class="table table-sm text-white">
+            <table class="table table-sm text-white" id="wt-form">
                 <tr *ngFor="let assistant of assistants">
 
-                    <td>{{assistant?.tx_name}} </td>
+                    <td>{{assistant?.tx_name | wordMaxLength : 8}} </td>
                     <td>
                         <span *ngIf="assistant._id===assistantUpdated">
                             <mat-icon class="ml-2 list-crud-edit">check</mat-icon>

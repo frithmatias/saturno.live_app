@@ -1,18 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { UserService } from 'src/app/services/user.service';
 import { MatSnackBar, MatSnackBarDismiss } from '@angular/material/snack-bar';
 import { User, UsersResponse, UserResponse } from '../../../interfaces/user.interface';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-assistants',
   templateUrl: './assistants.component.html',
   styleUrls: ['./assistants.component.css']
 })
-export class AssistantsComponent implements OnInit {
+export class AssistantsComponent implements OnInit, OnDestroy {
   assistants: User[];
   assistantEdit: User;
   assistantUpdated: string;
   user: User;
+  userSubscription: Subscription;
+
   constructor(
     private userService: UserService,
     private snack: MatSnackBar
@@ -28,7 +31,7 @@ export class AssistantsComponent implements OnInit {
         this.readAssistants(idCompany);
       }
       
-      this.userService.user$.subscribe(data => {
+      this.userSubscription = this.userService.user$.subscribe(data => {
         if (data) {
           this.user = data;
           if (data.id_company) { this.readAssistants(data.id_company._id); }
@@ -67,5 +70,9 @@ export class AssistantsComponent implements OnInit {
     this.userService.readAssistants(idCompany).subscribe((data: UsersResponse) => {
       this.assistants = data.users;
     });
+  }
+
+  ngOnDestroy(): void {
+    this.userSubscription.unsubscribe();
   }
 }

@@ -125,9 +125,9 @@ export class TicketsService {
 
 			let id_company: string;
 
-			if (this.companyData) {
+			if (this.companyData) { // public 
 				id_company = this.companyData._id;
-			} else if (this.userService.user) {
+			} else if (this.userService.user) { // user / assistant
 				id_company = this.userService.user.id_company._id;
 			}
 
@@ -148,7 +148,7 @@ export class TicketsService {
 			).subscribe((data: Ticket[]) => {
 
 				if (data.length === 0) {
-					reject();
+					resolve(data);
 					return;
 				}
 				// !obtiene los tickets antes de que el servicio de sockets pueda actualizar el id_socket
@@ -156,9 +156,7 @@ export class TicketsService {
 				this.ticketsCall = data.filter(ticket => ticket.tm_att !== null);
 				this.ticketsTail = [...this.ticketsCall].sort((a: Ticket, b: Ticket) => -1).slice(0, TAIL_LENGTH);
 				this.lastTicket = this.ticketsTail[0];
-				
-				
-				
+
 				// update ticket
 				if (this.myTicket) {
 					const myUpdatedTicket = this.ticketsAll.filter(ticket => ticket._id === this.myTicket._id)[0];

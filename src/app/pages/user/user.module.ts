@@ -21,6 +21,7 @@ import { SkillsComponent } from './skills/skills.component';
 import { SkillCreateFormComponent } from './skills/skill-create-form/skill-create-form.component';
 import { CompaniesComponent } from './companies/companies.component';
 import { CompanyCreateComponent } from './companies/company-create/company-create.component';
+import { WordMaxLengthPipe } from '../../pipes/word-max-length.pipe';
 
 
 @NgModule({
@@ -37,7 +38,9 @@ import { CompanyCreateComponent } from './companies/company-create/company-creat
 		SkillsComponent,
 		SkillCreateFormComponent,
 		CompaniesComponent,
-		CompanyCreateComponent
+		CompanyCreateComponent,
+		WordMaxLengthPipe
+
 	],
 	imports: [
 		CommonModule,

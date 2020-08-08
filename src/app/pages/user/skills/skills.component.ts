@@ -1,19 +1,22 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges, ViewChild, OnDestroy } from '@angular/core';
 import { MatSnackBar, MatSnackBarDismiss } from '@angular/material/snack-bar';
 import { UserService } from 'src/app/services/user.service';
 import { Skill, SkillsResponse, SkillResponse } from '../../../interfaces/skill.interface';
 import { MatStepper } from '@angular/material/stepper';
 import { User } from 'src/app/interfaces/user.interface';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-skills',
   templateUrl: './skills.component.html',
   styleUrls: ['./skills.component.css']
 })
-export class SkillsComponent implements OnInit {
+export class SkillsComponent implements OnInit, OnDestroy {
 
   skills: Skill[];
   user: User;
+  userSubscription: Subscription;
+
   constructor(
     private userService: UserService,
     private snack: MatSnackBar
@@ -30,7 +33,7 @@ export class SkillsComponent implements OnInit {
         this.readSkills(idCompany);
       }
 
-      this.userService.user$.subscribe(data => {
+      this.userSubscription = this.userService.user$.subscribe(data => {
         if (data) {
           this.user = data;
           if (data.id_company) { this.readSkills(data.id_company._id); }
@@ -71,5 +74,9 @@ export class SkillsComponent implements OnInit {
     this.userService.readSkills(idCompany).subscribe((data: SkillsResponse) => {
       this.skills = data.skills;
     });
+  }
+
+  ngOnDestroy(): void {
+    this.userSubscription.unsubscribe();
   }
 }

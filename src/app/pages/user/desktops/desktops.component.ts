@@ -1,17 +1,21 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { UserService } from '../../../services/user.service';
 import { MatSnackBar, MatSnackBarDismiss } from '@angular/material/snack-bar';
 import { Desktop, DesktopsResponse, DesktopResponse } from '../../../interfaces/desktop.interface';
 import { User } from 'src/app/interfaces/user.interface';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-desktops',
   templateUrl: './desktops.component.html',
   styleUrls: ['./desktops.component.css']
 })
-export class DesktopsComponent implements OnInit {
+export class DesktopsComponent implements OnInit, OnDestroy {
+
   desktops: Desktop[];
   user: User;
+  userSubscription: Subscription;
+
   constructor(
     private userService: UserService,
     private snack: MatSnackBar
@@ -28,7 +32,7 @@ export class DesktopsComponent implements OnInit {
         this.readDesktops(idCompany);
       }
 
-      this.userService.user$.subscribe(data => {
+      this.userSubscription = this.userService.user$.subscribe(data => {
         if (data) {
           this.user = data;
           if (data.id_company) { this.readDesktops(data.id_company._id); }
@@ -65,5 +69,9 @@ export class DesktopsComponent implements OnInit {
     this.userService.readDesktops(idCompany).subscribe((data: DesktopsResponse) => {
       this.desktops = data.desktops;
     });
+  }
+
+  ngOnDestroy(): void {
+    this.userSubscription.unsubscribe();
   }
 }
