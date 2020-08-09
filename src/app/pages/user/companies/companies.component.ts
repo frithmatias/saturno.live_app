@@ -51,7 +51,7 @@ export class CompaniesComponent implements OnInit, OnDestroy {
   }
 
   deleteCompany(idCompany: string): void {
-    this.snack.open('Desea eliminar el asistente?', 'ELIMINAR', { duration: 10000 }).afterDismissed().subscribe((data: MatSnackBarDismiss) => {
+    this.snack.open('Desea eliminar la empresa?', 'ELIMINAR', { duration: 10000 }).afterDismissed().subscribe((data: MatSnackBarDismiss) => {
       if (data.dismissedByAction) {
         this.userService.deleteCompany(idCompany).subscribe((data: CompanyResponse) => {
           this.snack.open(data.msg, null, { duration: 2000 });

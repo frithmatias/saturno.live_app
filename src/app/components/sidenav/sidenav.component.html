@@ -1,7 +1,7 @@
 <div>
     <mat-form-field *ngIf="companies?.length > 0" color="warn" appearance="fill" class="w-100">
         <mat-label>Seleccione una empresa</mat-label>
-        <mat-select formControlName="idCompany" [value]="companySelected" name="idCompany" #selectDesktop matNativeControl required>
+        <mat-select formControlName="idCompany" [value]="user.id_company?._id" name="idCompany" #selectDesktop matNativeControl required>
             <mat-option *ngFor="let company of companies" [value]="company._id" (click)="attachCompany(company)">
                 {{company.tx_company_name}}
             </mat-option>

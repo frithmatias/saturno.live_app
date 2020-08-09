@@ -127,7 +127,7 @@ export class AssistantCreateFormComponent implements OnInit, OnChanges {
 					this.assistantEdit = null;
 					this.updateAssistants.emit(data.user._id);
 					this.snack.open(data.msg, null, { duration: 5000 });
-					this.forma.reset();
+					this.resetForm(formDirective);
 					formDirective.resetForm();
 				}
 			}, (err: HttpErrorResponse) => {
@@ -140,7 +140,7 @@ export class AssistantCreateFormComponent implements OnInit, OnChanges {
 				(data: UserResponse) => {
 					this.updateAssistants.emit(data.user._id);
 					this.snack.open(data.msg, null, { duration: 5000 });
-					this.forma.reset();
+					this.resetForm(formDirective);
 					formDirective.resetForm();
 				}, (err: HttpErrorResponse) => {
 					this.snack.open(err.error.msg, null, { duration: 5000 });

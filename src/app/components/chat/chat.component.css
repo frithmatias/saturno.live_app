@@ -13,8 +13,9 @@
     position: fixed;
     bottom: 0px;
     left: 0px;
-    width: 100%;
-    margin: .5rem;
+    width: 110%;
+    padding: .5rem;
+    background-color: darkslategrey;
 }
 .send-button {
     color: white;
@@ -31,16 +32,22 @@
 
 .message {
     background-color: lightskyblue;
-    padding: 0.5em;
-    font-size: large;
+    padding: 0.7em;
+    font-size: medium;
+    font-weight: 200;
     float: left;
     border-radius: 10px;
-    width: 82%;
+    min-width: 18rem; 
+    max-width: 30rem;
+    margin-right: 50%;
+    margin-left: 10px;
 }
 
 .message-me {
     background-color: lightgoldenrodyellow;
     float: right;
+    margin-right: 10px;
+    margin-left: 50%;
 }
 
 .message-time {

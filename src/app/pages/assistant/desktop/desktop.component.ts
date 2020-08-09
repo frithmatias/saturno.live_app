@@ -62,6 +62,7 @@ export class DesktopComponent implements OnInit {
 
 		// traigo todos los tickets
 		await this.ticketsService.getTickets().then((tickets: Ticket[]) => {
+
 			// verifico si existe un ticket pendiente
 			const pending = tickets.filter(ticket => ticket.cd_desk === this.cdDesk && ticket.tm_end === null)[0]
 

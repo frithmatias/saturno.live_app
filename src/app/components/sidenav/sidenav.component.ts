@@ -13,8 +13,7 @@ import { Subscription } from 'rxjs';
 export class SidenavComponent implements OnInit, OnDestroy {
   events: string[] = [];
   opened: boolean;
-  companySelected: string;
-  
+
   user: User;
   userSubscription: Subscription;
 
@@ -23,22 +22,27 @@ export class SidenavComponent implements OnInit, OnDestroy {
   constructor(public userService: UserService) { }
 
   ngOnInit(): void {
-
     this.user = this.userService.user;
-    
-    this.userSubscription = this.userService.user$.subscribe(data => {
-      this.user = data;
-      if(this.user){
-        this.user.id_company?._id ? this.companySelected = this.user.id_company._id : 'not_assigned';
-        this.userService.readCompanies(this.user._id)
-      }
-    })
+    if(this.user){
+      this.readCompanies();
+        // subscriptions
+      this.userSubscription = this.userService.user$.subscribe((user: User) => {
+        this.user = user;
+        this.readCompanies();
+      });
+      this.companiesSubscription = this.userService.companies$.subscribe((data: Company[]) => {
+        this.companies = data;
+      })
+    }
+  }
 
-    this.companies = this.userService.companies;
-    this.userService.companies$.subscribe(data => {
-      this.companies = data;
-    })
-
+  readCompanies(): void {
+    if(this.user){
+      let idUser = this.user._id;
+      this.userService.readCompanies(idUser).subscribe((data: CompaniesResponse) => {
+        this.companies = data.companies;
+      });
+    }
   }
 
   attachCompany(company: Company) {

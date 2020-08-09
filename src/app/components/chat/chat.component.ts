@@ -1,7 +1,7 @@
-import { Component, OnInit, Output, EventEmitter, Input, SimpleChange } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, SimpleChange, OnDestroy } from '@angular/core';
 import { WebsocketService } from '../../services/websocket.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { timer } from 'rxjs';
+import { timer, Subscription } from 'rxjs';
 import { TicketsService } from '../../services/tickets.service';
 
 @Component({
@@ -9,12 +9,12 @@ import { TicketsService } from '../../services/tickets.service';
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.css']
 })
-export class ChatComponent implements OnInit {
+export class ChatComponent implements OnInit, OnDestroy {
   @Input() chatOpenStatus: boolean;
   @Output() unreadMessages: EventEmitter<number> = new EventEmitter();
   @Output() toggleChat: EventEmitter<boolean> = new EventEmitter();
   chatOpen: boolean;
-  
+  timerSubscription: Subscription;
   constructor(
     private wsService: WebsocketService, 
     private snack: MatSnackBar, 
@@ -77,7 +77,7 @@ export class ChatComponent implements OnInit {
 
   scrollTop(): void {
     // espero 100ms por la demora del template en renderear los mensajes.
-    const interval$ = timer(100).subscribe(() => {
+    this.timerSubscription = timer(100).subscribe(() => {
       const chatref = document.getElementById('chatmessages');
       chatref.scrollTop = chatref.scrollHeight - chatref.clientHeight;
     })
@@ -85,6 +85,10 @@ export class ChatComponent implements OnInit {
 
   closeChat(): void {
     this.toggleChat.emit(true);
+  }
+
+  ngOnDestroy(): void {
+    this.timerSubscription.unsubscribe();
   }
 
 }
