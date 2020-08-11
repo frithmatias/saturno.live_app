@@ -8,6 +8,7 @@ import { interval, Subscription } from 'rxjs';
 import { take, takeUntil, tap, map, takeWhile } from 'rxjs/operators';
 import { UserService } from 'src/app/services/user.service';
 import { DesktopResponse } from 'src/app/interfaces/desktop.interface';
+import { Skill, SkillsResponse } from 'src/app/interfaces/skill.interface';
 
 const DESK_TIMEOUT = 10; // 60 segundos
 const DESK_EXTRATIME = 20; // 120 segundos
@@ -31,7 +32,8 @@ export class DesktopComponent implements OnInit {
 	tmAttention: string = '--:--:--';
 	tmRun: Subscription;
 	message: string;
-
+	skills: Skill[] = [];
+	skillSelected: string = '';
 
 	constructor(
 		public ticketsService: TicketsService,
@@ -41,17 +43,14 @@ export class DesktopComponent implements OnInit {
 		private router: Router
 	) { }
 
-	ngOnInit() {
+	async ngOnInit() {
 
-		if (this.userService.desktop?.cd_desktop) {
-			this.cdDesk = this.userService.desktop.cd_desktop;
-		} else {
-			this.snack.open('No tiene un escritorio asignado', null, { duration: 2000 })
-			this.router.navigate(['/assistant/home']);
-		}
+		await this.readSkills().then((data: Skill[]) => {
+			this.skills = data;
+		}).catch(() => { this.snack.open('Error al obtener los skills', null, { duration: 2000 }); })
 
-		this.getTickets();
-		// obtengo la cantidad de tickets en cola al generar un nuevo turno.
+		await this.getTickets();
+
 		this.wsService.escucharTurnos().subscribe(data => {
 			this.getTickets();
 		});
@@ -61,38 +60,95 @@ export class DesktopComponent implements OnInit {
 	async getTickets() {
 
 		// traigo todos los tickets
-		await this.ticketsService.getTickets().then((tickets: Ticket[]) => {
+		return this.ticketsService.getTickets()
+			.then((tickets: Ticket[]) => {
+				// verifico si existe un ticket anterior pendiente 
+				const pending = tickets.filter(ticket =>
+					ticket.id_desk === this.userService.desktop._id &&
+					ticket.tm_end === null &&
+					ticket.id_child === null
+				)[0]
+				if (pending) {
+					this.message = 'Existe un ticket pendiente de resolución'
+					localStorage.setItem('ticket', JSON.stringify(pending));
+				}
 
-			// verifico si existe un ticket pendiente
-			const pending = tickets.filter(ticket => ticket.cd_desk === this.cdDesk && ticket.tm_end === null)[0]
+				let skillsCompany = this.skills;
+				let skillsAssistant = [];
+				this.userService.user.id_skills.forEach(skill => skillsAssistant.push(skill._id));
 
-			if (pending) {
-				this.message = 'Existe un ticket pendiente de resolución'
-				localStorage.setItem('ticket', JSON.stringify(pending));
-			}
+				const ticketsWaitingAssistant = tickets.filter(ticket => ticket.tm_end === null && ticket.id_child === null && skillsAssistant.includes(ticket.id_skill._id));
+				const ticketsWaitingTeam = tickets.filter(ticket => ticket.tm_end === null && ticket.id_child === null);
 
-			const ticketsWaiting = tickets.filter(ticket => ticket.tm_end === null);
-			this.pendingTicketsCount = ticketsWaiting.length;
+				this.pendingTicketsCount = ticketsWaitingAssistant.length;
 
-			if (ticketsWaiting.length > 0) { this.message = `Hay ${ticketsWaiting.length} tickets en espera`; }
-			this.pendingTicketsBySkill = [];
+				if (ticketsWaitingAssistant.length > 0) { this.message = `Hay ${ticketsWaitingAssistant.length} tickets en espera`; }
 
-			const idSkills = this.userService.user.id_skills;
+				// table pending skills
+				this.pendingTicketsBySkill = [];
+				// const idSkills = this.userService.user.id_skills;
 
-			for (let skill of idSkills) {
-				this.pendingTicketsBySkill.push({
-					'cd_skill': skill.cd_skill,
-					'tx_skill': skill.tx_skill,
-					'tickets': ticketsWaiting.filter(ticket => ticket.id_skill === skill._id && ticket.tm_end === null)
-				});
-			}
-		})
+				for (let skillCompany of skillsCompany) {
+					this.pendingTicketsBySkill.push({
+						'id': skillCompany._id,
+						'assigned': skillsAssistant.includes(skillCompany._id),
+						'cd_skill': skillCompany.cd_skill,
+						'tx_skill': skillCompany.tx_skill,
+						'tickets': ticketsWaitingTeam.filter(ticket => ticket.id_skill._id === skillCompany._id && ticket.tm_end === null)
+					});
+				}
+
+			})
 			.catch(() => {
 				this.message = 'Error al obtener los tickets';
 			})
 
 	}
 
+	clearSession() {
+		this.getTickets();
+		this.ticketsService.myTicket = null;
+		if (localStorage.getItem('ticket')) { localStorage.removeItem('ticket'); }
+		this.ticketsService.chatMessages = [];
+		this.tmWaiting = '--:--:--';
+		this.tmAttention = '--:--:--';
+		if (this.tmRun) { this.tmRun.unsubscribe(); }
+	}
+
+	async releaseDesktop() {
+
+		if (this.ticketsService.myTicket) {
+			await this.askForEndTicket().then(() => {
+				let idDesktop = this.userService.desktop._id
+				this.userService.releaseDesktop(idDesktop).subscribe((data: DesktopResponse) => {
+					if (data.ok) {
+						this.clearSession();
+						this.router.navigate(['assistant/home']);
+					}
+				})
+			}).catch(() => {
+				return;
+			})
+		}
+
+	}
+
+	readSkills(): Promise<Skill[]> {
+		return new Promise((resolve, reject) => {
+			let idCompany = this.userService.user.id_company?._id;
+			this.userService.readSkills(idCompany).subscribe((data: SkillsResponse) => {
+				if (data.ok) {
+					resolve(data.skills);
+				} else {
+					reject([])
+				}
+			})
+		})
+	}
+
+	// ========================================================
+	// Assistant Actions
+	// ========================================================
 
 	askForEndTicket(): Promise<boolean> {
 		return new Promise((resolve, reject) => {
@@ -138,6 +194,7 @@ export class DesktopComponent implements OnInit {
 
 					this.waitForClient = true;
 					this.message = '';
+
 					this.ticketsService.myTicket = resp.ticket;
 					localStorage.setItem('ticket', JSON.stringify(resp.ticket));
 
@@ -198,45 +255,60 @@ export class DesktopComponent implements OnInit {
 
 	}
 
-	assignTicket(): void {
+	async releaseTicket() {
+
+		if (this.ticketsService.myTicket) {
+			await this.askForEndTicket().then(() => {
+				let idTicket = this.ticketsService.myTicket._id;
+				this.ticketsService.releaseTicket(idTicket).subscribe((resp: TicketResponse) => {
+
+					if (resp.ok) {
+						this.clearSession();
+						this.message = resp.msg;
+					}
+				})
+			}).catch(() => {
+				return;
+			})
+		}
 
 	}
 
-	releaseTicket(): void {
-		this.ticketsService.releaseTicket(this.ticketsService.myTicket._id).subscribe((resp: TicketResponse) => {
-			if (resp.ok) {
-				this.clearSession();
-				this.message = resp.msg;
-			}
-		})
+	async reassignTicket() {
+
+		if (this.ticketsService.myTicket) {
+			await this.askForEndTicket().then(() => {
+				let idTicket = this.ticketsService.myTicket?._id;
+				let idSkill = this.skillSelected;
+				if (idTicket && idSkill) {
+					this.ticketsService.reassignTicket(idTicket, idSkill).subscribe((resp: TicketResponse) => {
+						if (resp.ok) {
+							this.clearSession();
+							this.message = resp.msg;
+						}
+					});
+				}
+			}).catch(() => {
+				return;
+			})
+		}
+
 	}
 
-	endTicket(): void {
-		this.ticketsService.endTicket(this.ticketsService.myTicket._id).subscribe((resp: TicketResponse) => {
-			if (resp.ok) {
-				this.clearSession();
-				this.message = resp.msg;
-			}
-		})
+	async endTicket() {
+
+		if (this.ticketsService.myTicket) {
+			await this.askForEndTicket().then(() => {
+				this.ticketsService.endTicket(this.ticketsService.myTicket._id).subscribe((resp: TicketResponse) => {
+					if (resp.ok) {
+						this.clearSession();
+						this.message = resp.msg;
+					}
+				})
+			}).catch(() => {
+				return;
+			})
+		}
 	}
 
-	clearSession() {
-		this.getTickets();
-		this.ticketsService.myTicket = null;
-		if (localStorage.getItem('ticket')) { localStorage.removeItem('ticket'); }
-		this.ticketsService.chatMessages = [];
-		this.tmWaiting = '--:--:--';
-		this.tmAttention = '--:--:--';
-		if (this.tmRun) { this.tmRun.unsubscribe(); }
-	}
-
-	releaseDesktop(): void {
-		let idDesktop = this.userService.desktop._id
-		this.userService.releaseDesktop(idDesktop).subscribe((data: DesktopResponse) => {
-			if (data.ok) {
-				this.clearSession();
-				this.router.navigate(['assistant/home']);
-			}
-		})
-	}
 }

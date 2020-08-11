@@ -16,7 +16,8 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatExpansionModule } from '@angular/material/expansion';
-
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatRadioModule } from '@angular/material/radio'; 
 @NgModule({
 	declarations: [],
 	imports: [
@@ -34,7 +35,9 @@ import { MatExpansionModule } from '@angular/material/expansion';
 		MatAutocompleteModule,
 		MatMenuModule,
 		MatSlideToggleModule,
-		MatExpansionModule
+		MatExpansionModule,
+		MatCheckboxModule,
+		MatRadioModule
 	],
 	exports: [
 		MatStepperModule,
@@ -51,7 +54,9 @@ import { MatExpansionModule } from '@angular/material/expansion';
 		MatAutocompleteModule,
 		MatMenuModule,
 		MatSlideToggleModule,
-		MatExpansionModule
+		MatExpansionModule,
+		MatCheckboxModule,
+		MatRadioModule
 	]
 })
 export class MaterialModule { }

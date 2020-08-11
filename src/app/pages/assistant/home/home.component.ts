@@ -4,6 +4,7 @@ import { Desktop, DesktopsResponse, DesktopResponse } from 'src/app/interfaces/d
 import { UserService } from 'src/app/services/user.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { User } from 'src/app/interfaces/user.interface';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -14,7 +15,7 @@ export class HomeComponent implements OnInit {
   desktops: Desktop[] = [];
   desktopsAvailable: Desktop[] = [];
   myDesktop: Desktop;
-  
+  userSuscription: Subscription
   user: User;
   constructor(
     private router: Router,
@@ -24,17 +25,18 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
 
-    if (this.userService.user.id_company._id) {
+    if (this.userService.user.id_company?._id) {
       let idCompany = this.userService.user.id_company._id;
       this.readDesktops(idCompany);
     }
 
     
-    this.userService.user$.subscribe(data => {
+    this.userSuscription = this.userService.user$.subscribe(data => {
       if (data) {
         this.readDesktops(data.id_company._id);
       }
     })
+
   }
 
   takeDesktop(desktop: Desktop): void {
@@ -65,6 +67,7 @@ export class HomeComponent implements OnInit {
 
   readDesktops(idCompany: string): void {
     this.userService.readDesktops(idCompany).subscribe((data: DesktopsResponse) => {
+
       if(data.ok){
         this.desktops = data.desktops;
         this.desktopsAvailable = this.desktops.filter(desktop => desktop.id_assistant === null);
@@ -88,5 +91,9 @@ export class HomeComponent implements OnInit {
     this.userService.releaseDesktop(idDesktop).subscribe(data => {
       this.readDesktops(idCompany);
     })
+  }
+
+  ngOnDestroy(): void {
+    this.userSuscription.unsubscribe();
   }
 }

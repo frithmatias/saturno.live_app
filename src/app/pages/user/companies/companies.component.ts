@@ -57,6 +57,7 @@ export class CompaniesComponent implements OnInit, OnDestroy {
           this.snack.open(data.msg, null, { duration: 2000 });
           this.companies = this.companies.filter(company => company._id != idCompany);
           this.userService.companies = this.companies;
+          this.userService.companiesSource.next(this.companies);
           if (idCompany === this.user.id_company?._id) {
             this.user.id_company = null;
             localStorage.setItem('user', JSON.stringify(this.user));

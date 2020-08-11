@@ -1,18 +1,18 @@
+import { Skill } from 'src/app/interfaces/skill.interface';
 // ========================================================
 // TICKET
 // ========================================================
 
 export interface Ticket {
-	id_ticket: number;
+	id_parent: string | null;
+	id_child: string | null;
+	cd_number: number;
 	id_socket: string;
 	id_socket_desk: string | null;
 	id_desk: string | null;
-	cd_desk: string | null;
 	id_assistant: string | null;
 	id_company: string;
-	id_skill: string;
-	cd_skill: string;
-	tx_status: string;
+	id_skill: Skill;
 	tm_start: number;
 	tm_att: number | null;
 	tm_end: number | null;
@@ -24,7 +24,6 @@ export interface TicketResponse {
 	msg: string;
 	ticket: Ticket | null;
 }
-
 
 export interface TicketsResponse {
 	ok: boolean;

@@ -1,7 +1,7 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment.prod';
-import { map, catchError, take } from 'rxjs/operators';
+import { map, catchError } from 'rxjs/operators';
 import { Ticket, TicketsResponse } from '../interfaces/ticket.interface';
 import { AjaxError } from 'rxjs/ajax';
 import { of, Observable, interval } from 'rxjs';
@@ -59,7 +59,6 @@ export class TicketsService {
 		return this.http.get<SkillsResponse>(environment.url + '/s/readskillsuser/' + idUser);
 	}
 
-
 	clearPublicSession(): void {
 		this.chatMessages = [];
 		this.myTicket = null;
@@ -73,10 +72,9 @@ export class TicketsService {
 		return this.http.put(environment.url + '/t/actualizarsocket', socketsData);
 	}
 
-	nuevoTicket(idCompany: string, idSkill: string, cdSkill: string, idSocket: string): Observable<object> {
-		let data = { idCompany, idSkill, cdSkill, idSocket };
-
-		return this.http.post(environment.url + '/t/nuevoticket/', data);
+	createTicket(idSkill: string, idSocket: string): Observable<object> {
+		let data = { idSkill, idSocket };
+		return this.http.post(environment.url + '/t/createticket/', data);
 	}
 
 	cancelTicket(idTicket: string) {
@@ -108,6 +106,15 @@ export class TicketsService {
 			'turnos-token': this.userService.token
 		});
 		const url = environment.url + '/t/releaseticket';
+		return this.http.post(url, data, { headers });
+	}
+
+	reassignTicket(idTicket: string, idSkill: string): Observable<object> {
+		const data = { idTicket, idSkill };
+		const headers = new HttpHeaders({
+			'turnos-token': this.userService.token
+		});
+		const url = environment.url + '/t/reassignticket';
 		return this.http.post(url, data, { headers });
 	}
 
@@ -159,7 +166,9 @@ export class TicketsService {
 
 				// update ticket
 				if (this.myTicket) {
-					const myUpdatedTicket = this.ticketsAll.filter(ticket => ticket._id === this.myTicket._id)[0];
+					const myUpdatedTicket = this.ticketsAll.filter(ticket => 
+						((ticket._id === this.myTicket._id && ticket.id_child === null) || 
+						(ticket.id_parent === this.myTicket._id && ticket.id_child === null)))[0];
 
 					if (myUpdatedTicket) {
 						this.myTicket = myUpdatedTicket;

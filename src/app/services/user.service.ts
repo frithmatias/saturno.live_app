@@ -20,16 +20,16 @@ export class UserService {
 
 	//assistant || user
 	token: string;
-	user: User;
 	menu: any[] = [];
 	logueado = false;
 	//assistant
 	desktop: Desktop;
+	
 	public companies: Company[] = [];
-
 	public companiesSource = new Subject<Company[]>();
 	companies$ = this.companiesSource.asObservable();
 	
+	public user: User;
 	public userSource = new Subject<User>();
 	user$ = this.userSource.asObservable();
 
@@ -252,14 +252,6 @@ export class UserService {
 			'turnos-token': this.token
 		});
 		const url = environment.url + '/d/readdesktops/' + idCompany;
-		return this.http.get(url, { headers });
-	}
-
-	readDesktopsUser(idUser: string) {
-		const headers = new HttpHeaders({
-			'turnos-token': this.token
-		});
-		const url = environment.url + '/d/readdesktopsuser/' + idUser;
 		return this.http.get(url, { headers });
 	}
 

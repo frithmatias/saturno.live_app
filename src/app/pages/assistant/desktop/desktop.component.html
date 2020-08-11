@@ -30,8 +30,8 @@
             </div>
             <div class="row">
               <div class="col xxxxl">
-                {{ ticketsService.myTicket.cd_skill }}
-                {{ ticketsService.myTicket.id_ticket }}
+                {{ ticketsService.myTicket.id_skill.cd_skill }}
+                {{ ticketsService.myTicket.cd_number }}
               </div>
             </div>
           </div>
@@ -64,32 +64,45 @@
             </div>
           </div>
 
+          <!------------------------------>
+          <!-- ACTIONS -->
+          <!------------------------------>
+
           <div class="content">
             <hr class="my-1">
             <div class="row" style="justify-content: space-between;">
 
-              <div class="col col-6 col-md-3 p-1">
-                <button class="btn btn-block btn-danger" (click)="releaseTicket()" [disabled]="waitForClient || !ticketsService.myTicket">
-                  Soltar
-                </button>
-              </div>
+
+
 
               <div class="col col-6 col-md-3 p-1">
-                <button class="btn btn-block btn-info" (click)="assignTicket()" [disabled]="true">
+                <button class="btn btn-block btn-info" (click)="reassignTicket()"
+                  [ngClass]="{'button-disabled': waitForClient || !ticketsService.myTicket || skillSelected === ''}"
+                  [disabled]="waitForClient || !ticketsService.myTicket || skillSelected === ''">
                   Reasignar
                 </button>
               </div>
 
               <div class="col col-6 col-md-3 p-1">
-                <button class="btn btn-block btn-primary" (click)="endTicket()"
-                  [disabled]="!ticketsService.myTicket || waitForClient">
-                  Finalizar
+                <button class="btn btn-block btn-success" (click)="takeTicket()"
+                  [ngClass]="{'button-disabled': waitForClient }" [disabled]="waitForClient">
+                  Siguiente
                 </button>
               </div>
 
               <div class="col col-6 col-md-3 p-1">
-                <button class="btn btn-block btn-success" (click)="takeTicket()" [disabled]="waitForClient">
-                  Siguiente
+                <button class="btn btn-block btn-danger" (click)="releaseTicket()"
+                  [ngClass]="{'button-disabled': waitForClient || !ticketsService.myTicket }"
+                  [disabled]="waitForClient || !ticketsService.myTicket">
+                  Soltar
+                </button>
+              </div>
+
+              <div class="col col-6 col-md-3 p-1">
+                <button class="btn btn-block btn-primary" (click)="endTicket()"
+                  [ngClass]="{'button-disabled': waitForClient || !ticketsService.myTicket }"
+                  [disabled]="waitForClient || !ticketsService.myTicket">
+                  Finalizar
                 </button>
               </div>
 
@@ -106,27 +119,43 @@
   <!-- SKILL TABLE -->
   <!-- ======================================================== -->
 
-
   <div class="col-lg-6">
-    <div class="card bg-primary mb-4" style="min-width: 18rem; max-width: 30rem;">
+    <div class="card bg-danger mb-4" style="min-width: 18rem; max-width: 30rem;font-size: large;font-weight: lighter;">
       <div class="card-content table-responsive-sm  p-2">
+        <mat-radio-group [(ngModel)]="skillSelected">
 
-        <table class="table table-sm text-white text-center" style="font-size: large;">
+          <table class="table table-sm text-white text-center">
 
-          <tr style="border-top: 0px; color: yellow;">
-            <td style="text-align: left; border: none;"> Skill </td>
-            <td style="text-align: center; border: none;"> Cola </td>
-          </tr>
+            <tr style="border-top: 0px; color: yellow;">
+              <td colspan="2" style="text-align: left; border: none;">Skill</td>
 
-          <tr *ngFor="let waiting of pendingTicketsBySkill">
-            <td style="text-align: left;">
-              {{ waiting.tx_skill }}
-            </td>
-            <td style="text-align: center;">
-              {{ waiting.tickets.length }}
-            </td>
-          </tr>
-        </table>
+              <td style="text-align: right; border: none;"> En espera </td>
+            </tr>
+
+            <tr *ngFor="let waiting of pendingTicketsBySkill">
+              <td style="padding: 0; vertical-align: middle; font-size: 16px;">
+                <!-- skill assigned to assistant -->
+                <span *ngIf="waiting.assigned" style="color: greenyellow">
+                  <mat-icon>check</mat-icon>
+                </span>
+                <!-- skill is NOT assigned to assistant, input radio can reassign ticket -->
+                <span *ngIf="!waiting.assigned && !waitForClient && ticketsService.myTicket">
+                  <mat-radio-button [value]="waiting.id" style="position: relative;
+                left: 4px;
+                top: 4px;"></mat-radio-button>
+                </span>
+              </td>
+              <td style="text-align: left;">
+                {{ waiting.tx_skill }}
+              </td>
+              <td style="text-align: right;">
+                {{ waiting.tickets.length }}
+              </td>
+            </tr>
+
+          </table>
+
+        </mat-radio-group>
 
       </div>
     </div>
@@ -137,13 +166,13 @@
 <div class="row">
   <div class="col">
 
-      <!-- ======================================================== -->
-      <!-- DESKTOP PANEL -->
-      <!-- ======================================================== -->
+    <!-- ======================================================== -->
+    <!-- DESKTOP BUTTONS -->
+    <!-- ======================================================== -->
 
-      <div class="text-center footer-panel">
-          <button class="btn btn-danger text-uppercase m-2" (click)="releaseDesktop()">Abandonar Escritorio</button>
-      </div>
+    <div class="text-center footer-panel">
+      <button class="btn btn-danger text-uppercase m-2" (click)="releaseDesktop()">Abandonar Escritorio</button>
+    </div>
 
   </div>
 </div>

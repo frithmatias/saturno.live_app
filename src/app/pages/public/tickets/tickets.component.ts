@@ -40,14 +40,15 @@ export class TicketsComponent implements OnInit {
 		}
 	}
 
-	nuevoTicket(idSkill: string, cdSkill: string): void {
+	createTicket(idSkill: string): void {
 		this.loading = true;
-		let idCompany = this.ticketsService.companyData._id;
+
 		let idSocket = this.wsService.idSocket;
 		
-		this.ticketsService.nuevoTicket(idCompany, idSkill, cdSkill, idSocket).subscribe(
+		this.ticketsService.createTicket(idSkill, idSocket).subscribe(
 			(data: TicketResponse) => {
 				if (data.ok) {
+
 					localStorage.setItem('ticket', JSON.stringify(data.ticket));
 					this.ticketsService.myTicket = data.ticket;
 					this.loading = false;

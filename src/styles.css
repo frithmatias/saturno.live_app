@@ -173,3 +173,10 @@ div:focus { outline: none; }
   .mat-expansion-panel-body {
       padding: .5rem !important;
   }
+  .mat-radio-outer-circle {
+    border-color: #ffd740;
+  }
+
+  .mat-icon {
+      font-size: 18px;
+  }

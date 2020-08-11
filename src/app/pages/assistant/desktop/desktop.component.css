@@ -6,3 +6,8 @@
     top: -0.30rem;
     left: -0.30rem;
 }
+
+.button-disabled {
+    background-color: lightgray;
+    border-color: lightgray;
+}

@@ -3,6 +3,7 @@ import { UserService } from '../../services/user.service';
 import { TicketsService } from '../../services/tickets.service';
 import { Router } from '@angular/router';
 import { User } from 'src/app/interfaces/user.interface';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-toolbar',
@@ -15,6 +16,7 @@ export class ToolbarComponent implements OnInit {
   @Input() unreadMessages: number;
   hiddenBadge: boolean;
   user: User;
+  userSuscription: Subscription;
   constructor(
     public userService: UserService,
     public ticketsService: TicketsService,
@@ -23,7 +25,7 @@ export class ToolbarComponent implements OnInit {
 
   ngOnInit(): void { 
     this.user = this.userService.user;
-    this.userService.user$.subscribe(data => {
+    this.userSuscription = this.userService.user$.subscribe(data => {
       this.user = data;
     })
   }
@@ -42,5 +44,9 @@ export class ToolbarComponent implements OnInit {
         this.toggleChat.emit(true);
         break;
     }
+  }
+
+  ngOnDestroy(): void {
+    this.userSuscription.unsubscribe();
   }
 }

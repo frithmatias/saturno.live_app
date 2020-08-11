@@ -20,8 +20,8 @@
 
                 <div *ngIf="!ticketsService.myTicket?.id_desk">
                     <span class="xxxxl">
-                        {{ ticketsService.myTicket?.cd_skill }}
-                        {{ ticketsService.myTicket?.id_ticket }}
+                        {{ ticketsService.myTicket?.id_skill.cd_skill }}
+                        {{ ticketsService.myTicket?.cd_number }}
                     </span>
                 </div>
 
@@ -71,8 +71,8 @@
                 </div>
                 <div>
                     <span class="xxxxl">
-                        {{ ticketsService.lastTicket?.cd_skill }}
-                        {{ ticketsService.lastTicket?.id_ticket }}
+                        {{ ticketsService.lastTicket?.id_skill.cd_skill }}
+                        {{ ticketsService.lastTicket?.cd_number }}
                     </span>
                 </div>
 
@@ -104,23 +104,31 @@
 
                     <tr>
                         <td> Turno </td>
-                        <td> </td>
-                        <td> Escritorio </td>
+                        <td> Escritorio</td>
+                        <td> Estado </td>
                     </tr>
                     <tr *ngIf="ticketsService.ticketsTail.length === 0">
                         <td>--</td>
-                        <td></td>
+                        <td>--</td>
                         <td>--</td>
                     </tr>
                     <tr *ngFor="let ticket of ticketsService.ticketsTail;">
-                        <td style="text-align: center; width: 50%;">
-                            {{ ticket.cd_skill }}{{ ticket.id_ticket }}</td>
+                        <td style="text-align: center;">
+                            {{ ticket.id_skill.cd_skill }}{{ ticket.cd_number }}</td>
+
+                        <td style="text-align: center; ">{{ ticket.id_desk.cd_desktop }}</td>
+
                         <td style="padding: 0; vertical-align: middle;">
-                            <span *ngIf="ticket.tm_end" style="color: greenyellow">
+                            <span *ngIf="!ticket.tm_end" style="color: greenyellow">
+                                <mat-icon>campaign</mat-icon>
+                            </span>
+                            <span *ngIf="ticket.id_child && ticket.tm_end" style="color: greenyellow">
+                                <mat-icon>replay</mat-icon>
+                            </span>
+                            <span *ngIf="!ticket.id_child && ticket.tm_end" style="color: greenyellow">
                                 <mat-icon>check</mat-icon>
                             </span>
                         </td>
-                        <td style="text-align: center;  width: 50%;">{{ ticket.cd_desk }}</td>
                     </tr>
 
                 </table>

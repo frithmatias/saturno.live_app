@@ -33,7 +33,7 @@
       </div>
 
       <button *ngFor="let skill of skills" class="btn btn-primary btn-block btn-lg"
-        (click)="nuevoTicket(skill._id, skill.cd_skill)">
+        (click)="createTicket(skill._id)">
         {{skill.tx_skill}}
       </button>
       <button class="btn btn-info btn-lg btn-block" routerLink='/public/screen'>Pantalla</button>

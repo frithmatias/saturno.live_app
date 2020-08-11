@@ -7,7 +7,7 @@
 
         <!-- Title -->
         <span *ngIf="user?.id_company?.tx_company_name || ticketsService.companyData">{{user?.id_company?.tx_company_name || ticketsService.companyData.tx_company_name}}</span>
-        <span *ngIf="!userService.user && !ticketsService.companyData">WebTurnos 0.0.1</span>
+        <span *ngIf="!userService.user && !ticketsService.companyData">SATURNO</span>
         <span class="example-spacer"></span>
 
         <!-- Chat Icon -->
@@ -15,12 +15,13 @@
             <mat-icon [matBadge]="unreadMessages" [matBadgeHidden]="hiddenBadge" matBadgeColor="warn" matBadgeSize="small">chat</mat-icon>
         </button>
 
-        <!-- Login Button -->
-        <button *ngIf="!userService.user && !ticketsService.publicMode && !ticketsService.myTicket"
-            class="btn btn-primary" routerLink="/login">Login</button>
+        <!-- User log-in Icon -->
+        <button *ngIf="!userService.user && !ticketsService.publicMode && !ticketsService.myTicket" routerLink="/login" mat-icon-button>
+            <mat-icon>account_circle</mat-icon>
+        </button>
 
-        <!-- User Icon -->
-        <div *ngIf="userService.user">
+        <!-- User logged Icon -->
+        <div *ngIf="userService.user" style="color: lightgreen">
             <button mat-icon-button [matMenuTriggerFor]="menu">
                 <mat-icon>account_circle</mat-icon>
             </button>

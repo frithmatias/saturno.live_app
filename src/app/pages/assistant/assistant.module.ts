@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { AssistantRoutingModule } from './assistant-routing.module';
 
+import { FormsModule } from '@angular/forms';
 import { AssistantComponent } from './assistant.component';
 import { HomeComponent } from './home/home.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -15,9 +16,10 @@ import { MaterialModule } from '../../modules/material.module';
     AssistantComponent, 
     HomeComponent,
     DashboardComponent, 
-    DesktopComponent
+    DesktopComponent,
   ],
   imports: [
+    FormsModule,
     CommonModule,
     MaterialModule,
     AssistantRoutingModule
