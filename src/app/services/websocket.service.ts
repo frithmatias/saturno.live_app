@@ -59,7 +59,7 @@ export class WebsocketService {
 						this.emit('enterCompany', data.ticket.id_company);
 
 						// si actualizo el ticket en la BD actualizo en myTicket y en la LS
-						if (localStorage.getItem('desktop')) {
+						if (localStorage.getItem('desktop') && this.ticketsService.myTicket) {
 							this.ticketsService.myTicket.id_socket_desk = this.idSocket;
 						} else {
 							this.ticketsService.myTicket.id_socket = this.idSocket;

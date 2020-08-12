@@ -34,6 +34,7 @@ export class DesktopComponent implements OnInit {
 	message: string;
 	skills: Skill[] = [];
 	skillSelected: string = '';
+	blPriority = false;
 
 	constructor(
 		public ticketsService: TicketsService,
@@ -54,11 +55,9 @@ export class DesktopComponent implements OnInit {
 		this.wsService.escucharTurnos().subscribe(data => {
 			this.getTickets();
 		});
-
 	}
 
 	async getTickets() {
-
 		// traigo todos los tickets
 		return this.ticketsService.getTickets()
 			.then((tickets: Ticket[]) => {
@@ -165,6 +164,8 @@ export class DesktopComponent implements OnInit {
 
 	async takeTicket() {
 
+		
+
 		if (this.ticketsService.myTicket) {
 			await this.askForEndTicket().then(() => {
 				this.clearSession();
@@ -173,12 +174,11 @@ export class DesktopComponent implements OnInit {
 			})
 		}
 
-		let cdDesk = this.cdDesk;
 		let idDesk = this.userService.desktop._id;
 		let idAssistant = this.userService.user._id;
 		let idSocketDesk = this.wsService.idSocket;
 
-		this.ticketsService.takeTicket(cdDesk, idDesk, idAssistant, idSocketDesk).subscribe(
+		this.ticketsService.takeTicket(idDesk, idAssistant, idSocketDesk).subscribe(
 			(resp: TicketResponse) => {
 
 				this.snack.open(resp.msg, null, { duration: 2000 });
@@ -280,9 +280,12 @@ export class DesktopComponent implements OnInit {
 			await this.askForEndTicket().then(() => {
 				let idTicket = this.ticketsService.myTicket?._id;
 				let idSkill = this.skillSelected;
+				let blPriority = this.blPriority;
 				if (idTicket && idSkill) {
-					this.ticketsService.reassignTicket(idTicket, idSkill).subscribe((resp: TicketResponse) => {
+					
+					this.ticketsService.reassignTicket(idTicket, idSkill, blPriority).subscribe((resp: TicketResponse) => {
 						if (resp.ok) {
+							this.blPriority = false;
 							this.clearSession();
 							this.message = resp.msg;
 						}

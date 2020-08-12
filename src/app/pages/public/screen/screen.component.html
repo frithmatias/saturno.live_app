@@ -7,6 +7,56 @@
     <div class="col-md-6" style="min-width: 18rem;">
 
         <!-- ======================================================== -->
+        <!-- TICKET FINALIZADO -->
+        <!-- ======================================================== -->
+        <!-- *ngIf="!ticketsService.myTicket && ticketsService.myTicketEnd!==null" -->
+        <div *ngIf="ticketsService.myTicketEnd!==null" class="card text-white bg-danger mb-4">
+            <div class="card-header banner-title">SU OPINION</div>
+            <div class="banner-content p-3" style="background-color: rgb(141, 51, 51)">
+
+                <div>¡Su turno ha finalizado!</div>
+                <div><h4 style="color:yellow;">Agradeceremos valorar la atención recibida</h4></div>
+
+                <div class="text-white my-4 table-responsive-sm">
+                    <table class="table table-sm text-white">
+                        <tr *ngFor="let ticket of ticketsService.allMytickets">
+                            <td class="py-2" style="width: 50%;text-align: left;">
+                                {{ ticket.id_skill?.tx_skill }}
+                            </td>
+                            <td class="py-2">
+                                <mat-icon class="screen-icon-star"
+                                    [ngClass]="{'screen-icon-star-on': scores.get(ticket._id) >= 1}"
+                                    (click)="setScore(ticket._id, 1)">star</mat-icon>
+                            </td>
+                            <td class="py-2">
+                                <mat-icon class="screen-icon-star"
+                                    [ngClass]="{'screen-icon-star-on': scores.get(ticket._id) >= 2}"
+                                    (click)="setScore(ticket._id, 2)">star</mat-icon>
+                            </td>
+                            <td class="py-2">
+                                <mat-icon class="screen-icon-star"
+                                    [ngClass]="{'screen-icon-star-on': scores.get(ticket._id) >= 3}"
+                                    (click)="setScore(ticket._id, 3)">star</mat-icon>
+                            </td>
+                            <td class="py-2">
+                                <mat-icon class="screen-icon-star"
+                                    [ngClass]="{'screen-icon-star-on': scores.get(ticket._id) >= 4}"
+                                    (click)="setScore(ticket._id, 4)">star</mat-icon>
+                            </td>
+                            <td class="py-2">
+                                <mat-icon class="screen-icon-star"
+                                    [ngClass]="{'screen-icon-star-on': scores.get(ticket._id) >= 5}"
+                                    (click)="setScore(ticket._id, 5)">star</mat-icon>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+
+            </div>
+        </div>
+
+        <!-- ======================================================== -->
         <!-- SU TURNO -->
         <!-- ======================================================== -->
 
@@ -37,7 +87,7 @@
                     </div>
                     <div class="row">
                         <div class="col xxxxl">
-                            {{ ticketsService.myTicket?.cd_desk }}
+                            {{ ticketsService.myTicket?.id_desk?.cd_desktop }}
                         </div>
                     </div>
                 </div>
@@ -46,11 +96,7 @@
                 <!-- FINALIZADO -->
                 <!------------------------------>
 
-                <div *ngIf="!ticketsService.myTicket && ticketsService.myTicket_end" class="banner-content">
-                    <div class="container">
-                        <div class="text-white my-4 py-2">Su turno ha finalizado</div>
-                    </div>
-                </div>
+
             </div>
         </div>
 
@@ -96,7 +142,7 @@
         <!-- ======================================================== -->
 
         <div class="card text-white bg-primary mb-4">
-            <div class="card-header banner-title">HISTORIAL DE LLAMADOS</div>
+            <div class="card-header banner-title">HISTORIAL</div>
 
             <div class="card-body card-tickets-info table-responsive-sm" style="background-color: rgb(54, 77, 194)">
 

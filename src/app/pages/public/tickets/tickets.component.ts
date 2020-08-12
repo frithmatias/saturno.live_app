@@ -6,6 +6,7 @@ import { TicketResponse } from '../../../interfaces/ticket.interface';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Skill } from '../../../interfaces/skill.interface';
 import { SkillsResponse } from '../../../interfaces/skill.interface';
+import { PublicService } from '../../../services/public.service';
 
 @Component({
 	selector: 'app-tickets',
@@ -15,11 +16,13 @@ import { SkillsResponse } from '../../../interfaces/skill.interface';
 export class TicketsComponent implements OnInit {
 	loading: boolean = false;
 	skills: Skill[];
+	blPriority = false;
 	constructor(
 		private wsService: WebsocketService,
 		public ticketsService: TicketsService,
 		private router: Router,
-		private snack: MatSnackBar
+		private snack: MatSnackBar,
+		private publicService: PublicService
 	) { }
 
 	ngOnInit(): void {
@@ -44,11 +47,10 @@ export class TicketsComponent implements OnInit {
 		this.loading = true;
 
 		let idSocket = this.wsService.idSocket;
-		
-		this.ticketsService.createTicket(idSkill, idSocket).subscribe(
+		let blPriority = this.blPriority;
+		this.ticketsService.createTicket(idSkill, idSocket, blPriority).subscribe(
 			(data: TicketResponse) => {
 				if (data.ok) {
-
 					localStorage.setItem('ticket', JSON.stringify(data.ticket));
 					this.ticketsService.myTicket = data.ticket;
 					this.loading = false;

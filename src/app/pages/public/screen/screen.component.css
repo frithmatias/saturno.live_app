@@ -4,3 +4,15 @@
   width          : 120px;
 }
 
+
+.screen-icon-star {
+  cursor   : pointer;
+  transform: scale(2);
+  color    : #b64444;
+  top      : 3px;
+  position : relative;
+}
+
+.screen-icon-star-on {
+  color: orange;
+}

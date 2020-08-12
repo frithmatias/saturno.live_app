@@ -4,7 +4,7 @@ import { Skill } from 'src/app/interfaces/skill.interface';
 // ========================================================
 
 export interface Ticket {
-	id_parent: string | null;
+	id_root: string | null;
 	id_child: string | null;
 	cd_number: number;
 	id_socket: string;

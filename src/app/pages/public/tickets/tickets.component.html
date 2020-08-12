@@ -32,8 +32,13 @@
         </div>
       </div>
 
+      <div class="m-3 float-right">
+        <mat-label class="mx-2">Prioritario</mat-label>
+        <mat-slide-toggle [(ngModel)]="blPriority"></mat-slide-toggle>
+      </div>
+
       <button *ngFor="let skill of skills" class="btn btn-primary btn-block btn-lg"
-        (click)="createTicket(skill._id)">
+        (click)="createTicket(skill._id, false)">
         {{skill.tx_skill}}
       </button>
       <button class="btn btn-info btn-lg btn-block" routerLink='/public/screen'>Pantalla</button>

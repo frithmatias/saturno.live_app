@@ -15,17 +15,19 @@ const TAIL_LENGTH = 4;
 	providedIn: 'root'
 })
 export class TicketsService {
-	
+
 	companyData: any;
 	publicMode: boolean = false;
-	
+
+	myTicketEnd: number = null;
+
+	allMytickets: Ticket[]=[];
 	myTicket: Ticket;
-	myTicket_end: number;
-	
+
+	lastTicket: Ticket;
 	ticketsAll: Ticket[] = [];
 	ticketsCall: Ticket[] = [];
 	ticketsTail: Ticket[] = [];
-	lastTicket: Ticket;
 
 	chatMessages: {
 		own: boolean,
@@ -61,10 +63,13 @@ export class TicketsService {
 
 	clearPublicSession(): void {
 		this.chatMessages = [];
+		this.allMytickets = null;
 		this.myTicket = null;
+		this.myTicketEnd = null;
 		this.companyData = null;
 		if (localStorage.getItem('ticket')) { localStorage.removeItem('ticket'); }
 		if (localStorage.getItem('company')) { localStorage.removeItem('company'); }
+		this.router.navigate(['/public']);
 	}
 
 	actualizarSocket(idTicket: string, oldSocket: string, newSocket: string): Observable<object> {
@@ -72,13 +77,18 @@ export class TicketsService {
 		return this.http.put(environment.url + '/t/actualizarsocket', socketsData);
 	}
 
-	createTicket(idSkill: string, idSocket: string): Observable<object> {
-		let data = { idSkill, idSocket };
+	createTicket(idSkill: string, idSocket: string, blPriority: boolean = false): Observable<object> {
+		let data = { idSkill, idSocket, blPriority };
 		return this.http.post(environment.url + '/t/createticket/', data);
 	}
 
 	cancelTicket(idTicket: string) {
 		return this.http.get(environment.url + '/t/cancelticket/' + idTicket);
+	}
+
+	sendScores(cdScores: any){
+		const url = environment.url + `/p/scores`;
+		return this.http.post(url, cdScores);
 	}
 
 	sendContact(data: any) {
@@ -88,13 +98,13 @@ export class TicketsService {
 
 	// desktop methods
 
-	takeTicket(cdDesk: string, idDesk: string, idAssistant: string, idSocketDesk: string): Observable<object> {
+	takeTicket(idDesk: string, idAssistant: string, idSocketDesk: string): Observable<object> {
 
 		const headers = new HttpHeaders({
 			'turnos-token': this.userService.token
 		});
 
-		const deskData = { cdDesk, idDesk, idAssistant, idSocketDesk };
+		const deskData = { idDesk, idAssistant, idSocketDesk };
 
 		const url = environment.url + `/t/taketicket`;
 		return this.http.post(url, deskData, { headers });
@@ -109,8 +119,8 @@ export class TicketsService {
 		return this.http.post(url, data, { headers });
 	}
 
-	reassignTicket(idTicket: string, idSkill: string): Observable<object> {
-		const data = { idTicket, idSkill };
+	reassignTicket(idTicket: string, idSkill: string, blPriority: boolean): Observable<object> {
+		const data = { idTicket, idSkill, blPriority };
 		const headers = new HttpHeaders({
 			'turnos-token': this.userService.token
 		});
@@ -139,7 +149,7 @@ export class TicketsService {
 			}
 
 			if (!id_company) {
-				
+
 				return;
 			}
 
@@ -166,19 +176,27 @@ export class TicketsService {
 
 				// update ticket
 				if (this.myTicket) {
-					const myUpdatedTicket = this.ticketsAll.filter(ticket => 
-						((ticket._id === this.myTicket._id && ticket.id_child === null) || 
-						(ticket.id_parent === this.myTicket._id && ticket.id_child === null)))[0];
+
+					// pick my LAST ticket
+					const myUpdatedTicket = this.ticketsAll.filter(ticket => (
+						// the same ticket updated
+						(ticket._id === this.myTicket._id && ticket.id_child === null) ||
+						// new one as child
+						(ticket.id_root === this.myTicket.id_root && ticket.id_child === null)
+					))[0];
 
 					if (myUpdatedTicket) {
 						this.myTicket = myUpdatedTicket;
 						localStorage.setItem('ticket', JSON.stringify(this.myTicket));
 					}
 
+					this.allMytickets = this.ticketsAll.filter(ticket => (
+						(ticket.id_root === this.myTicket.id_root )
+					))
+
 					// El ticket finalizó.
 					if (this.myTicket.tm_end !== null) {
-						this.myTicket_end = this.myTicket.tm_end;
-						this.clearPublicSession();
+						this.myTicketEnd = this.myTicket.tm_end;
 					}
 				}
 
