@@ -11,3 +11,11 @@
     background-color: lightgray;
     border-color: lightgray;
 }
+
+.accessible-icon {
+    font-size: xx-large;
+    position: relative;
+    left: -3px;
+    top: 3px;
+    color: green;
+}

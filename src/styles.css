@@ -9,11 +9,12 @@ div:focus { outline: none; }
 
 /* button panels */
 .footer-panel {
-    position        : fixed;
-    bottom          : 0px;
-    background-color: white;
-    width           : 100%;
-    box-shadow: 0px 0px 5px 0px rgb(0 0 0);
+    padding: 5px;
+    position: fixed;
+    bottom: 0px;
+    background-color: whitesmoke;
+    width: 100%;
+    box-shadow: 0px 0px 3px 0px #999;
   }
 
 /* list no warp */

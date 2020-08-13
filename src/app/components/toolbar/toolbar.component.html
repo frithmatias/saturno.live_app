@@ -21,11 +21,15 @@
         </button>
 
         <!-- User logged Icon -->
-        <div *ngIf="userService.user" style="color: lightgreen">
+        <div *ngIf="userService.user">
             <button mat-icon-button [matMenuTriggerFor]="menu">
                 <mat-icon>account_circle</mat-icon>
             </button>
             <mat-menu #menu="matMenu">
+                <button mat-menu-item routerLink="/assistant/home">
+                    <mat-icon>desktop_windows</mat-icon>
+                    <span >Mi escritorio</span>
+                </button>
                 <button mat-menu-item>
                     <mat-icon>account_circle</mat-icon>
                     <span>{{userService.user.tx_name}}</span>

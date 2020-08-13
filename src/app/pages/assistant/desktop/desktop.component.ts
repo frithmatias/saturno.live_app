@@ -38,7 +38,7 @@ export class DesktopComponent implements OnInit {
 
 	constructor(
 		public ticketsService: TicketsService,
-		private userService: UserService,
+		public userService: UserService,
 		private wsService: WebsocketService,
 		private snack: MatSnackBar,
 		private router: Router
@@ -55,6 +55,7 @@ export class DesktopComponent implements OnInit {
 		this.wsService.escucharTurnos().subscribe(data => {
 			this.getTickets();
 		});
+
 	}
 
 	async getTickets() {
@@ -115,9 +116,10 @@ export class DesktopComponent implements OnInit {
 	}
 
 	async releaseDesktop() {
+		let snackMsg = 'Desea cerrar la sesión del escritorio?';
 
 		if (this.ticketsService.myTicket) {
-			await this.askForEndTicket().then(() => {
+			await this.askForEndTicket(snackMsg).then(() => {
 				let idDesktop = this.userService.desktop._id
 				this.userService.releaseDesktop(idDesktop).subscribe((data: DesktopResponse) => {
 					if (data.ok) {
@@ -149,9 +151,9 @@ export class DesktopComponent implements OnInit {
 	// Assistant Actions
 	// ========================================================
 
-	askForEndTicket(): Promise<boolean> {
+	askForEndTicket(snackMsg: string): Promise<boolean> {
 		return new Promise((resolve, reject) => {
-			this.snack.open('Desea finalizar el ticket en curso?', 'ACEPTAR', { duration: 10000 }).afterDismissed().subscribe(data => {
+			this.snack.open(snackMsg, 'ACEPTAR', { duration: 5000 }).afterDismissed().subscribe(data => {
 				if (data.dismissedByAction) {
 					this.ticketsService.endTicket(this.ticketsService.myTicket._id).subscribe((resp: TicketResponse) => {
 						this.message = resp.msg;
@@ -167,7 +169,8 @@ export class DesktopComponent implements OnInit {
 		
 
 		if (this.ticketsService.myTicket) {
-			await this.askForEndTicket().then(() => {
+			let snackMsg = 'Desea finalizar el ticket actual?';
+			await this.askForEndTicket(snackMsg).then(() => {
 				this.clearSession();
 			}).catch(() => {
 				return;
@@ -258,7 +261,8 @@ export class DesktopComponent implements OnInit {
 	async releaseTicket() {
 
 		if (this.ticketsService.myTicket) {
-			await this.askForEndTicket().then(() => {
+			let snackMsg = 'Desea solter el ticket y devolverlo a su estado anterior?';
+			await this.askForEndTicket(snackMsg).then(() => {
 				let idTicket = this.ticketsService.myTicket._id;
 				this.ticketsService.releaseTicket(idTicket).subscribe((resp: TicketResponse) => {
 
@@ -277,7 +281,9 @@ export class DesktopComponent implements OnInit {
 	async reassignTicket() {
 
 		if (this.ticketsService.myTicket) {
-			await this.askForEndTicket().then(() => {
+			let snackMsg = 'Desea enviar el ticket al skill seleccionado?'
+
+			await this.askForEndTicket(snackMsg).then(() => {
 				let idTicket = this.ticketsService.myTicket?._id;
 				let idSkill = this.skillSelected;
 				let blPriority = this.blPriority;
@@ -301,7 +307,9 @@ export class DesktopComponent implements OnInit {
 	async endTicket() {
 
 		if (this.ticketsService.myTicket) {
-			await this.askForEndTicket().then(() => {
+			let snackMsg = 'Desea finalizar el ticket actual?'
+
+			await this.askForEndTicket(snackMsg).then(() => {
 				this.ticketsService.endTicket(this.ticketsService.myTicket._id).subscribe((resp: TicketResponse) => {
 					if (resp.ok) {
 						this.clearSession();

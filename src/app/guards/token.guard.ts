@@ -15,7 +15,6 @@ export class TokenGuard implements CanActivate {
 	// si no expiro verifica si tiene que renovar (es cuando defino un tiempo proximo a vencer)
 	// si tiene que renovar devuelve true y sino, devuelve false.
 	canActivate(): Promise<boolean> | boolean {
-
 		const token = this.userService.token;
 
 		if (!token) {
@@ -24,10 +23,12 @@ export class TokenGuard implements CanActivate {
 			return false;
 		}
 
+		// payload: {usuario: {…}, iat: 1597269832, exp: 1599861832}
 		const payload = JSON.parse(atob(token.split('.')[1]));
-		const expirado = this.expirado(payload.exp);
 
-		if (expirado) {
+		// verifica si el token expiro
+		const expira = this.expira(payload.exp); // 1599861832
+		if (expira) {
 			this.userService.logout();
 			this.router.navigate(['/home']);
 			return false;
@@ -40,44 +41,46 @@ export class TokenGuard implements CanActivate {
 	verificaRenueva(fechaExp: number): Promise<boolean> {
 		return new Promise((resolve, reject) => {
 			const tokenExp = new Date(fechaExp * 1000);
-			const ahora = new Date();
-			const renueva = new Date();
-			
-			// 1 hora
-			renueva.setTime(ahora.getTime() + (1 * 60 * 60 * 1000));
 
-			const difRenueva = tokenExp.getTime() - renueva.getTime();
-			const difExpira = tokenExp.getTime() - ahora.getTime();
+			const renueva = new Date();
+			const ahora = new Date();
+			// token expira en 2 horas y debe renovar 10 min antes de expirar
+			renueva.setTime(ahora.getTime() + (1 * 10 * 60 * 1000)); // 10 min
 
 			if (tokenExp.getTime() > renueva.getTime()) {
-				
 				// no es necesario renovar
-				const horaRenueva = (difRenueva / 1000 / 3600).toFixed(3).split('.');
-				const horaExpira = (difExpira / 1000 / 3600).toFixed(3).split('.');
-
-				const minRenueva = String(Number(horaRenueva[1]) * 60 / 1000).split('.');
-				const minExpira = String(Number(horaExpira[1]) * 60 / 1000).split('.');
-
-				const segRenueva = Number(minRenueva[1]) * 60 / 100;
-				const segExpira = Number(minExpira[1]) * 60 / 100;
-
 				resolve(true);
+				// const difRenueva = tokenExp.getTime() - renueva.getTime();
+				// const horaRenueva = (difRenueva / 1000 / 3600).toFixed(3).split('.');
+				// const minRenueva = String(Number(horaRenueva[1]) * 60 / 1000).split('.');
+				// const segRenueva = String(Number(minRenueva[1]) * 60 / 100).split('.');
+				
+				// const difExpira = tokenExp.getTime() - ahora.getTime();
+				// const horaExpira = (difExpira / 1000 / 3600).toFixed(3).split('.');
+				// const minExpira = String(Number(horaExpira[1]) * 60 / 1000).split('.');
+				// const segExpira = String(Number(minExpira[1]) * 60 / 100).split('.');
+				
+				// c .log( + new Date())
+				// c .log('renueva', `${horaRenueva[0]}:${minRenueva[0]}:${segRenueva[0]}`);
+				// c .log('expira', `${horaExpira[0]}:${minExpira[0]}:${segExpira[0]}`);
+				
 			} else {
-
 				// debe renovar
-				this.userService.updateToken()
-					.subscribe(() => {
+				this.userService.updateToken().subscribe((resp: any) => {
+					if (resp.ok) {
 						resolve(true);
-					}, () => {
-						this.userService.logout();
-						this.router.navigate(['/home']);
+					} else {
 						reject(false);
-					});
+					}
+				}, () => {
+					this.userService.logout();
+					reject(false);
+				});
 			}
 		});
 	}
 
-	expirado(fechaExp: number) {
+	expira(fechaExp: number) {
 		const ahora = new Date().getTime() / 1000;
 		if (fechaExp < ahora) {
 			return true;

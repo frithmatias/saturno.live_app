@@ -15,7 +15,7 @@
             <div class="banner-content p-3" style="background-color: rgb(141, 51, 51)">
 
                 <div>¡Su turno ha finalizado!</div>
-                <div><h4 style="color:yellow;">Agradeceremos valorar la atención recibida</h4></div>
+                <div class="lead my-2">Lo invitamos a valorar la atención recibida.</div>
 
                 <div class="text-white my-4 table-responsive-sm">
                     <table class="table table-sm text-white">
@@ -60,7 +60,7 @@
         <!-- SU TURNO -->
         <!-- ======================================================== -->
 
-        <div class="card text-white bg-success mb-4" *ngIf="ticketsService.myTicket">
+        <div class="card text-white bg-success mb-4" *ngIf="ticketsService.myTicket && ticketsService.myTicketEnd===null">
             <div class="card-header banner-title">SU TURNO</div>
             <div class="banner-content" style="background-color: rgb(51, 141, 51)">
 
@@ -166,13 +166,13 @@
 
                         <td style="padding: 0; vertical-align: middle;">
                             <span *ngIf="!ticket.tm_end" style="color: greenyellow">
-                                <mat-icon>campaign</mat-icon>
+                                <mat-icon style="font-size: xx-large;">campaign</mat-icon>
                             </span>
                             <span *ngIf="ticket.id_child && ticket.tm_end" style="color: greenyellow">
-                                <mat-icon>replay</mat-icon>
+                                <mat-icon style="font-size: xx-large;">replay</mat-icon>
                             </span>
                             <span *ngIf="!ticket.id_child && ticket.tm_end" style="color: greenyellow">
-                                <mat-icon>check</mat-icon>
+                                <mat-icon style="font-size: xx-large;">check</mat-icon>
                             </span>
                         </td>
                     </tr>

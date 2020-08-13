@@ -81,6 +81,11 @@ export class ScreenComponent implements OnInit {
 				dataScores.push({id_ticket: llave, cd_score: valor});
 			});
 
+
+			this.ticketsService.sendScores(dataScores).subscribe((d)=>{
+				console.log(d)
+			})
+			
 			const Toast = Swal.mixin({
 				toast: true,
 				position: 'center',

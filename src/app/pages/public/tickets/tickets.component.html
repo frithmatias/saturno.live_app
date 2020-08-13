@@ -18,32 +18,57 @@
         </p>
 
         <div class="card border-success py-4 my-4">
-
           <p class="text-company">
             {{ ticketsService.companyData.tx_company_name }}
           </p>
-
-
           <p style="color: darkblue; font-size: 1rem; font-weight: 400;">
             {{ ticketsService.companyData.tx_address_street }}
             {{ ticketsService.companyData.tx_address_number }}
             {{ ticketsService.companyData.cd_city }}
           </p>
         </div>
+
       </div>
 
-      <div class="m-3 float-right">
-        <mat-label class="mx-2">Prioritario</mat-label>
-        <mat-slide-toggle [(ngModel)]="blPriority"></mat-slide-toggle>
+      <div class="container">
+        <div class="row rounded border border-success mb-3">
+          <div class="col bg-success text-white p-2">
+            <div>
+              <mat-icon class="m-2 mr-3" style="font-size: xx-large;">accessible</mat-icon>
+              <mat-icon class="m-2 mr-3" style="font-size: xx-large;">pregnant_woman</mat-icon>
+            </div>
+            <div>
+              <mat-icon class="m-2 mr-3" style="font-size: xx-large;">child_friendly</mat-icon>
+              <mat-icon class="m-2 mr-3" style="font-size: xx-large;">elderly</mat-icon>
+            </div>
+          </div>
+          <div class="col m-3">
+            <p class="text-uppercase mx-2 font-weight-bold">Prioritario</p>
+            <mat-slide-toggle [(ngModel)]="blPriority"></mat-slide-toggle>
+          </div>
+        </div>
       </div>
 
-      <button *ngFor="let skill of skills" class="btn btn-primary btn-block btn-lg"
+
+
+      <button *ngFor="let skill of skills" class="btn btn-primary btn-block btn-lg text-uppercase"
         (click)="createTicket(skill._id, false)">
         {{skill.tx_skill}}
       </button>
-      <button class="btn btn-info btn-lg btn-block" routerLink='/public/screen'>Pantalla</button>
 
-      <button class="btn btn-danger btn-block btn-lg" (click)="salir()">Salir</button>
+      <hr>
+      <div class="container">
+        <div class="row mt-3">
+          <div class="col">
+            <button class="btn btn-info btn-block" routerLink='/public/screen'>Pantalla</button>
+          </div>
+          <div class="col">
+            <button class="btn btn-danger btn-block" (click)="salir()">Salir</button>
+          </div>
+        </div>
+      </div>
+
+
     </div>
   </div>
 

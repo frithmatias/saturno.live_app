@@ -195,7 +195,7 @@ export class TicketsService {
 					))
 
 					// El ticket finalizó.
-					if (this.myTicket.tm_end !== null) {
+					if (this.myTicket.tm_end !== null && this.myTicket.id_child === null) {
 						this.myTicketEnd = this.myTicket.tm_end;
 					}
 				}

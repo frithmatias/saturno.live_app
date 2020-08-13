@@ -53,13 +53,17 @@ export class LoginComponent implements OnInit {
 	attachSignin(element) {
 		this.auth2.attachClickHandler(element, {}, googleUser => {
 			const gtoken = googleUser.getAuthResponse().id_token;
-			this.userService.login(gtoken, null, false).subscribe(data => {
-				if(data.ok){
-					if(data.user.id_company) { this.wsService.emit('enterCompany', data.user.id_company._id); }
-					window.location.href = '#/user';
-					// this.router.navigate(['/user']);				
+			this.userService.login(gtoken, null, false).subscribe(
+				data => {
+					if (data.ok) {
+						if (data.user.id_company) { this.wsService.emit('enterCompany', data.user.id_company._id); }
+						window.location.href = '#/user';
+						// this.router.navigate(['/user']);				
+					}
+				},
+				() => {
+					this.snack.open('Error de validación en Google', null, { duration: 2000 });
 				}
-			},
 			);
 		});
 	}
@@ -81,15 +85,16 @@ export class LoginComponent implements OnInit {
 			id_company: null
 		};
 
-		this.userService.login(null , user, forma.value.recuerdame).subscribe(data => {
-				if(data.ok){
-					if(data.user.id_company) { this.wsService.emit('enterCompany', data.user.id_company._id); }
-					this.router.navigate([data.home]);
-				}
+		this.userService.login(null, user, forma.value.recuerdame).subscribe(
+		data => {
+			if (data.ok) {
+				if (data.user.id_company) { this.wsService.emit('enterCompany', data.user.id_company._id); }
+				this.router.navigate([data.home]);
+			}
 		},
-			err => {
+		err => {
 				this.snack.open(err.error.msg, null, { duration: 2000 });
-			});
+		});
 	}
 
 	cleanEmail(elementEmail, elementPassword) {

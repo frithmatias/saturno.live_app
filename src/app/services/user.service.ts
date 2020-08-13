@@ -331,12 +331,16 @@ export class UserService {
 		const url = environment.url + api;
 
 		return this.http.post(url, data).pipe(map((resp: any) => {
+			
 			this.token = resp.token;
 			this.menu = resp.menu;
+			
 			localStorage.setItem('token', JSON.stringify(resp.token));
 			localStorage.setItem('menu', JSON.stringify(resp.menu));
+
 			this.pushUser(resp.user);
 			this.logueado = true;
+			
 			return resp;
 		}),
 			catchError(err => {
@@ -347,17 +351,23 @@ export class UserService {
 
 	updateToken() {
 
-		const url = environment.url + '/login/updatetoken';
+		const url = environment.url + '/u/updatetoken';
 		// url += '?token=' + this.token;
 
 		const headers = new HttpHeaders({
 			'turnos-token': this.token
 		});
 
-		return this.http.get(url, { headers })
+		let data = { user: this.user };
+		return this.http.post(url, data, { headers })
 			.pipe(map((resp: any) => {
-				this.token = resp.token;
-				localStorage.setItem('token', this.token);
+				if(resp.ok){
+					this.token = resp.newtoken;
+					localStorage.setItem('token', JSON.stringify(this.token));
+				} else {
+					this.logout();
+				}
+				return resp;
 			}));
 
 	}
@@ -387,7 +397,7 @@ export class UserService {
 		if (localStorage.getItem('ticket')) { localStorage.removeItem('ticket'); }
 
 		this.logueado = false;
-		this.token = '';
+		this.token = null;
 		this.menu = null;
 		
 		this.user = null;
