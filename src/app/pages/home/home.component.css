@@ -1,0 +1,17 @@
+.footer {
+    position: fixed;
+    bottom: 0px;
+    width: 100%;
+    align-items: center;
+}
+
+.footer-text {
+    text-align: center;
+    color: grey;
+    font-weight: lighter;
+}
+
+.footer-logo {
+    text-align: center;
+    opacity: 0.8;
+}

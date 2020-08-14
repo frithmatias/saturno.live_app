@@ -5,18 +5,39 @@
         <mat-icon (click)="toggle('sidenav')">menu</mat-icon>
         <span class="example-spacer"></span>
 
-        <!-- Title -->
-        <span *ngIf="user?.id_company?.tx_company_name || ticketsService.companyData">{{user?.id_company?.tx_company_name || ticketsService.companyData.tx_company_name}}</span>
-        <span *ngIf="!userService.user && !ticketsService.companyData">SATURNO</span>
+        <!-- Title default -->
+        <div *ngIf="!userService.user && !ticketsService.companyData">
+            <span class="ml-3" style="float:left;">
+                <div class="saturno-title">
+                    SATURNO
+                </div>
+                <div class="saturno-description">
+                    Sistema de Administración de Turnos
+                </div>
+            </span>
+        </div>
+        <div  *ngIf="!userService.user && !ticketsService.companyData">
+            <img src="../../../assets/img/saturn.png" class="saturno-logo img-fluid">
+        </div>
+
+        <!-- Title Company -->
+        <span *ngIf="user?.id_company?.tx_company_name || ticketsService.companyData">
+            {{user?.id_company?.tx_company_name || ticketsService.companyData.tx_company_name}}
+        </span>
+
+
+
         <span class="example-spacer"></span>
 
         <!-- Chat Icon -->
         <button mat-icon-button *ngIf="ticketsService.myTicket" (click)="toggle('chat')">
-            <mat-icon [matBadge]="unreadMessages" [matBadgeHidden]="hiddenBadge" matBadgeColor="warn" matBadgeSize="small">chat</mat-icon>
+            <mat-icon [matBadge]="unreadMessages" [matBadgeHidden]="hiddenBadge" matBadgeColor="warn"
+                matBadgeSize="small">chat</mat-icon>
         </button>
 
         <!-- User log-in Icon -->
-        <button *ngIf="!userService.user && !ticketsService.publicMode && !ticketsService.myTicket" routerLink="/login" mat-icon-button>
+        <button *ngIf="!userService.user && !ticketsService.publicMode && !ticketsService.myTicket" routerLink="/login"
+            mat-icon-button>
             <mat-icon>account_circle</mat-icon>
         </button>
 
@@ -28,7 +49,7 @@
             <mat-menu #menu="matMenu">
                 <button mat-menu-item routerLink="/assistant/home">
                     <mat-icon>desktop_windows</mat-icon>
-                    <span >Mi escritorio</span>
+                    <span>Mi escritorio</span>
                 </button>
                 <button mat-menu-item>
                     <mat-icon>account_circle</mat-icon>

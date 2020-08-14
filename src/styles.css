@@ -6,6 +6,12 @@ textarea:focus { outline: none; }
 input:focus { outline: none; }
 div:focus { outline: none; }
 
+.shadow-box {
+    min-width: 18rem;
+    max-width: 30rem;
+    border-radius: 10px;
+    box-shadow: 3px 3px 30px -10px #999;
+}
 
 /* button panels */
 .footer-panel {

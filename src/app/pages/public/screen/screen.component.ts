@@ -76,16 +76,16 @@ export class ScreenComponent implements OnInit {
 
 		if (this.ticketsService.allMytickets.length === this.scores.size) {
 			let dataScores: Score[] = [];
-			
-			this.scores.forEach(function(valor, llave, mapaOrigen) {
-				dataScores.push({id_ticket: llave, cd_score: valor});
+
+			this.scores.forEach(function (valor, llave, mapaOrigen) {
+				dataScores.push({ id_ticket: llave, cd_score: valor });
 			});
 
 
-			this.ticketsService.sendScores(dataScores).subscribe((d)=>{
+			this.ticketsService.sendScores(dataScores).subscribe((d) => {
 				console.log(d)
 			})
-			
+
 			const Toast = Swal.mixin({
 				toast: true,
 				position: 'center',
@@ -93,27 +93,21 @@ export class ScreenComponent implements OnInit {
 				timer: 3000,
 				timerProgressBar: true,
 				onOpen: (toast) => {
-				  toast.addEventListener('mouseenter', Swal.stopTimer)
-				  toast.addEventListener('mouseleave', Swal.resumeTimer)
+					toast.addEventListener('mouseenter', Swal.stopTimer)
+					toast.addEventListener('mouseleave', Swal.resumeTimer)
 				}
-			  })
-			  
-			  Toast.fire({
+			})
+
+			Toast.fire({
 				icon: 'success',
 				title: '¡Gracias!'
-			  }).then(data => {
+			}).then(data => {
 				if (data.isDismissed) {
 					this.ticketsService.clearPublicSession();
 				}
 			})
-
-
-
-
-
 		}
 	}
-
 
 }
 

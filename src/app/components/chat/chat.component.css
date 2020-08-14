@@ -4,53 +4,57 @@
 
 .close-button {
     position: absolute;
-    left: 5px;
-    top: 3px;
-    color: white;
+    right    : 1em;
+    top     : 1em;
+    color   : white;
 }
 
-.row-input-button {
-    position: fixed;
-    bottom: 0px;
-    left: 0px;
-    width: 110%;
-    padding: .5rem;
+.row-messages {
+    overflow: scroll;
+    height  : 70vh;
+}
+
+.row-messages-send {
+    position        : fixed;
+    bottom          : 0px;
+    left            : 0px;
+    width           : 110%;
+    padding         : .5rem;
     background-color: darkslategrey;
 }
+
 .send-button {
-    color: white;
+    color           : white;
     background-color: seagreen;
-    box-shadow: none;
+    box-shadow      : none;
 }
+
 .chat-input {
-    border: 0px;
+    border          : 0px;
     background-color: white;
-    width: -webkit-fill-available;
-    border-radius: 2rem;
-    padding: .5rem 1rem 0.5rem 1rem;
+    width           : -webkit-fill-available;
+    border-radius   : 2rem;
+    padding         : .5rem 1rem 0.5rem 1rem;
 }
 
 .message {
     background-color: lightskyblue;
-    padding: 0.7em;
-    font-size: medium;
-    font-weight: 200;
-    float: left;
-    border-radius: 10px;
-    min-width: 18rem; 
-    max-width: 30rem;
-    margin-right: 50%;
-    margin-left: 10px;
+    padding         : 0.5em;
+    font-size       : medium;
+    font-weight     : 200;
+    border-radius   : 5px;
+    margin          : .5em;
+    width           : max-content;
+    max-width       : 15em;
 }
 
 .message-me {
     background-color: lightgoldenrodyellow;
-    float: right;
-    margin-right: 10px;
-    margin-left: 50%;
+    margin-left     : auto;
 }
 
 .message-time {
     font-size: small;
-    float: right;
+    float    : right;
+    color    : cornflowerblue;
 }

@@ -80,6 +80,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.timerSubscription = timer(100).subscribe(() => {
       const chatref = document.getElementById('chatmessages');
       chatref.scrollTop = chatref.scrollHeight - chatref.clientHeight;
+      console.log(chatref.scrollHeight, chatref.clientHeight)
     })
   }
 

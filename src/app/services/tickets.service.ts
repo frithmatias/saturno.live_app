@@ -19,8 +19,6 @@ export class TicketsService {
 	companyData: any;
 	publicMode: boolean = false;
 
-	myTicketEnd: number = null;
-
 	allMytickets: Ticket[]=[];
 	myTicket: Ticket;
 
@@ -65,7 +63,6 @@ export class TicketsService {
 		this.chatMessages = [];
 		this.allMytickets = null;
 		this.myTicket = null;
-		this.myTicketEnd = null;
 		this.companyData = null;
 		if (localStorage.getItem('ticket')) { localStorage.removeItem('ticket'); }
 		if (localStorage.getItem('company')) { localStorage.removeItem('company'); }
@@ -176,7 +173,7 @@ export class TicketsService {
 
 				// update ticket
 				if (this.myTicket) {
-
+					console.log(this)
 					// pick my LAST ticket
 					const myUpdatedTicket = this.ticketsAll.filter(ticket => (
 						// the same ticket updated
@@ -196,7 +193,7 @@ export class TicketsService {
 
 					// El ticket finalizó.
 					if (this.myTicket.tm_end !== null && this.myTicket.id_child === null) {
-						this.myTicketEnd = this.myTicket.tm_end;
+						this.myTicket = null;
 					}
 				}
 

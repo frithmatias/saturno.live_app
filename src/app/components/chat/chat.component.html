@@ -1,33 +1,27 @@
-<div class="h-100 chat-background">
-    <div class="row">
-        <div class="col">
-            <button class="btn btn-success m-2" (click)="closeChat()">Cerrar</button>
+<div>
 
+    <div>
+        <div class="p-2">
+            <button class="btn btn-success close-button" (click)="closeChat()">Cerrar</button>
         </div>
-        
-    </div>
-
-    <!-- MESSAGES -->
-    <div class="row" #chatmessages id="chatmessages">
-        <div class="col">
-            <div *ngFor="let message of ticketsService.chatMessages" class="message m-2"
+        <!-- MESSAGES -->
+        <div #chatmessages id="chatmessages" class="row-messages">
+  <div *ngFor="let message of ticketsService.chatMessages" class="message"
                 [ngClass]="{'message-me': message.own}">
                 {{ message.message }}
-                <br>
-                <span class="message-time">{{ message.time | messageTime }}</span>
+                <span class="message-time ml-2">{{ message.time | messageTime }}</span>
             </div>
         </div>
     </div>
 
-    <div class="row row-input-button">
+    <div class="row row-messages-send">
         <!-- INPUT TEXT -->
         <div class="col-10" style="align-self: center">
-
             <!-- <mat-label>CONSULTA A INFORMES</mat-label> -->
             <input type="text" autocomplete="off" class="chat-input" #textmsg matInput placeholder="INFORMES"
                 (keydown.enter)="sendMessage( textmsg, chatmessages )">
-
         </div>
+
         <!-- SEND BUTTON -->
         <div class="col-2 p-0">
             <button (click)="sendMessage( textmsg, chatmessages )" class="send-button" mat-mini-fab>
@@ -35,5 +29,4 @@
             </button>
         </div>
     </div>
-
 </div>

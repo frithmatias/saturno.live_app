@@ -105,7 +105,7 @@ export class DesktopComponent implements OnInit {
 
 	}
 
-	clearSession() {
+	clearDesktopSession() {
 		this.getTickets();
 		this.ticketsService.myTicket = null;
 		if (localStorage.getItem('ticket')) { localStorage.removeItem('ticket'); }
@@ -123,7 +123,7 @@ export class DesktopComponent implements OnInit {
 				let idDesktop = this.userService.desktop._id
 				this.userService.releaseDesktop(idDesktop).subscribe((data: DesktopResponse) => {
 					if (data.ok) {
-						this.clearSession();
+						this.clearDesktopSession();
 						this.router.navigate(['assistant/home']);
 					}
 				})
@@ -171,7 +171,7 @@ export class DesktopComponent implements OnInit {
 		if (this.ticketsService.myTicket) {
 			let snackMsg = 'Desea finalizar el ticket actual?';
 			await this.askForEndTicket(snackMsg).then(() => {
-				this.clearSession();
+				this.clearDesktopSession();
 			}).catch(() => {
 				return;
 			})
@@ -191,7 +191,7 @@ export class DesktopComponent implements OnInit {
 
 					this.waitForClient = false;
 					this.message = resp.msg;
-					this.clearSession();
+					this.clearDesktopSession();
 
 				} else {
 
@@ -267,7 +267,7 @@ export class DesktopComponent implements OnInit {
 				this.ticketsService.releaseTicket(idTicket).subscribe((resp: TicketResponse) => {
 
 					if (resp.ok) {
-						this.clearSession();
+						this.clearDesktopSession();
 						this.message = resp.msg;
 					}
 				})
@@ -292,7 +292,7 @@ export class DesktopComponent implements OnInit {
 					this.ticketsService.reassignTicket(idTicket, idSkill, blPriority).subscribe((resp: TicketResponse) => {
 						if (resp.ok) {
 							this.blPriority = false;
-							this.clearSession();
+							this.clearDesktopSession();
 							this.message = resp.msg;
 						}
 					});
@@ -312,7 +312,7 @@ export class DesktopComponent implements OnInit {
 			await this.askForEndTicket(snackMsg).then(() => {
 				this.ticketsService.endTicket(this.ticketsService.myTicket._id).subscribe((resp: TicketResponse) => {
 					if (resp.ok) {
-						this.clearSession();
+						this.clearDesktopSession();
 						this.message = resp.msg;
 					}
 				})
