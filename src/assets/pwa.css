@@ -1,8 +1,11 @@
 .oculto {
-    display: none !important;
-  }
-.notification-button {
-    position: fixed;
-    left: 3.5rem;
-    top: .5rem;
+  display: none !important;
+}
+
+.notification-icon {
+  position: fixed;
+  left    : 1rem;
+  bottom  : 1rem;
+  z-index : 2;
+  cursor  : pointer;
 }

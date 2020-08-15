@@ -1,4 +1,4 @@
-<div class="m-2 row animated fadeIn">
+<div class="m-2 row animated fadeIn" style="padding-bottom: 10em;">
 
   <!-- ======================================================== -->
   <!-- DESKTOP -->
@@ -120,45 +120,87 @@
   </div>
 </div>
 
-
 <!------------------------------>
 <!-- ACTIONS -->
 <!------------------------------>
-<div class="text-center footer-panel">
 
+<div class="container fixed-bottom bg-dark py-1">
+  <div class="row">
 
+    <div class="col-4 col-md-2 col-lg-1 button-content">
       <!-- priority slide -->
-        <mat-slide-toggle [(ngModel)]="blPriority" class="mx-2 my-1"
-          [disabled]="waitForClient || !ticketsService.myTicket || skillSelected === ''">
-          <mat-icon class="accessible-icon">accessible</mat-icon>
-        </mat-slide-toggle>
+      <mat-slide-toggle [(ngModel)]="blPriority" class="mx-2 my-1"
+        [disabled]="waitForClient || !ticketsService.myTicket || skillSelected === ''">
+        <mat-icon class="accessible-icon">accessible</mat-icon>
+      </mat-slide-toggle>
+    </div>
 
-      <!-- reassign ticket -->
-        <button class="mx-2 my-1" mat-flat-button color="primary" (click)="reassignTicket()"
-          [disabled]="waitForClient || !ticketsService.myTicket || skillSelected === ''">
+    <div class="col-4 col-md-2 col-lg-1 button-content">
+      <div class="btn-success button"
+        [ngClass]="{'button-disabled': waitForClient || !ticketsService.myTicket || skillSelected === ''}"
+        (click)="reassignTicket()">
+        <!-- reassign ticket -->
+        <div>
+          <mat-icon>rule</mat-icon>
+        </div>
+        <div>
           Asignar
-        </button>
+        </div>
+      </div>
 
+    </div>
+
+    <div class="col-4 col-md-2 col-lg-1 button-content">
       <!-- next ticket -->
-        <button class="mx-2 my-1" mat-flat-button color="primary" (click)="takeTicket()" 
-          [disabled]="waitForClient">
+      <div class="btn-success button" (click)="takeTicket()" [ngClass]="{'button-disabled': waitForClient}">
+        <div>
+          <mat-icon>check</mat-icon>
+        </div>
+        <div>
           Siguiente
-        </button>
+        </div>
+      </div>
+    </div>
 
+    <div class="col-4 col-md-2 col-lg-1 button-content">
       <!-- release ticket -->
-        <button class="mx-2 my-1" mat-flat-button color="primary" (click)="releaseTicket()"         
-          [disabled]="waitForClient || !ticketsService.myTicket">
+      <div class="btn-success button" (click)="releaseTicket()"
+        [ngClass]="{'button-disabled': waitForClient || !ticketsService.myTicket}">
+        <div>
+          <mat-icon>replay</mat-icon>
+        </div>
+        <div>
           Soltar
-        </button>
+        </div>
+      </div>
+    </div>
 
+    <div class="col-4 col-md-2 col-lg-1 button-content">
       <!-- end ticket -->
-        <button class="mx-2 my-1" mat-flat-button color="primary" (click)="endTicket()"
-          [disabled]="waitForClient || !ticketsService.myTicket">
+      <div class="btn-secondary button" (click)="endTicket()"
+        [ngClass]="{'button-disabled': waitForClient || !ticketsService.myTicket}">
+        <div>
+          <mat-icon>close</mat-icon>
+        </div>
+        <div>
           Finalizar
-        </button>
+        </div>
+      </div>
+    </div>
 
-        <button class="mx-2 my-1" mat-flat-button color="warn" (click)="releaseDesktop()"
-        [disabled]="waitForClient">
-        Abandonar Escritorio</button>
+    <div class="col-4 col-md-2 col-lg-1 button-content">
+
+      <div class="btn-danger button" (click)="releaseDesktop()"
+        [ngClass]="{'button-disabled': waitForClient}">
+        <div>
+          <mat-icon>power_settings_new</mat-icon>
+        </div>
+        <div>
+          Salir
+        </div>
+      </div>
+    </div>
 
   </div>
+
+</div>

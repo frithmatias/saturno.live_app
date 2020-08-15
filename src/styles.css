@@ -1,5 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
-html, body { height: 100%; }
+html, body { height: 100%}
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 button:focus { outline: none; }
 textarea:focus { outline: none; }
@@ -12,16 +12,6 @@ div:focus { outline: none; }
     border-radius: 10px;
     box-shadow: 3px 3px 30px -10px #999;
 }
-
-/* button panels */
-.footer-panel {
-    padding: 5px;
-    position: fixed;
-    bottom: 0px;
-    background-color: whitesmoke;
-    width: 100%;
-    box-shadow: 0px 0px 3px 0px #999;
-  }
 
 /* list no warp */
 .mat-select-option-nowarp {

@@ -12,13 +12,19 @@ import { Skill, SkillsResponse } from 'src/app/interfaces/skill.interface';
 
 const DESK_TIMEOUT = 10; // 60 segundos
 const DESK_EXTRATIME = 20; // 120 segundos
-
+export interface Tile {
+	color: string;
+	cols: number;
+	rows: number;
+	text: string;
+  }
 @Component({
 	selector: 'app-desktop',
 	templateUrl: './desktop.component.html',
 	styleUrls: ['./desktop.component.css']
 })
 export class DesktopComponent implements OnInit {
+
 	waitForClient: boolean = false;
 	comingClient: boolean = false;
 

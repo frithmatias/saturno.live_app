@@ -173,28 +173,34 @@ export class TicketsService {
 
 				// update ticket
 				if (this.myTicket) {
-					console.log(this)
 					// pick my LAST ticket
-					const myUpdatedTicket = this.ticketsAll.filter(ticket => (
-						// the same ticket updated
+					const pickMyTicket = this.ticketsAll.filter(ticket => (
+						// same ticket maybe updated
 						(ticket._id === this.myTicket._id && ticket.id_child === null) ||
-						// new one as child
+						// new and last one as child
 						(ticket.id_root === this.myTicket.id_root && ticket.id_child === null)
 					))[0];
 
-					if (myUpdatedTicket) {
-						this.myTicket = myUpdatedTicket;
-						localStorage.setItem('ticket', JSON.stringify(this.myTicket));
-					}
-
-					this.allMytickets = this.ticketsAll.filter(ticket => (
-						(ticket.id_root === this.myTicket.id_root )
-					))
-
 					// El ticket finalizó.
-					if (this.myTicket.tm_end !== null && this.myTicket.id_child === null) {
-						this.myTicket = null;
+					
+					if (pickMyTicket) {
+
+						if (pickMyTicket.tm_end !== null && pickMyTicket.id_child === null) {
+							this.myTicket = null;
+						} else {
+							this.myTicket = pickMyTicket;
+							localStorage.setItem('ticket', JSON.stringify(this.myTicket));
+						
+							this.allMytickets = this.ticketsAll.filter(ticket => (
+								(ticket.id_root === pickMyTicket.id_root )
+							))
+						}
+
+
 					}
+
+
+
 				}
 
 				resolve(data);

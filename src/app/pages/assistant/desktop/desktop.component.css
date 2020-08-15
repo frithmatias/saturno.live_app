@@ -7,9 +7,21 @@
     left: -0.30rem;
 }
 
+.button-content {
+    align-self: center;
+    line-height: 1.5em;
+    padding: 5px;
+    margin: 0px;
+}
+
+.button {
+    border-radius: 5px;
+    padding: 8px;
+}
+
 .button-disabled {
-    background-color: lightgray;
-    border-color: lightgray;
+    background-color: #383f46;
+    color: #54585d;
 }
 
 .accessible-icon {
