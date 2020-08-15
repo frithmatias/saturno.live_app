@@ -17,7 +17,7 @@ export interface Tile {
 	cols: number;
 	rows: number;
 	text: string;
-  }
+}
 @Component({
 	selector: 'app-desktop',
 	templateUrl: './desktop.component.html',
@@ -39,6 +39,7 @@ export class DesktopComponent implements OnInit {
 	tmRun: Subscription;
 	message: string;
 	skills: Skill[] = [];
+	skillsAssistant: Skill[] = [];
 	skillSelected: string = '';
 	blPriority = false;
 
@@ -52,6 +53,11 @@ export class DesktopComponent implements OnInit {
 
 	async ngOnInit() {
 
+		if (this.userService.user.id_skills) {
+			this.skillsAssistant = this.userService.user.id_skills;
+			// todo: crear coleccion userskills, si un usuario tiene dos o mas comercios, al hacer 
+			// todo: un attachCompany, me debe traer los skills del comercio seleccionado.
+		}
 		await this.readSkills().then((data: Skill[]) => {
 			this.skills = data;
 		}).catch(() => { this.snack.open('Error al obtener los skills', null, { duration: 2000 }); })
@@ -93,7 +99,6 @@ export class DesktopComponent implements OnInit {
 				// table pending skills
 				this.pendingTicketsBySkill = [];
 				// const idSkills = this.userService.user.id_skills;
-
 				for (let skillCompany of skillsCompany) {
 					this.pendingTicketsBySkill.push({
 						'id': skillCompany._id,
@@ -103,7 +108,6 @@ export class DesktopComponent implements OnInit {
 						'tickets': ticketsWaitingTeam.filter(ticket => ticket.id_skill._id === skillCompany._id && ticket.tm_end === null)
 					});
 				}
-
 			})
 			.catch(() => {
 				this.message = 'Error al obtener los tickets';
@@ -122,10 +126,19 @@ export class DesktopComponent implements OnInit {
 	}
 
 	async releaseDesktop() {
-		let snackMsg = 'Desea cerrar la sesión del escritorio?';
 
 		if (this.ticketsService.myTicket) {
+			let snackMsg = 'Desea cerrar la sesión del ticket actual?';
 			await this.askForEndTicket(snackMsg).then(() => {
+
+			}).catch(() => {
+				return;
+			})
+		}
+
+		let snackMsg = 'Desea salir del escritorio?';
+		this.snack.open(snackMsg, 'ACEPTAR', { duration: 5000 }).afterDismissed().subscribe(data => {
+			if (data.dismissedByAction) {
 				let idDesktop = this.userService.desktop._id
 				this.userService.releaseDesktop(idDesktop).subscribe((data: DesktopResponse) => {
 					if (data.ok) {
@@ -133,11 +146,8 @@ export class DesktopComponent implements OnInit {
 						this.router.navigate(['assistant/home']);
 					}
 				})
-			}).catch(() => {
-				return;
-			})
-		}
-
+			}
+		})
 	}
 
 	readSkills(): Promise<Skill[]> {
@@ -172,7 +182,7 @@ export class DesktopComponent implements OnInit {
 
 	async takeTicket() {
 
-		
+
 
 		if (this.ticketsService.myTicket) {
 			let snackMsg = 'Desea finalizar el ticket actual?';
@@ -289,25 +299,25 @@ export class DesktopComponent implements OnInit {
 		if (this.ticketsService.myTicket) {
 			let snackMsg = 'Desea enviar el ticket al skill seleccionado?'
 
-			await this.askForEndTicket(snackMsg).then(() => {
-				let idTicket = this.ticketsService.myTicket?._id;
-				let idSkill = this.skillSelected;
-				let blPriority = this.blPriority;
-				if (idTicket && idSkill) {
-					
-					this.ticketsService.reassignTicket(idTicket, idSkill, blPriority).subscribe((resp: TicketResponse) => {
-						if (resp.ok) {
-							this.blPriority = false;
-							this.clearDesktopSession();
-							this.message = resp.msg;
-						}
-					});
-				}
-			}).catch(() => {
-				return;
-			})
-		}
+			this.snack.open(snackMsg, 'ACEPTAR', { duration: 5000 }).afterDismissed().subscribe(data => {
+				if (data.dismissedByAction) {
 
+					let idTicket = this.ticketsService.myTicket?._id;
+					let idSkill = this.skillSelected;
+					let blPriority = this.blPriority;
+					if (idTicket && idSkill) {
+
+						this.ticketsService.reassignTicket(idTicket, idSkill, blPriority).subscribe((resp: TicketResponse) => {
+							if (resp.ok) {
+								this.blPriority = false;
+								this.clearDesktopSession();
+								this.message = resp.msg;
+							}
+						});
+					}
+				}
+			});
+		}
 	}
 
 	async endTicket() {

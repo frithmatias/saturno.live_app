@@ -160,7 +160,7 @@ export class UserService {
 		});
 		let data = { company };
 		let idUser = this.user._id;
-		const url = environment.url + '/u/attach/' + idUser;
+		const url = environment.url + '/u/attachcompany/' + idUser;
 		return this.http.post(url, data, { headers });
 	}
 

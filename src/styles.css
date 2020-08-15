@@ -9,8 +9,8 @@ div:focus { outline: none; }
 .shadow-box {
     min-width: 18rem;
     max-width: 30rem;
-    border-radius: 10px;
-    box-shadow: 3px 3px 30px -10px #999;
+    border-radius: 5px;
+    box-shadow: 0px 5px 20px 0px #999
 }
 
 /* list no warp */

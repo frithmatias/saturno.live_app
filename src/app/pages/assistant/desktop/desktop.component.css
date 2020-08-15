@@ -15,13 +15,22 @@
 }
 
 .button {
+    border: none;
     border-radius: 5px;
     padding: 8px;
+    width: inherit;
 }
 
 .button-disabled {
-    background-color: #383f46;
-    color: #54585d;
+    background-color: #f1f1f1;
+    color: #c7c7c7;
+}
+
+
+
+.button-inner {
+    font-weight: lighter;
+    font-size: small;
 }
 
 .accessible-icon {
