@@ -43,7 +43,7 @@ export class ScreenComponent implements OnInit {
 		}
 
 		this.ticketsService.getTickets();
-
+		console.log(this)
 	}
 
 	toggle(chat): void {
@@ -103,7 +103,7 @@ export class ScreenComponent implements OnInit {
 				title: '¡Gracias!'
 			}).then(data => {
 				if (data.isDismissed) {
-					this.ticketsService.clearPublicSession();
+					this.ticketsService.clearPublicSessionComplete();
 				}
 			})
 		}

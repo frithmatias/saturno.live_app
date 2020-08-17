@@ -16,3 +16,9 @@
 .screen-icon-star-on {
   color: orange;
 }
+
+
+.button-disabled {
+  background-color: #f1f1f1;
+  color: #c7c7c7;
+}

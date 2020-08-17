@@ -3,7 +3,7 @@ import { Socket } from 'ngx-socket-io';
 import { Observable, of } from 'rxjs';
 import { TicketsService } from './tickets.service';
 import { AjaxError } from 'rxjs/ajax';
-import { catchError, take } from 'rxjs/operators';
+import { catchError, take, tap } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UserService } from './user.service';
 
@@ -59,10 +59,12 @@ export class WebsocketService {
 						this.emit('enterCompany', data.ticket.id_company);
 
 						// si actualizo el ticket en la BD actualizo en myTicket y en la LS
-						if (localStorage.getItem('desktop') && this.ticketsService.myTicket) {
-							this.ticketsService.myTicket.id_socket_desk = this.idSocket;
-						} else {
-							this.ticketsService.myTicket.id_socket = this.idSocket;
+						if(this.ticketsService.myTicket){
+							if (localStorage.getItem('desktop')) {
+								this.ticketsService.myTicket.id_socket_desk = this.idSocket;
+							} else {
+								this.ticketsService.myTicket.id_socket = this.idSocket;
+							}
 						}
 
 						localStorage.setItem('ticket', JSON.stringify(this.ticketsService.myTicket));
@@ -101,12 +103,16 @@ export class WebsocketService {
 		return this.listen('cliente-en-camino').pipe(take(3));
 	}
 
+	escucharTurnoCancelado(): Observable<string> {
+		return this.listen('turno-cancelado');
+	}
+
 	escucharMensajes(): Observable<string> {
 		return this.listen('mensaje-privado');
 	}
 
 	escucharTurnos(): Observable<string> {
-		return this.listen('nuevo-turno');
+		return this.listen('nuevo-turno').pipe(tap(console.log));
 	}
 
 	escucharSystem(): Observable<string> {

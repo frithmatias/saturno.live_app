@@ -10,7 +10,7 @@ import { UserService } from 'src/app/services/user.service';
 import { DesktopResponse } from 'src/app/interfaces/desktop.interface';
 import { Skill, SkillsResponse } from 'src/app/interfaces/skill.interface';
 
-const DESK_TIMEOUT = 10; // 60 segundos
+const DESK_TIMEOUT = 2; // 60 segundos
 const DESK_EXTRATIME = 20; // 120 segundos
 export interface Tile {
 	color: string;
@@ -67,48 +67,60 @@ export class DesktopComponent implements OnInit {
 		this.wsService.escucharTurnos().subscribe(data => {
 			this.getTickets();
 		});
+		
+		this.wsService.escucharTurnoCancelado().subscribe(data => {
+			this.snack.open('Turno cancelado por el cliente', null, {duration:5000});
+			this.clearDesktopSession();
+			this.getTickets();
+		});
 
 	}
 
 	async getTickets() {
 		// traigo todos los tickets
-		return this.ticketsService.getTickets()
-			.then((tickets: Ticket[]) => {
-				// verifico si existe un ticket anterior pendiente 
-				const pending = tickets.filter(ticket =>
-					ticket.id_desk === this.userService.desktop._id &&
+		return this.ticketsService.getTickets().then((tickets: Ticket[]) => {
+			// DESKTOP: verifico si existe un ticket anterior pendiente 
+
+			const pending = tickets.filter(ticket => {
+				return (
+					// id_desk optional -> client can cancel ticket.
+					ticket.id_desk?._id === this.userService.desktop._id &&
 					ticket.tm_end === null &&
 					ticket.id_child === null
-				)[0]
-				if (pending) {
-					this.message = 'Existe un ticket pendiente de resolución'
-					localStorage.setItem('ticket', JSON.stringify(pending));
-				}
 
-				let skillsCompany = this.skills;
-				let skillsAssistant = [];
-				this.userService.user.id_skills.forEach(skill => skillsAssistant.push(skill._id));
+				);
+			})[0];
 
-				const ticketsWaitingAssistant = tickets.filter(ticket => ticket.tm_end === null && ticket.id_child === null && skillsAssistant.includes(ticket.id_skill._id));
-				const ticketsWaitingTeam = tickets.filter(ticket => ticket.tm_end === null && ticket.id_child === null);
+			if (pending) {
+				this.message = 'Existe un ticket pendiente de resolución'
+				this.ticketsService.myTicket = pending;
+				localStorage.setItem('ticket', JSON.stringify(pending));
+			}
 
-				this.pendingTicketsCount = ticketsWaitingAssistant.length;
+			let skillsCompany = this.skills;
+			let skillsAssistant = [];
+			this.userService.user.id_skills.forEach(skill => skillsAssistant.push(skill._id));
 
-				if (ticketsWaitingAssistant.length > 0) { this.message = `Hay ${ticketsWaitingAssistant.length} tickets en espera`; }
+			const ticketsWaitingAssistant = tickets.filter(ticket => ticket.tm_end === null && ticket.id_child === null && skillsAssistant.includes(ticket.id_skill._id));
+			const ticketsWaitingTeam = tickets.filter(ticket => ticket.tm_end === null && ticket.id_child === null);
 
-				// table pending skills
-				this.pendingTicketsBySkill = [];
-				// const idSkills = this.userService.user.id_skills;
-				for (let skillCompany of skillsCompany) {
-					this.pendingTicketsBySkill.push({
-						'id': skillCompany._id,
-						'assigned': skillsAssistant.includes(skillCompany._id),
-						'cd_skill': skillCompany.cd_skill,
-						'tx_skill': skillCompany.tx_skill,
-						'tickets': ticketsWaitingTeam.filter(ticket => ticket.id_skill._id === skillCompany._id && ticket.tm_end === null)
-					});
-				}
-			})
+			this.pendingTicketsCount = ticketsWaitingAssistant.length;
+
+			if (ticketsWaitingAssistant.length > 0) { this.message = `Hay ${ticketsWaitingAssistant.length} tickets en espera`; }
+
+			// table pending skills
+			this.pendingTicketsBySkill = [];
+			// const idSkills = this.userService.user.id_skills;
+			for (let skillCompany of skillsCompany) {
+				this.pendingTicketsBySkill.push({
+					'id': skillCompany._id,
+					'assigned': skillsAssistant.includes(skillCompany._id),
+					'cd_skill': skillCompany.cd_skill,
+					'tx_skill': skillCompany.tx_skill,
+					'tickets': ticketsWaitingTeam.filter(ticket => ticket.id_skill._id === skillCompany._id && ticket.tm_end === null)
+				});
+			}
+		})
 			.catch(() => {
 				this.message = 'Error al obtener los tickets';
 			})
@@ -128,26 +140,36 @@ export class DesktopComponent implements OnInit {
 	async releaseDesktop() {
 
 		if (this.ticketsService.myTicket) {
-			let snackMsg = 'Desea cerrar la sesión del ticket actual?';
-			await this.askForEndTicket(snackMsg).then(() => {
-
+			let snackMsg = 'Tiene una sesión de turno activa. ¿Desea finalizarla?';
+			return await this.askForContinue(snackMsg).then(() => {
+				// end ticket session
+				this.ticketsService.endTicket(this.ticketsService.myTicket._id).subscribe((resp: TicketResponse) => {
+					if (resp.ok) {
+						let idDesktop = this.userService.desktop._id
+						this.userService.releaseDesktop(idDesktop).subscribe((data: DesktopResponse) => {
+							if (data.ok) {
+								this.clearDesktopSession();
+								this.router.navigate(['assistant/home']);
+							} else {
+								this.message = resp.msg;
+							}
+						})
+					}
+				})
 			}).catch(() => {
 				return;
 			})
 		}
 
-		let snackMsg = 'Desea salir del escritorio?';
-		this.snack.open(snackMsg, 'ACEPTAR', { duration: 5000 }).afterDismissed().subscribe(data => {
-			if (data.dismissedByAction) {
-				let idDesktop = this.userService.desktop._id
-				this.userService.releaseDesktop(idDesktop).subscribe((data: DesktopResponse) => {
-					if (data.ok) {
-						this.clearDesktopSession();
-						this.router.navigate(['assistant/home']);
-					}
-				})
+		// end desktop session
+		let idDesktop = this.userService.desktop._id
+		this.userService.releaseDesktop(idDesktop).subscribe((data: DesktopResponse) => {
+			if (data.ok) {
+				this.clearDesktopSession();
+				this.router.navigate(['assistant/home']);
 			}
 		})
+
 	}
 
 	readSkills(): Promise<Skill[]> {
@@ -167,121 +189,23 @@ export class DesktopComponent implements OnInit {
 	// Assistant Actions
 	// ========================================================
 
-	askForEndTicket(snackMsg: string): Promise<boolean> {
+	askForContinue(snackMsg: string): Promise<boolean> {
 		return new Promise((resolve, reject) => {
 			this.snack.open(snackMsg, 'ACEPTAR', { duration: 5000 }).afterDismissed().subscribe(data => {
 				if (data.dismissedByAction) {
-					this.ticketsService.endTicket(this.ticketsService.myTicket._id).subscribe((resp: TicketResponse) => {
-						this.message = resp.msg;
-						resp.ok ? resolve() : reject();
-					});
+					resolve();
+				} else {
+					reject()
 				}
 			});
 		})
 	}
 
 	async takeTicket() {
-
-
-
 		if (this.ticketsService.myTicket) {
 			let snackMsg = 'Desea finalizar el ticket actual?';
-			await this.askForEndTicket(snackMsg).then(() => {
-				this.clearDesktopSession();
-			}).catch(() => {
-				return;
-			})
-		}
-
-		let idDesk = this.userService.desktop._id;
-		let idAssistant = this.userService.user._id;
-		let idSocketDesk = this.wsService.idSocket;
-
-		this.ticketsService.takeTicket(idDesk, idAssistant, idSocketDesk).subscribe(
-			(resp: TicketResponse) => {
-
-				this.snack.open(resp.msg, null, { duration: 2000 });
-				this.getTickets();
-
-				if (!resp.ok) {
-
-					this.waitForClient = false;
-					this.message = resp.msg;
-					this.clearDesktopSession();
-
-				} else {
-
-					this.waitForClient = true;
-					this.message = '';
-
-					this.ticketsService.myTicket = resp.ticket;
-					localStorage.setItem('ticket', JSON.stringify(resp.ticket));
-
-					// Seteo el tiempo que el cliente estuvo en espera desde que saco su turno hasta que fué atendido
-					this.tmWaiting = this.ticketsService.getTimeInterval(resp.ticket.tm_start, resp.ticket.tm_att);
-
-					// DESKTOP WAITING TIMERS
-					const encamino$ = this.wsService.escucharEnCamino();
-					const timer_timeout$ = interval(1000).pipe(map(num => num + 1), take(DESK_TIMEOUT));
-					let timeIsOut = false;
-					timer_timeout$.pipe(
-						tap(num => this.timerCount = DESK_TIMEOUT - num),
-						takeUntil(encamino$)
-					).subscribe(
-						data => {	// next
-							if (data >= DESK_TIMEOUT - 1) { timeIsOut = true; }
-						},
-						undefined, 	// error
-						() => { 	// complete
-							const timerEnd = new Promise((resolve) => {
-								if (timeIsOut) { // Cliente no envió en camino, el operador puede cerrar el turno. 
-									this.waitForClient = false;
-									this.comingClient = false;
-									resolve();
-								} else { // Cliente envió en camino, corre un segundo observable que adiciona tiempo de espera.
-									this.waitForClient = true;
-									this.comingClient = true;
-									const timer_extratime$ = interval(1000).pipe(
-										map(num => num + 1),
-										take(DESK_EXTRATIME)
-									);
-
-									timer_extratime$.subscribe(
-										num => this.timerCount = DESK_EXTRATIME - num,  // next
-										undefined, 	// error
-										() => { 	// complete
-											this.waitForClient = false;
-											this.comingClient = false;
-											resolve();
-										});
-								}
-
-							});
-
-							timerEnd.then(() => {
-								// finalizo el tiempo de espera del cliente, comienza el tiempo del asistente.
-								const timer_cliente$ = interval(1000);
-								const start_cliente = new Date().getTime();
-								this.tmRun = timer_cliente$.subscribe((data) => {
-									this.tmAttention = this.ticketsService.getTimeInterval(start_cliente, + new Date());
-								});
-							});
-						});
-				}
-			});
-
-		this.getTickets();
-
-	}
-
-	async releaseTicket() {
-
-		if (this.ticketsService.myTicket) {
-			let snackMsg = 'Desea solter el ticket y devolverlo a su estado anterior?';
-			await this.askForEndTicket(snackMsg).then(() => {
-				let idTicket = this.ticketsService.myTicket._id;
-				this.ticketsService.releaseTicket(idTicket).subscribe((resp: TicketResponse) => {
-
+			return await this.askForContinue(snackMsg).then(() => {
+				this.ticketsService.endTicket(this.ticketsService.myTicket._id).subscribe((resp: TicketResponse) => {
 					if (resp.ok) {
 						this.clearDesktopSession();
 						this.message = resp.msg;
@@ -292,40 +216,127 @@ export class DesktopComponent implements OnInit {
 			})
 		}
 
+		let idDesk = this.userService.desktop._id;
+		let idAssistant = this.userService.user._id;
+		let idSocketDesk = this.wsService.idSocket;
+
+		this.ticketsService.takeTicket(idDesk, idAssistant, idSocketDesk).subscribe((resp: TicketResponse) => {
+
+			this.snack.open(resp.msg, null, { duration: 2000 });
+			this.getTickets();
+
+			if (!resp.ok) {
+
+				this.waitForClient = false;
+				this.message = resp.msg;
+				this.clearDesktopSession();
+
+			} else {
+
+				this.waitForClient = true;
+				this.message = '';
+
+				this.ticketsService.myTicket = resp.ticket;
+				localStorage.setItem('ticket', JSON.stringify(resp.ticket));
+
+				// Seteo el tiempo que el cliente estuvo en espera desde que saco su turno hasta que fué atendido
+				this.tmWaiting = this.ticketsService.getTimeInterval(resp.ticket.tm_start, resp.ticket.tm_att);
+
+				// DESKTOP WAITING TIMERS
+				const encamino$ = this.wsService.escucharEnCamino();
+				const timer_timeout$ = interval(1000).pipe(map(num => num + 1), take(DESK_TIMEOUT));
+				let timeIsOut = false;
+				timer_timeout$.pipe(
+					tap(num => this.timerCount = DESK_TIMEOUT - num),
+					takeUntil(encamino$)
+				).subscribe(
+					data => {	// next
+						if (data >= DESK_TIMEOUT - 1) { timeIsOut = true; }
+					},
+					undefined, 	// error
+					() => { 	// complete
+						const timerEnd = new Promise((resolve) => {
+							if (timeIsOut) { // Cliente no envió en camino, el operador puede cerrar el turno. 
+								this.waitForClient = false;
+								this.comingClient = false;
+								resolve();
+							} else { // Cliente envió en camino, corre un segundo observable que adiciona tiempo de espera.
+								this.waitForClient = true;
+								this.comingClient = true;
+								const timer_extratime$ = interval(1000).pipe(
+									map(num => num + 1),
+									take(DESK_EXTRATIME)
+								);
+
+								timer_extratime$.subscribe(
+									num => this.timerCount = DESK_EXTRATIME - num,  // next
+									undefined, 	// error
+									() => { 	// complete
+										this.waitForClient = false;
+										this.comingClient = false;
+										resolve();
+									});
+							}
+
+						});
+
+						timerEnd.then(() => {
+							// finalizo el tiempo de espera del cliente, comienza el tiempo del asistente.
+							const timer_cliente$ = interval(1000);
+							const start_cliente = new Date().getTime();
+							this.tmRun = timer_cliente$.subscribe((data) => {
+								this.tmAttention = this.ticketsService.getTimeInterval(start_cliente, + new Date());
+							});
+						});
+					});
+			}
+		});
+		this.getTickets();
+	}
+
+	async releaseTicket() {
+		if (this.ticketsService.myTicket) {
+			let snackMsg = 'Desea soltar el ticket y devolverlo a su estado anterior?';
+			await this.askForContinue(snackMsg).then(() => {
+				let idTicket = this.ticketsService.myTicket._id;
+				this.ticketsService.releaseTicket(idTicket).subscribe((resp: TicketResponse) => {
+					if (resp.ok) {
+						this.clearDesktopSession();
+						this.message = resp.msg;
+					}
+				})
+			}).catch(() => {
+				return;
+			})
+		}
 	}
 
 	async reassignTicket() {
-
 		if (this.ticketsService.myTicket) {
 			let snackMsg = 'Desea enviar el ticket al skill seleccionado?'
-
-			this.snack.open(snackMsg, 'ACEPTAR', { duration: 5000 }).afterDismissed().subscribe(data => {
-				if (data.dismissedByAction) {
-
-					let idTicket = this.ticketsService.myTicket?._id;
-					let idSkill = this.skillSelected;
-					let blPriority = this.blPriority;
-					if (idTicket && idSkill) {
-
-						this.ticketsService.reassignTicket(idTicket, idSkill, blPriority).subscribe((resp: TicketResponse) => {
-							if (resp.ok) {
-								this.blPriority = false;
-								this.clearDesktopSession();
-								this.message = resp.msg;
-							}
-						});
-					}
+			await this.askForContinue(snackMsg).then(() => {
+				let idTicket = this.ticketsService.myTicket?._id;
+				let idSkill = this.skillSelected;
+				let blPriority = this.blPriority;
+				if (idTicket && idSkill) {
+					this.ticketsService.reassignTicket(idTicket, idSkill, blPriority).subscribe((resp: TicketResponse) => {
+						if (resp.ok) {
+							this.blPriority = false;
+							this.clearDesktopSession();
+							this.message = resp.msg;
+						}
+					});
 				}
-			});
+			}).catch(() => {
+				return;
+			})
 		}
 	}
 
 	async endTicket() {
-
 		if (this.ticketsService.myTicket) {
 			let snackMsg = 'Desea finalizar el ticket actual?'
-
-			await this.askForEndTicket(snackMsg).then(() => {
+			await this.askForContinue(snackMsg).then(() => {
 				this.ticketsService.endTicket(this.ticketsService.myTicket._id).subscribe((resp: TicketResponse) => {
 					if (resp.ok) {
 						this.clearDesktopSession();
@@ -337,5 +348,4 @@ export class DesktopComponent implements OnInit {
 			})
 		}
 	}
-
 }

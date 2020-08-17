@@ -19,8 +19,9 @@ export class TicketsService {
 	companyData: any;
 	publicMode: boolean = false;
 
-	allMytickets: Ticket[]=[];
+	allMytickets: Ticket[] = [];
 	myTicket: Ticket;
+	myTicketTmEnd: number = null;
 
 	lastTicket: Ticket;
 	ticketsAll: Ticket[] = [];
@@ -61,12 +62,15 @@ export class TicketsService {
 
 	clearPublicSession(): void {
 		this.chatMessages = [];
-		this.allMytickets = null;
 		this.myTicket = null;
 		this.companyData = null;
 		if (localStorage.getItem('ticket')) { localStorage.removeItem('ticket'); }
 		if (localStorage.getItem('company')) { localStorage.removeItem('company'); }
+	}
+	clearPublicSessionComplete(): void {
 		this.router.navigate(['/public']);
+		this.allMytickets = null;
+
 	}
 
 	actualizarSocket(idTicket: string, oldSocket: string, newSocket: string): Observable<object> {
@@ -83,7 +87,7 @@ export class TicketsService {
 		return this.http.get(environment.url + '/t/cancelticket/' + idTicket);
 	}
 
-	sendScores(cdScores: any){
+	sendScores(cdScores: any) {
 		const url = environment.url + `/p/scores`;
 		return this.http.post(url, cdScores);
 	}
@@ -172,8 +176,9 @@ export class TicketsService {
 				this.lastTicket = this.ticketsTail[0];
 
 				// update ticket
-				if (this.myTicket) {
-					// pick my LAST ticket
+				if (this.myTicket) { // client
+
+					// pick LAST ticket
 					const pickMyTicket = this.ticketsAll.filter(ticket => (
 						// same ticket maybe updated
 						(ticket._id === this.myTicket._id && ticket.id_child === null) ||
@@ -181,28 +186,24 @@ export class TicketsService {
 						(ticket.id_root === this.myTicket.id_root && ticket.id_child === null)
 					))[0];
 
-					// El ticket finalizó.
-					
+
 					if (pickMyTicket) {
 
 						if (pickMyTicket.tm_end !== null && pickMyTicket.id_child === null) {
+							// El ticket finalizó.
 							this.myTicket = null;
+							this.myTicketTmEnd = pickMyTicket.tm_end;
+							this.clearPublicSession();
 						} else {
 							this.myTicket = pickMyTicket;
 							localStorage.setItem('ticket', JSON.stringify(this.myTicket));
-						
+
 							this.allMytickets = this.ticketsAll.filter(ticket => (
-								(ticket.id_root === pickMyTicket.id_root )
+								(ticket.id_root === pickMyTicket.id_root)
 							))
 						}
-
-
 					}
-
-
-
 				}
-
 				resolve(data);
 			});
 		});

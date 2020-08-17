@@ -1,42 +1,4 @@
-.desktop-panel-buttons {
-    font-size: 1.5rem;
-    /* margin: 0px; */
-    /* padding: 0px; */
-    position: relative;
-    top: -0.30rem;
-    left: -0.30rem;
-}
-
-.button-content {
-    align-self: center;
-    line-height: 1.5em;
-    padding: 5px;
-    margin: 0px;
-}
-
-.button {
-    border: none;
-    border-radius: 5px;
-    padding: 8px;
-    width: inherit;
-}
-
 .button-disabled {
     background-color: #f1f1f1;
     color: #c7c7c7;
-}
-
-
-
-.button-inner {
-    font-weight: lighter;
-    font-size: small;
-}
-
-.accessible-icon {
-    font-size: xx-large;
-    position: relative;
-    left: -3px;
-    top: 3px;
-    color: green;
 }

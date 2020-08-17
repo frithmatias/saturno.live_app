@@ -2,7 +2,7 @@
 <!-- TICKETS SCREEN -->
 <!-- ======================================================== -->
 
-<div class="row p-2 animated fadeIn">
+<div class="row p-2 pb-5 animated fadeIn">
 
     <div class="col-md-6" style="min-width: 18rem;">
 
@@ -10,7 +10,7 @@
         <!-- TICKET FINALIZADO -->
         <!-- ======================================================== -->
         <!-- *ngIf="!ticketsService.myTicket && ticketsService.myTicketEnd!==null" -->
-        <div *ngIf="ticketsService.myTicket===null" class="card text-white bg-danger mb-4">
+        <div *ngIf="ticketsService.myTicket===null && ticketsService.myTicketTmEnd!==null" class="card text-white bg-danger mb-4">
             <div class="card-header banner-title">SU OPINION</div>
             <div class="banner-content p-3" style="background-color: rgb(141, 51, 51)">
 
@@ -189,15 +189,37 @@
 <!-- ======================================================== -->
 <!-- PUBLIC BUTTONS -->
 <!-- ======================================================== -->
+<div class="container bg-light fixed-bottom shadow-box no-radius text-center py-1">
+    <div class="row">
+  
+        <div class="col-6 button-content">
+            <button [disabled]="!ticketsService.myTicket?.id_desk"  
+            [ngClass]="{'button-disabled':!ticketsService.myTicket?.id_desk}"
+            class="btn btn-danger button" (click)="cancelTicket()">
+              <!-- cancel ticket -->
+              <div>
+                <mat-icon>power_settings_new</mat-icon>
+              </div>
+              <div class="button-inner">
+                Cancelar Turno
+              </div>
+            </button>
+          </div>
 
-<div class="row">
-    <div class="col">
-
-        <div *ngIf="ticketsService.myTicket" class="text-center footer-panel">
-            <button class="btn btn-danger text-uppercase m-2" (click)="cancelTicket()">Cancelar Turno</button>
-            <button [disabled]="!ticketsService.myTicket?.id_desk || coming" class="btn btn-success text-uppercase m-2"
-                (click)="enCamino()">en camino</button>
-        </div>
+          <div class="col-6 button-content">
+            <button [disabled]="!ticketsService.myTicket?.id_desk || coming" 
+            class="btn btn-success button"
+            [ngClass]="{'button-disabled':!ticketsService.myTicket?.id_desk || coming}"
+                (click)="enCamino()">
+              <!-- cancel ticket -->
+              <div>
+                <mat-icon>directions_walk</mat-icon>
+              </div>
+              <div class="button-inner">
+                ¡En camino!
+              </div>
+            </button>
+          </div>
 
     </div>
 </div>
