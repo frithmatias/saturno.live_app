@@ -193,8 +193,8 @@
     <div class="row">
   
         <div class="col-6 button-content">
-            <button [disabled]="!ticketsService.myTicket?.id_desk"  
-            [ngClass]="{'button-disabled':!ticketsService.myTicket?.id_desk}"
+            <button [disabled]="!ticketsService.myTicket"  
+            [ngClass]="{'button-disabled':!ticketsService.myTicket}"
             class="btn btn-danger button" (click)="cancelTicket()">
               <!-- cancel ticket -->
               <div>

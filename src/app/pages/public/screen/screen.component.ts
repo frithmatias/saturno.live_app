@@ -43,7 +43,6 @@ export class ScreenComponent implements OnInit {
 		}
 
 		this.ticketsService.getTickets();
-		console.log(this)
 	}
 
 	toggle(chat): void {

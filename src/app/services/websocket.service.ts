@@ -111,8 +111,8 @@ export class WebsocketService {
 		return this.listen('mensaje-privado');
 	}
 
-	escucharTurnos(): Observable<string> {
-		return this.listen('nuevo-turno').pipe(tap(console.log));
+	escucharNuevoTurno(): Observable<string> {
+		return this.listen('nuevo-turno');
 	}
 
 	escucharSystem(): Observable<string> {

@@ -10,8 +10,8 @@ import { UserService } from 'src/app/services/user.service';
 import { DesktopResponse } from 'src/app/interfaces/desktop.interface';
 import { Skill, SkillsResponse } from 'src/app/interfaces/skill.interface';
 
-const DESK_TIMEOUT = 2; // 60 segundos
-const DESK_EXTRATIME = 20; // 120 segundos
+const DESK_TIMEOUT = 30; // 60 segundos
+const DESK_EXTRATIME = 60; // 120 segundos
 export interface Tile {
 	color: string;
 	cols: number;
@@ -64,13 +64,16 @@ export class DesktopComponent implements OnInit {
 
 		await this.getTickets();
 
-		this.wsService.escucharTurnos().subscribe(data => {
+		this.wsService.escucharNuevoTurno().subscribe(() => {
 			this.getTickets();
 		});
-		
-		this.wsService.escucharTurnoCancelado().subscribe(data => {
-			this.snack.open('Turno cancelado por el cliente', null, {duration:5000});
-			this.clearDesktopSession();
+
+		this.wsService.escucharTurnoCancelado().subscribe(idTicket => {
+			this.snack.open('Turno cancelado por el cliente', null, { duration: 5000 });
+			if (this.ticketsService.myTicket?._id === idTicket) {
+				this.message = 'El turno fue cancelado por el cliente.';
+				this.clearDesktopSession();
+			}
 			this.getTickets();
 		});
 
