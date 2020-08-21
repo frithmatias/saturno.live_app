@@ -62,7 +62,7 @@
       <div class="jumbotron m-2 animated fadeIn">
         <div class="card-body">
           <h3>Hola {{ userService?.user.tx_name }}!</h3>
-          <hr>
+          
           <p>
             Para comenzar a atender turnos debe crear, al menos un comercio, al menos un escritorio y al menos una habilidad
           </p>
@@ -86,7 +86,6 @@
           <!-- no companies, no attached company -->
           <div *ngIf="userService.companies?.length === 0">
             <h3>Comencemos</h3>
-            <hr>
             <p>
               Usted no tiene ningún comercio registrado, desde aquí usted debe registrar al menos un comercio.
             </p>
@@ -112,16 +111,17 @@
           <!-- companies and attached company -->
           <div *ngIf="userService.companies?.length > 0 && userService.user?.id_company?._id">
             
-            <h4>Empresa creada y seleccionada <mat-icon style="color:green">check</mat-icon></h4>
-            <hr>
+            <h3>Perfecto! <mat-icon style="color:green">check</mat-icon></h3>
             <p>
               Las habilidades, escritorios y asistentes que registre a partir de ahora, serán
               asignados a
               <span style="color:blue;">
                 {{userService.user.id_company.tx_company_name}}
-              </span> </p>
+              </span> 
+            </p>
+            <hr>
             <p>
-              Si usted tiene mas comercios o sucursales puede crear todos los que necesite.
+              Usted puede crear mas comercios si dispone de sucursales.
             </p>
           </div>
 
@@ -147,7 +147,7 @@
         <div class="card-header">Crear Skills / Habilidades</div>
         <div class="card-body">
           <h3>Habilidades</h3>
-          <hr>
+          
           <p>
             Los skills o habilidades son segmentos que cada asistente esta capacitado para atender. Los crea aquí pero
             se asignan a los usuarios al momento de crear un asistente. Un asistente que tiene asignados los skills de,
@@ -177,7 +177,7 @@
         <div class="card-header">Crear Ventanillas / Escritorios</div>
         <div class="card-body">
           <h3>Escritorios</h3>
-          <hr>
+          
           <p>
             Los escritorios sólo necesitan un identificador que es simplemente una etiqueta. Estos
             identificadores pueden ser letras o números por ejemplo
@@ -208,17 +208,17 @@
         <div class="card-header">Crear Asistentes / Operadores</div>
         <div class="card-body">
           <h3>Asistentes</h3>
-          <hr>
           <p>
             Usted como usuario puede atender turnos desde el menú de Asistentes, sin embargo puede (opcionalmente) crear
             otros
             usuarios con rol de asistente para esa tarea y asignarles las habilidades (Skills) creadas anteriormente.
           </p>
+          <hr>
           <p>
             Tenga en cuenta que los asistentes que usted cree aquí, deben ingresar a sus cuentas desde el mismo login de
             usuario pero con la opción [ENTRAR] con su email y contraseña.
           </p>
-          <hr>
+     
 
           <div *ngIf="userService.assistants.length === 1 && userService.user.id_skills.length === 0"
             class="card bg-danger p-3 text-white">

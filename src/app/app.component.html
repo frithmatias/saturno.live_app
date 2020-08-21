@@ -1,10 +1,10 @@
 <app-toolbar (toggleSideNav)="toggle( sidenav )" [unreadMessages]="unreadMessages" (toggleChat)="toggle( chat )">
 </app-toolbar>
 
-<mat-drawer-container class="example-container h-100">
+<mat-drawer-container class="mt-1 h-100" style="background-color: unset;">
 
     <!-- sidenav -->
-    <mat-drawer #sidenav id="sidenav" mode="over" style="background-color: whitesmoke;">
+    <mat-drawer #sidenav id="sidenav" mode="over">
         <app-sidenav></app-sidenav>
     </mat-drawer>
 

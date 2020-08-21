@@ -12,6 +12,7 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
+  loading = false;
   desktops: Desktop[] = [];
   desktopsAvailable: Desktop[] = [];
   myDesktop: Desktop;
@@ -24,6 +25,8 @@ export class HomeComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+
+    this.loading = true;
 
     if (this.userService.user.id_company?._id) {
       let idCompany = this.userService.user.id_company._id;
@@ -82,15 +85,21 @@ export class HomeComponent implements OnInit {
         if (localStorage.getItem('desktop')) { localStorage.removeItem('desktop'); }
       }
 
-    });
+    },
+    ()=>{this.loading = false;},()=>{this.loading = false;});
   }
 
   releaseDesktop(desktop: Desktop): void {
+    
+    this.loading = true;
+
     let idDesktop = desktop._id;
     let idCompany = this.userService.user.id_company._id;
     this.userService.releaseDesktop(idDesktop).subscribe(data => {
       this.readDesktops(idCompany);
-    })
+      
+    },
+    ()=>{this.loading = false;},()=>{this.loading = false;})
   }
 
   ngOnDestroy(): void {

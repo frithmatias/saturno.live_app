@@ -1,134 +1,139 @@
 <div class="m-2 animated fadeIn" style="padding-bottom: 10em;">
 
-  <!-- ======================================================== -->
-  <!-- DESKTOP -->
-  <!-- ======================================================== -->
+  <div *ngIf="loading" class="mt-5 animated fadeIn">
+    <mat-spinner></mat-spinner>
+  </div>
 
-  <div class="card bg-light mb-4" style="min-width: 18rem; max-width: 30rem;">
-    <div class="card-header banner-title">
-      <span>
-        ESCRITORIO {{ userService.desktop?.cd_desktop }}
-      </span>
-      <span *ngIf="comingClient">
-        <mat-icon style="float: right; color: blueviolet; font-size: x-large;">directions_walk</mat-icon>
-      </span>
-    </div>
-    <div class="card-body">
+  <div *ngIf="!loading" class="animated fadeIn">
+    <!-- ======================================================== -->
+    <!-- DESKTOP -->
+    <!-- ======================================================== -->
 
-      <div class="container">
+    <div class="card bg-light mb-4" style="min-width: 18rem; max-width: 30rem;">
+      <div class="card-header banner-title">
+        <span>
+          ESCRITORIO {{ userService.desktop?.cd_desktop }}
+        </span>
+        <span *ngIf="comingClient">
+          <mat-icon style="float: right; color: blueviolet; font-size: x-large;">directions_walk</mat-icon>
+        </span>
+      </div>
+      <div class="card-body">
 
-        <!------------------------------>
-        <!-- EN ATENCIÓN -->
-        <!------------------------------>
+        <div class="container">
 
-        <div *ngIf="ticketsService.myTicket">
-          <div>
-          
+          <!------------------------------>
+          <!-- EN ATENCIÓN -->
+          <!------------------------------>
+
+          <div *ngIf="ticketsService.myTicket">
+            <div>
+
               Atendiendo turno
-           
-          </div>
-          <div class="banner-content xxxxl">
-            <div class="xxxl">
-              {{ ticketsService.myTicket.id_skill?.cd_skill }}
-              {{ ticketsService.myTicket.cd_number }}
 
             </div>
+            <div class="banner-content xxxxl">
+              <div class="xxxl">
+                {{ ticketsService.myTicket.id_skill?.cd_skill }}
+                {{ ticketsService.myTicket.cd_number }}
+
+              </div>
+            </div>
+          </div>
+
+          <!------------------------------>
+          <!-- OCIOSO -->
+          <!------------------------------>
+
+          <div class="card text-white my-4 p-1" style="background-color: darkcyan;" *ngIf='message'>{{message}}</div>
+
+        </div>
+      </div>
+      <!------------------------------>
+      <!-- TIEMPOS DE ATENCION -->
+      <!------------------------------>
+      <div class="card-footer">
+        <div class="row">
+          <div class="col p-0">
+            <div>TE</div>
+            <div>{{tmWaitingStr}}</div>
+          </div>
+          <div class="col p-0">
+            <div>TA</div>
+            <div>{{tmAttention}}</div>
+          </div>
+          <div class="col p-0">
+            <div>Tm</div>
+            <div>{{timerCount}}</div>
+          </div>
+          <div class="col p-0">
+            <div>TC</div>
+            <div>{{pendingTicketsCount}}</div>
           </div>
         </div>
-
-        <!------------------------------>
-        <!-- OCIOSO -->
-        <!------------------------------>
-
-        <div class="card text-white my-4 p-1" style="background-color: darkcyan;" *ngIf='message'>{{message}}</div>
-
       </div>
-    </div>
-    <!------------------------------>
-    <!-- TIEMPOS DE ATENCION -->
-    <!------------------------------>
-    <div class="card-footer">
-      <div class="row">
-        <div class="col p-0">
-          <div>TE</div>
-          <div>{{tmWaitingStr}}</div>
-        </div>
-        <div class="col p-0">
-          <div>TA</div>
-          <div>{{tmAttention}}</div>
-        </div>
-        <div class="col p-0">
-          <div>Tm</div>
-          <div>{{timerCount}}</div>
-        </div>
-        <div class="col p-0">
-          <div>TC</div>
-          <div>{{pendingTicketsCount}}</div>
-        </div>
-      </div>
+
+
     </div>
 
+    <!-- ======================================================== -->
+    <!-- NO SKILLS -->
+    <!-- ======================================================== -->
 
-  </div>
+    <div class="card bg-danger text-warning p-3 mb-4" style="min-width: 18rem; max-width: 30rem;"
+      *ngIf="skillsAssistantThisCompany.length === 0">
+      <p class="lead">
+        Usted no tiene habilidades asignadas. Puede asignarse habilidades
+        editando su usuario desde "Asistentes" del menú de Usuario.
+      </p>
+    </div>
 
-  <!-- ======================================================== -->
-  <!-- NO SKILLS -->
-  <!-- ======================================================== -->
+    <!-- ======================================================== -->
+    <!-- SKILL TABLE -->
+    <!-- ======================================================== -->
 
-  <div class="card bg-danger text-warning p-3 mb-4" style="min-width: 18rem; max-width: 30rem;"
-    *ngIf="skillsAssistantThisCompany.length === 0">
-    <p class="lead">
-      Usted no tiene habilidades asignadas. Puede asignarse habilidades 
-      editando su usuario desde "Asistentes" del menú de Usuario.
-    </p>
-  </div>
+    <div class="card bg-secondary mb-4" style="min-width: 18rem; max-width: 30rem;">
+      <div class="card-content table-responsive-sm  p-2">
+        <mat-radio-group [(ngModel)]="skillSelected">
 
-  <!-- ======================================================== -->
-  <!-- SKILL TABLE -->
-  <!-- ======================================================== -->
+          <table class="table table-sm text-white text-center">
 
-  <div class="card bg-secondary mb-4" style="min-width: 18rem; max-width: 30rem;">
-    <div class="card-content table-responsive-sm  p-2">
-      <mat-radio-group [(ngModel)]="skillSelected">
+            <tr style="border-top: 0px; color: yellow;">
+              <td style="text-align: left; border: none;"></td>
+              <td style="text-align: left; border: none;">Skill</td>
+              <td style="text-align: right; border: none;"> En espera </td>
+            </tr>
 
-        <table class="table table-sm text-white text-center">
-
-          <tr style="border-top: 0px; color: yellow;">
-            <td style="text-align: left; border: none;"></td>
-            <td style="text-align: left; border: none;">Skill</td>
-            <td style="text-align: right; border: none;"> En espera </td>
-          </tr>
-
-          <tr *ngFor="let waiting of pendingTicketsBySkill">
-            <td style="padding: 0; vertical-align: middle; font-size: 16px;">
-              <!-- skill assigned to assistant -->
-              <span *ngIf="waiting.assigned" style="color: greenyellow">
-                <mat-icon>check</mat-icon>
-              </span>
-              <!-- skill is NOT assigned to assistant, input radio can reassign ticket -->
-              <span *ngIf="!waiting.assigned && !waitForClient && ticketsService.myTicket">
-                <mat-radio-button [value]="waiting.id" style="position: relative;
+            <tr *ngFor="let waiting of pendingTicketsBySkill">
+              <td style="padding: 0; vertical-align: middle; font-size: 16px;">
+                <!-- skill assigned to assistant -->
+                <span *ngIf="waiting.assigned" style="color: greenyellow">
+                  <mat-icon>check</mat-icon>
+                </span>
+                <!-- skill is NOT assigned to assistant, input radio can reassign ticket -->
+                <span *ngIf="!waiting.assigned && !waitForClient && ticketsService.myTicket">
+                  <mat-radio-button [value]="waiting.id" style="position: relative;
                 left: 4px;
                 top: 4px;"></mat-radio-button>
-              </span>
-            </td>
-            <td style="text-align: left;">
-              {{ waiting.tx_skill }}
-            </td>
-            <td style="text-align: right;">
-              {{ waiting.tickets.length }}
-            </td>
-          </tr>
+                </span>
+              </td>
+              <td style="text-align: left;">
+                {{ waiting.tx_skill }}
+              </td>
+              <td style="text-align: right;">
+                {{ waiting.tickets.length }}
+              </td>
+            </tr>
 
-        </table>
+          </table>
 
-      </mat-radio-group>
+        </mat-radio-group>
+
+      </div>
 
     </div>
 
   </div>
-
-
 </div>
 
 <!------------------------------>

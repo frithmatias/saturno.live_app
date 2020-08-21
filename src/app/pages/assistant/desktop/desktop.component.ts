@@ -24,7 +24,7 @@ export interface Tile {
 	styleUrls: ['./desktop.component.css']
 })
 export class DesktopComponent implements OnInit {
-
+	loading = false;
 	waitForClient: boolean = false;
 	comingClient: boolean = false;
 
@@ -57,12 +57,13 @@ export class DesktopComponent implements OnInit {
 	) { }
 
 	async ngOnInit() {
+		this.loading = true;
+
 		if (!this.userService.desktop) {
 			this.router.navigate(['/assistant/home']);
 		}
 
 		await this.readSkills().then((data: Skill[]) => {
-			console.log(data)
 			this.skills = data;
 		}).catch(() => { this.snack.open('Error al obtener los skills', null, { duration: 2000 }); })
 
@@ -78,11 +79,13 @@ export class DesktopComponent implements OnInit {
 		this.subjectTurnoCancelado$.subscribe(idCancelledTicket => {
 			let idActiveTicket = this.ticketsService.myTicket?._id;
 			if (idCancelledTicket === idActiveTicket) {
-				this.snack.open('El turno fue cancelado por el cliente', null, {duration:10000});
+				this.snack.open('El turno fue cancelado por el cliente', null, { duration: 10000 });
 				this.clearDesktopSession();
 				this.getTickets();
 			}
 		});
+
+		this.loading = false;
 
 	}
 
@@ -125,9 +128,9 @@ export class DesktopComponent implements OnInit {
 			// table pending skills
 			this.pendingTicketsBySkill = [];
 			// const idSkills = this.userService.user.id_skills;
-			
+
 			for (let skillCompany of skillsCompany) {
-				if(skillsAssistantArray.includes(skillCompany._id)){
+				if (skillsAssistantArray.includes(skillCompany._id)) {
 					this.skillsAssistantThisCompany.push(skillCompany);
 				}
 				this.pendingTicketsBySkill.push({
@@ -137,10 +140,12 @@ export class DesktopComponent implements OnInit {
 					'tx_skill': skillCompany.tx_skill,
 					'tickets': ticketsWaitingTeam.filter(ticket => ticket.id_skill?._id === skillCompany._id && ticket.tm_end === null)
 				});
-				
+
 			}
+			this.loading = false;
 		})
 			.catch(() => {
+				this.loading = false;
 				this.message = 'Error al obtener los tickets';
 			})
 
@@ -200,7 +205,6 @@ export class DesktopComponent implements OnInit {
 		return new Promise((resolve, reject) => {
 			let idCompany = this.userService.user.id_company?._id;
 			this.userService.readSkills(idCompany).subscribe((data: SkillsResponse) => {
-				console.log(idCompany, data)
 				if (data.ok) {
 					resolve(data.skills);
 				} else {

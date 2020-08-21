@@ -21,7 +21,6 @@ export class TicketsComponent implements OnInit {
   readTickets(): void {
     this.ticketsService.getTickets().then((tickets: Ticket[]) => {
       this.tickets = tickets;
-      console.log(tickets);
     })
   }
 
