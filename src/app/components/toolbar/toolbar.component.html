@@ -36,18 +36,20 @@
         </button>
 
         <!-- User log-in Icon -->
-        <button *ngIf="!userService.user && !ticketsService.publicMode && !ticketsService.myTicket" routerLink="/login"
-            mat-icon-button>
-            <mat-icon>account_circle</mat-icon>
-        </button>
+        <div>
+            <button *ngIf="!userService.user && !ticketsService.myTicket" routerLink="/login"
+                mat-icon-button>
+                <mat-icon style="font-size: x-large;line-height: 20px;">account_circle</mat-icon>
+            </button>
+        </div>
 
         <!-- User logged Icon -->
         <div *ngIf="userService.user">
             <button mat-icon-button [matMenuTriggerFor]="menu">
-                <mat-icon>account_circle</mat-icon>
+                <mat-icon style="font-size: x-large;line-height: 20px;">account_circle</mat-icon>
             </button>
             <mat-menu #menu="matMenu">
-                <button mat-menu-item routerLink="/assistant/home">
+                <button mat-menu-item routerLink="/assistant/desktop">
                     <mat-icon>desktop_windows</mat-icon>
                     <span>Mi escritorio</span>
                 </button>

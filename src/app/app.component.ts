@@ -10,24 +10,7 @@ import { Router } from '@angular/router';
 export class AppComponent {
   opened: boolean;
   unreadMessages: number;
-  constructor(private router: Router) {
-
-    if (localStorage.getItem('company')) {
-      this.router.navigate(['/public']);
-    } else if (localStorage.getItem('user')) {
-      
-      if (localStorage.getItem('desktop')) {
-        this.router.navigate(['/assistant']);
-      } else {
-        this.router.navigate(['/user']);
-      }
-    } else {
-      this.router.navigate(['/home'])
-    }
-
-
-
-  }
+  constructor(private router: Router) {}
   toggle(htmlRef: MatSidenav): void {
     htmlRef.toggle();
   }

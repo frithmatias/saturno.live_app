@@ -1,15 +1,19 @@
 <div>
 
     <div>
-        <div class="p-2">
-            <button class="btn btn-success close-button" (click)="closeChat()">Cerrar</button>
+        <div class="close-button">
+            <button class="btn btn-success btn-sm" (click)="closeChat()">Cerrar</button>
         </div>
         <!-- MESSAGES -->
         <div #chatmessages id="chatmessages" class="row-messages">
-  <div *ngFor="let message of ticketsService.chatMessages" class="message"
+            <div *ngFor="let message of ticketsService.chatMessages" class="d-flex message"
                 [ngClass]="{'message-me': message.own}">
-                {{ message.message }}
-                <span class="message-time ml-2">{{ message.time | messageTime }}</span>
+                <div>
+                    {{ message.message }}
+                </div>
+                <div class="message-time ml-2">
+                    {{ message.time | messageTime }}
+                </div>
             </div>
         </div>
     </div>

@@ -1,62 +1,97 @@
 <div class="animated fadeIn" style="min-width: 18rem; max-width: 30rem;">
 
+  <!-- STEPPER OFF -->
   <div *ngIf="!showIntro">
-    <div class="jumbotron m-1 animated fadeIn">
-      <h1 class="display-2">Bienvenido {{ userService?.user.tx_name }}!</h1>
+    <div class="jumbotron m-2 animated fadeIn">
+      <h3 class="mb-4">Bienvenido {{ userService?.user.tx_name }}!</h3>
 
       <button class="btn btn-primary btn-block btn-lg" routerLink="/assistant/home">Atender</button>
 
       <hr class="my-4">
 
-      <p *ngIf="userService.user.id_company" class="card-text"> Web Pública
+      <div *ngIf="userService.user.id_company" class="card bg-danger text-white">
+        <div class="card-body" style="text-align: left;">
 
-        <a target="_blank"
-          href="https://saturno.live/#/public/{{userService.user.id_company.tx_public_name}}">
-          https://saturno.live/#/public/{{userService.user.id_company.tx_public_name}}
-        </a>
-      </p>
+          <div>
+            <p>
+              <mat-icon style="vertical-align: sub;">headset_mic</mat-icon> Atender Turnos
+            </p>
+            <p>
+              Para atender turnos sólo debe ingresar a su cuenta y luego ir al menú de Asistente y tomar un escritorio.
+            </p>
+
+          </div>
+          <hr>
+          <div>
+            <p>
+              <mat-icon style="vertical-align: sub;">bookmark_border</mat-icon> Generar Turnos
+            </p>
+            <p>
+              Para que sus clientes puedan crear turnos de su comercio o empresa, debe ofrecerles la
+              dirección web principal en saturno.live, ir a "OBTENER TURNO" y allí buscar su empresa por su nombre.
+            </p>
+            <p>
+              <a target="_blank" href="https://saturno.live">
+                https://saturno.live
+              </a>
+            </p>
+          </div>
+          <hr>
+          <p>
+            <mat-icon style="vertical-align: sub;">language</mat-icon> Acceso directo a crear turnos
+          </p>
+          <p>
+            La dirección web de acceso directo a el panel de turnos de su comercio es:
+          </p>
+          <p>
+            <a target="_blank" href="https://saturno.live/#/public/{{userService.user.id_company.tx_public_name}}">
+              https://saturno.live/#/public/{{userService.user.id_company.tx_public_name}}
+            </a>
+          </p>
+        </div>
+      </div>
     </div>
   </div>
 
-  <mat-horizontal-stepper *ngIf="showIntro" labelPosition="bottom" linear #stepper>
+
+  <!-- STEPPER ON -->
+  <mat-horizontal-stepper style="text-align: left;" *ngIf="showIntro" labelPosition="bottom" linear #stepper>
 
     <!-- Welcome Step -->
-    <mat-step>
-      <div class="jumbotron m-2" style="font-size: large;font-weight: lighter;">
-        <h1 class="display-2">Bienvenido {{ userService?.user.tx_name }}!</h1>
-        <p class="card-text">
-          Para comenzar a atender turnos debe dar de alta empresas o comercios, escritorios, habilidades y
-          opcionalmente puede dar de alta asistentes. Desde este asistente puede hacer todo.
-        </p>
-
-        <hr class="my-4">
-
-        <p class="card-text">Usted debe ofrecerle a sus clientes la URL pública de acceso al portal de turnos, estas
-          URL
-          estarán disponibles cuando haya terminado de crear sus empresas/comercios.</p>
-
-        <p>Por ej: https://webturnos.com/#/public/SUEMPRESA</p>
-
-        <button class="btn btn-success btn-block btn-lg" matStepperNext>Comenzar</button>
+    <mat-step state="star">
+      <div class="jumbotron m-2 animated fadeIn">
+        <div class="card-body">
+          <h3>Hola {{ userService?.user.tx_name }}!</h3>
+          <hr>
+          <p>
+            Para comenzar a atender turnos debe crear, al menos un comercio, al menos un escritorio y al menos una habilidad
+          </p>
+          <p>
+            Opcionalmente puede dar de alta asistentes. No le llevará mas de un minuto y desde aquí puede hacer todo!.
+          </p>
+          <hr>
+          <button class="btn btn-success" matStepperNext>Comenzar</button>
+          <qrcode [qrdata]="'Your data string'" [width]="256" [errorCorrectionLevel]="'M'"></qrcode>
+        </div>
       </div>
     </mat-step>
 
     <!-- Company Step -->
-    <mat-step>
+    <mat-step [completed]="userService.companies?.length > 0 && userService.user?.id_company?._id"  state="store">
 
-      <div class="card border-success m-2"
-        style="min-width: 18rem; max-width: 30rem; font-size: large;font-weight: lighter;">
+      <div class="card m-2" style="min-width: 18rem; max-width: 30rem;">
         <div class="card-header">Crear Empresas / Comercios</div>
-        <div class="card-body text-success">
+        <div class="card-body">
 
           <!-- no companies, no attached company -->
           <div *ngIf="userService.companies?.length === 0">
-            <h1>¡Comencemos!</h1>
-            <p class="card-text">
+            <h3>Comencemos</h3>
+            <hr>
+            <p>
               Usted no tiene ningún comercio registrado, desde aquí usted debe registrar al menos un comercio.
             </p>
             <hr>
-            <p class="card-text">
+            <p>
               Es importante que usted ingrese la dirección exacta. Esta dirección será visible para sus clientes
               desde el menú público de turnos y le asegura a su cliente que esta obteniendo un turno en el comercio
               correcto.
@@ -65,27 +100,28 @@
 
           <!-- companies, but not attached company -->
           <div *ngIf="userService.companies?.length > 0 && !userService.user?.id_company?._id">
-            <h1>¡Perfecto!</h1>
+            <h3>Comercio creado!</h3>
+            <hr>
             <p class="card-text card-text">
-              Ya tiene creada al menos una empresa. Para continuar registrando habilidades, escritorios y asistentes
-              es necesario que seleccione primero una de sus empresas ó comercios desde el menú principal.
+              Ya tiene creado al menos un comercio.
+              Para continuar es necesario que lo seleccione desde el menu principal.
             </p>
+            <img src="assets/img/saturno-selector-empresas.png">
           </div>
 
           <!-- companies and attached company -->
           <div *ngIf="userService.companies?.length > 0 && userService.user?.id_company?._id">
-            <h1>¡Excelente!</h1>
-            <p class="card-text">
-              Puede continúar creando habilidades, escritorios y asistentes.
-            </p>
+            
+            <h4>Empresa creada y seleccionada <mat-icon style="color:green">check</mat-icon></h4>
             <hr>
-            <p class="card-text">
-              Recuerde que las habilidades, escritorios o asistentes que registre a partir de ahora, serán
-              asignados a la empresa
+            <p>
+              Las habilidades, escritorios y asistentes que registre a partir de ahora, serán
+              asignados a
               <span style="color:blue;">
                 {{userService.user.id_company.tx_company_name}}
-              </span>. Si quiere asignarlas a otra empresa / comercio debe primero crearla si no existe y luego
-              seleccionarla.
+              </span> </p>
+            <p>
+              Si usted tiene mas comercios o sucursales puede crear todos los que necesite.
             </p>
           </div>
 
@@ -105,25 +141,28 @@
     </mat-step>
 
     <!-- Skills Step -->
-    <mat-step>
+    <mat-step [completed]="userService.skills?.length > 0" state="playlist_add_check">
 
-      <div class="card border-danger m-2"
-        style="min-width: 18rem; max-width: 30rem; font-size: large;font-weight: lighter;">
+      <div class="card m-2" style="min-width: 18rem; max-width: 30rem;">
         <div class="card-header">Crear Skills / Habilidades</div>
-        <div class="card-body text-danger">
-          <p class="card-text">
-            Los skills son habilidades que se asignan a los asistentes. Estas pueden ser etiquetas que
-            que identifiquen cualquier segmento de su negocio como "Ventas", "Repuestos", "Informes", etc.
+        <div class="card-body">
+          <h3>Habilidades</h3>
+          <hr>
+          <p>
+            Los skills o habilidades son segmentos que cada asistente esta capacitado para atender. Los crea aquí pero
+            se asignan a los usuarios al momento de crear un asistente. Un asistente que tiene asignados los skills de,
+            por ejemplo,
+            "Ventas" sólo recibira en su escritorio turnos de "Ventas".
           </p>
           <hr>
-          <p class="card-text">
-            De la misma forma que las empresas, las habilidades estan asociadas a los usuarios y asistentes por lo
-            tanto
-            deben ser creadas ANTES de crear asistentes o de comenzar a atender turnos.
+          <p>
+            También debe especificar un prefijo que tenga sentido semantico con la habilidad por ejemplo para Ventas
+            el prefijo puede ser V, de modo que su cliente vera los turnos de ventas como V1, V2, V3, etc.
           </p>
           <div class="row mx-2 mt-4" style="justify-content: space-between;">
             <button class="btn btn-danger col-5" matStepperPrevious> Volver </button>
-            <button class="btn btn-success col-5" matStepperNext> Siguiente </button>
+            <button [disabled]="userService.skills?.length === 0" class="btn btn-success col-5" matStepperNext>
+              Siguiente </button>
           </div>
         </div>
       </div>
@@ -132,27 +171,29 @@
     </mat-step>
 
     <!-- Desktops Step -->
-    <mat-step>
+    <mat-step [completed]="userService.desktops?.length > 0" state="important_devices">
 
-      <div class="card text-info m-2"
-        style="min-width: 18rem; max-width: 30rem; font-size: large;font-weight: lighter;">
+      <div class="card m-2" style="min-width: 18rem; max-width: 30rem;">
         <div class="card-header">Crear Ventanillas / Escritorios</div>
-        <div class="card-body text-info">
-          <p class="card-text">
+        <div class="card-body">
+          <h3>Escritorios</h3>
+          <hr>
+          <p>
             Los escritorios sólo necesitan un identificador que es simplemente una etiqueta. Estos
             identificadores pueden ser letras o números por ejemplo
           </p>
-          <p class="card-text">
-            "1", "2", "VR", "B1"
+          <p>
+            "1", "2", "A", "B"
           </p>
           <hr>
-          <p class="card-text">
-            Este identificador debe colocarlo en cada escritorio de forma bien visible para que el user
-            pueda identificar fácilmente el escritorio para el cual fue llamado.
+          <p>
+            Este identificador debe colocarlo en cada escritorio de forma bien visible para que su cliente
+            pueda identificar fácilmente el escritorio desde el cual fue llamado.
           </p>
           <div class="row mx-2 mt-4" style="justify-content: space-between;">
             <button class="btn btn-danger col-5" matStepperPrevious> Volver </button>
-            <button class="btn btn-success col-5" matStepperNext> Siguiente </button>
+            <button [disabled]="userService.desktops?.length === 0" class="btn btn-success col-5" matStepperNext>
+              Siguiente </button>
           </div>
         </div>
       </div>
@@ -161,24 +202,43 @@
     </mat-step>
 
     <!-- Assistants Step -->
-    <mat-step>
+    <mat-step [completed]="userService.assistants.length > 1 || userService.user.id_skills.length > 0" state="face">
 
-      <div class="card text-primary m-2"
-        style="min-width: 18rem; max-width: 30rem;font-size: large;font-weight: lighter;">
+      <div class="card m-2" style="min-width: 18rem; max-width: 30rem;">
         <div class="card-header">Crear Asistentes / Operadores</div>
-        <div class="card-body text-primary">
-          <p class="card-text">
-            Usted ya puede puede atender turnos desde el menú de Asistentes, sin embargo puede crear otros
-            usuarios con rol de asistente para esa tarea y asignarles las habilidades creadas anteriormente.
+        <div class="card-body">
+          <h3>Asistentes</h3>
+          <hr>
+          <p>
+            Usted como usuario puede atender turnos desde el menú de Asistentes, sin embargo puede (opcionalmente) crear
+            otros
+            usuarios con rol de asistente para esa tarea y asignarles las habilidades (Skills) creadas anteriormente.
+          </p>
+          <p>
+            Tenga en cuenta que los asistentes que usted cree aquí, deben ingresar a sus cuentas desde el mismo login de
+            usuario pero con la opción [ENTRAR] con su email y contraseña.
           </p>
           <hr>
-          <p class="card-text">
-            Los asistentes deben ingresar a sus cuentas desde el mismo login de usuario y puden comenzar
-            a atender turnos tomando un escritorio desde el menú "Escritorio" en el menú del "Asistente".
-          </p>
+
+          <div *ngIf="userService.assistants.length === 1 && userService.user.id_skills.length === 0"
+            class="card bg-danger p-3 text-white">
+            Usted no tiene asistentes creados ni habilidades asociadas a su usuario.
+            <hr>
+            <p>
+              Usted puede crear asistentes y asignarles habilidades, o puede omitir crear asistentes, pero en ese caso
+              debe al menos asignarse a su propio usuario las habilidades que quiere atender. Para eso
+              edite su usuario haciendo click en editar con el icono
+              <mat-icon style="font-size: medium;">edit</mat-icon> y luego selecciones las habilidades en el cuadro
+              SKILLS.
+            </p>
+
+          </div>
+
+
           <div class="row mx-2 mt-4" style="justify-content: space-between;">
             <button class="btn btn-danger col-5" matStepperPrevious> Volver </button>
-            <button class="btn btn-primary col-5" routerLink="/user/home" (click)="endWizard()"> Finalizar </button>
+            <button [disabled]="userService.assistants.length === 1 && userService.user.id_skills.length === 0"
+              class="btn btn-primary col-5" routerLink="/user/home" (click)="endWizard()"> Finalizar </button>
           </div>
         </div>
       </div>

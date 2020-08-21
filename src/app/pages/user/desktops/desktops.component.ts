@@ -68,6 +68,7 @@ export class DesktopsComponent implements OnInit, OnDestroy {
   readDesktops(idCompany: string) {
     this.userService.readDesktops(idCompany).subscribe((data: DesktopsResponse) => {
       this.desktops = data.desktops;
+      this.userService.desktops = data.desktops;
     });
   }
 

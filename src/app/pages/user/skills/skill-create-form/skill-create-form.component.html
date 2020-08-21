@@ -1,8 +1,8 @@
 <form autocomplete="off" style="color: brown;" ngNativeValidate #formDirective="ngForm" [formGroup]="forma" (ngSubmit)="createSkill(formDirective)">
 
     <mat-form-field color="warn" appearance="fill" class="w-100">
-        <mat-label>Abreviado</mat-label>
-        <input matInput placeholder="V" formControlName="cdSkill" name="cdSkill" type="text" required>
+        <mat-label>Prefijo</mat-label>
+        <input matInput placeholder="V" formControlName="cdSkill" name="cdSkill" type="text" maxlength="2" required>
     </mat-form-field>
 
     <mat-form-field color="warn" appearance="fill" class="w-100">
@@ -11,7 +11,7 @@
     </mat-form-field>
 
     <div class="form-group text-center">
-        <button class="btn btn-success btn-block text-uppercase waves-effect waves-light" type="submit">Alta de Skill</button>
+        <button class="btn btn-success btn-block text-uppercase waves-effect waves-light" type="submit">Crear Skill</button>
     </div>
 
 </form>

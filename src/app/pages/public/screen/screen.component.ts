@@ -16,8 +16,8 @@ export class ScreenComponent implements OnInit {
 	dni: number;
 	loading = false;
 	coming: boolean = false;
-	publicMode: boolean = false;
 	scores = new Map();
+	
 	constructor(
 		private wsService: WebsocketService,
 		public ticketsService: TicketsService,
@@ -39,7 +39,6 @@ export class ScreenComponent implements OnInit {
 				this.snack.open('Por favor ingrese una empresa primero!', null, { duration: 5000 });
 			}
 
-			this.publicMode = true;
 		}
 
 		this.ticketsService.getTickets();

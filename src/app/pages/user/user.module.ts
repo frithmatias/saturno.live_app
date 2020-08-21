@@ -22,7 +22,7 @@ import { SkillCreateFormComponent } from './skills/skill-create-form/skill-creat
 import { CompaniesComponent } from './companies/companies.component';
 import { CompanyCreateComponent } from './companies/company-create/company-create.component';
 import { WordMaxLengthPipe } from '../../pipes/word-max-length.pipe';
-
+import { StatusComponent } from './status/status.component';
 
 @NgModule({
 	declarations: [
@@ -39,7 +39,8 @@ import { WordMaxLengthPipe } from '../../pipes/word-max-length.pipe';
 		SkillCreateFormComponent,
 		CompaniesComponent,
 		CompanyCreateComponent,
-		WordMaxLengthPipe
+		WordMaxLengthPipe,
+		StatusComponent,
 
 	],
 	imports: [
@@ -48,7 +49,7 @@ import { WordMaxLengthPipe } from '../../pipes/word-max-length.pipe';
 		FormsModule,
 		MaterialModule,
 		ComponentsModule,
-		UserRoutingModule
+		UserRoutingModule,
 	]
 })
 export class UserModule { }

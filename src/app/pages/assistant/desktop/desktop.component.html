@@ -1,4 +1,4 @@
-<div class="m-2 animated fadeIn" style="padding-bottom: 10em;font-size: large; font-weight: lighter;">
+<div class="m-2 animated fadeIn" style="padding-bottom: 10em;">
 
   <!-- ======================================================== -->
   <!-- DESKTOP -->
@@ -13,7 +13,7 @@
         <mat-icon style="float: right; color: blueviolet; font-size: x-large;">directions_walk</mat-icon>
       </span>
     </div>
-    <div class="banner-content">
+    <div class="card-body">
 
       <div class="container">
 
@@ -22,15 +22,16 @@
         <!------------------------------>
 
         <div *ngIf="ticketsService.myTicket">
-          <div class="row">
-            <div class="col">
+          <div>
+          
               Atendiendo turno
-            </div>
+           
           </div>
-          <div class="row">
-            <div class="col xxxxl">
+          <div class="banner-content xxxxl">
+            <div class="xxxl">
               {{ ticketsService.myTicket.id_skill?.cd_skill }}
               {{ ticketsService.myTicket.cd_number }}
+
             </div>
           </div>
         </div>
@@ -41,37 +42,41 @@
 
         <div class="card text-white my-4 p-1" style="background-color: darkcyan;" *ngIf='message'>{{message}}</div>
 
-        <!------------------------------>
-        <!-- TIEMPOS DE ATENCION -->
-        <!------------------------------>
-        <div class="row banner-footer">
-          <div class="col p-0">
-            <div>TE</div>
-            <div>{{tmWaiting}}</div>
-          </div>
-          <div class="col p-0">
-            <div>TA</div>
-            <div>{{tmAttention}}</div>
-          </div>
-          <div class="col p-0">
-            <div>Tm</div>
-            <div>{{timerCount}}</div>
-          </div>
-          <div class="col p-0">
-            <div>TC</div>
-            <div>{{pendingTicketsCount}}</div>
-          </div>
+      </div>
+    </div>
+    <!------------------------------>
+    <!-- TIEMPOS DE ATENCION -->
+    <!------------------------------>
+    <div class="card-footer">
+      <div class="row">
+        <div class="col p-0">
+          <div>TE</div>
+          <div>{{tmWaitingStr}}</div>
+        </div>
+        <div class="col p-0">
+          <div>TA</div>
+          <div>{{tmAttention}}</div>
+        </div>
+        <div class="col p-0">
+          <div>Tm</div>
+          <div>{{timerCount}}</div>
+        </div>
+        <div class="col p-0">
+          <div>TC</div>
+          <div>{{pendingTicketsCount}}</div>
         </div>
       </div>
-
     </div>
+
+
   </div>
 
   <!-- ======================================================== -->
   <!-- NO SKILLS -->
   <!-- ======================================================== -->
 
-  <div class="card bg-danger text-warning p-3 mb-4" style="min-width: 18rem; max-width: 30rem;" *ngIf="skillsAssistant.length === 0">
+  <div class="card bg-danger text-warning p-3 mb-4" style="min-width: 18rem; max-width: 30rem;"
+    *ngIf="skillsAssistant.length === 0">
     <p class="lead">
       !Usted no tiene skills o habilidades asignadas a su usuario!
     </p>
@@ -81,15 +86,15 @@
   <!-- SKILL TABLE -->
   <!-- ======================================================== -->
 
-  <div class="card bg-danger mb-4" style="min-width: 18rem; max-width: 30rem;">
+  <div class="card bg-secondary mb-4" style="min-width: 18rem; max-width: 30rem;">
     <div class="card-content table-responsive-sm  p-2">
       <mat-radio-group [(ngModel)]="skillSelected">
 
         <table class="table table-sm text-white text-center">
 
           <tr style="border-top: 0px; color: yellow;">
-            <td colspan="2" style="text-align: left; border: none;">Skill</td>
-
+            <td style="text-align: left; border: none;"></td>
+            <td style="text-align: left; border: none;">Skill</td>
             <td style="text-align: right; border: none;"> En espera </td>
           </tr>
 

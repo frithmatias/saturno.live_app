@@ -17,7 +17,6 @@ const TAIL_LENGTH = 4;
 export class TicketsService {
 
 	companyData: any;
-	publicMode: boolean = false;
 
 	allMytickets: Ticket[] = [];
 	myTicket: Ticket;
@@ -67,6 +66,7 @@ export class TicketsService {
 		if (localStorage.getItem('ticket')) { localStorage.removeItem('ticket'); }
 		if (localStorage.getItem('company')) { localStorage.removeItem('company'); }
 	}
+
 	clearPublicSessionComplete(): void {
 		this.router.navigate(['/public']);
 		this.allMytickets = null;
@@ -150,7 +150,6 @@ export class TicketsService {
 			}
 
 			if (!id_company) {
-
 				return;
 			}
 

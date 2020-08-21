@@ -15,6 +15,8 @@ export class ChatComponent implements OnInit, OnDestroy {
   @Output() toggleChat: EventEmitter<boolean> = new EventEmitter();
   chatOpen: boolean;
   timerSubscription: Subscription;
+  escucharMensajesSub: Subscription;
+
   constructor(
     private wsService: WebsocketService, 
     private snack: MatSnackBar, 
@@ -31,7 +33,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
   
   ngOnInit(): void {
-    this.wsService.escucharMensajes().subscribe((data: any) => {
+    this.escucharMensajesSub = this.wsService.escucharMensajes().subscribe((data: any) => {
       let message = {
         own: false,
         time: new Date(),
@@ -88,7 +90,8 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.timerSubscription.unsubscribe();
+    if(this.timerSubscription) {this.timerSubscription.unsubscribe();}
+    if(this.escucharMensajesSub) {this.escucharMensajesSub.unsubscribe();}
   }
 
 }

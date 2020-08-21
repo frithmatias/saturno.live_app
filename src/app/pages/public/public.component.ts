@@ -17,9 +17,7 @@ export class PublicComponent implements OnInit {
     private route: ActivatedRoute,
     private snack: MatSnackBar,
     public ticketsService: TicketsService
-  ) {
-    this.ticketsService.publicMode = true;
-  }
+  ) {}
 
   ngOnInit(): void {
 
@@ -59,7 +57,9 @@ export class PublicComponent implements OnInit {
       }
 
     });
+
   }
+
   toggle(htmlRef: MatSidenav): void {
     htmlRef.toggle();
   }

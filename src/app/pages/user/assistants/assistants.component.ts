@@ -69,6 +69,7 @@ export class AssistantsComponent implements OnInit, OnDestroy {
   readAssistants(idCompany: string): void {
     this.userService.readAssistants(idCompany).subscribe((data: UsersResponse) => {
       this.assistants = data.users;
+      this.userService.assistants = data.users;
     });
   }
 

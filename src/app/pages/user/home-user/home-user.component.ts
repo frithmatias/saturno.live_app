@@ -21,13 +21,14 @@ export class HomeUserComponent implements OnInit {
 	config: any = {};
 	userSuscription: Subscription;
 	user: User;
+	userAvailable = false;	
 	constructor(public userService: UserService) { }
 	ngOnInit() {
 		if (this.userService.user) { this.user = this.userService.user; }
 
 		this.userSuscription = this.userService.user$.subscribe(data => {
 			if (data) {
-			  this.user = data;
+				this.user = data;
 			}
 		});
 
@@ -35,7 +36,6 @@ export class HomeUserComponent implements OnInit {
 			this.config = JSON.parse(localStorage.getItem('config'));
 			this.showIntro = this.config.intro;
 		}
-
 	}
 
 	toggleIntro() {

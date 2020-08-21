@@ -13,9 +13,11 @@ import { UserService } from './user.service';
 export class WebsocketService {
 	public socketStatus = false;
 	public idSocket = null;
+
 	constructor(
 		private socket: Socket,
 		private ticketsService: TicketsService,
+		private userService: UserService,
 		private snack: MatSnackBar,
 	) {
 		this.escucharConexiones();
@@ -29,10 +31,19 @@ export class WebsocketService {
 
 		this.socket.on('connect', () => {
 			this.snack.open('Conectado al servidor de turnos', null, { duration: 2000 });
+			// entra a la sala de la empresa asignada en el ticket
+			let idCompany: string;
+			if (this.ticketsService.myTicket?.id_company) { // public
+				idCompany = this.ticketsService.myTicket.id_company;
+			} else if(this.userService.user?.id_company?._id){ // user/assistant
+				idCompany = this.userService.user.id_company._id;
+			}
+
+			if (idCompany) {this.emit('enterCompany', idCompany);}
 
 			// si había un ticket en la LS lo actualizo
 			this.idSocket = this.socket.ioSocket.id;
-			
+
 			if (localStorage.getItem('ticket') !== 'undefined') {
 				let myTicket = JSON.parse(localStorage.getItem('ticket'));
 				if (!myTicket) {
@@ -54,19 +65,14 @@ export class WebsocketService {
 					catchError(this.manejaError)
 				).subscribe((data: any) => {
 					if (data.ok) {
-						
-						// entra a la sala de la empresa asignada en el ticket
-						this.emit('enterCompany', data.ticket.id_company);
-
 						// si actualizo el ticket en la BD actualizo en myTicket y en la LS
-						if(this.ticketsService.myTicket){
+						if (this.ticketsService.myTicket) {
 							if (localStorage.getItem('desktop')) {
 								this.ticketsService.myTicket.id_socket_desk = this.idSocket;
 							} else {
 								this.ticketsService.myTicket.id_socket = this.idSocket;
 							}
 						}
-
 						localStorage.setItem('ticket', JSON.stringify(this.ticketsService.myTicket));
 					}
 				});
@@ -91,8 +97,8 @@ export class WebsocketService {
 	}
 
 	escucharActualizarTicket(): void {
-		this.listen('ticket-updated').subscribe((data: any ) => {
-			this.snack.open('Se actualizo la sesión remota', null, {duration:1000});
+		this.listen('ticket-updated').subscribe((data: any) => {
+			this.snack.open('Se actualizo la sesión remota', null, { duration: 1000 });
 			this.ticketsService.myTicket = data.ticket;
 			localStorage.setItem('ticket', JSON.stringify(data.ticket));
 		});
@@ -111,8 +117,8 @@ export class WebsocketService {
 		return this.listen('mensaje-privado');
 	}
 
-	escucharNuevoTurno(): Observable<string> {
-		return this.listen('nuevo-turno');
+	escucharTurnoNuevo(): Observable<string> {
+		return this.listen('turno-nuevo');
 	}
 
 	escucharSystem(): Observable<string> {

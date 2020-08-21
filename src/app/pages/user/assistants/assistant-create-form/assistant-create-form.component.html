@@ -41,19 +41,23 @@
             placeholder="Confirma contraseña" autocomplete="new-password">
     </mat-form-field>
 
-
-    <mat-selection-list [ngModelOptions]="{standalone: true}" [(ngModel)]="selStrSkills">
-        <mat-list-option name="selStrSkills" *ngFor="let skill of skills" (click)="setNewSkill(skill)"
-            [value]="skill._id">
-            <span class="mat-select-option-nowarp">{{skill.tx_skill}}</span>
-        </mat-list-option>
-    </mat-selection-list>
+    <div class="card mb-4">
+        <div class="card-header">SKILLS</div>
+        <div class="card-body">
+            <mat-selection-list [ngModelOptions]="{standalone: true}" [(ngModel)]="selStrSkills">
+                <mat-list-option name="selStrSkills" *ngFor="let skill of skills" (click)="setNewSkill(skill)"
+                    [value]="skill._id">
+                    <span class="mat-select-option-nowarp">{{skill.tx_skill}}</span>
+                </mat-list-option>
+            </mat-selection-list>
+        </div>
+    </div>
 
 
     <div *ngIf="!assistantEdit" class="row text-center">
         <div class="col">
             <button *ngIf="!assistantEdit" class="btn btn-success btn-block text-uppercase" type="submit">
-                Alta de Asistente
+                Crear Asistente
             </button>
         </div>
     </div>

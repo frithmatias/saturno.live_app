@@ -1,173 +1,206 @@
 /* You can add global styles to this file, and also import other style files */
-html, body { height: 100%}
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
-button:focus { outline: none; }
-textarea:focus { outline: none; }
-input:focus { outline: none; }
-div:focus { outline: none; }
+html,
+body {
+    height: 100%
+}
 
-.shadow-box {
-    min-width: 18rem;
-    max-width: 30rem;
-    border-radius: 5px;
-    box-shadow: 0px 5px 20px 0px #999
+body {
+    margin      : 0;
+    font-family : Roboto, "Helvetica Neue", sans-serif;
+    font-style  : normal;
+    font-size   : medium;
+    font-weight : 300;
+    line-height : normal;
+    src         : local('Pacifico Regular'), local('Pacifico-Regular'), url(https://fonts.gstatic.com/s/pacifico/v12/FwZY7-Qmy14u9lezJ-6H6MmBp0u-.woff2) format('woff2');
+    font-display: swap;
+}
+
+button:focus {
+    outline: none;
+}
+
+textarea:focus {
+    outline: none;
+}
+
+input:focus {
+    outline: none;
+}
+
+div:focus {
+    outline: none;
 }
 
 
+td {
+    vertical-align: middle !important;
+}
+
+.shadow-box {
+    min-width    : 18rem;
+    max-width    : 30rem;
+    border-radius: 5px;
+    box-shadow   : 0px 0px 10px 0px #999;
+}
+
 .desktop-panel-buttons {
-    font-size: 1.5rem;
-    /* margin: 0px; */
+    font-size : 1.5rem;
+    /* margin : 0px; */
     /* padding: 0px; */
-    position: relative;
-    top: -0.30rem;
-    left: -0.30rem;
+    position  : relative;
+    top       : -0.30rem;
+    left      : -0.30rem;
 }
 
 .button-content {
-    align-self: center;
+    align-self : center;
     line-height: 1.5em;
-    padding: 5px;
-    margin: 0px;
+    padding    : 5px;
+    margin     : 0px;
 }
 
 .button {
-    border: none;
+    border       : none;
     border-radius: 5px;
-    padding: 8px;
-    width: inherit;
+    padding      : 8px;
+    width        : inherit;
 }
 
 .button-disabled {
     background-color: #f1f1f1;
-    color: #c7c7c7;
+    color           : #c7c7c7;
 }
 
 
 
 .button-inner {
-    font-weight: lighter;
-    font-size: small;
+    font-weight: 300;
+    font-size  : small;
 }
 
 .accessible-icon {
     font-size: xx-large;
-    position: relative;
-    left: -3px;
-    top: 3px;
-    color: green;
+    position : relative;
+    left     : -3px;
+    top      : 3px;
+    color    : green;
 }
 
 /* list no warp */
 .mat-select-option-nowarp {
     float: left;
     width: max-content;
-  }
+}
 
 /* banner company search & welcome */
 .text-company {
-    color: darkred; 
-    font-size: 2.5rem; 
+    color      : darkred;
+    font-size  : 2.5rem;
     line-height: 2rem;
-    font-weight: 400; 
+    font-weight: 400;
 }
 
 /* cruds */
-.list-crud-delete{
+.list-crud-delete {
     vertical-align: middle;
-    color:deeppink;
-    cursor: pointer;
+    color         : deeppink;
+    cursor        : pointer;
 }
 
-.list-crud-edit{
+.list-crud-edit {
     vertical-align: middle;
-    color:lightgreen;
-    cursor: pointer;
+    color         : lightgreen;
+    cursor        : pointer;
 
 }
 
-.list-crud-star{
+.list-crud-star {
     vertical-align: middle;
-    color:yellow;
-    cursor: pointer;
+    color         : yellow;
+    cursor        : pointer;
 }
 
 .card-turnos-danger {
     background-color: brown;
 }
+
 .card-turnos-primary {
     background-color: darkslateblue;
 }
+
 .card-turnos-info {
     background-color: darkslategrey;
 }
 
 
 /* sidenav */
+/* sidenav titles */
 .sidenav-title {
-    font-size: 24px;
-    cursor: pointer;
+    align-items: center;
+    cursor     : pointer;
 }
 
 .sidenav-title-icons {
-    font-size: 24px;
-    color: dimgray;
-    vertical-align: bottom;
+    font-size     : x-large;
+    color         : #449;
+    vertical-align: top;
 }
 
 .sidenav-title-text {
-    margin-left: .3rem;
-    font-weight: 100;
-    color: lightgray;
+    color         : #449;
+    font-size     : large;
+    vertical-align: bottom;
+    margin-left   : .5rem;
+    font-weight   : 400;
 }
 
+
+
+/* sidenav items */
 .sidenav-item {
-    cursor: pointer;
-    margin: 1rem;
+    display    : flex;
+    align-items: center;
+    cursor     : pointer;
+    margin     : 1rem;
 }
 
 .sidenav-item-icons {
-    color: cornflowerblue;
+    font-size     : x-large;
+    color         : #aaa;
     vertical-align: top;
 }
 
 .sidenav-item-text {
-    font-weight: 100;
-    color: black;
-    font-size: medium;
+    color         : black;
+    font-size     : medium;
     vertical-align: bottom;
-    margin-left: .5rem;
+    margin-left   : .5rem;
+    font-weight   : 300;
 }
 
 
 
 
 .banner-title {
-    font-size: x-large;
+    font-size  : x-large;
     font-family: unset;
-}
-
-.banner-subtitle {
-    padding: .4em;
-    font-size: x-large;
-    font-family: unset;
-    font-weight: 100;
-    line-height: normal;
+    font-weight: 400;
 }
 
 .banner-content {
-    border-radius: 0.3rem;
-    text-align: center;
-    font-weight: 100;
-    line-height: normal;
-    font-size: x-large;
+    border-radius  : 0.3rem;
+    text-align     : center;
+    line-height    : normal;
+    font-size      : x-large;
     justify-content: center;
-    margin: .3rem;
+    margin         : .3rem;
 }
 
 .banner-footer {
-    font-size: large;
-    font-weight: 100;
+    font-size  : large;
+    font-weight: 200;
 }
+
 .banner-content .xxxxl {
     font-size: 3em;
 }
@@ -180,44 +213,54 @@ div:focus { outline: none; }
 /* animate */
 /* animaciones */
 .animated {
-    -webkit-animation-duration: 1s;
-    animation-duration: 1s;
+    -webkit-animation-duration : 1s;
+    animation-duration         : 1s;
     -webkit-animation-fill-mode: both;
-    animation-fill-mode: both;
-  }
-  
-  .fast {
-    -webkit-animation-duration: 0.4s;
-    animation-duration: 0.4s;
+    animation-fill-mode        : both;
+}
+
+.fast {
+    -webkit-animation-duration : 0.4s;
+    animation-duration         : 0.4s;
     -webkit-animation-fill-mode: both;
-    animation-fill-mode: both;
-  }
-  
-  @keyframes fadeIn {
+    animation-fill-mode        : both;
+}
+
+@keyframes fadeIn {
     from {
-      opacity: 0;
+        opacity: 0;
     }
-  
+
     to {
-      opacity: 1;
+        opacity: 1;
     }
-  }
-  
-  .fadeIn {
+}
+
+.fadeIn {
     animation-name: fadeIn;
-  }
+}
 
 /* angular material re styling */
-  .mat-horizontal-content-container {
-      padding: 0px !important;
-  }
-  .mat-expansion-panel-body {
-      padding: .5rem !important;
-  }
-  .mat-radio-outer-circle {
-    border-color: #ffd740;
-  }
+.mat-horizontal-content-container {
+    padding: 0px !important;
+}
 
-  .mat-icon {
-      font-size: 18px;
-  }
+.mat-expansion-panel-body {
+    padding: .5rem !important;
+}
+
+.mat-radio-outer-circle {
+    border-color: #ffd740;
+}
+
+
+.swal2-title {
+    font-size: x-large !important;
+    font-weight: 300 !important;
+    color: red !important;
+}
+
+.swal2-content {
+    font-size: medium !important;
+    font-weight: 300 !important;
+}

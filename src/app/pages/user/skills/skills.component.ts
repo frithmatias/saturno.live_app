@@ -73,6 +73,7 @@ export class SkillsComponent implements OnInit, OnDestroy {
   readSkills(idCompany: string) {
     this.userService.readSkills(idCompany).subscribe((data: SkillsResponse) => {
       this.skills = data.skills;
+      this.userService.skills = data.skills;
     });
   }
 

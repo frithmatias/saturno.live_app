@@ -7,6 +7,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Skill } from '../../../interfaces/skill.interface';
 import { SkillsResponse } from '../../../interfaces/skill.interface';
 import { PublicService } from '../../../services/public.service';
+import Swal from 'sweetalert2';
 
 @Component({
 	selector: 'app-tickets',
@@ -27,11 +28,11 @@ export class TicketsComponent implements OnInit {
 
 	ngOnInit(): void {
 		if (this.ticketsService.myTicket) {
-			this.snack.open('Usted ya tiene un turno!', null, { duration: 5000 });
+			this.snack.open('Usted ya tiene un turno!', null, { duration: 2000 });
 			this.router.navigate(['/public/screen']);
 		} else {
 			if (!this.ticketsService.companyData) {
-				this.snack.open('Por favor ingrese una empresa primero.', null, { duration: 5000 });
+				this.snack.open('Por favor ingrese una empresa primero.', null, { duration: 2000 });
 				this.router.navigate(['/public']);
 			} else {
 				let idCompany = this.ticketsService.companyData._id;
@@ -44,6 +45,16 @@ export class TicketsComponent implements OnInit {
 	}
 
 	createTicket(idSkill: string): void {
+		
+		if (localStorage.getItem('user')){
+			Swal.fire({
+				icon: 'error',
+				title: 'Tiene una sesión de usuario activa',
+				text: 'Usted está en una página de acceso al público pero tiene una sesión de usuario activa. Para obtener un turno debe cerrar la sesión de usuario o abrir una pestaña en modo incógnito.',
+			  })	
+			return;
+		}
+
 		this.loading = true;
 
 		let idSocket = this.wsService.idSocket;

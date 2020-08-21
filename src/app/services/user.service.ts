@@ -24,8 +24,11 @@ export class UserService {
 	logueado = false;
 	//assistant
 	desktop: Desktop;
-	
+
+	public desktops: Desktop[] = [];
+	public skills: Skill[] = [];
 	public companies: Company[] = [];
+	public assistants: User[] = [];
 	public companiesSource = new Subject<Company[]>();
 	companies$ = this.companiesSource.asObservable();
 	

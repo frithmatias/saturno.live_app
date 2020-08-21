@@ -8,9 +8,7 @@ import { TicketsService } from '../../services/tickets.service';
 })
 export class HomeComponent implements OnInit {
 
-  constructor(private ticketsService: TicketsService) {
-    this.ticketsService.publicMode = false;
-   }
+  constructor(private ticketsService: TicketsService) {}
 
   ngOnInit(): void {}
 

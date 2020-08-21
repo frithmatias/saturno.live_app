@@ -20,9 +20,7 @@ export class SearchComponent implements OnInit {
     private wsService: WebsocketService,
     private snack: MatSnackBar) { }
 
-  ngOnInit(): void {
-
-  }
+  ngOnInit(): void {}
   ngAfterViewInit() {
     let refInput = document.getElementById('inputCompany');
     refInput.focus();

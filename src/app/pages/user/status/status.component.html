@@ -1,0 +1,60 @@
+<div class="card bg-light text-white">
+    <div class="card-body table-responsive-sm">
+
+        <table class="table table-sm">
+            <tr>
+                <td style="text-align: left;">Al menos un comercio</td>
+                <td>{{ userService.companies.length }}</td>
+                <td style="text-align: right;">
+                    <mat-icon style="font-size:large; color:limegreen" *ngIf="userService.companies.length > 0">check
+                    </mat-icon>
+                    <mat-icon style="font-size:large; color: red;" *ngIf="userService.companies.length === 0">clear
+                    </mat-icon>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: left;">Tiene comercio asignado</td>
+                <td>{{ this.userService.user?.id_company?.tx_company_name }}</td>
+                <td style="text-align: right;">
+                    <mat-icon style="font-size:large; color:limegreen" *ngIf="this.userService.user?.id_company?._id">check
+                    </mat-icon>
+                    <mat-icon style="font-size:large; color: red;" *ngIf="!this.userService.user?.id_company?._id">clear
+                    </mat-icon>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: left;">Al menos un skill</td>
+                <td>{{ userService.skills.length }}</td>
+                <td style="text-align: right;">
+                    <mat-icon style="font-size:large; color:limegreen" *ngIf="userService.skills.length > 0">check
+                    </mat-icon>
+                    <mat-icon style="font-size:large; color: red;" *ngIf="userService.skills.length === 0">clear
+                    </mat-icon>
+
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: left;">Escritorios</td>
+                <td>{{ userService.desktops.length }}</td>
+                <td style="text-align: right;">
+                    <mat-icon style="font-size:large; color:limegreen" *ngIf="userService.desktops.length > 0">check
+                    </mat-icon>
+                    <mat-icon style="font-size:large; color: red;" *ngIf="userService.desktops.length === 0">clear
+                    </mat-icon>
+
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: left;">Asistentes</td>
+                <td>{{ userService.assistants.length }}</td>
+                <td style="text-align: right;">
+                    <mat-icon style="font-size:large; color:limegreen" *ngIf="userService.assistants.length > 0">check
+                    </mat-icon>
+                    <mat-icon style="font-size:large; color: red;" *ngIf="userService.assistants.length === 0">clear
+                    </mat-icon>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+</div>

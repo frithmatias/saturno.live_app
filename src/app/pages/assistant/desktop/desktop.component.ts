@@ -4,7 +4,7 @@ import { TicketsService } from 'src/app/services/tickets.service';
 import { WebsocketService } from 'src/app/services/websocket.service';
 import { TicketResponse, Ticket } from '../../../interfaces/ticket.interface';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { interval, Subscription } from 'rxjs';
+import { interval, Subscription, Subject } from 'rxjs';
 import { take, takeUntil, tap, map, takeWhile } from 'rxjs/operators';
 import { UserService } from 'src/app/services/user.service';
 import { DesktopResponse } from 'src/app/interfaces/desktop.interface';
@@ -34,14 +34,19 @@ export class DesktopComponent implements OnInit {
 	timerCount: number = DESK_TIMEOUT;
 	cdDesk: string;
 	idDesk: string;
-	tmWaiting: string = '--:--:--';
+	tmWaitingStr: string = '--:--:--';
 	tmAttention: string = '--:--:--';
-	tmRun: Subscription;
-	message: string;
+	tmWaitingSub: Subscription;
+	tmExtraTimeSub: Subscription;
+	tmRunSub: Subscription;
+	message: string = '';
 	skills: Skill[] = [];
 	skillsAssistant: Skill[] = [];
 	skillSelected: string = '';
 	blPriority = false;
+
+	private subjectTurnoNuevo$ = new Subject();
+	private subjectTurnoCancelado$ = new Subject();
 
 	constructor(
 		public ticketsService: TicketsService,
@@ -52,6 +57,9 @@ export class DesktopComponent implements OnInit {
 	) { }
 
 	async ngOnInit() {
+		if (!this.userService.desktop) {
+			this.router.navigate(['/assistant/home']);
+		}
 
 		if (this.userService.user.id_skills) {
 			this.skillsAssistant = this.userService.user.id_skills;
@@ -64,17 +72,20 @@ export class DesktopComponent implements OnInit {
 
 		await this.getTickets();
 
-		this.wsService.escucharNuevoTurno().subscribe(() => {
+		// hot subjects subscribe to socket.io listeners
+		this.wsService.escucharTurnoNuevo().subscribe(this.subjectTurnoNuevo$);
+		this.subjectTurnoNuevo$.subscribe((data) => {
 			this.getTickets();
 		});
 
-		this.wsService.escucharTurnoCancelado().subscribe(idTicket => {
-			this.snack.open('Turno cancelado por el cliente', null, { duration: 5000 });
-			if (this.ticketsService.myTicket?._id === idTicket) {
-				this.message = 'El turno fue cancelado por el cliente.';
+		this.wsService.escucharTurnoCancelado().subscribe(this.subjectTurnoCancelado$);
+		this.subjectTurnoCancelado$.subscribe(idCancelledTicket => {
+			let idActiveTicket = this.ticketsService.myTicket?._id;
+			if (idCancelledTicket === idActiveTicket) {
+				this.snack.open('El turno fue cancelado por el cliente', null, {duration:10000});
 				this.clearDesktopSession();
+				this.getTickets();
 			}
-			this.getTickets();
 		});
 
 	}
@@ -109,7 +120,11 @@ export class DesktopComponent implements OnInit {
 
 			this.pendingTicketsCount = ticketsWaitingAssistant.length;
 
-			if (ticketsWaitingAssistant.length > 0) { this.message = `Hay ${ticketsWaitingAssistant.length} tickets en espera`; }
+			if (ticketsWaitingAssistant.length > 0) {
+				this.message = `Hay ${ticketsWaitingAssistant.length} tickets en espera`;
+			} else {
+				this.message = `No existen tickets pendientes.`
+			}
 
 			// table pending skills
 			this.pendingTicketsBySkill = [];
@@ -131,13 +146,18 @@ export class DesktopComponent implements OnInit {
 	}
 
 	clearDesktopSession() {
-		this.getTickets();
 		this.ticketsService.myTicket = null;
 		if (localStorage.getItem('ticket')) { localStorage.removeItem('ticket'); }
 		this.ticketsService.chatMessages = [];
-		this.tmWaiting = '--:--:--';
+		this.tmWaitingStr = '--:--:--';
 		this.tmAttention = '--:--:--';
-		if (this.tmRun) { this.tmRun.unsubscribe(); }
+		this.timerCount = DESK_TIMEOUT;
+		this.waitForClient = false;
+		if (this.tmWaitingSub) { this.tmWaitingSub.unsubscribe(); }
+		if (this.tmExtraTimeSub) { this.tmExtraTimeSub.unsubscribe(); }
+		if (this.tmRunSub) { this.tmRunSub.unsubscribe(); }
+
+
 	}
 
 	async releaseDesktop() {
@@ -205,6 +225,7 @@ export class DesktopComponent implements OnInit {
 	}
 
 	async takeTicket() {
+
 		if (this.ticketsService.myTicket) {
 			let snackMsg = 'Desea finalizar el ticket actual?';
 			return await this.askForContinue(snackMsg).then(() => {
@@ -224,18 +245,11 @@ export class DesktopComponent implements OnInit {
 		let idSocketDesk = this.wsService.idSocket;
 
 		this.ticketsService.takeTicket(idDesk, idAssistant, idSocketDesk).subscribe((resp: TicketResponse) => {
-
 			this.snack.open(resp.msg, null, { duration: 2000 });
-			this.getTickets();
-
-			if (!resp.ok) {
-
+			if (!resp.ok) { // no tickets
 				this.waitForClient = false;
 				this.message = resp.msg;
-				this.clearDesktopSession();
-
 			} else {
-
 				this.waitForClient = true;
 				this.message = '';
 
@@ -243,13 +257,13 @@ export class DesktopComponent implements OnInit {
 				localStorage.setItem('ticket', JSON.stringify(resp.ticket));
 
 				// Seteo el tiempo que el cliente estuvo en espera desde que saco su turno hasta que fué atendido
-				this.tmWaiting = this.ticketsService.getTimeInterval(resp.ticket.tm_start, resp.ticket.tm_att);
+				this.tmWaitingStr = this.ticketsService.getTimeInterval(resp.ticket.tm_start, resp.ticket.tm_att);
 
 				// DESKTOP WAITING TIMERS
 				const encamino$ = this.wsService.escucharEnCamino();
 				const timer_timeout$ = interval(1000).pipe(map(num => num + 1), take(DESK_TIMEOUT));
 				let timeIsOut = false;
-				timer_timeout$.pipe(
+				this.tmWaitingSub = timer_timeout$.pipe(
 					tap(num => this.timerCount = DESK_TIMEOUT - num),
 					takeUntil(encamino$)
 				).subscribe(
@@ -271,7 +285,7 @@ export class DesktopComponent implements OnInit {
 									take(DESK_EXTRATIME)
 								);
 
-								timer_extratime$.subscribe(
+								this.tmExtraTimeSub = timer_extratime$.subscribe(
 									num => this.timerCount = DESK_EXTRATIME - num,  // next
 									undefined, 	// error
 									() => { 	// complete
@@ -287,13 +301,14 @@ export class DesktopComponent implements OnInit {
 							// finalizo el tiempo de espera del cliente, comienza el tiempo del asistente.
 							const timer_cliente$ = interval(1000);
 							const start_cliente = new Date().getTime();
-							this.tmRun = timer_cliente$.subscribe((data) => {
+							this.tmRunSub = timer_cliente$.subscribe((data) => {
 								this.tmAttention = this.ticketsService.getTimeInterval(start_cliente, + new Date());
 							});
 						});
 					});
 			}
 		});
+
 		this.getTickets();
 	}
 
@@ -350,5 +365,11 @@ export class DesktopComponent implements OnInit {
 				return;
 			})
 		}
+	}
+
+	ngOnDestroy() {
+		this.subjectTurnoNuevo$.complete();
+		this.subjectTurnoCancelado$.complete();
+
 	}
 }

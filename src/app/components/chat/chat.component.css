@@ -3,10 +3,8 @@
 }
 
 .close-button {
-    position: absolute;
-    right    : 1em;
-    top     : 1em;
-    color   : white;
+    margin: .5em;
+    text-align: end;
 }
 
 .row-messages {
@@ -27,13 +25,14 @@
     color           : white;
     background-color: seagreen;
     box-shadow      : none;
+    border-radius: .2em;
 }
 
 .chat-input {
     border          : 0px;
     background-color: white;
     width           : -webkit-fill-available;
-    border-radius   : 2rem;
+    border-radius   : .2em;
     padding         : .5rem 1rem 0.5rem 1rem;
 }
 
@@ -41,7 +40,7 @@
     background-color: lightskyblue;
     padding         : 0.5em;
     font-size       : medium;
-    font-weight     : 200;
+    font-weight     : 300;
     border-radius   : 5px;
     margin          : .5em;
     width           : max-content;
@@ -55,6 +54,6 @@
 
 .message-time {
     font-size: small;
-    float    : right;
     color    : cornflowerblue;
+    align-self: flex-end;
 }
