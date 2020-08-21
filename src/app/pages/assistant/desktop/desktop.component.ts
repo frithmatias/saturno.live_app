@@ -41,7 +41,7 @@ export class DesktopComponent implements OnInit {
 	tmRunSub: Subscription;
 	message: string = '';
 	skills: Skill[] = [];
-	skillsAssistant: Skill[] = [];
+	skillsAssistantThisCompany: Skill[] = [];
 	skillSelected: string = '';
 	blPriority = false;
 
@@ -61,12 +61,8 @@ export class DesktopComponent implements OnInit {
 			this.router.navigate(['/assistant/home']);
 		}
 
-		if (this.userService.user.id_skills) {
-			this.skillsAssistant = this.userService.user.id_skills;
-			// todo: crear coleccion userskills, si un usuario tiene dos o mas comercios, al hacer 
-			// todo: un attachCompany, me debe traer los skills del comercio seleccionado.
-		}
 		await this.readSkills().then((data: Skill[]) => {
+			console.log(data)
 			this.skills = data;
 		}).catch(() => { this.snack.open('Error al obtener los skills', null, { duration: 2000 }); })
 
@@ -112,10 +108,10 @@ export class DesktopComponent implements OnInit {
 			}
 
 			let skillsCompany = this.skills;
-			let skillsAssistant = [];
-			this.userService.user.id_skills.forEach(skill => skillsAssistant.push(skill._id));
+			let skillsAssistantArray = [];
+			this.userService.user.id_skills.forEach(skill => skillsAssistantArray.push(skill._id));
 
-			const ticketsWaitingAssistant = tickets.filter(ticket => ticket.tm_end === null && ticket.id_child === null && skillsAssistant.includes(ticket.id_skill._id));
+			const ticketsWaitingAssistant = tickets.filter(ticket => ticket.tm_end === null && ticket.id_child === null && skillsAssistantArray.includes(ticket.id_skill?._id));
 			const ticketsWaitingTeam = tickets.filter(ticket => ticket.tm_end === null && ticket.id_child === null);
 
 			this.pendingTicketsCount = ticketsWaitingAssistant.length;
@@ -129,14 +125,19 @@ export class DesktopComponent implements OnInit {
 			// table pending skills
 			this.pendingTicketsBySkill = [];
 			// const idSkills = this.userService.user.id_skills;
+			
 			for (let skillCompany of skillsCompany) {
+				if(skillsAssistantArray.includes(skillCompany._id)){
+					this.skillsAssistantThisCompany.push(skillCompany);
+				}
 				this.pendingTicketsBySkill.push({
 					'id': skillCompany._id,
-					'assigned': skillsAssistant.includes(skillCompany._id),
+					'assigned': skillsAssistantArray.includes(skillCompany._id),
 					'cd_skill': skillCompany.cd_skill,
 					'tx_skill': skillCompany.tx_skill,
-					'tickets': ticketsWaitingTeam.filter(ticket => ticket.id_skill._id === skillCompany._id && ticket.tm_end === null)
+					'tickets': ticketsWaitingTeam.filter(ticket => ticket.id_skill?._id === skillCompany._id && ticket.tm_end === null)
 				});
+				
 			}
 		})
 			.catch(() => {
@@ -199,6 +200,7 @@ export class DesktopComponent implements OnInit {
 		return new Promise((resolve, reject) => {
 			let idCompany = this.userService.user.id_company?._id;
 			this.userService.readSkills(idCompany).subscribe((data: SkillsResponse) => {
+				console.log(idCompany, data)
 				if (data.ok) {
 					resolve(data.skills);
 				} else {

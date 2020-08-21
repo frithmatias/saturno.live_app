@@ -140,43 +140,21 @@ export class TicketsService {
 
 	getTickets(): Promise<any> {
 		return new Promise((resolve, reject) => {
-
-			let id_company: string;
-
-			if (this.companyData) { // public 
-				id_company = this.companyData._id;
-			} else if (this.userService.user) { // user / assistant
-				id_company = this.userService.user.id_company._id;
-			}
-
-			if (!id_company) {
-				return;
-			}
-
-			const url = environment.url + '/t/gettickets/' + id_company;
-			const getError = (err: AjaxError) => {
-				reject();
-				return of([{ idDesk: 'err', id_ticket: 'err', status: 'err' }]);
-			};
-
-			this.http.get(url).pipe(
-				map<TicketsResponse, Ticket[]>(data => data.tickets),
-				catchError(getError)
-			).subscribe((data: Ticket[]) => {
-
-				if (data.length === 0) {
-					resolve(data);
+			let idCompany = this.companyData ? this.companyData._id : this.userService.user.id_company._id;
+			if (!idCompany) {return;}
+			const url = environment.url + '/t/gettickets/' + idCompany;
+			this.http.get(url).subscribe((data: TicketsResponse) => {
+				if (data.tickets.length === 0) {
+					resolve(data.tickets);
 					return;
 				}
 				// !obtiene los tickets antes de que el servicio de sockets pueda actualizar el id_socket
-				this.ticketsAll = data;
-				this.ticketsCall = data.filter(ticket => ticket.tm_att !== null);
+				this.ticketsAll = data.tickets;
+				this.ticketsCall = data.tickets.filter(ticket => ticket.tm_att !== null);
 				this.ticketsTail = [...this.ticketsCall].sort((a: Ticket, b: Ticket) => -1).slice(0, TAIL_LENGTH);
 				this.lastTicket = this.ticketsTail[0];
-
 				// update ticket
 				if (this.myTicket) { // client
-
 					// pick LAST ticket
 					const pickMyTicket = this.ticketsAll.filter(ticket => (
 						// same ticket maybe updated
@@ -185,9 +163,7 @@ export class TicketsService {
 						(ticket.id_root === this.myTicket.id_root && ticket.id_child === null)
 					))[0];
 
-
 					if (pickMyTicket) {
-
 						if (pickMyTicket.tm_end !== null && pickMyTicket.id_child === null) {
 							// El ticket finalizó.
 							this.myTicket = null;
@@ -203,7 +179,7 @@ export class TicketsService {
 						}
 					}
 				}
-				resolve(data);
+				resolve(data.tickets);
 			});
 		});
 	}

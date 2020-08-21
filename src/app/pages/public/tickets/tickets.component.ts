@@ -73,7 +73,7 @@ export class TicketsComponent implements OnInit {
 
 	salir(): void {
 		if (localStorage.getItem('company')) { localStorage.removeItem('company'); }
-		this.router.navigate(['/public'])
+		this.router.navigate(['/public/search'])
 	}
 
 }

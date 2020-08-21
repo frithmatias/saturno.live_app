@@ -7,6 +7,7 @@ import { DesktopsComponent } from './desktops/desktops.component';
 import { AssistantsComponent } from './assistants/assistants.component';
 import { SkillsComponent } from './skills/skills.component';
 import { CompaniesComponent } from './companies/companies.component';
+import { TicketsComponent } from './tickets/tickets.component';
 
 const userRoutes: Routes = [
   { path: 'home', component: HomeUserComponent },
@@ -15,6 +16,8 @@ const userRoutes: Routes = [
   { path: 'assistants', component: AssistantsComponent },
   { path: 'skills', component: SkillsComponent },
   { path: 'dashboard', component: DashboardComponent },
+  { path: 'tickets', component: TicketsComponent },
+
 	{ path: '', redirectTo: '/user/home', pathMatch: 'full' },
   { path: '**', component: NopagefoundComponent}
 

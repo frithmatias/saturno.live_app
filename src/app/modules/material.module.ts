@@ -18,7 +18,8 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatRadioModule } from '@angular/material/radio'; 
-
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 @NgModule({
 	declarations: [],
 	imports: [
@@ -38,7 +39,9 @@ import { MatRadioModule } from '@angular/material/radio';
 		MatSlideToggleModule,
 		MatExpansionModule,
 		MatCheckboxModule,
-		MatRadioModule
+		MatRadioModule,
+		MatDatepickerModule,
+		MatNativeDateModule
 	],
 	exports: [
 		MatStepperModule,
@@ -57,7 +60,9 @@ import { MatRadioModule } from '@angular/material/radio';
 		MatSlideToggleModule,
 		MatExpansionModule,
 		MatCheckboxModule,
-		MatRadioModule
+		MatRadioModule,
+		MatDatepickerModule,
+		MatNativeDateModule
 	]
 })
 export class MaterialModule { }

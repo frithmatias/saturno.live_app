@@ -59,11 +59,13 @@
       <hr>
       <div class="container">
         <div class="row mt-3">
-          <div class="col">
-            <button class="btn btn-info btn-block" routerLink='/public/screen'>Pantalla</button>
+          <div class="col" style="cursor: pointer;" routerLink="/public/search">
+            <mat-icon>search</mat-icon>
+            <div >Volver al buscador</div>
           </div>
-          <div class="col">
-            <button class="btn btn-danger btn-block" (click)="salir()">Salir</button>
+          <div class="col" style="cursor: pointer;" routerLink="/public/screen">
+            <mat-icon>list_alt</mat-icon>
+            <div >Ver la pantalla</div>
           </div>
         </div>
       </div>
