@@ -8,6 +8,7 @@ export interface Skill {
 	id_company: string,
 	cd_skill: string,
 	tx_skill: string,
+	bl_generic: boolean, 
 	__v: number;
 	_id: string;
 }

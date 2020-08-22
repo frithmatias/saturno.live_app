@@ -4,16 +4,27 @@
         <div class="card-header">Skills</div>
         <div class="card-body card-tickets-info table-responsive-sm">
 
+             
+            <div class="mb-3">
+                <mat-slide-toggle [(ngModel)]="activateSkills" (click)="toggleSkills()"> 
+                    <div *ngIf="activateSkills">Habilidades Activadas</div>
+                    <div *ngIf="!activateSkills">Habilidades Desactivadas</div>
+                    
+                </mat-slide-toggle>
+              </div>
+
             <table class="table table-sm text-white">
-                <tr *ngFor="let skill of skills">
-                    <td> {{skill?.cd_skill}} </td>
-                    <td> {{skill?.tx_skill}} </td>
-                    <td style="text-align: right;">
-                        <mat-icon class="ml-2 list-crud-edit" (click)="editSkill(skill._id)">edit</mat-icon>
-                        <mat-icon class="ml-2 list-crud-delete" (click)="deleteSkill(skill._id)">delete
-                        </mat-icon>
-                    </td>
-                </tr>
+                <div *ngFor="let skill of skills">
+                    <tr *ngIf="!skill.bl_generic">
+                        
+                        <td> {{skill?.cd_skill}} </td>
+                        <td> {{skill?.tx_skill}} </td>
+                        <td style="text-align: right;">
+                            <mat-icon class="ml-2 list-crud-delete" (click)="deleteSkill(skill._id)">delete
+                            </mat-icon>
+                        </td>
+                    </tr>
+                </div>
             </table>
         </div>
     </div>
@@ -21,7 +32,7 @@
 
     <div class="my-4"></div>
 
-    <div class="card lead">
+    <div class="card lead" *ngIf="activateSkills">
         <div class="card-header">Alta de Skills para {{user.id_company?.tx_company_name}}</div>
         <div class="card-body">
             <app-skill-create-form (skillCreated)="skillCreated($event)"></app-skill-create-form>

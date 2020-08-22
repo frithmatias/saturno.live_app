@@ -12,6 +12,7 @@ import { Skill } from '../interfaces/skill.interface';
 import { User } from 'src/app/interfaces/user.interface';
 import { Company, CompaniesResponse } from '../interfaces/company.interface';
 import { MatStepper } from '@angular/material/stepper';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
 	providedIn: 'root'
@@ -31,13 +32,13 @@ export class UserService {
 	public assistants: User[] = [];
 	public companiesSource = new Subject<Company[]>();
 	companies$ = this.companiesSource.asObservable();
-	
+
 	public user: User;
 	public userSource = new Subject<User>();
 	user$ = this.userSource.asObservable();
 
 
-	constructor(private http: HttpClient, private router: Router) {
+	constructor(private http: HttpClient, private router: Router, private snack: MatSnackBar) {
 		if (localStorage.getItem('token') && localStorage.getItem('user') && localStorage.getItem('menu')) {
 			this.token = JSON.parse(localStorage.getItem('token'));
 			this.menu = JSON.parse(localStorage.getItem('menu'));
@@ -328,22 +329,22 @@ export class UserService {
 
 	login(gtoken: string, user: User, recordar: boolean = false) {
 		recordar ? localStorage.setItem('email', user.tx_email) : localStorage.removeItem('email');
-		
-		const api = gtoken ? '/u/google' : '/u/login' 
-		const data = gtoken ? {gtoken} : user;
+
+		const api = gtoken ? '/u/google' : '/u/login'
+		const data = gtoken ? { gtoken } : user;
 		const url = environment.url + api;
 
 		return this.http.post(url, data).pipe(map((resp: any) => {
-			
+
 			this.token = resp.token;
 			this.menu = resp.menu;
-			
+
 			localStorage.setItem('token', JSON.stringify(resp.token));
 			localStorage.setItem('menu', JSON.stringify(resp.menu));
 
 			this.pushUser(resp.user);
 			this.logueado = true;
-			
+
 			return resp;
 		}),
 			catchError(err => {
@@ -364,7 +365,7 @@ export class UserService {
 		let data = { user: this.user };
 		return this.http.post(url, data, { headers })
 			.pipe(map((resp: any) => {
-				if(resp.ok){
+				if (resp.ok) {
 					this.token = resp.newtoken;
 					localStorage.setItem('token', JSON.stringify(this.token));
 				} else {
@@ -402,12 +403,12 @@ export class UserService {
 		this.logueado = false;
 		this.token = null;
 		this.menu = null;
-		
+
 		this.user = null;
 		this.userSource.next(null)
 		this.companies = null;
 		this.companiesSource.next(null);
-		
+
 		this.router.navigate(['/home']);
 	}
 
@@ -427,5 +428,23 @@ export class UserService {
 
 	stepperReset(stepper: MatStepper) {
 		stepper.reset();
+	}
+
+	snackShow(msg: string, dur: number): Promise<boolean> {
+		return new Promise((resolve, reject) => {
+			this.snack.open(msg, null, { duration: dur });
+		})
+	}
+
+	snackAsk(msg: string, ask: string, dur: number): Promise<boolean> {
+		return new Promise((resolve, reject) => {
+			this.snack.open(msg, ask, { duration: dur }).afterDismissed().subscribe(data => {
+				if (data.dismissedByAction) {
+					resolve(true);
+				} else {
+					reject(false);
+				}
+			})
+		})
 	}
 }
