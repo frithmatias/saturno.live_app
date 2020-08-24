@@ -39,6 +39,7 @@ export class SkillsComponent implements OnInit, OnDestroy {
         if (data) {
           this.user = data;
           if (data.id_company) { this.readSkills(data.id_company._id); }
+          
         }
       });
 
@@ -74,9 +75,15 @@ export class SkillsComponent implements OnInit, OnDestroy {
       this.skills = data.skills;
       this.userService.skills = data.skills;
       if (data.skills.length === 0) {
+        this.activateSkills = false;
         this.createGenericSkill().catch(() => {
           this.userService.snackShow('Error al crear el skill por defecto!', 5000);
         })
+
+      } else if( data.skills.length === 1 && data.skills[0].bl_generic){
+        this.activateSkills = false;
+      } else if( data.skills.length > 1) {
+        this.activateSkills = true;
       }
     });
   }
@@ -159,6 +166,7 @@ export class SkillsComponent implements OnInit, OnDestroy {
         if (data.ok) {
           this.skills.push(data.skill);
           this.userService.skills = this.skills;
+
           resolve(data.skill)
         }
       },
