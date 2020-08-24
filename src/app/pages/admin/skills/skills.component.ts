@@ -165,8 +165,6 @@ export class SkillsComponent implements OnInit, OnDestroy {
 
       const skill: Skill = {
         id_company: this.userService.user.id_company._id,
-        cd_skill: 'T',
-        tx_skill: 'DEFAULT_SKILL',
         bl_generic: true,
         _id: null
       };

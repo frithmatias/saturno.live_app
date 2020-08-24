@@ -6,8 +6,8 @@ import { Company } from './company.interface';
 
 export interface Skill {
 	id_company: string,
-	cd_skill: string,
-	tx_skill: string,
+	cd_skill?: string,
+	tx_skill?: string,
 	bl_generic: boolean, 
 	_id: string;
 }
