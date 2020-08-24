@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { HomeUserComponent } from './home-user/home-user.component';
+import { HomeComponent } from './home/home.component';
 import { NopagefoundComponent } from '../nopagefound/nopagefound.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { DesktopsComponent } from './desktops/desktops.component';
@@ -10,7 +10,7 @@ import { CompaniesComponent } from './companies/companies.component';
 import { TicketsComponent } from './tickets/tickets.component';
 
 const userRoutes: Routes = [
-  { path: 'home', component: HomeUserComponent },
+  { path: 'home', component: HomeComponent },
   { path: 'companies', component: CompaniesComponent },
   { path: 'desktops', component: DesktopsComponent },
   { path: 'assistants', component: AssistantsComponent },
@@ -18,7 +18,7 @@ const userRoutes: Routes = [
   { path: 'dashboard', component: DashboardComponent },
   { path: 'tickets', component: TicketsComponent },
 
-	{ path: '', redirectTo: '/user/home', pathMatch: 'full' },
+	{ path: '', redirectTo: '/admin/home', pathMatch: 'full' },
   { path: '**', component: NopagefoundComponent}
 
 ];
@@ -28,4 +28,4 @@ const userRoutes: Routes = [
   imports: [RouterModule.forChild(userRoutes)], 
   exports: [RouterModule]
 })
-export class UserRoutingModule { }
+export class AdminRoutingModule { }

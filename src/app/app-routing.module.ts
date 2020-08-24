@@ -8,8 +8,8 @@ import { LoginComponent } from './pages/login/login.component';
 import { NopagefoundComponent } from './pages/nopagefound/nopagefound.component';
 import { HelpComponent } from './pages/help/help.component';
 
+import { SuperuserComponent } from './pages/superuser/superuser.component';
 import { AdminComponent } from './pages/admin/admin.component';
-import { UserComponent } from './pages/user/user.component';
 import { AssistantComponent } from './pages/assistant/assistant.component';
 import { PublicComponent } from './pages/public/public.component';
 
@@ -17,6 +17,7 @@ import { PublicComponent } from './pages/public/public.component';
 import { LoginGuard } from './guards/login.guard';
 import { TokenGuard } from './guards/token.guard';
 import { AdminGuard } from './guards/admin.guard';
+import { SuperuserModule } from './pages/superuser/superuser.module';
 
 const appRoutes: Routes = [
 
@@ -34,15 +35,15 @@ const appRoutes: Routes = [
 		component: AssistantComponent, 	
 		loadChildren: () => import('./pages/assistant/assistant.module').then((m) => m.AssistantModule)}, 
 
-	{ 	path: 'user', 		
-		canActivate: [LoginGuard, TokenGuard], 				
-		component: UserComponent, 		
-		loadChildren: () => import('./pages/user/user.module').then((m) => m.UserModule)},
-	
 	{ 	path: 'admin', 		
-		canActivate: [LoginGuard, TokenGuard, AdminGuard], 	
+		canActivate: [LoginGuard, TokenGuard], 				
 		component: AdminComponent, 		
 		loadChildren: () => import('./pages/admin/admin.module').then((m) => m.AdminModule)},
+	
+	{ 	path: 'superuser', 		
+		canActivate: [LoginGuard, TokenGuard, AdminGuard], 	
+		component: SuperuserComponent, 		
+		loadChildren: () => import('./pages/superuser/superuser.module').then((m) => m.SuperuserModule)},
 
 	{ path: '', redirectTo: '/home', pathMatch: 'full' },
 	{ path: '**',     component: NopagefoundComponent }

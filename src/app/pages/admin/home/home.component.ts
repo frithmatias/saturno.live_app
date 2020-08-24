@@ -3,18 +3,18 @@ import { UserService } from '../../../services/user.service';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { MatStepper } from '@angular/material/stepper/stepper';
 import { Company, CompaniesResponse } from '../../../interfaces/company.interface';
-import { User } from 'src/app/interfaces/user.interface';
+import { User } from '../../../interfaces/user.interface';
 import { Subscription } from 'rxjs';
 
 @Component({
-	selector: 'app-home-user',
-	templateUrl: './home-user.component.html',
-	styleUrls: ['./home-user.component.css'],
+	selector: 'app-home',
+	templateUrl: './home.component.html',
+	styleUrls: ['./home.component.css'],
 	providers: [{
 		provide: STEPPER_GLOBAL_OPTIONS, useValue: { displayDefaultIndicatorType: false }
 	}]
 })
-export class HomeUserComponent implements OnInit {
+export class HomeComponent implements OnInit {
 	@ViewChild('stepper') stepper: MatStepper;
 	publicURL: string;
 	showIntro: boolean = true;
@@ -22,6 +22,8 @@ export class HomeUserComponent implements OnInit {
 	userSuscription: Subscription;
 	user: User;
 	userAvailable = false;	
+	activateSkillExplanation = false;
+	activateAssistantExplanation = false;
 	constructor(public userService: UserService) { }
 	ngOnInit() {
 		if (this.userService.user) { this.user = this.userService.user; }

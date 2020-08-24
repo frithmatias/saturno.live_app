@@ -57,8 +57,8 @@ export class LoginComponent implements OnInit {
 				data => {
 					if (data.ok) {
 						if (data.user.id_company) { this.wsService.emit('enterCompany', data.user.id_company._id); }
-						window.location.href = '#/user';
-						// this.router.navigate(['/user']);				
+						window.location.href = '#/admin';
+						// this.router.navigate(['/admin']);				
 					}
 				},
 				() => {

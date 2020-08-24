@@ -40,8 +40,8 @@ export class AssistantCreateFormComponent implements OnInit, OnChanges {
 
 	ngOnChanges(changes: SimpleChanges) {
 		this.forma?.enable();
-		// USER_ROLE -> id_company: null
-		if (changes.assistantEdit.currentValue?.id_role === 'USER_ROLE') {
+		// ADMIN_ROLE -> id_company: null
+		if (changes.assistantEdit.currentValue?.id_role === 'ADMIN_ROLE') {
 			this.forma.controls['rol'].disable();
 			this.forma.controls['email'].disable();
 		}

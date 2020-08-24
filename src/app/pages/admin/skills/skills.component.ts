@@ -16,7 +16,8 @@ export class SkillsComponent implements OnInit, OnDestroy {
   skills: Skill[];
   user: User;
   userSubscription: Subscription;
-  activateSkills = true;
+  activateSkills = false;
+  activateSlide = true;
 
   constructor(
     private userService: UserService,
@@ -72,83 +73,98 @@ export class SkillsComponent implements OnInit, OnDestroy {
     this.userService.readSkills(idCompany).subscribe((data: SkillsResponse) => {
       this.skills = data.skills;
       this.userService.skills = data.skills;
+      if (data.skills.length === 0) {
+        this.createGenericSkill().catch(() => {
+          this.userService.snackShow('Error al crear el skill por defecto!', 5000);
+        })
+      }
     });
   }
 
   toggleSkills() {
+    if (this.activateSlide) {
+      if (this.activateSkills) { // el usuario desactiva los skills
+        if (this.skills.length > 0) { // verifico que tenga skills
 
-    if (this.activateSkills) { // el usuario desactiva los skills
-
-      if (this.skills.length > 0) { // verifico que tenga skills
-
-        let hasNoGenericSkill = false;
-        for (let skill of this.skills) {
-          if (skill.bl_generic === false) {
-            hasNoGenericSkill = true;
-            break;
+          let hasUserSkill = false;
+          for (let skill of this.skills) {
+            if (skill.bl_generic === false) {
+              hasUserSkill = true;
+              break;
+            }
           }
+
+          if (hasUserSkill) {
+            this.activateSlide = false;
+            this.userService.snackAsk('Hay habilidades creadas, desea eliminarlas?', 'Aceptar', 5000).then(() => {
+              this.deleteAllSkills().then(() => {
+               return this.createGenericSkill().then(() => { // borro skills y creo generico correctamente
+                 this.activateSkills = false;
+                 this.activateSlide = true;
+                  this.userService.snackShow('Habilidades Desactivadas!', 2000);
+                });
+              }).catch(() => {  // fallo borrar los skills o crear el generico
+                this.activateSkills = true;
+                this.activateSlide = true;
+                this.userService.snackShow('Error al eliminar las habilidades!', 5000);
+              })
+            }).catch(() => { // el usuario no respondio
+              this.activateSkills = true;
+              this.activateSlide = true;
+              return;
+            })
+          } else { // already has generic skill do nothing
+
+          }
+        } else {
+          this.createGenericSkill();
         }
-
-        if (hasNoGenericSkill) {
-          
-          this.userService.snackAsk('Se eliminarán los skills creados', 'Aceptar', 5000).then(() => {
-            this.deleteAllSkills();
-            this.createGenericSkill().then(() => {
-              this.userService.snackShow('Se creó un skill genérico y único.', 2000);
-            });
-          }).catch(() => {
-            this.activateSkills = true;
-            return;
-          })
-
-        } 
       } else {
-        this.createGenericSkill();
-      }
-
-    } else {
-
-      // elimino los skills, al activar sólo puede haber un skill genérico
-      this.deleteAllSkills();
-
-    }
-  }
-
-  deleteAllSkills(): void {
-    if (this.skills.length > 0) {
-      for (let skill of this.skills) {
-        let idSkill = skill._id;
-        this.userService.deleteSkill(idSkill).subscribe((data: SkillResponse) => {
-          this.skills = this.skills.filter(skill => skill._id !== data.skill._id);
-          this.userService.skills = this.skills;
-        });
+        // elimino los skills, al activar sólo puede haber un skill genérico
+        this.deleteAllSkills();
       }
     }
   }
 
-  createGenericSkill(): Promise<boolean> {
+  deleteAllSkills(): Promise<boolean> {
+    return new Promise((resolve) => {
+      if (this.skills.length > 0) {
+        for (let skill of this.skills) {
+          let idSkill = skill._id;
+          this.userService.deleteSkill(idSkill).subscribe((data: SkillResponse) => {
+            if(data.ok){
+              this.skills = this.skills.filter(skill => skill._id !== data.skill._id);
+              this.userService.skills = this.skills;
+            }
+          });
+        }
+      }
+      resolve();
+    });
+  }
+
+  createGenericSkill(): Promise<Skill | null> {
     return new Promise((resolve, reject) => {
 
       const skill: Skill = {
         id_company: this.userService.user.id_company._id,
         cd_skill: 'T',
-        tx_skill: 'OBTENER TURNO',
+        tx_skill: 'DEFAULT_SKILL',
         bl_generic: true,
-        __v: null,
         _id: null
       };
 
       this.userService.createSkill(skill).subscribe((data: SkillResponse) => {
+
         if (data.ok) {
           this.skills.push(data.skill);
           this.userService.skills = this.skills;
-          // this.snack.open(data.msg, null, { duration: 5000 });
-          resolve(true)
+          resolve(data.skill)
         }
       },
         (err: any) => {
           this.snack.open(err.error.msg, null, { duration: 5000 });
-          reject(false);
+          reject(null);
         }
       )
     });

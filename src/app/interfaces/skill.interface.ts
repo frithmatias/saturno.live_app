@@ -9,7 +9,6 @@ export interface Skill {
 	cd_skill: string,
 	tx_skill: string,
 	bl_generic: boolean, 
-	__v: number;
 	_id: string;
 }
 

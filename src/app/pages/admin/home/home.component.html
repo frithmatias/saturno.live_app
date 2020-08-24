@@ -62,9 +62,10 @@
       <div class="jumbotron m-2 animated fadeIn">
         <div class="card-body">
           <h3>Hola {{ userService?.user.tx_name }}!</h3>
-          
+
           <p>
-            Para comenzar a atender turnos debe crear, al menos un comercio, al menos un escritorio y al menos una habilidad
+            Para comenzar a atender turnos debe crear, al menos un comercio, al menos un escritorio y al menos una
+            habilidad
           </p>
           <p>
             Opcionalmente puede dar de alta asistentes. No le llevará mas de un minuto y desde aquí puede hacer todo!.
@@ -77,7 +78,7 @@
     </mat-step>
 
     <!-- Company Step -->
-    <mat-step [completed]="userService.companies?.length > 0 && userService.user?.id_company?._id"  state="store">
+    <mat-step [completed]="userService.companies?.length > 0 && userService.user?.id_company?._id" state="store">
 
       <div class="card m-2" style="min-width: 18rem; max-width: 30rem;">
         <div class="card-header">Crear Empresas / Comercios</div>
@@ -110,14 +111,15 @@
 
           <!-- companies and attached company -->
           <div *ngIf="userService.companies?.length > 0 && userService.user?.id_company?._id">
-            
-            <h3>Perfecto! <mat-icon style="color:green">check</mat-icon></h3>
+
+            <h3>Perfecto! <mat-icon style="color:green">check</mat-icon>
+            </h3>
             <p>
               Las habilidades, escritorios y asistentes que registre a partir de ahora, serán
               asignados a
               <span style="color:blue;">
                 {{userService.user.id_company.tx_company_name}}
-              </span> 
+              </span>
             </p>
             <hr>
             <p>
@@ -146,26 +148,43 @@
       <div class="card m-2" style="min-width: 18rem; max-width: 30rem;">
         <div class="card-header">Crear Skills / Habilidades</div>
         <div class="card-body">
-          <h3>Habilidades</h3>
-          
-          <p class="card bg-danger p-3 text-white">
-            Si su comercio no requiere de habilidades y prefiere utilizar una sóla línea de turnos puede deshabilitar 
-            la opcion haciendo click en Habilidades Activadas para deshabilitar esta opción.
-          </p>
+          <h3>Habilidades (opcional)</h3>
           <p>
-            Los skills o habilidades son segmentos que cada asistente esta capacitado para atender. Los crea aquí pero
-            se asignan a los usuarios.
+            Este paso es opcional. Si no necesita mas de una línea de turnos puede omitir este paso y continuar. 
+            Por defecto esta opción esta desactivada.
           </p>
           <hr>
-          <p>
-            El prefijo de la habilidad es una abreviatura de su nombre. Por ejemplo para la habilidad de "Pediatría" 
-            el prefijo puede ser P, de este modo su cliente vera los turnos como P1, P2, etc.
+          <div class="p-1 mb-3" style="cursor: pointer;" (click)="activateSkillExplanation=!activateSkillExplanation">
+            ¿Que son los skills? (habilidades)
+          </div>
+          <div *ngIf="activateSkillExplanation" class="animated fadeIn">
+            <p>
+              Al crear su comercio, una habilidad genérica para su comercio fue creada y asignada por defecto a su usuario.
+            </p>
+            <p>
+              Sin embargo usted puede habilitar la opción de skills si su comercio tiene diferentes segmentos 
+              que requieren diferentes habilidades de atención. 
+            </p>
+            <p>
+              Por ejemplo si usted quiere generar turnos para una guardia, podría necesitar generar las habilidades
+              de "Pediatría", "Clínica" y "Traumatología" con las abreviaturas como P, C y T respectivamente.
+            </p>
+            <p>
+              Con las habilidades usted puede además definir circuitos de atención. Puede recibir un turno que fué 
+              atendido en un escritorio con skill A y enviarlo luego para ser atendido a un escritorio con skill B, 
+              y así sucesivamente. Al reasignar un turno tamién puede establecer su prioridad de modo de enviarlo 
+              al inicio o al fin de la cola de espera.
+            </p>
+            <p>
+              Las habilidades se asignan a los asistentes al momento de crearlos. Puede asignar una o mas habilidades por 
+              asistente. Su usuario tiene rol de administrador y tendrá asignadas todas las habilidades de atención.
+            </p>
 
+          </div>
 
-          </p>
           <div class="row mx-2 mt-4" style="justify-content: space-between;">
             <button class="btn btn-danger col-5" matStepperPrevious> Volver </button>
-            <button [disabled]="userService.skills?.length === 0" class="btn btn-success col-5" matStepperNext>
+            <button [disabled]="userService.skills?.length === 0 " class="btn btn-success col-5" matStepperNext>
               Siguiente </button>
           </div>
         </div>
@@ -181,7 +200,7 @@
         <div class="card-header">Crear Ventanillas / Escritorios</div>
         <div class="card-body">
           <h3>Escritorios</h3>
-          
+
           <p>
             Los escritorios sólo necesitan un identificador que es simplemente una etiqueta. Estos
             identificadores pueden ser letras o números por ejemplo
@@ -211,18 +230,28 @@
       <div class="card m-2" style="min-width: 18rem; max-width: 30rem;">
         <div class="card-header">Crear Asistentes / Operadores</div>
         <div class="card-body">
-          <h3>Asistentes</h3>
+          <h3>Asistentes (opcional)</h3>
           <p>
-            Usted como usuario puede atender turnos desde el menú de Asistentes, sin embargo puede (opcionalmente) crear
-            otros
-            usuarios con rol de asistente para esa tarea y asignarles las habilidades (Skills) creadas anteriormente.
+            Este paso es opcional. Si sólo necesita su propio usuario para atender turnos puede
+            omitir este paso y continuar.
           </p>
           <hr>
-          <p>
-            Tenga en cuenta que los asistentes que usted cree aquí, deben ingresar a sus cuentas desde el mismo login de
-            usuario pero con la opción [ENTRAR] con su email y contraseña.
-          </p>
-     
+          <div class="p-1 mb-3" style="cursor: pointer;" (click)="activateAssistantExplanation=!activateAssistantExplanation">
+            ¿Que son los asistentes?
+          </div>
+          <div *ngIf="activateAssistantExplanation" class="animated fadeIn">
+            <p>
+              Usted como usuario puede atender turnos desde el menú de Asistentes. Sin embargo puede
+              opcionalmente crear otros usuarios con rol de asistente para la tarea de atender turnos.
+            </p>
+            <p>
+              Si fueron creadas habilidades deberá asignarle a cada asistente las habilidades que le correspondan.
+            </p>
+            <p>
+              Tenga en cuenta que los asistentes que usted puede crear aquí, deben ingresar a sus cuentas desde el mismo login
+              de usuario pero con la opción [ENTRAR] con su email y contraseña.
+            </p>
+          </div>
 
           <div *ngIf="userService.assistants.length === 1 && userService.user.id_skills.length === 0"
             class="card bg-danger p-3 text-white">
@@ -242,7 +271,7 @@
           <div class="row mx-2 mt-4" style="justify-content: space-between;">
             <button class="btn btn-danger col-5" matStepperPrevious> Volver </button>
             <button [disabled]="userService.assistants.length === 1 && userService.user.id_skills.length === 0"
-              class="btn btn-primary col-5" routerLink="/user/home" (click)="endWizard()"> Finalizar </button>
+              class="btn btn-primary col-5" routerLink="/admin/home" (click)="endWizard()"> Finalizar </button>
           </div>
         </div>
       </div>

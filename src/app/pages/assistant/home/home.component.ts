@@ -31,6 +31,10 @@ export class HomeComponent implements OnInit {
     if (this.userService.user.id_company?._id) {
       let idCompany = this.userService.user.id_company._id;
       this.readDesktops(idCompany);
+    } else {
+      this.userService.snackShow('No tiene una empresa seleccionada', 5000);
+      this.loading = false;
+      return;
     }
 
     

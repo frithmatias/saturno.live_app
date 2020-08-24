@@ -34,7 +34,6 @@ export class SkillCreateFormComponent implements OnInit {
 			cd_skill: this.forma.value.cdSkill,
 			tx_skill: this.forma.value.txSkill,
 			bl_generic: false,
-			__v: null,
 			_id: null
 		};
 

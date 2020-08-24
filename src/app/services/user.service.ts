@@ -45,7 +45,7 @@ export class UserService {
 			let user = JSON.parse(localStorage.getItem('user'));
 			this.pushUser(user);
 
-			if (this.user.id_role === 'USER_ROLE') {
+			if (this.user.id_role === 'ADMIN_ROLE') {
 				this.readCompanies(this.user._id).subscribe(data => {
 					this.companies = data.companies;
 					this.companiesSource.next(data.companies);
