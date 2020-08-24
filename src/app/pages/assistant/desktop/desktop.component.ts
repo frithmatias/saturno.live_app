@@ -86,7 +86,6 @@ export class DesktopComponent implements OnInit {
 		});
 
 		this.loading = false;
-
 	}
 
 	async getTickets() {

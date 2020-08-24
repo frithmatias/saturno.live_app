@@ -41,7 +41,7 @@
             placeholder="Confirma contraseña" autocomplete="new-password">
     </mat-form-field>
 
-    <div class="card mb-4">
+    <div class="card mb-4" *ngIf="assistantEdit?.id_role ==='ASSISTANT_ROLE' && !skills[0].bl_generic">
         <div class="card-header">SKILLS</div>
         <div class="card-body">
             <mat-selection-list [ngModelOptions]="{standalone: true}" [(ngModel)]="selStrSkills">

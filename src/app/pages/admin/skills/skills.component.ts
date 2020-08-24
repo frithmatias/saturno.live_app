@@ -32,7 +32,13 @@ export class SkillsComponent implements OnInit, OnDestroy {
 
       if (this.user.id_company) {
         let idCompany = this.user.id_company._id;
-        this.readSkills(idCompany);
+        this.readSkills(idCompany).then((skills: Skill[]) => {
+          if(skills.length === 0) {
+            this.createGenericSkill().catch(() => {
+              this.userService.snackShow('Error al crear el skill por defecto!', 5000);
+            })
+          }
+        })
       }
 
       this.userSubscription = this.userService.user$.subscribe(data => {
@@ -52,15 +58,16 @@ export class SkillsComponent implements OnInit, OnDestroy {
       if (data.dismissedByAction) {
 
         this.userService.deleteSkill(idSkill).subscribe((data: SkillResponse) => {
-          this.snack.open(data.msg, null, { duration: 5000 });
-          this.skills = this.skills.filter(skill => skill._id != idSkill);
-          this.userService.skills = this.skills;
+          if(data.ok){
+            this.snack.open(data.msg, null, { duration: 5000 });
+            this.skills = this.skills.filter(skill => skill._id != idSkill);
+            this.userService.skills = this.skills;
+          }
         },
           (err: SkillResponse) => {
             this.snack.open(err.msg, null, { duration: 5000 });
           }
         )
-
       }
     });
 
@@ -70,22 +77,25 @@ export class SkillsComponent implements OnInit, OnDestroy {
     this.skills.push(skill);
   }
 
-  readSkills(idCompany: string) {
-    this.userService.readSkills(idCompany).subscribe((data: SkillsResponse) => {
-      this.skills = data.skills;
-      this.userService.skills = data.skills;
-      if (data.skills.length === 0) {
-        this.activateSkills = false;
-        this.createGenericSkill().catch(() => {
-          this.userService.snackShow('Error al crear el skill por defecto!', 5000);
-        })
+  readSkills(idCompany: string): Promise<Skill[]> {
+    return new Promise(resolve => {
+      this.userService.readSkills(idCompany).subscribe((data: SkillsResponse) => {
+        if(data.ok){
+          this.skills = data.skills;
+          this.userService.skills = data.skills;
+          if (data.skills.length === 0) {
+    
+    
+          } else if( data.skills.length === 1 && data.skills[0].bl_generic){
+            this.activateSkills = false;
+          } else if( data.skills.length > 1) {
+            this.activateSkills = true;
+          }
+          resolve(data.skills);
+        }
+      });
 
-      } else if( data.skills.length === 1 && data.skills[0].bl_generic){
-        this.activateSkills = false;
-      } else if( data.skills.length > 1) {
-        this.activateSkills = true;
-      }
-    });
+    })
   }
 
   toggleSkills() {
@@ -145,8 +155,8 @@ export class SkillsComponent implements OnInit, OnDestroy {
             }
           });
         }
+        resolve();
       }
-      resolve();
     });
   }
 
@@ -166,7 +176,6 @@ export class SkillsComponent implements OnInit, OnDestroy {
         if (data.ok) {
           this.skills.push(data.skill);
           this.userService.skills = this.skills;
-
           resolve(data.skill)
         }
       },

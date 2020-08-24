@@ -5,6 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { GetidstringPipe } from '../../../../pipes/getidstring.pipe';
 import { Company, CompanyResponse } from '../../../../interfaces/company.interface';
 import { HttpErrorResponse } from '@angular/common/http';
+import { UserResponse } from 'src/app/interfaces/user.interface';
 
 @Component({
 	selector: 'app-company-create',
@@ -112,11 +113,13 @@ export class CompanyCreateComponent implements OnInit {
 
 		} else {
 
-			this.userService.createCompany(company).subscribe((data: any) => {
+			this.userService.createCompany(company).subscribe((data: CompanyResponse) => {
 				this.newCompany.emit(data.company);
 				this.forma.reset();
 				formDirective.resetForm();
 				if (data.ok) {
+					
+					this.userService.attachCompany(data.company);
 					this.userService.scrollTop();
 					this.snack.open('Empresa creada correctamente', null, { duration: 2000 });
 				} else {

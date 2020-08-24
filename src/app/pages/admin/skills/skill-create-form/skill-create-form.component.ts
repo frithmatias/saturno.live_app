@@ -3,6 +3,7 @@ import { UserService } from 'src/app/services/user.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormGroup, FormControl, Validators, FormGroupDirective } from '@angular/forms';
 import { Skill, SkillResponse } from '../../../../interfaces/skill.interface';
+import { User } from 'src/app/interfaces/user.interface';
 
 @Component({
 	selector: 'app-skill-create-form',
@@ -38,10 +39,12 @@ export class SkillCreateFormComponent implements OnInit {
 		};
 
 		this.userService.createSkill(skill).subscribe((data: SkillResponse) => {
-			this.skillCreated.emit(data.skill);
-			this.snack.open(data.msg, null, { duration: 5000 });
-			this.forma.reset();
-			formDirective.resetForm();
+			if(data.ok){
+				this.skillCreated.emit(data.skill);
+				this.snack.open(data.msg, null, { duration: 5000 });
+				this.forma.reset();
+				formDirective.resetForm();
+			}
 		},
 			(err: any) => {
 				this.snack.open(err.error.msg, null, { duration: 5000 });

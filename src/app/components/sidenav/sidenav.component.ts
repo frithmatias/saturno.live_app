@@ -46,14 +46,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
   }
 
   attachCompany(company: Company) {
-    this.userService.attachCompany(company).subscribe((data: UserResponse) => {
-      // obtengo el usuario con el nuevo id_company populado
-      if (data.ok) {
-        this.userService.user = data.user;
-        this.userService.userSource.next(data.user);
-        localStorage.setItem('user', JSON.stringify(data.user));
-      }
-    })
+    this.userService.attachCompany(company);
   }
 
   ngOnDestroy(): void {

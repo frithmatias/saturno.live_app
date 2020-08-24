@@ -35,7 +35,6 @@ export class AssistantCreateFormComponent implements OnInit, OnChanges {
 			password: new FormControl(null, Validators.required),
 			password2: new FormControl(null, Validators.required)
 		}, { validators: this.sonIguales('password', 'password2') });
-
 	}
 
 	ngOnChanges(changes: SimpleChanges) {
