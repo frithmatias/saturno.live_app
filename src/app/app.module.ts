@@ -21,7 +21,7 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './pages/login/login.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { HomeComponent } from './pages/home/home.component';
-import { HelpComponent } from './pages/help/help.component';
+import { ContactComponent } from './pages/contact/contact.component';
 import { NopagefoundComponent } from './pages/nopagefound/nopagefound.component';
 
 // MODULES
@@ -33,8 +33,9 @@ import { ComponentsModule } from './components/components.module';
 import { AdminGuard } from './guards/admin.guard';
 import { TokenGuard } from './guards/token.guard';
 import { LoginGuard } from './guards/login.guard';
-import { GetidstringPipe } from './pipes/getidstring.pipe';
 
+import { GetidstringPipe } from './pipes/getidstring.pipe';
+import { MAT_DATE_LOCALE } from '@angular/material/core';
 
 @NgModule({
 	declarations: [
@@ -44,7 +45,7 @@ import { GetidstringPipe } from './pipes/getidstring.pipe';
 		LoginComponent,
 		NopagefoundComponent,
 		GetidstringPipe,
-		HelpComponent
+		ContactComponent
 	],
 	imports: [
 		MaterialModule,
@@ -61,7 +62,8 @@ import { GetidstringPipe } from './pipes/getidstring.pipe';
 	providers: [
 		AdminGuard,
 		TokenGuard,
-		LoginGuard
+		LoginGuard,
+		{provide: MAT_DATE_LOCALE, useValue: 'es'}
 	],
 	bootstrap: [AppComponent]
 })

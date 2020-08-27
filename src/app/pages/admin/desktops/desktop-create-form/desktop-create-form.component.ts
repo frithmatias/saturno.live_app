@@ -36,7 +36,7 @@ export class DesktopCreateFormComponent implements OnInit {
 		const desktop: Desktop = {
 			id_company: this.userService.user.id_company._id,
 			cd_desktop: this.forma.value.cdDesktop,
-			id_assistant: null,
+			id_session: null,
 			__v: null,
 			_id: null
 		};

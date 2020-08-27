@@ -10,8 +10,8 @@ import { UserService } from 'src/app/services/user.service';
 import { DesktopResponse } from 'src/app/interfaces/desktop.interface';
 import { Skill, SkillsResponse } from 'src/app/interfaces/skill.interface';
 
-const DESK_TIMEOUT = 30; // 60 segundos
-const DESK_EXTRATIME = 60; // 120 segundos
+const DESK_TIMEOUT = 2; // 60 segundos
+const DESK_EXTRATIME = 5; // 120 segundos
 export interface Tile {
 	color: string;
 	cols: number;
@@ -28,6 +28,8 @@ export class DesktopComponent implements OnInit {
 	waitForClient: boolean = false;
 	comingClient: boolean = false;
 
+	userSubscription: Subscription;
+	
 	pendingTicketsCount: number = 0;
 	pendingTicketsBySkill: any[] = [];
 
@@ -69,6 +71,15 @@ export class DesktopComponent implements OnInit {
 
 		await this.getTickets();
 
+		// read for user company changes
+		this.userSubscription = this.userService.user$.subscribe(data => {
+			if (data) {
+			  if (data.id_company) { 
+				  this.releaseDesktop();
+			   }
+			}
+		  });
+
 		// hot subjects subscribe to socket.io listeners
 		this.wsService.escucharTurnoNuevo().subscribe(this.subjectTurnoNuevo$);
 		this.subjectTurnoNuevo$.subscribe((data) => {
@@ -96,7 +107,7 @@ export class DesktopComponent implements OnInit {
 			const pending = tickets.filter(ticket => {
 				return (
 					// id_desk optional -> client can cancel ticket.
-					ticket.id_desk?._id === this.userService.desktop._id &&
+					ticket.id_session === this.userService.desktop.id_session._id &&
 					ticket.tm_end === null &&
 					ticket.id_child === null
 
@@ -171,9 +182,10 @@ export class DesktopComponent implements OnInit {
 			let snackMsg = 'Tiene una sesión de turno activa. ¿Desea finalizarla?';
 			return await this.askForContinue(snackMsg).then(() => {
 				// end ticket session
-				this.ticketsService.endTicket(this.ticketsService.myTicket._id).subscribe((resp: TicketResponse) => {
+				let idTicket = this.ticketsService.myTicket._id;
+				this.ticketsService.endTicket(idTicket).subscribe((resp: TicketResponse) => {
 					if (resp.ok) {
-						let idDesktop = this.userService.desktop._id
+						let idDesktop = this.userService.desktop._id;
 						this.userService.releaseDesktop(idDesktop).subscribe((data: DesktopResponse) => {
 							if (data.ok) {
 								this.clearDesktopSession();
@@ -190,7 +202,7 @@ export class DesktopComponent implements OnInit {
 		}
 
 		// end desktop session
-		let idDesktop = this.userService.desktop._id
+		let idDesktop = this.userService.desktop._id;
 		this.userService.releaseDesktop(idDesktop).subscribe((data: DesktopResponse) => {
 			if (data.ok) {
 				this.clearDesktopSession();
@@ -234,7 +246,8 @@ export class DesktopComponent implements OnInit {
 		if (this.ticketsService.myTicket) {
 			let snackMsg = 'Desea finalizar el ticket actual?';
 			return await this.askForContinue(snackMsg).then(() => {
-				this.ticketsService.endTicket(this.ticketsService.myTicket._id).subscribe((resp: TicketResponse) => {
+				let idTicket = this.ticketsService.myTicket._id;
+				this.ticketsService.endTicket(idTicket).subscribe((resp: TicketResponse) => {
 					if (resp.ok) {
 						this.clearDesktopSession();
 						this.message = resp.msg;
@@ -244,12 +257,10 @@ export class DesktopComponent implements OnInit {
 				return;
 			})
 		}
-
-		let idDesk = this.userService.desktop._id;
-		let idAssistant = this.userService.user._id;
+		let idSession = this.userService.desktop.id_session._id;
 		let idSocketDesk = this.wsService.idSocket;
 
-		this.ticketsService.takeTicket(idDesk, idAssistant, idSocketDesk).subscribe((resp: TicketResponse) => {
+		this.ticketsService.takeTicket(idSession, idSocketDesk).subscribe((resp: TicketResponse) => {
 			this.snack.open(resp.msg, null, { duration: 2000 });
 			if (!resp.ok) { // no tickets
 				this.waitForClient = false;
@@ -375,6 +386,7 @@ export class DesktopComponent implements OnInit {
 	ngOnDestroy() {
 		this.subjectTurnoNuevo$.complete();
 		this.subjectTurnoCancelado$.complete();
-
 	}
+
+
 }

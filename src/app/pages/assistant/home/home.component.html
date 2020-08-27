@@ -83,10 +83,10 @@
                                     {{desktop.cd_desktop}}
                                 </td>
                                 <td style="text-align: right;">
-                                    <div *ngIf="desktop.id_assistant">
-                                        {{desktop.id_assistant?.tx_name}}
+                                    <div *ngIf="desktop.id_session">
+                                        {{desktop.id_session?.id_assistant.tx_name}}
                                     </div>
-                                    <div *ngIf="!desktop.id_assistant" style="color: mediumspringgreen;">
+                                    <div *ngIf="!desktop.id_session" style="color: mediumspringgreen;">
                                         Disponible
                                     </div>
                                 </td>

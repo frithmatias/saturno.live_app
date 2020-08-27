@@ -7,12 +7,12 @@ import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 
 // Interfaces
-import { Desktop } from 'src/app/interfaces/desktop.interface';
 import { Skill, SkillResponse } from '../interfaces/skill.interface';
 import { User, UserResponse } from 'src/app/interfaces/user.interface';
 import { Company, CompaniesResponse } from '../interfaces/company.interface';
 import { MatStepper } from '@angular/material/stepper';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Desktop } from '../interfaces/desktop.interface';
 
 @Injectable({
 	providedIn: 'root'
@@ -24,7 +24,7 @@ export class UserService {
 	menu: any[] = [];
 	logueado = false;
 	//assistant
-	desktop: Desktop;
+	desktop: Desktop = null;
 
 	public desktops: Desktop[] = [];
 	public skills: Skill[] = [];

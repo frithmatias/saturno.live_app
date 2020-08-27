@@ -1,4 +1,4 @@
-<div class="animated fadeIn p-2" style="min-width: 18rem; max-width: 30rem;">
+<div class="saturno-container animated fadeIn">
 
   <div class="card-header">OBTENER TURNO</div>
   <div class="card-body">
@@ -49,29 +49,29 @@
         </div>
       </div>
 
-
-
       <button *ngFor="let skill of skills" class="btn btn-primary btn-block btn-lg text-uppercase"
         (click)="createTicket(skill._id, false)">
         {{skill.tx_skill}}
       </button>
 
-      <hr>
-      <div class="container">
-        <div class="row mt-3">
-          <div class="col" style="cursor: pointer;" routerLink="/public/search">
-            <mat-icon>search</mat-icon>
-            <div >Volver al buscador</div>
-          </div>
-          <div class="col" style="cursor: pointer;" routerLink="/public/screen">
-            <mat-icon>list_alt</mat-icon>
-            <div >Ver la pantalla</div>
-          </div>
-        </div>
-      </div>
-
-
     </div>
   </div>
+</div>
 
+
+<div class="saturno-footer">
+  <div class="row">
+    <div class="col">
+      <span class="footer-icon-menu" routerLink="/public/search">
+        <mat-icon>search</mat-icon>
+        <div >Volver al buscador</div>
+      </span>
+    </div>
+    <div class="col">
+      <span class="footer-icon-menu" routerLink="/public/screen">
+        <mat-icon>list_alt</mat-icon>
+        <div >Ver la pantalla</div>
+      </span>
+    </div>
+  </div>
 </div>

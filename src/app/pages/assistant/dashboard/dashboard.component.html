@@ -1,7 +1,68 @@
-<div class="container animated fadeIn">
-    <div class="row">
-        <div class="col">
-            Working on it
-        </div>
+<mat-form-field appearance="fill">
+  <mat-label>Angular forms</mat-label>
+  <input matInput [matDatepicker]="picker1" [value]="date" (dateChange)="setDate($event)">
+  <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+  <mat-datepicker #picker1></mat-datepicker>
+</mat-form-field>
+
+
+<div *ngIf="loading" class="mt-5 animated fadeIn">
+  <mat-spinner></mat-spinner>
+</div>
+
+<div *ngIf="!loading">
+
+  <div *ngIf="tickets.length > 0">
+
+
+    <div class="card bg-secondary mb-4" style="min-width: 18rem; max-width: 30rem;">
+      <div class="card-content table-responsive-sm  p-2">
+
+        <table class="table table-sm text-white text-center" style="
+        font-size: x-small;">
+
+          <tr style="border-top: 0px; color: yellow;">
+            <td style="text-align: left; border: none;">Ticket</td>
+            
+            <td style="text-align: center; border: none;">Start</td>
+            <td style="text-align: center; border: none;"> - </td>
+            <td style="text-align: center; border: none;">Atteneded</td>
+            <td style="text-align: center; border: none;"> - </td>
+            <td style="text-align: right; border: none;">End</td>
+          </tr>
+          <tr *ngFor="let ticket of tickets">
+
+            <td style="text-align: left;">
+              {{ ticket.id_skill.cd_skill }} {{ticket.id_position}}
+            </td>
+
+            <td style="text-align: center;">
+              {{ ticket.tm_start | timeToHms}}
+            </td>
+
+
+            <td style="text-align: center;">
+              {{ ticket.tm_start | intervalToHms: ticket.tm_att}}
+            </td>
+            
+
+            <td style="text-align: center;">
+              {{ ticket.tm_att | timeToHms}}
+            </td>
+
+            <td style="text-align: center;">
+              {{ ticket.tm_att | intervalToHms: ticket.tm_end}}
+            </td>
+            
+
+            <td style="text-align: right;">
+              {{ ticket.tm_end | timeToHms}}
+            </td>
+          </tr>
+        </table>
+
+      </div>
     </div>
+  </div>
+
 </div>

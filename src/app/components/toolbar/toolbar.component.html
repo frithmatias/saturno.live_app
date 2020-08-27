@@ -2,7 +2,7 @@
     <mat-toolbar-row>
 
         <!-- Menu -->
-        <mat-icon (click)="toggle('sidenav')">menu</mat-icon>
+        <mat-icon *ngIf="userService.logueado" (click)="toggle('sidenav')">menu</mat-icon>
         <span class="example-spacer"></span>
 
         <!-- Title default -->
@@ -16,16 +16,15 @@
                 </div>
             </span>
         </div>
+
         <div  *ngIf="!userService.user && !ticketsService.companyData">
             <img src="../../../assets/img/saturn.png" class="saturno-logo img-fluid">
         </div>
 
         <!-- Title Company -->
-        <span *ngIf="user?.id_company?.tx_company_name || ticketsService.companyData">
+        <span style="font-size: x-large; font-weight: 300;" *ngIf="user?.id_company?.tx_company_name || ticketsService.companyData">
             {{user?.id_company?.tx_company_name || ticketsService.companyData.tx_company_name}}
         </span>
-
-
 
         <span class="example-spacer"></span>
 

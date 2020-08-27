@@ -1,0 +1,58 @@
+<div class="saturno-container shadow-box animated fadeIn">
+    <form #f="ngForm" (ngSubmit)="enviar( f )">
+
+        <mat-form-field color="warn" appearance="fill" logincss class="w-100">
+            <mat-label>Tipo de contacto</mat-label>
+            <mat-select ngModel name="tipo" required>
+                <mat-option value="consulta"> Consulta </mat-option>
+                <mat-option value="comentario"> Comentario </mat-option>
+                <mat-option value="sugerencia"> Sugerencia </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field color="warn" appearance="fill" logincss class="w-100">
+            <mat-label>Comentario</mat-label>
+            <textarea matInput ngModel name="comentarios" rows="10" required minlength="10">
+                                Por favor, deje su consulta, comentario o sugerencia aquí.
+                                </textarea>
+        </mat-form-field>
+
+
+        <div class="card">
+            <div class="card-header" style="cursor: pointer;text-align: start;" (click)="showContactData=!showContactData">
+                Datos de contacto (opcional)</div>
+            <div *ngIf="showContactData" class="card-body">
+        
+                <mat-form-field color="warn" appearance="fill" logincss class="w-100">
+                    <mat-label>Nombre</mat-label>
+                    <input matInput ngModel name="nombre" minlength="2">
+                </mat-form-field>
+        
+                <mat-form-field color="warn" appearance="fill" logincss class="w-100">
+                    <mat-label>Email</mat-label>
+                    <input matInput ngModel name="email" type="email">
+                </mat-form-field>
+        
+                <mat-form-field color="warn" appearance="fill" logincss class="w-100">
+                    <mat-label>Teléfono</mat-label>
+                    <input matInput ngModel name="telefono" minlength="8">
+                </mat-form-field>
+            </div>
+        </div>    
+
+        <button class="btn btn-success btn-block mt-4" [disabled]="!f.valid">Enviar</button>
+
+    </form>
+</div>
+
+
+<div class="saturno-footer">
+    <div class="row">
+      <div class="col">
+        <span class="footer-icon-menu" routerLink="/home">
+          <mat-icon>home</mat-icon>
+          <div>Inicio</div>
+        </span>
+      </div>
+    </div>
+  </div>

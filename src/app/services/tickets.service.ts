@@ -99,13 +99,13 @@ export class TicketsService {
 
 	// desktop methods
 
-	takeTicket(idDesk: string, idAssistant: string, idSocketDesk: string): Observable<object> {
+	takeTicket(idSession: string, idSocketDesk: string): Observable<object> {
 
 		const headers = new HttpHeaders({
 			'turnos-token': this.userService.token
 		});
 
-		const deskData = { idDesk, idAssistant, idSocketDesk };
+		const deskData = { idSession, idSocketDesk };
 
 		const url = environment.url + `/t/taketicket`;
 		return this.http.post(url, deskData, { headers });

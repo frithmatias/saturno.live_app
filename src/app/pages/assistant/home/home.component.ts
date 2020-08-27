@@ -43,7 +43,6 @@ export class HomeComponent implements OnInit {
         this.readDesktops(data.id_company._id);
       }
     })
-
   }
 
   takeDesktop(desktop: Desktop): void {
@@ -77,10 +76,9 @@ export class HomeComponent implements OnInit {
 
       if(data.ok){
         this.desktops = data.desktops;
-        this.desktopsAvailable = this.desktops.filter(desktop => desktop.id_assistant === null);
-        this.myDesktop = this.desktops.filter(desktop => desktop.id_assistant?._id === this.userService.user._id)[0]
+        this.desktopsAvailable = this.desktops.filter(desktop => desktop.id_session === null);
+        this.myDesktop = this.desktops.filter(desktop => desktop.id_session?.id_assistant._id === this.userService.user._id)[0]
       }
-
       if (this.myDesktop) {
         this.userService.desktop = this.myDesktop;
         localStorage.setItem('desktop', JSON.stringify(this.myDesktop));
@@ -107,6 +105,6 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnDestroy(): void {
-    this.userSuscription.unsubscribe();
+    if(this.userSuscription){this.userSuscription.unsubscribe();}
   }
 }

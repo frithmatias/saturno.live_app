@@ -7,11 +7,11 @@ import { Desktop } from 'src/app/interfaces/desktop.interface';
 export interface Ticket {
 	id_root: string | null;
 	id_child: string | null;
-	cd_number: number;
+	bl_priority: boolean;
+	id_position: number;
 	id_socket: string;
 	id_socket_desk: string | null;
-	id_desk: Desktop | null;
-	id_assistant: string | null;
+	id_session: string | null;
 	id_company: string;
 	id_skill: Skill;
 	tm_start: number;
@@ -28,6 +28,7 @@ export interface TicketResponse {
 
 export interface TicketsResponse {
 	ok: boolean;
+	msg: string;
 	tickets: Ticket[];
 }
 

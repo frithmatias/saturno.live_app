@@ -1,5 +1,4 @@
-import { User } from 'src/app/interfaces/user.interface';
-
+import { Session } from './session.interface';
 // ========================================================
 // DESKTOPS
 // ========================================================
@@ -7,7 +6,7 @@ import { User } from 'src/app/interfaces/user.interface';
 export interface Desktop {
 	id_company: string,
 	cd_desktop: string,
-	id_assistant: User | null,
+	id_session: Session | null,
 	__v: number;
 	_id: string;
 }

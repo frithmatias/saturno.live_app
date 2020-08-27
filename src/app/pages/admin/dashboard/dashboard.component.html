@@ -1,7 +1,13 @@
-<div class="animated fadeIn p-2" style="min-width: 18rem; max-width: 30rem;">
-    <div class="row">
-        <div class="col">
-            Working on it
-        </div>
-    </div>
-</div>
+<mat-form-field color="accent" appearance="fill">
+    <mat-label>Inherited calendar color</mat-label>
+    <input matInput [matDatepicker]="picker1">
+    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+    <mat-datepicker #picker1></mat-datepicker>
+  </mat-form-field>
+  
+  <mat-form-field color="accent" appearance="fill">
+    <mat-label>Custom calendar color</mat-label>
+    <input matInput [matDatepicker]="picker2">
+    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+    <mat-datepicker #picker2 color="primary"></mat-datepicker>
+  </mat-form-field>

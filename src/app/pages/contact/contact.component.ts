@@ -4,12 +4,12 @@ import { TicketsService } from '../../services/tickets.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
-  selector: 'app-help',
-  templateUrl: './help.component.html',
-  styleUrls: ['./help.component.css']
+  selector: 'app-contact',
+  templateUrl: './contact.component.html',
+  styleUrls: ['./contact.component.css']
 })
-export class HelpComponent implements OnInit {
-
+export class ContactComponent implements OnInit {
+showContactData = false;
   constructor(
     private ticketsService: TicketsService,
     private snack: MatSnackBar) { }

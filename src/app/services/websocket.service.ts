@@ -55,7 +55,7 @@ export class WebsocketService {
 				let oldSocket: string;
 				let newSocket = this.idSocket;
 
-				if (localStorage.getItem('desktop')) {
+				if (localStorage.getItem('session')) {
 					oldSocket = myTicket.id_socket_desk;
 				} else {
 					oldSocket = myTicket.id_socket;
@@ -67,7 +67,7 @@ export class WebsocketService {
 					if (data.ok) {
 						// si actualizo el ticket en la BD actualizo en myTicket y en la LS
 						if (this.ticketsService.myTicket) {
-							if (localStorage.getItem('desktop')) {
+							if (localStorage.getItem('session')) {
 								this.ticketsService.myTicket.id_socket_desk = this.idSocket;
 							} else {
 								this.ticketsService.myTicket.id_socket = this.idSocket;

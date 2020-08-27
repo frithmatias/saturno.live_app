@@ -6,7 +6,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { LoginComponent } from './pages/login/login.component';
 import { NopagefoundComponent } from './pages/nopagefound/nopagefound.component';
-import { HelpComponent } from './pages/help/help.component';
+import { ContactComponent } from './pages/contact/contact.component';
 
 import { SuperuserComponent } from './pages/superuser/superuser.component';
 import { AdminComponent } from './pages/admin/admin.component';
@@ -24,7 +24,7 @@ const appRoutes: Routes = [
 	{ path: 'home', component: HomeComponent },
 	{ path: 'login', component: LoginComponent },
 	{ path: 'register', component: RegisterComponent },
-	{ path: 'help', component: HelpComponent },
+	{ path: 'contact', component: ContactComponent },
 	
 	{ 	path: 'public', 															
 		component: PublicComponent, 	

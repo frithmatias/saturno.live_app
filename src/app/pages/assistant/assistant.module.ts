@@ -9,6 +9,8 @@ import { HomeComponent } from './home/home.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { DesktopComponent } from './desktop/desktop.component';
 import { MaterialModule } from '../../modules/material.module';
+import { TimeToHmsPipe } from 'src/app/pipes/time-to-hms.pipe';
+import { IntervalToHmsPipe } from 'src/app/pipes/interval-to-hms.pipe';
 
 
 @NgModule({
@@ -17,12 +19,18 @@ import { MaterialModule } from '../../modules/material.module';
     HomeComponent,
     DashboardComponent, 
     DesktopComponent,
+    TimeToHmsPipe,
+    IntervalToHmsPipe
   ],
   imports: [
     FormsModule,
     CommonModule,
     MaterialModule,
     AssistantRoutingModule
+  ],
+  exports:[
+    TimeToHmsPipe,
+    IntervalToHmsPipe
   ]
 })
 export class AssistantModule { }

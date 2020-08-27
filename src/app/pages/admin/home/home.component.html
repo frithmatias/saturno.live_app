@@ -98,21 +98,10 @@
             </p>
           </div>
 
-          <!-- companies, but not attached company -->
-          <div *ngIf="userService.companies?.length > 0 && !userService.user?.id_company?._id">
-            <h3>Comercio creado!</h3>
-            <hr>
-            <p class="card-text card-text">
-              Ya tiene creado al menos un comercio.
-              Para continuar es necesario que lo seleccione desde el menu principal.
-            </p>
-            <img src="assets/img/saturno-selector-empresas.png">
-          </div>
-
           <!-- companies and attached company -->
           <div *ngIf="userService.companies?.length > 0 && userService.user?.id_company?._id">
 
-            <h3>Perfecto! <mat-icon style="color:green">check</mat-icon>
+            <h3>Comercio creado <mat-icon style="color:green">check</mat-icon>
             </h3>
             <p>
               Las habilidades, escritorios y asistentes que registre a partir de ahora, serán
@@ -122,9 +111,14 @@
               </span>
             </p>
             <hr>
-            <p>
-              Usted puede crear mas comercios si dispone de sucursales.
+            <p class="card-text card-text">
+              Usted puede crear mas comercios si dispone de sucursales y moverse entre ellos 
+              seleccionandolos desde el menu principal.
             </p>
+            <p style="text-align: center;">
+              <img src="assets/img/saturno-selector-empresas.png">
+            </p>
+            
           </div>
 
           <!-- previous / next -->
@@ -159,10 +153,7 @@
           </div>
           <div *ngIf="activateSkillExplanation" class="animated fadeIn">
             <p>
-              Al crear su comercio, una habilidad genérica para su comercio fue creada y asignada por defecto a su usuario.
-            </p>
-            <p>
-              Sin embargo usted puede habilitar la opción de skills si su comercio tiene diferentes segmentos 
+              Usted puede habilitar la opción de habilidades si su comercio tiene diferentes segmentos 
               que requieren diferentes habilidades de atención. 
             </p>
             <p>

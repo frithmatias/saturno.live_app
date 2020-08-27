@@ -10,45 +10,11 @@
     </mat-form-field>
 
     <mat-accordion multi>
-        <mat-expansion-panel expanded>
 
-            <mat-expansion-panel-header>
-                <mat-panel-title class="sidenav-title">
-                    <mat-icon class="sidenav-title-icons">face</mat-icon>
-                    <span class="sidenav-title-text mx-2">Público</span>
-                </mat-panel-title>
-            </mat-expansion-panel-header>
-
-            <!-- HELP -->
-            <div class="sidenav-item" routerLink="/help">
-                <mat-icon class="sidenav-item-icons">help</mat-icon>
-                <span class="sidenav-item-text">Ayuda</span>
-            </div>
-
-            <!-- HOME -->
-            <div class="sidenav-item" routerLink="/home">
-                <mat-icon class="sidenav-item-icons">home</mat-icon>
-                <span class="sidenav-item-text">Home</span>
-            </div>
-
-            <!-- SCREEN -->
-            <div class="sidenav-item" routerLink="/public/screen">
-                <mat-icon class="sidenav-item-icons">input</mat-icon>
-                <span class="sidenav-item-text">Pantalla</span>
-            </div>
-
-            <!-- TICKETS -->
-            <div class="sidenav-item" routerLink="/public/tickets">
-                <mat-icon class="sidenav-item-icons">turned_in</mat-icon>
-                <span class="sidenav-item-text">Turnos</span>
-            </div>
-
-        </mat-expansion-panel>
-        <!-- *ngIf="userService.user?.id_role === 'ADMIN_ROLE'" -->
 
         <!-- ASSISTANT / USER -->
         <div *ngFor="let item of userService.menu">
-            <mat-expansion-panel>
+            <mat-expansion-panel [expanded]="item.titulo === 'Asistente'">
 
                 <mat-expansion-panel-header>
                     <mat-panel-title style="align-items: center; color: darkred;">

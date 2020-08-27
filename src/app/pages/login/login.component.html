@@ -1,4 +1,4 @@
-<div class="shadow-box animated fadeIn m-4 p-3">
+<div class="saturno-container shadow-box animated fadeIn">
 
     <form ngNativeValidate #f="ngForm" (ngSubmit)="login( f )">
 
@@ -65,10 +65,18 @@
                 No tenes cuenta? | <a routerLink="/register" class="text-primary m-l-5"><b class="text-uppercase">Crear
                         cuenta</b></a>
             </div>
-            <div class="mt-4 text-center">
-                <a routerLink="/home">Volver al inicio</a>
-            </div>
         </div>
     </form>
+</div>
 
+
+<div class="saturno-footer">
+    <div class="row">
+        <div class="col">
+            <span class="footer-icon-menu" routerLink="/home">
+                <mat-icon>home</mat-icon>
+                <div>Inicio</div>
+            </span>
+        </div>
+    </div>
 </div>
