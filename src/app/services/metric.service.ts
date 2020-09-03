@@ -13,14 +13,15 @@ export class MetricService {
     private http: HttpClient,
     private userService: UserService) { }
 
-	getTickets(idUser: string): Observable<object> {
+	getUserMetrics(fcSel: number, idUser: string): Observable<object> {
 
 		const headers = new HttpHeaders({
 			'turnos-token': this.userService.token
 		});
 
-		const url = environment.url + `/m/gettickets/${idUser}`;
-		return this.http.get(url, { headers });
+		let data = { fcSel, idUser };
+		const url = environment.url + `/m/getusermetrics`;
+		return this.http.post(url, data, { headers });
 	}
 
 }

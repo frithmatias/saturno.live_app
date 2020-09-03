@@ -101,11 +101,9 @@ export class CompanyCreateComponent implements OnInit {
 		if (this.companyEdit) {
 			company._id = this.companyEdit._id;
 			this.userService.updateCompany(company).subscribe((data: CompanyResponse) => {
-				this.companyEdit = null;
 				this.newCompany.emit(data.company);
 				this.snack.open(data.msg, null, { duration: 5000 });
-				this.forma.reset();
-				formDirective.resetForm();
+				this.resetForm(formDirective);
 			},	(err: HttpErrorResponse) => {
 					this.snack.open(err.error.msg, null, { duration: 5000 });
 				}
@@ -115,12 +113,9 @@ export class CompanyCreateComponent implements OnInit {
 
 			this.userService.createCompany(company).subscribe((data: CompanyResponse) => {
 				this.newCompany.emit(data.company);
-				this.forma.reset();
-				formDirective.resetForm();
+				this.resetForm(formDirective);
 				if (data.ok) {
-					
 					this.userService.attachCompany(data.company);
-					this.userService.scrollTop();
 					this.snack.open('Empresa creada correctamente', null, { duration: 2000 });
 				} else {
 					this.snack.open(data.msg, null, { duration: 5000 });
@@ -133,7 +128,9 @@ export class CompanyCreateComponent implements OnInit {
 	
 	resetForm(formDirective: FormGroupDirective) {
 		this.companyEdit = null;
+		this.forma.enable();
 		this.forma.reset();
 		formDirective.resetForm();
+		this.userService.scrollTop();
 	}
 }

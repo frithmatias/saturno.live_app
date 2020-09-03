@@ -1,11 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
-import moment from 'moment';
 import { MetricService } from '../../../services/metric.service';
 import { UserService } from 'src/app/services/user.service';
-import { Ticket } from 'src/app/interfaces/ticket.interface';
-import { TicketsResponse } from '../../../interfaces/ticket.interface';
-import { map } from 'rxjs/operators';
+import { MetricResponse, Metrics } from '../../../interfaces/metric.interface';
+
 
 @Component({
   selector: 'app-dashboard',
@@ -14,28 +12,31 @@ import { map } from 'rxjs/operators';
 })
 export class DashboardComponent implements OnInit {
   loading = false;
-  tickets: Ticket[] = [];
-  date = new Date();
+  metrics: Metrics = { total: 0, avg: 0, tickets: [] }
+  date: Date = new Date();
+
   constructor(
     private metricService: MetricService,
     private userService: UserService
   ) { }
 
   ngOnInit(): void {
+    let hoy = new Date().setHours(0,0,0,0);
+    this.getMetrics(hoy);
   }
 
   setDate(e: MatDatepickerInputEvent<Date>): void {
-    this.loading = true;
-    let idUser = this.userService.user._id;
-    this.metricService.getTickets(idUser).subscribe((data: TicketsResponse) => {
-      if (data.ok) {
-        this.tickets = data.tickets;
-        this.loading = false;
-      }
-    },()=>{this.loading = false;})
-
+    let fcSel = + new Date(e.value);
+    this.date = new Date(fcSel);
+    this.getMetrics(fcSel);
   }
 
-
-
+  getMetrics(fcSel: number) {
+    this.loading = true;
+    let idUser = this.userService.user._id;
+    this.metricService.getUserMetrics(fcSel, idUser).subscribe((data: MetricResponse) => {
+      this.metrics = data.metrics;
+      this.loading = false;
+    }, () => { this.loading = false; })
+  }
 }

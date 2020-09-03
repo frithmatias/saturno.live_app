@@ -54,4 +54,20 @@ export class HomeComponent implements OnInit {
 	ngOnDestroy(): void {
 		this.userSuscription.unsubscribe();
 	}
+
+
+	scrollTop() {
+		document.body.scrollTop = 0; // Safari
+		document.documentElement.scrollTop = 0; // Other
+  }
+  
+	stepperGoBack(stepper: MatStepper) {
+		stepper.previous();
+	}
+
+	stepperGoNext(stepper: MatStepper) {
+		this.scrollTop();
+		stepper.next();
+	}
+	
 }

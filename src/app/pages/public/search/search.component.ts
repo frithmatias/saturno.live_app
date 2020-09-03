@@ -30,14 +30,14 @@ export class SearchComponent implements OnInit {
 
     if (e.value.length > 1) {
       this.ticketsService.findCompany(e.value).subscribe((data: CompaniesResponse) => {
-        if (!data.ok) {
+        if (data.ok) {
+          this.companies = data.companies;
+        } else {
           e.value = '';
           this.snack.open('No existen resultados.', null, { duration: 1000 });
-        } else {
-          this.companies =  data.companies;
         }
       }, () => {
-        this.snack.open('Ocurrio un error al buscar la empresa', null, { duration: 2000 });
+        this.snack.open('Error al obtener las empresas', null, { duration: 2000 });
       })
       // this.router.navigate(['/public', e.value]);
     }
@@ -52,5 +52,9 @@ export class SearchComponent implements OnInit {
   setCompany(e: any):void {
     this.companySelected = e;
   }
+
+  cleanInput(inputCompany) {
+		inputCompany.value = null;
+	}
 
 }

@@ -47,6 +47,10 @@ export class AssistantsComponent implements OnInit, OnDestroy {
   }
 
   deleteAssistant(idAssistant: string): void {
+    if(idAssistant === this.userService.user._id){
+      this.userService.snackShow('Usted no puede borrar su propio usuario!', 2000);
+      return;
+    }
     this.snack.open('Desea eliminar el asistente?', 'ELIMINAR', { duration: 10000 }).afterDismissed().subscribe((data: MatSnackBarDismiss) => {
       if (data.dismissedByAction) {
         this.userService.deleteAssistant(idAssistant).subscribe((data: UserResponse) => {

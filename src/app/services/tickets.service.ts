@@ -141,47 +141,48 @@ export class TicketsService {
 	getTickets(): Promise<any> {
 		return new Promise((resolve, reject) => {
 			let idCompany = this.companyData ? this.companyData._id : this.userService.user.id_company._id;
-			if (!idCompany) {return;}
+			if (!idCompany) { return; }
 			const url = environment.url + '/t/gettickets/' + idCompany;
 			this.http.get(url).subscribe((data: TicketsResponse) => {
+
 				if (data.tickets.length === 0) {
 					resolve(data.tickets);
-					return;
+				} else {
+					this.ticketsAll = data.tickets;
+					this.ticketsCall = data.tickets.filter(ticket => ticket.tm_att !== null);
+					this.ticketsTail = [...this.ticketsCall].sort((a: Ticket, b: Ticket) => -1).slice(0, TAIL_LENGTH);
+					this.lastTicket = this.ticketsTail[0];
+					this.updateMyTicket();
+					resolve(data.tickets);
 				}
-				// !obtiene los tickets antes de que el servicio de sockets pueda actualizar el id_socket
-				this.ticketsAll = data.tickets;
-				this.ticketsCall = data.tickets.filter(ticket => ticket.tm_att !== null);
-				this.ticketsTail = [...this.ticketsCall].sort((a: Ticket, b: Ticket) => -1).slice(0, TAIL_LENGTH);
-				this.lastTicket = this.ticketsTail[0];
-				// update ticket
-				if (this.myTicket) { // client
-					// pick LAST ticket
-					const pickMyTicket = this.ticketsAll.filter(ticket => (
-						// same ticket maybe updated
-						(ticket._id === this.myTicket._id && ticket.id_child === null) ||
-						// new and last one as child
-						(ticket.id_root === this.myTicket.id_root && ticket.id_child === null)
-					))[0];
 
-					if (pickMyTicket) {
-						if (pickMyTicket.tm_end !== null && pickMyTicket.id_child === null) {
-							// El ticket finalizó.
-							this.myTicket = null;
-							this.myTicketTmEnd = pickMyTicket.tm_end;
-							this.clearPublicSession();
-						} else {
-							this.myTicket = pickMyTicket;
-							localStorage.setItem('ticket', JSON.stringify(this.myTicket));
-
-							this.allMytickets = this.ticketsAll.filter(ticket => (
-								(ticket.id_root === pickMyTicket.id_root)
-							))
-						}
-					}
-				}
-				resolve(data.tickets);
 			});
 		});
+	}
+
+	updateMyTicket(): void {
+		if (this.myTicket) { // client and assistant
+			// pick LAST ticket
+			const pickMyTicket = this.ticketsAll.filter(ticket => (
+				ticket.id_root === this.myTicket.id_root && ticket.id_child === null
+			))[0];
+
+			if (pickMyTicket) {
+				if (pickMyTicket.tm_end !== null && pickMyTicket.id_child === null) {
+					// El ticket finalizó.
+					this.myTicket = null;
+					this.myTicketTmEnd = pickMyTicket.tm_end;
+					this.clearPublicSession();
+				} else {
+					this.myTicket = pickMyTicket;
+					localStorage.setItem('ticket', JSON.stringify(this.myTicket));
+
+					this.allMytickets = this.ticketsAll.filter(ticket => (
+						(ticket.id_root === pickMyTicket.id_root)
+					))
+				}
+			}
+		}
 	}
 
 	getTimeInterval(from: number, to?: number): string {

@@ -44,13 +44,18 @@ export class DesktopCreateFormComponent implements OnInit {
 		this.userService.createDesktop(desktop).subscribe((data: DesktopResponse) => {
 			this.desktopCreated.emit(data.desktop);
 			this.snack.open(data.msg, null, { duration: 5000 });
-			this.forma.reset();
-			formDirective.resetForm();
+			this.resetForm(formDirective);
 		},
 			(err: any) => {
 				this.snack.open(err.error.msg, null, { duration: 5000 });
 			}
 		)
+	}
+
+	resetForm(formDirective: FormGroupDirective) {
+		formDirective.resetForm();
+		this.forma.reset();
+		this.userService.scrollTop();
 	}
 
 }

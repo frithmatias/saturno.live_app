@@ -48,12 +48,16 @@
             <div class="row text-center p-0 w-100">
                 <div class="col">
                     <!-- Normal Login -->
-                    <button class="btn btn-success btn-block text-uppercase" type="submit">ENTRAR</button>
+                    <button class="btn btn-success btn-block" type="submit">
+                        <span class="mdi mdi-login"></span> Login
+                    </button>
                 </div>
                 <div class="col">
                     <!-- Google Login -->
-                    <button class="btn btn-danger btn-block text-uppercase" type="button" id="btnGoogle"
-                        data-toggle="tooltip">Google
+
+                    <button class="btn btn-danger btn-block" type="button" id="btnGoogle"
+                        data-toggle="tooltip">
+                        <span class="mdi mdi-google"></span> Google
                     </button>
                 </div>
             </div>
@@ -62,8 +66,8 @@
             <!-- REGISTRARSE -->
             <!---------------------------------------------------------------------->
             <div class="mt-4 text-center">
-                No tenes cuenta? | <a routerLink="/register" class="text-primary m-l-5"><b class="text-uppercase">Crear
-                        cuenta</b></a>
+                No tenes cuenta? | <a routerLink="/register" class="text-primary m-l-5">Crear
+                        cuenta</a>
             </div>
         </div>
     </form>

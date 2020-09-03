@@ -1,7 +1,5 @@
-<div class="saturno-container animated fadeIn">
+<div class="saturno-container shadow-box animated fadeIn">
 
-  <div class="card-header">OBTENER TURNO</div>
-  <div class="card-body">
 
     <div *ngIf="ticketsService.companyData">
 
@@ -17,11 +15,11 @@
           ¡Bienvenido! Usted esta por sacar un turno para ser atendido en
         </p>
 
-        <div class="card border-success py-4 my-4">
+        <div class="card py-4 my-4">
           <p class="text-company">
             {{ ticketsService.companyData.tx_company_name }}
           </p>
-          <p style="color: darkblue; font-size: 1rem; font-weight: 400;">
+          <p style="color: darkblue; font-size: 1rem; font-weight: 400;" class="my-0">
             {{ ticketsService.companyData.tx_address_street }}
             {{ ticketsService.companyData.tx_address_number }}
             {{ ticketsService.companyData.cd_city }}
@@ -49,13 +47,12 @@
         </div>
       </div>
 
-      <button *ngFor="let skill of skills" class="btn btn-primary btn-block btn-lg text-uppercase"
+      <button *ngFor="let skill of skills" class="btn btn-primary btn-block btn-lg skill-button text-uppercase"
         (click)="createTicket(skill._id, false)">
         {{skill.tx_skill}}
       </button>
 
-    </div>
-  </div>
+
 </div>
 
 

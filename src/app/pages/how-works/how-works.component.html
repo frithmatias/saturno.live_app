@@ -1,0 +1,217 @@
+<div class="saturno-container p-0 shadow-box animated fadeIn">
+
+
+    <!-- STEPPER ON -->
+    <mat-horizontal-stepper style="text-align: left;" linear #stepper>
+
+        <!-- Qué es Step -->
+        <mat-step state="star">
+            <div class="animated fadeIn">
+                <div class="card-body">
+                    <h5>Qué es <span class="saturno-typo">SATURNO</span>?</h5>
+                    <p>
+                        Saturno es un sistema de administración de turnos on-line que funciona como una web app en el
+                        dispositivo de su cliente.
+                    </p>
+                    <p>
+                        A diferencia de una app estándar su cliente <b>no debe descargar la app de saturno</b>, esto
+                        significa que no debe visitar una PlayStore
+                        o una AppStore para descargar e instalar la app.
+
+                    </p>
+                    <p>
+                        Sólo se debe ingresar a la web en <b>saturno.live</b> donde se ofrece a su cliente instalar una
+                        PWA (sólo si
+                        desea) que es una app de apenas unos pocos kb que genera un acceso en la HomeScreen de su móvil.
+                        Si no lo desea, puede omitir esta instalación y utilizar el navegador de su dispositivo
+                        accediendo al menú de
+                        su empresa como en una web normal.
+                    </p>
+                    <p> 
+                        <b>
+                            En esta web utilizamos HTTPS que es un protocolo seguro de cifrado de datos (SSL) en la
+                            transferencia de datos.
+                            El mail que usted o sus clientes ingresan a esta web son sólo con fines de "logueo" y no
+                            serán usados bajo ningún
+                            aspecto para enviar pubicidad o SPAM. En el proceso de validación de cuenta utilizamos JWT
+                            que es un protocolo seguro
+                            de validación de TOKENS.
+
+                        </b>
+                    </p>
+                    <hr>
+                    
+                    <div class="row" style="text-align: center;">
+                        <div class="col">
+                            <span class="footer-icon-menu" routerLink="/home">
+                                <mat-icon>home</mat-icon>
+                                <div>Home</div>
+                            </span>
+                        </div>
+                        <div class="col">
+                            <div class="footer-icon-menu" (click)="stepperGoNext(stepper)">
+                                <mat-icon>navigate_next</mat-icon>
+                                <div>Siguiente</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </mat-step>
+
+        <!-- Cómo funciona Step -->
+        <mat-step state="star">
+            <div class="animated fadeIn">
+                <div class="card-body">
+
+                    <h5>Cómo funciona <span class="saturno-typo">SATURNO</span>?</h5>
+
+                    <p>
+                        Usted debe registrar un usuario. Puede utilizar el formulario para crear uno
+                        o puede utilizar el botón "Google" que le permite crear un usuario a partir de un usuario que
+                        usted ya tenga creado en Google.
+                    </p>
+                    <p>
+                        Luego debe ingresar desde "Login". Una vez logueado usted ya dispone de un usuario con rol de
+                        administrador. Este perfil le va a permitir crear todo lo necesario a través de un simple asistente, 
+                        para que pueda empezar a atender los turnos que generan sus clientes. 
+                        Para atender turnos sólo debe ir al menu de Asistentes y tomar un escritorio que se encuentre disponible. 
+                        Cada asistente puede iniciar y cerrar una sesión de escritorio.
+                    </p>
+
+                    <p>
+                        Por otro lado su cliente debe entrar al buscador de empresas en la dirección principal
+                        https://saturno.live y allí
+                        buscar su empresa. Usted puede también proveerle la dirección de acceso directo por ejemplo
+                        saturno.live/suempresa.
+                    </p>
+                    <p>
+                        Una vez que su cliente encuentra su empresa va a encontrar un menú con opciones. Esas opciones
+                        son las habilidades
+                        que usted creó anteriormente. Si no creo habilidades porque su comercio no las necesita sólo se
+                        verá la opción
+                        "Obtener turno".
+                    </p>
+                    <hr>
+
+
+
+                    <div class="row" style="text-align: center;">
+                        <div class="col">
+                            <div class="footer-icon-menu" (click)="stepperGoBack(stepper)">
+                                <mat-icon>navigate_before</mat-icon>
+                                <div>Anterior</div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="footer-icon-menu" (click)="stepperGoNext(stepper)">
+                                <mat-icon>navigate_next</mat-icon>
+                                <div>Siguiente</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </mat-step>
+
+        <!-- Qué ofrece Step -->
+        <mat-step state="star">
+            <div class="animated fadeIn">
+                <div class="card-body">
+
+                    <h5>Qué ofrece <span class="saturno-typo">SATURNO</span>?</h5>
+                    <p>
+
+                        Un sistema online de turnos le permite a usted y a sus clientes evitar congenstionamiento de
+                        personas en una sala de espera, ofreciéndole a sus clientes permanecer a la espera en un lugar
+                        de preferencia.
+                    </p>
+                    <p>
+                        Además el sistema ofrece una manera óptima de administrar el tiempo de sus clientes, quienes
+                        podrán ver desde sus teléfonos en la
+                        pantalla de turnos de su empresa el tiempo aproximado en la demora de atención. Esto le permite
+                        obtener un
+                        turno desde
+                        cualquier lugar y llegar próximo al momento que un asistente ya se encuentra disponible para
+                        atenderlo.
+                    </p>
+                    <p>
+                        <b>¡Sus clientes ya no se quejarán por la demora en la atención!</b>
+                    </p>
+                    <hr>
+
+
+                    <div class="row" style="text-align: center;">
+                        <div class="col">
+                            <div class="footer-icon-menu" (click)="stepperGoBack(stepper)">
+                                <mat-icon>navigate_before</mat-icon>
+                                <div>Anterior</div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="footer-icon-menu" (click)="stepperGoNext(stepper)">
+                                <mat-icon>navigate_next</mat-icon>
+                                <div>Siguiente</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            
+        </mat-step>
+
+        <!-- Porqué Step -->
+        <mat-step state="star">
+            <div class="animated fadeIn">
+                <div class="card-body">
+
+                    <h5>Porqué <span class="saturno-typo">SATURNO</span>?</h5>
+                    <p>
+                        Somos programadores y nos dedicamos a esta profesión con pasión, nos mantenemos constantemente 
+                        actualizados con las últimas tecnologías disponibles para convertirlas en
+                        aplicaciones ágiles y modernas que aporten valor y sean de gran utilidad.
+                    </p>
+                    <p>
+                        Es un proyecto que a penas comienza. Es libre y sobretodo es gratis. No cobramos ni cobraremos por este servicio, 
+                        ni a usted ni a sus clientes. 
+                    </p>
+                    <p>
+                        Estaremos con la mejor predisposición a escuchar propuestas de mejora para su negocio de modo que además, nos permita 
+                        implementar un proceso de mejoras constantes en nuestras aplicaciones para que puedan adaptarse mejor a sus necesidades, 
+                        de su negocio y sus clientes.
+                    </p>
+                    <hr>
+
+                    <div class="row" style="text-align: center;">
+
+                        <div class="col">
+                            <div class="footer-icon-menu" (click)="stepperGoBack(stepper)">
+                                <mat-icon>navigate_before</mat-icon>
+                                <div>Anterior</div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <span class="footer-icon-menu" routerLink="/home">
+                                <mat-icon>home</mat-icon>
+                                <div>Home</div>
+                            </span>
+                        </div>
+                        <div class="col">
+                            <span class="footer-icon-menu" routerLink="/register">
+                                <mat-icon>account_box</mat-icon>
+                                <div>Registrarme</div>
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </mat-step>
+
+
+    </mat-horizontal-stepper>
+</div>

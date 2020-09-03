@@ -21,7 +21,6 @@ export class WebsocketService {
 		private snack: MatSnackBar,
 	) {
 		this.escucharConexiones();
-		this.escucharActualizarPantalla();
 		this.escucharActualizarTicket();
 	}
 
@@ -86,15 +85,15 @@ export class WebsocketService {
 		});
 	}
 
-	escucharActualizarPantalla(): void {
-		this.listen('actualizar-pantalla').subscribe(data => {
-			this.ticketsService.getTickets();
-			const audio = new Audio();
-			audio.src = '../../assets/bell.wav';
-			audio.load();
-			audio.play();
-		});
+	escucharUpdatePublic(): Observable<string> {
+		return this.listen('update-public');
 	}
+
+	escucharUpdateDesktops(): Observable<string> {
+		return this.listen('update-desktops' || 'update-public');
+		
+	}
+
 
 	escucharActualizarTicket(): void {
 		this.listen('ticket-updated').subscribe((data: any) => {
@@ -109,20 +108,17 @@ export class WebsocketService {
 		return this.listen('cliente-en-camino').pipe(take(3));
 	}
 
-	escucharTurnoCancelado(): Observable<string> {
-		return this.listen('turno-cancelado');
+	escucharTicketCancelled(): Observable<string> {
+		return this.listen('ticket-cancelled');
 	}
 
 	escucharMensajes(): Observable<string> {
-		return this.listen('mensaje-privado');
+		return this.listen('message-private');
 	}
 
-	escucharTurnoNuevo(): Observable<string> {
-		return this.listen('turno-nuevo');
-	}
 
 	escucharSystem(): Observable<string> {
-		return this.listen('mensaje-system');
+		return this.listen('message-system');
 	}
 
 

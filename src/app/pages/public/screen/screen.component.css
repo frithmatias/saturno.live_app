@@ -5,6 +5,7 @@
 }
 
 
+
 .screen-icon-star {
   cursor   : pointer;
   transform: scale(2);
@@ -19,7 +20,33 @@
 }
 
 
+
 .button-disabled {
   background-color: #f1f1f1;
-  color: #c7c7c7;
+  color           : #c7c7c7;
+}
+
+.screen-text-title {
+  font-size:calc(.7em + 1.5vw);
+}
+
+
+.screen-text-big {
+  font-weight: 500;
+  font-size:calc(3em + 5vw);
+}
+
+.screen-text-history {
+  font-size:calc(1.5em + 1.5vw);
+  border-top: 1px solid rgba(98, 98, 214, 0.2);
+}
+
+.screen-text-subtitled {
+  color: darkslategrey;
+  border-top: none;
+  font-size :calc(.5em + .8vw);
+}
+
+.screen-icons {
+  font-size:calc(.5em + 1.5vw);
 }

@@ -1,0 +1,8 @@
+.skill-button {
+    border-radius: 0;
+    border-left: 1px solid rgb(220, 220, 255);
+    border-top: 1px solid rgb(190, 190, 255);
+    border-right: 1px solid rgb(79, 79, 167);
+    border-bottom: 1px solid rgb(92, 92, 192);
+
+}

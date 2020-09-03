@@ -42,13 +42,18 @@ export class SkillCreateFormComponent implements OnInit {
 			if(data.ok){
 				this.skillCreated.emit(data.skill);
 				this.snack.open(data.msg, null, { duration: 5000 });
-				this.forma.reset();
-				formDirective.resetForm();
+				this.resetForm(formDirective);
 			}
 		},
 			(err: any) => {
 				this.snack.open(err.error.msg, null, { duration: 5000 });
 			}
 		)
+	}
+
+	resetForm(formDirective: FormGroupDirective) {
+		formDirective.resetForm();
+		this.forma.reset();
+		this.userService.scrollTop();
 	}
 }

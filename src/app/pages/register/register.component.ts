@@ -4,6 +4,10 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { UserService } from '../../services/user.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import Swal from 'sweetalert2';
+import { environment } from 'src/environments/environment';
+import { WebsocketService } from 'src/app/services/websocket.service';
+import { PublicService } from '../../services/public.service';
+declare const gapi: any;
 
 @Component({
 	selector: 'app-register',
@@ -12,16 +16,22 @@ import Swal from 'sweetalert2';
 })
 export class RegisterComponent implements OnInit {
 	forma: FormGroup;
+	auth2: any; // info de google con el token
 
 	constructor(
 		private router: Router,
 		private userService: UserService,
+		private publicService: PublicService,
+		private wsService: WebsocketService,
 		private snack: MatSnackBar
 	) { }
 
 
 
 	ngOnInit() {
+		this.googleInit();
+		this.publicService.drawerScrollTop();
+
 		// this.publicUrl = document.
 		// this.publicUrl = location.origin + '/#/public/';
 		let defaults = {
@@ -40,6 +50,10 @@ export class RegisterComponent implements OnInit {
 			this.sonIguales('password1', 'password2')] 
 		});
 	}
+
+
+
+
 
 	sonIguales(campo1: string, campo2: string) {
 		return (group: FormGroup) => {
@@ -95,5 +109,40 @@ export class RegisterComponent implements OnInit {
 			}
 		)
 	}
+
+
+	// ========================================================
+	// REGISTER GOOGLE 
+	// ========================================================
+	
+	googleInit() {
+		gapi.load('auth2', () => {
+			this.auth2 = gapi.auth2.init({
+				client_id: environment.gapi_uid,
+				cookiepolicy: 'single_host_origin',
+				scope: 'profile email'
+			});
+			this.attachSignin(document.getElementById('btnGoogle'));
+		});
+	}
+
+	attachSignin(element) {
+		this.auth2.attachClickHandler(element, {}, googleUser => {
+			const gtoken = googleUser.getAuthResponse().id_token;
+			this.userService.login(gtoken, null, false).subscribe(
+				data => {
+					if (data.ok) {
+						if (data.user.id_company) { this.wsService.emit('enterCompany', data.user.id_company._id); }
+						window.location.href = '#/admin';
+						// this.router.navigate(['/admin']);				
+					}
+				},
+				() => {
+					this.snack.open('Error de validación en Google', null, { duration: 2000 });
+				}
+			);
+		});
+	}
+	
 
 }

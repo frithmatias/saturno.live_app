@@ -6,6 +6,8 @@ import { Router } from '@angular/router';
 import { TicketResponse } from '../../../interfaces/ticket.interface';
 import { UserService } from '../../../services/user.service';
 import Swal from 'sweetalert2';
+import { Subject } from 'rxjs';
+import { Ticket } from 'src/app/interfaces/ticket.interface';
 
 @Component({
 	selector: 'app-screen',
@@ -17,7 +19,7 @@ export class ScreenComponent implements OnInit {
 	loading = false;
 	coming: boolean = false;
 	scores = new Map();
-	
+	private subjectUpdateTickets$ = new Subject();
 	constructor(
 		private wsService: WebsocketService,
 		public ticketsService: TicketsService,
@@ -32,16 +34,33 @@ export class ScreenComponent implements OnInit {
 		const body = document.getElementsByTagName('body')[0];
 		body.classList.remove('container');
 
-		if (!this.userService.user) {
+		// listen for tickets
+		this.wsService.escucharUpdatePublic().subscribe(this.subjectUpdateTickets$);
+		this.subjectUpdateTickets$.subscribe(() => {
+			this.getTickets();
+		});
 
-			if (!this.ticketsService.companyData) {
-				this.router.navigate(['/public']);
-				this.snack.open('Por favor ingrese una empresa primero!', null, { duration: 5000 });
-			}
-
+		if (!this.userService.user && !this.ticketsService.companyData) {
+			this.router.navigate(['/public']);
+			this.snack.open('Por favor ingrese una empresa primero!', null, { duration: 5000 });
 		}
 
+
 		this.ticketsService.getTickets();
+	}
+
+
+	async getTickets() {
+		// traigo todos los tickets
+		return this.ticketsService.getTickets().then((tickets: Ticket[]) => {
+			const audio = new Audio();
+			audio.src = '../../assets/bell.wav';
+			audio.load();
+			audio.play();
+		}).catch(() => {
+			this.userService.snackShow('Error al obtener los tickets', 2000);
+		})
+
 	}
 
 	toggle(chat): void {
@@ -106,6 +125,11 @@ export class ScreenComponent implements OnInit {
 			})
 		}
 	}
+
+	ngOnDestroy() {
+		this.subjectUpdateTickets$.complete();
+	}
+
 
 }
 

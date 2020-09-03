@@ -1,25 +1,73 @@
 <div class="saturno-container shadow-box animated fadeIn">
-
-  <div class="jumbotron">
+  <!-- <span style="font-size: small;color:gray">{{date}}</span> -->
+  <div class="jumbotron mb-3 text-dark">
     <h2>Bienvenido</h2>
-    <p class=" lead mb-2">Desde aquí puede sacar un turno y esperar donde usted quiera evitando salas de espera.</p>
+    <p class="lead mb-2">Desde aquí puede sacar un turno y esperar donde usted quiera evitando salas de espera.</p>
+    <hr class="saturno-hr-red">
+    <p class="mb-0">
+      <span class="mdi mdi-cellphone-sound icon-home-phone"></span>
+    </p>
+    <p class="lead my-0">Cuando llegue su turno nosotros le avisamos a su móvil.</p>
   </div>
 
-  <button class="btn btn-primary btn-lg btn-block m-1" routerLink="/public" role="button">OBTENER TURNO</button>
-  <!-- <button class="btn btn-dark m-1" routerLink="/register" role="button">REGISTRARME</button> -->
-  <span style="font-size: small;color:gray">{{date}}</span>
-  <div class="container mt-5">
-    <div class="row" style="align-items: center;">
-      <div class="col-6 footer-text">
-        2020 | Matias Frith
+  <div>
+    <div>
+      <button class="btn btn-primary btn-lg btn-block mb-2" routerLink="/public" role="button">
+        <span class="mdi mdi-bookmark"></span>
+        OBTENER TURNO
+      </button>
+    </div>
+
+
+    <div class="row mt-3" style="align-items: baseline;">
+      <div class="col" style="text-align: left;">
+        <span class="footer-text">Matias Frith | 2020</span>
       </div>
-      <div class="col-6 footer-logo">
-        <img src="../../../assets/img/mean-mini.png" class="img-fluid">
+      <div class="col" style="text-align: right;">
+        <span class="mdi mdi-heart footer-icon ml-1" style="color:red"></span>
+        <span class="mdi mdi-angularjs footer-icon ml-1" ></span>
+        <span class="mdi mdi-language-javascript footer-icon ml-1" ></span>
+        <span class="mdi mdi-nodejs footer-icon ml-1" ></span>
       </div>
     </div>
+
   </div>
 </div>
 
+<div class="saturno-container p-0 d-flex">
+
+  <div class="col saturno-info-box shadow-box" routerLink="/howworks">
+    <div class="saturno-info-title">
+      <div>
+        <span class="mdi mdi-cogs icon-home-card"></span>
+      </div>
+      <div>
+        ¿Cómo funciona?
+      </div>
+    </div>
+    <hr class="saturno-hr-green">
+    <div class="saturno-info-text">
+      Este pequeño asistente le explica como funciona este sistema.
+    </div>
+    
+  </div>
+
+  <div class="col saturno-info-box shadow-box" routerLink="/register">
+    <div class="saturno-info-title">
+      <div>
+        <span class="mdi mdi-account-circle icon-home-card"></span>
+      </div>
+      <div>
+        Registrar mi empresa.
+      </div>
+    </div>
+    <hr class="saturno-hr-blue">
+    <div class="saturno-info-text">
+      Desde aquí puede registrar su comercio ó empresa y empezar a atender turnos.
+    </div>
+  </div>
+
+</div>
 
 <div class="saturno-footer">
   <div class="row">

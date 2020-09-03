@@ -1,6 +1,25 @@
 <div class="saturno-container shadow-box animated fadeIn">
-    <form autocomplete="off" class="form-container m-3" ngNativeValidate [formGroup]="forma"
-        (ngSubmit)="registrarUsuario()" id="loginform" action="index.html">
+
+    <form ngNativeValidate #f="ngForm">
+        <div class="jumbotron py-5 text-dark">
+
+            <h2>Bienvenido</h2>
+            <p class="lead" style="font-size: medium;">Desde aquí puede registrar su cuenta. </p>
+            <hr class="saturno-hr my-4">
+            <p class="lead" style="font-size: medium;">Usted puede crear su cuenta utilizando su cuenta de Google.</p>
+           
+            <button class="btn btn-danger btn-block" type="button" id="btnGoogle"
+            data-toggle="tooltip">
+            <span class="mdi mdi-google"></span> Google
+        </button>
+
+        </div>
+    </form>
+
+
+
+
+    <form ngNativeValidate [formGroup]="forma" (ngSubmit)="registrarUsuario()" id="loginform">
 
 
         <!-- User -->
@@ -42,19 +61,19 @@
         </div>
         <!-- [disabled]="!forma.valid" -->
         <div class="form-group text-center">
-            <button [disabled]="!forma.valid" class="btn btn-lg btn-dark btn-block text-uppercase"
-                type="submit">Registrarme
+            <button [disabled]="!forma.valid" class="btn btn-dark" type="submit">
+                <span class="mdi mdi-account-plus"></span> Registrarme
             </button>
-
         </div>
 
         <div class="form-group m-b-0">
             <div class="col-sm-12 text-center">
-                <p>Ya tenes una cuenta? | <a routerLink="/login" class="text-dark text-uppercase m-l-5"><b>Ingresa
-                            ahora</b></a>
+                <p>Ya tenes una cuenta? | <a routerLink="/login" class="text-dark"><b>Ingresa
+                            aquí</b></a>
                 </p>
             </div>
         </div>
+
     </form>
 </div>
 

@@ -16,6 +16,9 @@ export class PublicService {
   setScore(idDesktopSession: string, score: number): void {
   }
 
-
+  drawerScrollTop(): void {
+    let ref = document.getElementsByClassName('mat-drawer-content')[0];
+		ref.scrollTop = 0;
+  }
 
 }

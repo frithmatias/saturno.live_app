@@ -18,6 +18,7 @@ import { LoginGuard } from './guards/login.guard';
 import { TokenGuard } from './guards/token.guard';
 import { AdminGuard } from './guards/admin.guard';
 import { SuperuserModule } from './pages/superuser/superuser.module';
+import { HowWorksComponent } from './pages/how-works/how-works.component';
 
 const appRoutes: Routes = [
 
@@ -25,6 +26,7 @@ const appRoutes: Routes = [
 	{ path: 'login', component: LoginComponent },
 	{ path: 'register', component: RegisterComponent },
 	{ path: 'contact', component: ContactComponent },
+	{ path: 'howworks', component: HowWorksComponent},
 	
 	{ 	path: 'public', 															
 		component: PublicComponent, 	

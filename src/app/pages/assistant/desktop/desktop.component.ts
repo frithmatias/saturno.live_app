@@ -28,8 +28,6 @@ export class DesktopComponent implements OnInit {
 	waitForClient: boolean = false;
 	comingClient: boolean = false;
 
-	userSubscription: Subscription;
-	
 	pendingTicketsCount: number = 0;
 	pendingTicketsBySkill: any[] = [];
 
@@ -47,7 +45,7 @@ export class DesktopComponent implements OnInit {
 	skillSelected: string = '';
 	blPriority = false;
 
-	private subjectTurnoNuevo$ = new Subject();
+	private subjectUpdateTickets$ = new Subject();
 	private subjectTurnoCancelado$ = new Subject();
 
 	constructor(
@@ -71,22 +69,13 @@ export class DesktopComponent implements OnInit {
 
 		await this.getTickets();
 
-		// read for user company changes
-		this.userSubscription = this.userService.user$.subscribe(data => {
-			if (data) {
-			  if (data.id_company) { 
-				  this.releaseDesktop();
-			   }
-			}
-		  });
-
 		// hot subjects subscribe to socket.io listeners
-		this.wsService.escucharTurnoNuevo().subscribe(this.subjectTurnoNuevo$);
-		this.subjectTurnoNuevo$.subscribe((data) => {
+		this.wsService.escucharUpdateDesktops().subscribe(this.subjectUpdateTickets$);
+		this.subjectUpdateTickets$.subscribe(() => {
 			this.getTickets();
 		});
 
-		this.wsService.escucharTurnoCancelado().subscribe(this.subjectTurnoCancelado$);
+		this.wsService.escucharTicketCancelled().subscribe(this.subjectTurnoCancelado$);
 		this.subjectTurnoCancelado$.subscribe(idCancelledTicket => {
 			let idActiveTicket = this.ticketsService.myTicket?._id;
 			if (idCancelledTicket === idActiveTicket) {
@@ -103,14 +92,11 @@ export class DesktopComponent implements OnInit {
 		// traigo todos los tickets
 		return this.ticketsService.getTickets().then((tickets: Ticket[]) => {
 			// DESKTOP: verifico si existe un ticket anterior pendiente 
-
 			const pending = tickets.filter(ticket => {
 				return (
-					// id_desk optional -> client can cancel ticket.
 					ticket.id_session === this.userService.desktop.id_session._id &&
 					ticket.tm_end === null &&
 					ticket.id_child === null
-
 				);
 			})[0];
 
@@ -172,12 +158,10 @@ export class DesktopComponent implements OnInit {
 		if (this.tmWaitingSub) { this.tmWaitingSub.unsubscribe(); }
 		if (this.tmExtraTimeSub) { this.tmExtraTimeSub.unsubscribe(); }
 		if (this.tmRunSub) { this.tmRunSub.unsubscribe(); }
-
-
+		this.getTickets();
 	}
 
 	async releaseDesktop() {
-
 		if (this.ticketsService.myTicket) {
 			let snackMsg = 'Tiene una sesión de turno activa. ¿Desea finalizarla?';
 			return await this.askForContinue(snackMsg).then(() => {
@@ -188,7 +172,6 @@ export class DesktopComponent implements OnInit {
 						let idDesktop = this.userService.desktop._id;
 						this.userService.releaseDesktop(idDesktop).subscribe((data: DesktopResponse) => {
 							if (data.ok) {
-								this.clearDesktopSession();
 								this.router.navigate(['assistant/home']);
 							} else {
 								this.message = resp.msg;
@@ -268,7 +251,6 @@ export class DesktopComponent implements OnInit {
 			} else {
 				this.waitForClient = true;
 				this.message = '';
-
 				this.ticketsService.myTicket = resp.ticket;
 				localStorage.setItem('ticket', JSON.stringify(resp.ticket));
 
@@ -384,7 +366,7 @@ export class DesktopComponent implements OnInit {
 	}
 
 	ngOnDestroy() {
-		this.subjectTurnoNuevo$.complete();
+		this.subjectUpdateTickets$.complete();
 		this.subjectTurnoCancelado$.complete();
 	}
 

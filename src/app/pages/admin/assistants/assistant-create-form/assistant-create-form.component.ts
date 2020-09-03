@@ -123,11 +123,9 @@ export class AssistantCreateFormComponent implements OnInit, OnChanges {
 						// push my user edited
 						this.userService.pushUser(data.user)
 					}
-					this.assistantEdit = null;
 					this.updateAssistants.emit(data.user._id);
 					this.snack.open(data.msg, null, { duration: 5000 });
 					this.resetForm(formDirective);
-					formDirective.resetForm();
 				}
 			}, (err: HttpErrorResponse) => {
 				this.snack.open(err.error.msg, null, { duration: 5000 });
@@ -159,5 +157,6 @@ export class AssistantCreateFormComponent implements OnInit, OnChanges {
 		this.forma.enable();
 		this.forma.reset();
 		formDirective.resetForm();
+		this.userService.scrollTop();
 	}
 }

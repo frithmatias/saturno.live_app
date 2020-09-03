@@ -3,6 +3,7 @@ import { TicketsService } from '../../services/tickets.service';
 import moment from 'moment';
 import { timer, interval } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
+import { PublicService } from '../../services/public.service';
 moment.locale('es');
 @Component({
   selector: 'app-home',
@@ -11,7 +12,7 @@ moment.locale('es');
 })
 export class HomeComponent implements OnInit {
   date: string;
-  constructor(public ticketsService: TicketsService) {}
+  constructor(public ticketsService: TicketsService, private publicService: PublicService) {}
 
   ngOnInit(): void {
 
@@ -21,6 +22,9 @@ export class HomeComponent implements OnInit {
       this.date = moment().format('LL H:mm:ss');
       
     })
+
+		this.publicService.drawerScrollTop();
+
   }
 
 }

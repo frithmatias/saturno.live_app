@@ -1,11 +1,11 @@
-<div class="animated fadeIn" style="min-width: 18rem; max-width: 30rem;">
+<div class="saturno-container shadow-box animated fadeIn">
 
   <!-- STEPPER OFF -->
   <div *ngIf="!showIntro">
-    <div class="jumbotron m-2 animated fadeIn">
+    <div class="m-2 animated fadeIn">
       <h3 class="mb-4">Bienvenido {{ userService?.user.tx_name }}!</h3>
 
-      <button class="btn btn-primary btn-block btn-lg" routerLink="/assistant/home">Atender</button>
+      <button class="btn btn-primary btn-block" routerLink="/assistant/home">Atender</button>
 
       <hr class="my-4">
 
@@ -59,7 +59,7 @@
 
     <!-- Welcome Step -->
     <mat-step state="star">
-      <div class="jumbotron m-2 animated fadeIn">
+      <div class="m-2 animated fadeIn">
         <div class="card-body">
           <h3>Hola {{ userService?.user.tx_name }}!</h3>
 
@@ -80,58 +80,53 @@
     <!-- Company Step -->
     <mat-step [completed]="userService.companies?.length > 0 && userService.user?.id_company?._id" state="store">
 
-      <div class="card m-2" style="min-width: 18rem; max-width: 30rem;">
-        <div class="card-header">Crear Empresas / Comercios</div>
-        <div class="card-body">
 
-          <!-- no companies, no attached company -->
-          <div *ngIf="userService.companies?.length === 0">
-            <h3>Comencemos</h3>
-            <p>
-              Usted no tiene ningún comercio registrado, desde aquí usted debe registrar al menos un comercio.
-            </p>
-            <hr>
-            <p>
-              Es importante que usted ingrese la dirección exacta. Esta dirección será visible para sus clientes
-              desde el menú público de turnos y le asegura a su cliente que esta obteniendo un turno en el comercio
-              correcto.
-            </p>
-          </div>
 
-          <!-- companies and attached company -->
-          <div *ngIf="userService.companies?.length > 0 && userService.user?.id_company?._id">
+      <!-- no companies, no attached company -->
+      <div *ngIf="userService.companies?.length === 0">
+        <h3>Comencemos</h3>
+        <p>
+          Usted no tiene ningún comercio registrado, desde aquí usted debe registrar al menos un comercio.
+        </p>
+        <hr>
+        <p>
+          Es importante que usted ingrese la dirección exacta. Esta dirección será visible para sus clientes
+          desde el menú público de turnos y le asegura a su cliente que esta obteniendo un turno en el comercio
+          correcto.
+        </p>
+      </div>
 
-            <h3>Comercio creado <mat-icon style="color:green">check</mat-icon>
-            </h3>
-            <p>
-              Las habilidades, escritorios y asistentes que registre a partir de ahora, serán
-              asignados a
-              <span style="color:blue;">
-                {{userService.user.id_company.tx_company_name}}
-              </span>
-            </p>
-            <hr>
-            <p class="card-text card-text">
-              Usted puede crear mas comercios si dispone de sucursales y moverse entre ellos 
-              seleccionandolos desde el menu principal.
-            </p>
-            <p style="text-align: center;">
-              <img src="assets/img/saturno-selector-empresas.png">
-            </p>
-            
-          </div>
+      <!-- companies and attached company -->
+      <div *ngIf="userService.companies?.length > 0 && userService.user?.id_company?._id">
 
-          <!-- previous / next -->
-          <div class="row mx-2 mt-4" style="justify-content: space-between;">
-            <button class="btn btn-danger col-5" matStepperPrevious> Volver </button>
-            <button class="btn btn-success col-5"
-              [disabled]="!userService.companies || !userService.user?.id_company?._id" matStepperNext> Siguiente
-            </button>
-          </div>
-
-        </div>
+        <h3>Comercio creado <mat-icon style="color:green">check</mat-icon>
+        </h3>
+        <p>
+          Las habilidades, escritorios y asistentes que registre a partir de ahora, serán
+          asignados a
+          <span style="color:blue;">
+            {{userService.user.id_company.tx_company_name}}
+          </span>
+        </p>
+        <hr>
+        <p class="card-text card-text">
+          Usted puede crear mas comercios si dispone de sucursales y moverse entre ellos
+          seleccionándolos desde el menu principal.
+        </p>
+        <p style="text-align: center;">
+          <img src="assets/img/saturno-selector-empresas.png">
+        </p>
 
       </div>
+
+      <!-- previous / next -->
+      <div class="row mx-2 mt-4" style="justify-content: space-between;">
+        <button class="btn btn-danger col-5" matStepperPrevious> Volver </button>
+        <button class="btn btn-success col-5" [disabled]="!userService.companies || !userService.user?.id_company?._id"
+          matStepperNext> Siguiente
+        </button>
+      </div>
+      <hr>
 
       <app-companies></app-companies>
     </mat-step>
@@ -139,47 +134,44 @@
     <!-- Skills Step -->
     <mat-step [completed]="userService.skills?.length > 0" state="playlist_add_check">
 
-      <div class="card m-2" style="min-width: 18rem; max-width: 30rem;">
-        <div class="card-header">Crear Skills / Habilidades</div>
-        <div class="card-body">
-          <h3>Habilidades (opcional)</h3>
-          <p>
-            Este paso es opcional. Si no necesita mas de una línea de turnos puede omitir este paso y continuar. 
-            Por defecto esta opción esta desactivada.
-          </p>
-          <hr>
-          <div class="p-1 mb-3" style="cursor: pointer;" (click)="activateSkillExplanation=!activateSkillExplanation">
-            ¿Que son los skills? (habilidades)
-          </div>
-          <div *ngIf="activateSkillExplanation" class="animated fadeIn">
-            <p>
-              Usted puede habilitar la opción de habilidades si su comercio tiene diferentes segmentos 
-              que requieren diferentes habilidades de atención. 
-            </p>
-            <p>
-              Por ejemplo si usted quiere generar turnos para una guardia, podría necesitar generar las habilidades
-              de "Pediatría", "Clínica" y "Traumatología" con las abreviaturas como P, C y T respectivamente.
-            </p>
-            <p>
-              Con las habilidades usted puede además definir circuitos de atención. Puede recibir un turno que fué 
-              atendido en un escritorio con skill A y enviarlo luego para ser atendido a un escritorio con skill B, 
-              y así sucesivamente. Al reasignar un turno tamién puede establecer su prioridad de modo de enviarlo 
-              al inicio o al fin de la cola de espera.
-            </p>
-            <p>
-              Las habilidades se asignan a los asistentes al momento de crearlos. Puede asignar una o mas habilidades por 
-              asistente. Su usuario tiene rol de administrador y tendrá asignadas todas las habilidades de atención.
-            </p>
 
-          </div>
-
-          <div class="row mx-2 mt-4" style="justify-content: space-between;">
-            <button class="btn btn-danger col-5" matStepperPrevious> Volver </button>
-            <button [disabled]="userService.skills?.length === 0 " class="btn btn-success col-5" matStepperNext>
-              Siguiente </button>
-          </div>
-        </div>
+      <h3>Habilidades (opcional)</h3>
+      <p>
+        Este paso es opcional. Si no necesita mas de una línea de turnos puede omitir este paso y continuar.
+        Por defecto esta opción esta desactivada.
+      </p>
+      <hr>
+      <div class="p-1 mb-3" style="cursor: pointer;" (click)="activateSkillExplanation=!activateSkillExplanation">
+        ¿Que son los skills? (habilidades)
       </div>
+      <div *ngIf="activateSkillExplanation" class="animated fadeIn">
+        <p>
+          Usted puede habilitar la opción de habilidades si su comercio tiene diferentes segmentos
+          que requieren diferentes habilidades de atención.
+        </p>
+        <p>
+          Por ejemplo si usted quiere generar turnos para una guardia, podría necesitar generar las habilidades
+          de "Pediatría", "Clínica" y "Traumatología" con las abreviaturas como P, C y T respectivamente.
+        </p>
+        <p>
+          Con las habilidades usted puede además definir circuitos de atención. Puede recibir un turno que fué
+          atendido en un escritorio con skill A y enviarlo luego para ser atendido a un escritorio con skill B,
+          y así sucesivamente. Al reasignar un turno también puede establecer su prioridad de modo de enviarlo
+          al inicio o al fin de la cola de espera.
+        </p>
+        <p>
+          Las habilidades se asignan a los asistentes al momento de crearlos. Puede asignar una o mas habilidades por
+          asistente. Su usuario tiene rol de administrador y tendrá asignadas todas las habilidades de atención.
+        </p>
+
+      </div>
+
+      <div class="row mx-2 mt-4" style="justify-content: space-between;">
+        <button class="btn btn-danger col-5" matStepperPrevious> Volver </button>
+        <button [disabled]="userService.skills?.length === 0 " class="btn btn-success col-5" matStepperNext>
+          Siguiente </button>
+      </div>
+      <hr>
 
       <app-skills></app-skills>
     </mat-step>
@@ -187,9 +179,7 @@
     <!-- Desktops Step -->
     <mat-step [completed]="userService.desktops?.length > 0" state="important_devices">
 
-      <div class="card m-2" style="min-width: 18rem; max-width: 30rem;">
-        <div class="card-header">Crear Ventanillas / Escritorios</div>
-        <div class="card-body">
+
           <h3>Escritorios</h3>
 
           <p>
@@ -209,8 +199,7 @@
             <button [disabled]="userService.desktops?.length === 0" class="btn btn-success col-5" matStepperNext>
               Siguiente </button>
           </div>
-        </div>
-      </div>
+          <hr>
 
       <app-desktops></app-desktops>
     </mat-step>
@@ -218,16 +207,15 @@
     <!-- Assistants Step -->
     <mat-step [completed]="userService.assistants.length > 1 || userService.user.id_skills.length > 0" state="face">
 
-      <div class="card m-2" style="min-width: 18rem; max-width: 30rem;">
-        <div class="card-header">Crear Asistentes / Operadores</div>
-        <div class="card-body">
+
           <h3>Asistentes (opcional)</h3>
           <p>
             Este paso es opcional. Si sólo necesita su propio usuario para atender turnos puede
             omitir este paso y continuar.
           </p>
           <hr>
-          <div class="p-1 mb-3" style="cursor: pointer;" (click)="activateAssistantExplanation=!activateAssistantExplanation">
+          <div class="p-1 mb-3" style="cursor: pointer;"
+            (click)="activateAssistantExplanation=!activateAssistantExplanation">
             ¿Que son los asistentes?
           </div>
           <div *ngIf="activateAssistantExplanation" class="animated fadeIn">
@@ -236,12 +224,13 @@
               opcionalmente crear otros usuarios con rol de asistente para esa tarea.
             </p>
             <p>
-              Si fueron creadas habilidades, su cuenta de usuario con rol de administrador ya tiene asignadas todas 
-              las habilidades. Sin embargo si desea crear asistentes debera asignarle a cada asistente las 
+              Si fueron creadas habilidades, su cuenta de usuario con rol de administrador ya tiene asignadas todas
+              las habilidades. Sin embargo si desea crear asistentes deberá asignarle a cada asistente las
               habilidades que le correspondan.
             </p>
             <p>
-              Tenga en cuenta que los asistentes que usted puede crear aquí, deben ingresar a sus cuentas desde el mismo login
+              Tenga en cuenta que los asistentes que usted puede crear aquí, deben ingresar a sus cuentas desde el mismo
+              login
               de usuario pero con la opción [ENTRAR] con su email y contraseña.
             </p>
           </div>
@@ -266,8 +255,7 @@
             <button [disabled]="userService.assistants.length === 1 && userService.user.id_skills.length === 0"
               class="btn btn-primary col-5" routerLink="/admin/home" (click)="endWizard()"> Finalizar </button>
           </div>
-        </div>
-      </div>
+          <hr>
 
       <app-assistants></app-assistants>
     </mat-step>
@@ -275,7 +263,7 @@
   </mat-horizontal-stepper>
 
   <div class="m-2">
-    <mat-slide-toggle [(ngModel)]="showIntro" (click)="toggleIntro()"> Ver intoducción </mat-slide-toggle>
+    <mat-slide-toggle [(ngModel)]="showIntro" (click)="toggleIntro()"> Ver introducción </mat-slide-toggle>
   </div>
 
 </div>

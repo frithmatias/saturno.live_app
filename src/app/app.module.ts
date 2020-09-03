@@ -36,6 +36,7 @@ import { LoginGuard } from './guards/login.guard';
 
 import { GetidstringPipe } from './pipes/getidstring.pipe';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
+import { HowWorksComponent } from './pages/how-works/how-works.component';
 
 @NgModule({
 	declarations: [
@@ -45,7 +46,8 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
 		LoginComponent,
 		NopagefoundComponent,
 		GetidstringPipe,
-		ContactComponent
+		ContactComponent,
+		HowWorksComponent
 	],
 	imports: [
 		MaterialModule,
