@@ -65,6 +65,7 @@ export class AssistantsComponent implements OnInit, OnDestroy {
     })
   }
 
+  // assistant was created or updated
   updateAssistants(assistant: string): void {
     this.assistantUpdated = assistant;
     this.readAssistants(this.userService.user.id_company._id);

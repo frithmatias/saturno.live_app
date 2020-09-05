@@ -27,17 +27,13 @@ export class SkillsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
 
     if (this.userService.user) {
-
       this.user = this.userService.user;
 
       if (this.user.id_company) {
         let idCompany = this.user.id_company._id;
         this.readSkills(idCompany).then((skills: Skill[]) => {
-          if(skills.length === 0) {
-            this.createGenericSkill().catch(() => {
-              this.userService.snackShow('Error al crear el skill por defecto!', 5000);
-            })
-          }
+          this.skills = skills.filter(skill => skill.bl_generic === false); // filter default_skill
+          this.userService.skills = skills;
         })
       }
 
@@ -45,144 +41,65 @@ export class SkillsComponent implements OnInit, OnDestroy {
         if (data) {
           this.user = data;
           if (data.id_company) { this.readSkills(data.id_company._id); }
-          
         }
       });
 
     }
   }
 
-  deleteSkill(idSkill: string): void {
+  skillCreated(skill: Skill): void {
+    this.skills = this.skills.filter(skill => skill.bl_generic === false) // clear generics
+    this.skills.push(skill);
 
+    let user: User;
+    user = JSON.parse(localStorage.getItem('user'));
+    user.id_skills = this.skills;
+    this.userService.pushUser(user);
+  }
+
+  deleteSkill(idSkill: string): void {
     this.snack.open('Desea eliminar el skill?', 'ELIMINAR', { duration: 10000 }).afterDismissed().subscribe((data: MatSnackBarDismiss) => {
       if (data.dismissedByAction) {
-
         this.userService.deleteSkill(idSkill).subscribe((data: SkillResponse) => {
           if(data.ok){
-            this.snack.open(data.msg, null, { duration: 5000 });
+            this.snack.open(data.msg, null, { duration: 2000 });
+            // update user
+            let user: User;
+            user = JSON.parse(localStorage.getItem('user'));
+            user.id_skills = user.id_skills.filter(skill => skill._id !== data.skill._id);
+            this.userService.pushUser(user);
+
+            // update skills
             this.skills = this.skills.filter(skill => skill._id != idSkill);
             this.userService.skills = this.skills;
+
+            // if last custom was removed then get generic skill
+            if(this.skills.length===0){ 
+              this.readSkills(data.skill.id_company).then((skills: Skill[]) => {
+                let user: User;
+                user = JSON.parse(localStorage.getItem('user'));
+                user.id_skills = skills;
+                this.userService.pushUser(user);
+              })
+            }
           }
         },
           (err: SkillResponse) => {
-            this.snack.open(err.msg, null, { duration: 5000 });
+            this.snack.open(err.msg, null, { duration: 2000 });
           }
         )
       }
     });
-
-  }
-
-  skillCreated(skill: Skill): void {
-    this.skills.push(skill);
   }
 
   readSkills(idCompany: string): Promise<Skill[]> {
     return new Promise(resolve => {
       this.userService.readSkills(idCompany).subscribe((data: SkillsResponse) => {
         if(data.ok){
-          this.skills = data.skills;
-          this.userService.skills = data.skills;
-          if (data.skills.length === 0) {
-    
-    
-          } else if( data.skills.length === 1 && data.skills[0].bl_generic){
-            this.activateSkills = false;
-          } else if( data.skills.length > 1) {
-            this.activateSkills = true;
-          }
           resolve(data.skills);
         }
       });
-
     })
-  }
-
-  toggleSkills() {
-    if (this.activateSlide) {
-      if (this.activateSkills) { // el usuario desactiva los skills
-        if (this.skills.length > 0) { // verifico que tenga skills
-
-          let hasUserSkill = false;
-          for (let skill of this.skills) {
-            if (skill.bl_generic === false) {
-              hasUserSkill = true;
-              break;
-            }
-          }
-
-          if (hasUserSkill) {
-            this.activateSlide = false;
-            this.userService.snackAsk('Hay habilidades creadas, desea eliminarlas?', 'Aceptar', 5000).then(() => {
-              this.deleteAllSkills().then(() => {
-               return this.createGenericSkill().then(() => { // borro skills y creo generico correctamente
-                 this.activateSkills = false;
-                 this.activateSlide = true;
-                  this.userService.snackShow('Habilidades Desactivadas!', 2000);
-                });
-              }).catch(() => {  // fallo borrar los skills o crear el generico
-                this.activateSkills = true;
-                this.activateSlide = true;
-                this.userService.snackShow('Error al eliminar las habilidades!', 5000);
-              })
-            }).catch(() => { // el usuario no respondio
-              this.activateSkills = true;
-              this.activateSlide = true;
-              return;
-            })
-          } else { // already has generic skill do nothing
-
-          }
-        } else {
-          this.createGenericSkill();
-        }
-      } else {
-        // elimino los skills, al activar sólo puede haber un skill genérico
-        this.deleteAllSkills();
-      }
-    }
-  }
-
-  deleteAllSkills(): Promise<boolean> {
-    return new Promise((resolve) => {
-      if (this.skills.length > 0) {
-        for (let skill of this.skills) {
-          let idSkill = skill._id;
-          this.userService.deleteSkill(idSkill).subscribe((data: SkillResponse) => {
-            if(data.ok){
-              this.skills = this.skills.filter(skill => skill._id !== data.skill._id);
-              this.userService.skills = this.skills;
-            }
-          });
-        }
-        resolve();
-      }
-    });
-  }
-
-  createGenericSkill(): Promise<Skill | null> {
-    return new Promise((resolve, reject) => {
-
-      const skill: Skill = {
-        id_company: this.userService.user.id_company._id,
-        bl_generic: true,
-        _id: null
-      };
-
-      this.userService.createSkill(skill).subscribe((data: SkillResponse) => {
-
-        if (data.ok) {
-          this.skills.push(data.skill);
-          this.userService.skills = this.skills;
-          resolve(data.skill)
-        }
-      },
-        (err: any) => {
-          this.snack.open(err.error.msg, null, { duration: 5000 });
-          reject(null);
-        }
-      )
-    });
   }
 
   ngOnDestroy(): void {

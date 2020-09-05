@@ -3,7 +3,7 @@
   <!-- STEPPER OFF -->
   <div *ngIf="!showIntro">
     <div class="m-2 animated fadeIn">
-      <h3 class="mb-4">Bienvenido {{ userService?.user.tx_name }}!</h3>
+      <h4 class="mb-4">Bienvenido {{ userService?.user.tx_name }}!</h4>
 
       <button class="btn btn-primary btn-block" routerLink="/assistant/home">Atender</button>
 
@@ -61,14 +61,13 @@
     <mat-step state="star">
       <div class="m-2 animated fadeIn">
         <div class="card-body">
-          <h3>Hola {{ userService?.user.tx_name }}!</h3>
+          <h4>Hola {{ userService?.user.tx_name }}!</h4>
 
           <p>
-            Para comenzar a atender turnos debe crear, al menos un comercio, al menos un escritorio y al menos una
-            habilidad
+            Este pequeño asistente le ayuda a crear todo lo necesario para comenzar a atender turnos.
           </p>
           <p>
-            Opcionalmente puede dar de alta asistentes. No le llevará mas de un minuto y desde aquí puede hacer todo!.
+            No le llevará mas de un minuto y desde aquí puede hacer todo!.
           </p>
           <hr>
           <button class="btn btn-success" matStepperNext>Comenzar</button>
@@ -84,9 +83,10 @@
 
       <!-- no companies, no attached company -->
       <div *ngIf="userService.companies?.length === 0">
-        <h3>Comencemos</h3>
+        <h4 style="color: crimson;"><span class="mdi mdi-storefront-outline mr-2"></span>Comencemos</h4>
+
         <p>
-          Usted no tiene ningún comercio registrado, desde aquí usted debe registrar al menos un comercio.
+          Usted no tiene ninguna empresa ó comercio registrado, desde aquí usted debe registrar al menos uno.
         </p>
         <hr>
         <p>
@@ -98,19 +98,16 @@
 
       <!-- companies and attached company -->
       <div *ngIf="userService.companies?.length > 0 && userService.user?.id_company?._id">
+        <h4 style="color: crimson;"><span class="mdi mdi-storefront-outline mr-2"></span>Empresa creada! <span
+            class="mdi mdi-check text-success"></span></h4>
 
-        <h3>Comercio creado <mat-icon style="color:green">check</mat-icon>
-        </h3>
+
         <p>
-          Las habilidades, escritorios y asistentes que registre a partir de ahora, serán
-          asignados a
-          <span style="color:blue;">
-            {{userService.user.id_company.tx_company_name}}
-          </span>
+          Puede seguir adelante con el asistente.
         </p>
         <hr>
         <p class="card-text card-text">
-          Usted puede crear mas comercios si dispone de sucursales y moverse entre ellos
+          Recuerde que puede crear mas comercios si dispone de sucursales y moverse entre ellos
           seleccionándolos desde el menu principal.
         </p>
         <p style="text-align: center;">
@@ -120,142 +117,191 @@
       </div>
 
       <!-- previous / next -->
-      <div class="row mx-2 mt-4" style="justify-content: space-between;">
-        <button class="btn btn-danger col-5" matStepperPrevious> Volver </button>
-        <button class="btn btn-success col-5" [disabled]="!userService.companies || !userService.user?.id_company?._id"
-          matStepperNext> Siguiente
-        </button>
+      <div class="row" style="text-align: center;">
+        <div class="col">
+          <div class="footer-icon-menu" style="color: red;" (click)="stepperGoBack(stepper)">
+            <span class="mdi mdi-arrow-left-circle xxl"></span>
+            <div>Anterior</div>
+          </div>
+        </div>
+
+        <div class="col">
+          <div *ngIf="userService.companies || userService.user?.id_company?._id" class="footer-icon-menu"
+            style="color: green;" (click)="stepperGoNext(stepper)">
+            <span class="mdi mdi-arrow-right-circle xxl"></span>
+            <div>Siguiente</div>
+          </div>
+        </div>
       </div>
+
       <hr>
 
       <app-companies></app-companies>
     </mat-step>
 
     <!-- Skills Step -->
-    <mat-step [completed]="userService.skills?.length > 0" state="playlist_add_check">
+    <mat-step state="playlist_add_check">
 
+      <h4 style="color: crimson;"><span class="mdi mdi-list-status mr-2"></span>Skills / Habilidades</h4>
 
-      <h3>Habilidades (opcional)</h3>
       <p>
-        Este paso es opcional. Si no necesita mas de una línea de turnos puede omitir este paso y continuar.
-        Por defecto esta opción esta desactivada.
+        Si no necesita mas de una línea de turnos puede omitir este paso y continuar.
       </p>
-      <hr>
-      <div class="p-1 mb-3" style="cursor: pointer;" (click)="activateSkillExplanation=!activateSkillExplanation">
-        ¿Que son los skills? (habilidades)
+
+      <div class="row" style="text-align: center;">
+        <div class="col">
+          <div class="footer-icon-menu" style="color: red;" (click)="stepperGoBack(stepper)">
+            <span class="mdi mdi-arrow-left-circle xxl"></span>
+            <div>Anterior</div>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="footer-icon-menu" style="color: green;" (click)="stepperGoNext(stepper)">
+            <span class="mdi mdi-arrow-right-circle xxl"></span>
+            <div>Siguiente</div>
+          </div>
+        </div>
       </div>
+
+      <hr>
+
+      <div style="cursor: pointer;" (click)="activateSkillExplanation=!activateSkillExplanation">
+        <h5 style="color: crimson;"><span class="mdi mdi-help-network-outline mr-2"></span>¿Qué son los Skills /
+          habilidades?</h5>
+      </div>
+
       <div *ngIf="activateSkillExplanation" class="animated fadeIn">
         <p>
-          Usted puede habilitar la opción de habilidades si su comercio tiene diferentes segmentos
-          que requieren diferentes habilidades de atención.
+          Si su negocio requiere de diferentes habilidades de atención, por ejemplo una guardia, usted podría querer
+          generar
+          aquí las habilidades de "Pediatría", "Clínica" y "Traumatología" con las abreviaturas como P, C y T
+          respectivamente.
         </p>
         <p>
-          Por ejemplo si usted quiere generar turnos para una guardia, podría necesitar generar las habilidades
-          de "Pediatría", "Clínica" y "Traumatología" con las abreviaturas como P, C y T respectivamente.
-        </p>
-        <p>
-          Con las habilidades usted puede además definir circuitos de atención. Puede recibir un turno que fué
-          atendido en un escritorio con skill A y enviarlo luego para ser atendido a un escritorio con skill B,
-          y así sucesivamente. Al reasignar un turno también puede establecer su prioridad de modo de enviarlo
+          Con las habilidades usted puede además definir circuitos de atención. Puede reasignar un turno que fué
+          atendido en un escritorio con una habilidad y enviarlo luego para ser atendido en escritorio con otra
+          diferente. Al reasignar una habilidad a un turno, puede establecer su prioridad de modo de enviarlo
           al inicio o al fin de la cola de espera.
         </p>
-        <p>
-          Las habilidades se asignan a los asistentes al momento de crearlos. Puede asignar una o mas habilidades por
-          asistente. Su usuario tiene rol de administrador y tendrá asignadas todas las habilidades de atención.
-        </p>
-
       </div>
 
-      <div class="row mx-2 mt-4" style="justify-content: space-between;">
-        <button class="btn btn-danger col-5" matStepperPrevious> Volver </button>
-        <button [disabled]="userService.skills?.length === 0 " class="btn btn-success col-5" matStepperNext>
-          Siguiente </button>
-      </div>
+
       <hr>
 
       <app-skills></app-skills>
     </mat-step>
 
     <!-- Desktops Step -->
-    <mat-step [completed]="userService.desktops?.length > 0" state="important_devices">
+    <mat-step state="important_devices">
 
 
-          <h3>Escritorios</h3>
+      <h4 style="color: crimson;"><span class="mdi mdi-monitor mr-2"></span>Escritorios / Ventanillas</h4>
 
-          <p>
-            Los escritorios sólo necesitan un identificador que es simplemente una etiqueta. Estos
-            identificadores pueden ser letras o números por ejemplo
-          </p>
-          <p>
-            "1", "2", "A", "B"
-          </p>
-          <hr>
-          <p>
-            Este identificador debe colocarlo en cada escritorio de forma bien visible para que su cliente
-            pueda identificar fácilmente el escritorio desde el cual fue llamado.
-          </p>
-          <div class="row mx-2 mt-4" style="justify-content: space-between;">
-            <button class="btn btn-danger col-5" matStepperPrevious> Volver </button>
-            <button [disabled]="userService.desktops?.length === 0" class="btn btn-success col-5" matStepperNext>
-              Siguiente </button>
+
+      <p>
+        Si su comercio no require de múltiples lugares de atención puede omitir este paso y continuar.
+      </p>
+
+      <div class="row" style="text-align: center;">
+        <div class="col">
+          <div class="footer-icon-menu" style="color: red;" (click)="stepperGoBack(stepper)">
+            <span class="mdi mdi-arrow-left-circle xxl"></span>
+            <div>Anterior</div>
           </div>
-          <hr>
+        </div>
+
+        <div class="col">
+          <div class="footer-icon-menu" style="color: green;" (click)="stepperGoNext(stepper)">
+            <span class="mdi mdi-arrow-right-circle xxl"></span>
+            <div>Siguiente</div>
+          </div>
+        </div>
+      </div>
+
+      <hr>
+
+      <div style="cursor: pointer;" (click)="activateDesktopExplanation=!activateDesktopExplanation">
+        <h5 style="color: crimson;"><span class="mdi mdi-help-network-outline mr-2"></span>¿Qué son los Escritorios?
+        </h5>
+      </div>
+      <div *ngIf="activateDesktopExplanation" class="animated fadeIn">
+        <p>
+          Los escritorios sólo necesitan un identificador que es simplemente una etiqueta. Estos
+          identificadores pueden ser letras o números por ejemplo
+        </p>
+        <p>
+          "1", "2", "A", "B"
+        </p>
+        <p>
+          Este identificador debe colocarlo en cada escritorio de forma bien visible para que su cliente
+          pueda identificar fácilmente el escritorio desde el cual fue llamado.
+        </p>
+      </div>
+      <hr>
 
       <app-desktops></app-desktops>
     </mat-step>
 
     <!-- Assistants Step -->
-    <mat-step [completed]="userService.assistants.length > 1 || userService.user.id_skills.length > 0" state="face">
+    <mat-step state="face">
 
+      <h4 style="color: crimson;"><span class="mdi mdi-headset mr-2"></span>Asistentes</h4>
 
-          <h3>Asistentes (opcional)</h3>
-          <p>
-            Este paso es opcional. Si sólo necesita su propio usuario para atender turnos puede
-            omitir este paso y continuar.
-          </p>
-          <hr>
-          <div class="p-1 mb-3" style="cursor: pointer;"
-            (click)="activateAssistantExplanation=!activateAssistantExplanation">
-            ¿Que son los asistentes?
+      <p>
+        Si no necesita mas usuarios que su propio usuario para atender turnos puede
+        omitir este paso y continuar.
+      </p>
+
+      <div class="row" style="text-align: center;">
+        <div class="col">
+          <div class="footer-icon-menu" style="color: red;" (click)="stepperGoBack(stepper)">
+            <span class="mdi mdi-arrow-left-circle xxl"></span>
+            <div>Anterior</div>
           </div>
-          <div *ngIf="activateAssistantExplanation" class="animated fadeIn">
-            <p>
-              Usted como usuario administrador puede atender turnos desde el menú de Asistentes. Sin embargo puede
-              opcionalmente crear otros usuarios con rol de asistente para esa tarea.
-            </p>
-            <p>
-              Si fueron creadas habilidades, su cuenta de usuario con rol de administrador ya tiene asignadas todas
-              las habilidades. Sin embargo si desea crear asistentes deberá asignarle a cada asistente las
-              habilidades que le correspondan.
-            </p>
-            <p>
-              Tenga en cuenta que los asistentes que usted puede crear aquí, deben ingresar a sus cuentas desde el mismo
-              login
-              de usuario pero con la opción [ENTRAR] con su email y contraseña.
-            </p>
+        </div>
+
+        <div class="col">
+          <div class="footer-icon-menu" style="color: blue;" (click)="endWizard()">
+            <span class="mdi mdi-check-circle xxl"></span>
+            <div>Finalizar</div>
           </div>
+        </div>
+      </div>
 
-          <div *ngIf="userService.assistants.length === 1 && userService.user.id_skills.length === 0"
-            class="card bg-danger p-3 text-white">
-            Usted no tiene asistentes creados ni habilidades asociadas a su usuario.
-            <hr>
-            <p>
-              Usted puede crear asistentes y asignarles habilidades, o puede omitir crear asistentes, pero en ese caso
-              debe al menos asignarse a su propio usuario las habilidades que quiere atender. Para eso
-              edite su usuario haciendo click en editar con el icono
-              <mat-icon style="font-size: medium;">edit</mat-icon> y luego selecciones las habilidades en el cuadro
-              SKILLS.
-            </p>
+      <hr>
+      <div style="cursor: pointer;" (click)="activateAssistantExplanation=!activateAssistantExplanation">
+        <h5 style="color: crimson;"><span class="mdi mdi-help-network-outline mr-2"></span>¿Qué son los Asistentes?</h5>
+      </div>
+      <div *ngIf="activateAssistantExplanation" class="animated fadeIn">
 
-          </div>
+        <p>
+          Usted como usuario administrador puede atender turnos desde el menú de Asistentes, sin embargo puede
+          aquí crear otros usuarios con rol de asistente para esa tarea.
+        </p>
+        <p>
+          Los asistentes que usted puede crear aquí, deben ingresar a sus cuentas desde el mismo
+          login de usuario pero con la opción [ENTRAR] con su email y contraseña.
+        </p>
+      </div>
+
+      <div *ngIf="userService.assistants.length === 1 && userService.user.id_skills.length === 0"
+        class="card bg-danger p-3 text-white">
+        Usted no tiene asistentes creados ni habilidades asociadas a su usuario.
+        <hr>
+        <p>
+          Usted puede crear asistentes y asignarles habilidades, o puede omitir crear asistentes, pero en ese caso
+          debe al menos asignarse a su propio usuario las habilidades que quiere atender. Para eso
+          edite su usuario haciendo click en editar con el icono
+          <mat-icon style="font-size: medium;">edit</mat-icon> y luego selecciones las habilidades en el cuadro
+          SKILLS.
+        </p>
+
+      </div>
 
 
-          <div class="row mx-2 mt-4" style="justify-content: space-between;">
-            <button class="btn btn-danger col-5" matStepperPrevious> Volver </button>
-            <button [disabled]="userService.assistants.length === 1 && userService.user.id_skills.length === 0"
-              class="btn btn-primary col-5" routerLink="/admin/home" (click)="endWizard()"> Finalizar </button>
-          </div>
-          <hr>
+
+      <hr>
 
       <app-assistants></app-assistants>
     </mat-step>

@@ -29,7 +29,10 @@ export class DesktopsComponent implements OnInit, OnDestroy {
 
       if (this.user.id_company) {
         let idCompany = this.user.id_company._id;
-        this.readDesktops(idCompany);
+        this.readDesktops(idCompany).then((desktops: Desktop[]) => {
+          this.desktops = desktops.filter(desktops => desktops.bl_generic === false); // filter default_desktop
+          this.userService.desktops = desktops;
+        })
       }
 
       this.userSubscription = this.userService.user$.subscribe(data => {
@@ -66,10 +69,13 @@ export class DesktopsComponent implements OnInit, OnDestroy {
   }
 
   readDesktops(idCompany: string) {
-    this.userService.readDesktops(idCompany).subscribe((data: DesktopsResponse) => {
-      this.desktops = data.desktops;
-      this.userService.desktops = data.desktops;
-    });
+    return new Promise((resolve, reject) => {
+      this.userService.readDesktops(idCompany).subscribe((data: DesktopsResponse) => {
+        if(data.ok){
+          resolve(data.desktops);
+        }
+      });
+    })
   }
 
   ngOnDestroy(): void {

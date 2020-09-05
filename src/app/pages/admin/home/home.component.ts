@@ -5,6 +5,7 @@ import { MatStepper } from '@angular/material/stepper/stepper';
 import { Company, CompaniesResponse } from '../../../interfaces/company.interface';
 import { User } from '../../../interfaces/user.interface';
 import { Subscription } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
 	selector: 'app-home',
@@ -23,8 +24,10 @@ export class HomeComponent implements OnInit {
 	user: User;
 	userAvailable = false;	
 	activateSkillExplanation = false;
+	activateDesktopExplanation = false;
 	activateAssistantExplanation = false;
-	constructor(public userService: UserService) { }
+
+	constructor(public userService: UserService, private router: Router) { }
 	ngOnInit() {
 		if (this.userService.user) { this.user = this.userService.user; }
 
@@ -49,6 +52,7 @@ export class HomeComponent implements OnInit {
 		this.config.intro = false;
 		this.showIntro = false;
 		localStorage.setItem('config', JSON.stringify(this.config));
+		this.router.navigate(['/assistant/home']);
 	}
 
 	ngOnDestroy(): void {

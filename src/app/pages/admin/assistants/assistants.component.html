@@ -1,7 +1,10 @@
 <div class="animated saturno-container fadeIn p-2">
 
-    <div class="card bg-primary lead text-white">
-        <div class="card-header">Asistentes</div>
+    <div class="card bg-primary text-white">
+        <div class="card-header">
+            <span class="mdi mdi-headset"></span>
+            
+            Asistentes</div>
         <div class="card-body table-responsive-sm">
 
             <table class="table table-sm text-white" id="wt-form">
@@ -31,8 +34,10 @@
 
     <div class="my-4"></div>
 
-    <div class="card lead">
-        <div class="card-header">Alta de asistentes para {{user.id_company?.tx_company_name}}</div>
+    <div class="card">
+        <div class="card-header">
+            <span class="mdi mdi-plus-circle-outline"></span>
+            Alta de asistente </div>
         <div class="card-body">
 
             <app-assistant-create-form [assistantEdit]="assistantEdit" (updateAssistants)="updateAssistants($event)">

@@ -100,7 +100,6 @@ export class ScreenComponent implements OnInit {
 
 
 			this.ticketsService.sendScores(dataScores).subscribe((d) => {
-				console.log(d)
 			})
 
 			const Toast = Swal.mixin({

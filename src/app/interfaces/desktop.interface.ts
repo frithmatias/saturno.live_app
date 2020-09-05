@@ -7,6 +7,7 @@ export interface Desktop {
 	id_company: string,
 	cd_desktop: string,
 	id_session: Session | null,
+	bl_generic: boolean,
 	__v: number;
 	_id: string;
 }

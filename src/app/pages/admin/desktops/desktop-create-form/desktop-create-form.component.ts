@@ -37,6 +37,7 @@ export class DesktopCreateFormComponent implements OnInit {
 			id_company: this.userService.user.id_company._id,
 			cd_desktop: this.forma.value.cdDesktop,
 			id_session: null,
+			bl_generic: false,
 			__v: null,
 			_id: null
 		};

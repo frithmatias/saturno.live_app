@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 // Interfaces
 import { Skill, SkillResponse } from '../interfaces/skill.interface';
 import { User, UserResponse } from 'src/app/interfaces/user.interface';
-import { Company, CompaniesResponse } from '../interfaces/company.interface';
+import { Company, CompaniesResponse, CompanyResponse } from '../interfaces/company.interface';
 import { MatStepper } from '@angular/material/stepper';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Desktop } from '../interfaces/desktop.interface';
@@ -154,7 +154,9 @@ export class UserService {
 		});
 		let data = { company };
 		const url = environment.url + '/c/create';
-		return this.http.post(url, data, { headers });
+		return this.http.post(url, data, { headers }).pipe(tap((data: CompanyResponse) => {
+			this.attachCompany(data.company);
+		}))
 	}
 
 	attachCompany(company: Company) {
@@ -299,15 +301,7 @@ export class UserService {
 			'turnos-token': this.token
 		});
 		const url = environment.url + '/s/createskill';
-		return this.http.post(url, skill, { headers }).pipe(tap((data: SkillResponse) => {
-				let user: User;
-				user = JSON.parse(localStorage.getItem('user'));
-				user.id_skills.push(data.skill);
-				this.pushUser(user);
-				// this.user.id_skills = user.id_skills;
-				// localStorage.setItem('user', JSON.stringify(user));
-
-		}))
+		return this.http.post(url, skill, { headers });
 	}
 
 	readSkills(idCompany: string) {
@@ -331,14 +325,7 @@ export class UserService {
 			'turnos-token': this.token
 		});
 		const url = environment.url + '/s/deleteskill/' + idSkill;
-		return this.http.delete(url, { headers }).pipe(tap((data: SkillResponse) => {
-			let user: User;
-			user = JSON.parse(localStorage.getItem('user'));
-			user.id_skills = user.id_skills.filter(skill => skill._id !== data.skill._id);
-			this.pushUser(user);
-			// this.user.id_skills = user.id_skills;
-			// localStorage.setItem('user', JSON.stringify(user));
-	}))
+		return this.http.delete(url, { headers });
 	}
 
 

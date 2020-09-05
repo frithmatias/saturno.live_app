@@ -38,10 +38,6 @@ export class TicketsComponent implements OnInit {
 				let idCompany = this.ticketsService.companyData._id;
 				this.wsService.emit('enterCompany', idCompany);
 				this.ticketsService.readSkills(idCompany).subscribe((data: SkillsResponse) => {
-
-					if (data.skills.length === 1 && data.skills[0].bl_generic) {
-						data.skills[0].tx_skill = 'OBTENER TURNO';
-					}
 					this.skills = data.skills;
 				})
 			}

@@ -115,7 +115,6 @@ export class CompanyCreateComponent implements OnInit {
 				this.newCompany.emit(data.company);
 				this.resetForm(formDirective);
 				if (data.ok) {
-					this.userService.attachCompany(data.company);
 					this.snack.open('Empresa creada correctamente', null, { duration: 2000 });
 				} else {
 					this.snack.open(data.msg, null, { duration: 5000 });

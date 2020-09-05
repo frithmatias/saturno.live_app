@@ -1,21 +1,19 @@
 <div class="saturno-container animated fadeIn p-2">
 
-    <div class="card bg-danger lead text-white">
-        <div class="card-header d-flex">
-            <div>
-                Habilidades
-            </div>
-            <div style="width: 100%; text-align: right;">
-                <mat-slide-toggle [disabled]="!activateSlide" labelPosition="before" [(ngModel)]="activateSkills" (click)="toggleSkills()">
-                    <div *ngIf="activateSkills">Activadas</div>
-                    <div *ngIf="!activateSkills">Desactivadas</div>
-                </mat-slide-toggle>
-            </div>
-            
+    <div class="card bg-danger text-white">
 
-
+        <div class="card-header" style="align-items: center;">
+            <span class="mdi mdi-list-status"></span>
+            Habilidades
         </div>
-        <div *ngIf="activateSkills" class="card-body table-responsive-sm">
+
+        
+        
+        <div class="card-body table-responsive-sm">
+            <div *ngIf="!skills || skills?.length === 0" class="row align-items-center justify-content-center">
+                <span class="mdi mdi-check-circle-outline xxl mx-2 text-warning"></span>
+                <span>Un skill genérico fué creado</span>
+            </div>
             <table class="table table-sm text-white">
                 <tr *ngFor="let skill of skills">
                     <td> {{skill?.cd_skill}} </td>
@@ -27,13 +25,17 @@
                 </tr>
             </table>
         </div>
+
+
     </div>
 
 
     <div class="my-4"></div>
 
-    <div class="card lead" *ngIf="activateSkills">
-        <div class="card-header">Alta de Skills para {{user.id_company?.tx_company_name}}</div>
+    <div class="card">
+        <div class="card-header">
+            <span class="mdi mdi-plus-circle-outline"></span>
+            Alta de Skill</div>
         <div class="card-body">
             <app-skill-create-form (skillCreated)="skillCreated($event)"></app-skill-create-form>
         </div>

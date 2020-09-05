@@ -16,10 +16,11 @@ import { Skill, SkillsResponse } from '../../../../interfaces/skill.interface';
 export class AssistantCreateFormComponent implements OnInit, OnChanges {
 	@Input() assistantEdit: User;
 	@Output() updateAssistants: EventEmitter<string> = new EventEmitter();
-	selStrSkills: string[];
+
 	forma: FormGroup;
 	skills: Skill[] = [];
-
+	hasGenericSkillOnly = true; // dont show if assistant has generic skill only
+	selStrSkills: string[] = [];
 	constructor(
 		public userService: UserService,
 		private snack: MatSnackBar
@@ -61,12 +62,24 @@ export class AssistantCreateFormComponent implements OnInit, OnChanges {
 			password2: '******'
 		})
 
-		this.selStrSkills = changes.assistantEdit?.currentValue?.id_skills;
+		if(changes.assistantEdit?.currentValue?.id_skills.length > 0){
+			this.selStrSkills = changes.assistantEdit?.currentValue?.id_skills;
+		} else {
+			this.selStrSkills = [];
+		}
 	}
 
 	getSkills(idCompany: string) {
 		this.userService.readSkills(idCompany).subscribe((data: SkillsResponse) => {
-			this.skills = data.skills;
+			// if company has generic_skill only dont show table and select generic_skill by default
+			if(data.skills.length === 1 && data.skills[0].bl_generic === true){
+				this.hasGenericSkillOnly = true;
+				this.selStrSkills.push(data.skills[0]._id); // select generic_skill
+			} else {
+				this.hasGenericSkillOnly = false;
+			}
+
+			this.skills = data.skills.filter(skill => skill.bl_generic === false);
 		})
 	}
 
@@ -85,12 +98,7 @@ export class AssistantCreateFormComponent implements OnInit, OnChanges {
 	}
 
 
-	setNewSkill(skill: any): void {
-
-	}
-
 	createAssistant(formDirective: FormGroupDirective) {
-
 		if (!this.selStrSkills || this.selStrSkills.length === 0) {
 			this.snack.open('Seleccione al menos un skill', 'ACEPTAR', { duration: 5000 });
 			return;
