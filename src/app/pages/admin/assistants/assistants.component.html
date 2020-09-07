@@ -3,28 +3,27 @@
     <div class="card bg-primary text-white">
         <div class="card-header">
             <span class="mdi mdi-headset"></span>
-            
+
             Asistentes</div>
         <div class="card-body table-responsive-sm">
 
             <table class="table table-sm text-white" id="wt-form">
                 <tr *ngFor="let assistant of assistants">
+                    <td style="width: 1px;">
+                        <span *ngIf="assistant.id_role==='ADMIN_ROLE'" class="mdi mdi-star list-crud-star"></span>
+                        <span *ngIf="assistant.id_role!=='ADMIN_ROLE'" class="mdi mdi-face-agent list-crud-star"></span>
 
+                    </td>
                     <td>{{assistant?.tx_name | wordMaxLength : 8}} </td>
                     <td>
-                        <span *ngIf="assistant._id===assistantUpdated">
-                            <mat-icon class="ml-2 list-crud-edit">check</mat-icon>
-                        </span>
-                    </td>
-                    <td>
-                        <span *ngIf="assistant.id_role==='ADMIN_ROLE'">
-                            <mat-icon class="ml-2 list-crud-star">star</mat-icon>
-                        </span>
+                        <span *ngIf="assistant._id===assistantUpdated"
+                            class="mdi mdi-check ml-2 list-crud-edit"></span>
                     </td>
                     <td style="text-align: right;">
-                        <mat-icon class="ml-2 list-crud-edit" (click)="editAssistant(assistant)">edit</mat-icon>
-                        <mat-icon *ngIf="assistant._id !== userService.user._id" class="ml-2 list-crud-delete" (click)="deleteAssistant(assistant._id)">delete
-                        </mat-icon>
+                        <span class="mdi mdi-pencil ml-2 list-crud-edit" (click)="editAssistant(assistant)"></span>
+                        <span *ngIf="assistant._id !== userService.user._id"
+                            class="mdi mdi-delete ml-2 list-crud-delete"
+                            (click)="deleteAssistant(assistant._id)"></span>
                     </td>
                 </tr>
             </table>

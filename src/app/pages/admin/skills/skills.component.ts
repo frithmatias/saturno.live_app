@@ -31,10 +31,7 @@ export class SkillsComponent implements OnInit, OnDestroy {
 
       if (this.user.id_company) {
         let idCompany = this.user.id_company._id;
-        this.readSkills(idCompany).then((skills: Skill[]) => {
-          this.skills = skills.filter(skill => skill.bl_generic === false); // filter default_skill
-          this.userService.skills = skills;
-        })
+        this.readSkills(idCompany);
       }
 
       this.userSubscription = this.userService.user$.subscribe(data => {
@@ -96,10 +93,12 @@ export class SkillsComponent implements OnInit, OnDestroy {
     return new Promise(resolve => {
       this.userService.readSkills(idCompany).subscribe((data: SkillsResponse) => {
         if(data.ok){
+          this.skills = data.skills.filter(skill => skill.bl_generic === false); // filter default_skill
+          this.userService.skills = data.skills;
           resolve(data.skills);
         }
       });
-    })
+    });
   }
 
   ngOnDestroy(): void {

@@ -12,7 +12,7 @@
   color    : #b64444;
   top      : 3px;
   position : relative;
-  font-size: large;
+  font-size: xx-large;
 }
 
 .screen-icon-star-on {
@@ -48,5 +48,5 @@
 }
 
 .screen-icons {
-  font-size:calc(.5em + 1.5vw);
+  font-size:calc(.8em + 1.5vw);
 }

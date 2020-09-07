@@ -16,8 +16,7 @@
                 <tr *ngFor="let desktop of desktops">
                     <td>{{desktop?.cd_desktop}}</td>
                     <td style="text-align: right;">
-                        <mat-icon class="ml-2 list-crud-delete" (click)="deleteDesktop(desktop._id)">delete
-                        </mat-icon>
+                        <span class="mdi mdi-delete ml-2 list-crud-delete" (click)="deleteDesktop(desktop._id)"></span>
                     </td>
                 </tr>
             </table>

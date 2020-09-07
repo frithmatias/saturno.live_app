@@ -18,13 +18,13 @@
 
                 <mat-expansion-panel-header>
                     <mat-panel-title style="align-items: center; color: darkred;">
-                        <mat-icon class="sidenav-title-icons">{{ item.icon }}</mat-icon>
+                        <span class="{{ item.icon }} sidenav-title-icons"></span>
                         <span class="sidenav-title-text mx-2">{{ item.titulo }}</span>
                     </mat-panel-title>
                 </mat-expansion-panel-header>
 
                 <div *ngFor="let sub of item.submenu" routerLink="/{{sub.url}}" class="sidenav-item">
-                    <mat-icon class="sidenav-item-icons">{{ sub.icon }}</mat-icon>
+                    <span class="{{ sub.icon }} sidenav-item-icons"></span>
                     <span class="sidenav-item-text">{{ sub.titulo}}</span>
                 </div>
 

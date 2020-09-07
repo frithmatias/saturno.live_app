@@ -8,17 +8,14 @@
 
             <table class="table table-sm text-white">
                 <tr *ngFor="let company of companies">
-
                     <td> {{company?.tx_company_name}} </td>
                     <td>
-                        <span *ngIf="company._id===companyUpdated?._id">
-                            <mat-icon class="ml-2 list-crud-edit">check</mat-icon>
-                        </span>
+                        <span *ngIf="company._id===companyUpdated?._id"
+                            class="mdi mdi-check ml-2 list-crud-edit"></span>
                     </td>
                     <td style="text-align: right;">
-                        <mat-icon class="ml-2 list-crud-edit" (click)="editCompany(company)">edit</mat-icon>
-                        <mat-icon class="ml-2 list-crud-delete" (click)="deleteCompany(company._id)">delete
-                        </mat-icon>
+                        <span class="mdi mdi-pencil ml-2 list-crud-edit" (click)="editCompany(company)"></span>
+                        <span class="mdi mdi-delete ml-2 list-crud-delete" (click)="deleteCompany(company._id)"></span>
                     </td>
                 </tr>
             </table>

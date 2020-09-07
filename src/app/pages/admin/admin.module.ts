@@ -18,7 +18,6 @@ import { HomeComponent } from './home/home.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ProfileComponent } from './profile/profile.component';
 import { TicketsComponent } from './tickets/tickets.component';
-import { StatusComponent } from './status/status.component';
 
 // MODULES
 import { AdminRoutingModule } from './admin-routing.module';
@@ -42,7 +41,6 @@ import { WordMaxLengthPipe } from '../../pipes/word-max-length.pipe';
 		CompaniesComponent,
 		CompanyCreateComponent,
 		WordMaxLengthPipe,
-		StatusComponent,
 
 	],
 	imports: [

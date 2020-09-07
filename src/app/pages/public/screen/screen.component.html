@@ -26,29 +26,38 @@
                                     {{ ticket.id_skill?.tx_skill }}
                                 </td>
                                 <td class="py-2">
-                                    <mat-icon class="screen-icon-star"
-                                        [ngClass]="{'screen-icon-star-on': scores.get(ticket._id) >= 1}"
-                                        (click)="setScore(ticket._id, 1)">star</mat-icon>
+                                    <span 
+                                    class="mdi mdi-star screen-icon-star"
+                                    [ngClass]="{'screen-icon-star-on': scores.get(ticket._id) >= 1}"
+                                    (click)="setScore(ticket._id, 1)"
+                                    ></span>
                                 </td>
                                 <td class="py-2">
-                                    <mat-icon class="screen-icon-star"
-                                        [ngClass]="{'screen-icon-star-on': scores.get(ticket._id) >= 2}"
-                                        (click)="setScore(ticket._id, 2)">star</mat-icon>
+                                    <span 
+                                    class="mdi mdi-star screen-icon-star"
+                                    [ngClass]="{'screen-icon-star-on': scores.get(ticket._id) >= 2}"
+                                    (click)="setScore(ticket._id, 2)"
+                                    ></span>                                </td>
+                                <td class="py-2">
+                                    <span 
+                                    class="mdi mdi-star screen-icon-star"
+                                    [ngClass]="{'screen-icon-star-on': scores.get(ticket._id) >= 3}"
+                                    (click)="setScore(ticket._id, 3)"
+                                    ></span>
                                 </td>
                                 <td class="py-2">
-                                    <mat-icon class="screen-icon-star"
-                                        [ngClass]="{'screen-icon-star-on': scores.get(ticket._id) >= 3}"
-                                        (click)="setScore(ticket._id, 3)">star</mat-icon>
+                                    <span 
+                                    class="mdi mdi-star screen-icon-star"
+                                    [ngClass]="{'screen-icon-star-on': scores.get(ticket._id) >= 4}"
+                                    (click)="setScore(ticket._id, 4)"
+                                    ></span>
                                 </td>
                                 <td class="py-2">
-                                    <mat-icon class="screen-icon-star"
-                                        [ngClass]="{'screen-icon-star-on': scores.get(ticket._id) >= 4}"
-                                        (click)="setScore(ticket._id, 4)">star</mat-icon>
-                                </td>
-                                <td class="py-2">
-                                    <mat-icon class="screen-icon-star"
-                                        [ngClass]="{'screen-icon-star-on': scores.get(ticket._id) >= 5}"
-                                        (click)="setScore(ticket._id, 5)">star</mat-icon>
+                                    <span 
+                                    class="mdi mdi-star screen-icon-star"
+                                    [ngClass]="{'screen-icon-star-on': scores.get(ticket._id) >= 5}"
+                                    (click)="setScore(ticket._id, 5)"
+                                    ></span>
                                 </td>
                             </tr>
                         </table>
@@ -160,13 +169,13 @@
                             <td style="text-align: center; ">{{ ticket.id_session.id_desktop.cd_desktop }}</td>
                             <td style="padding: 0; vertical-align: middle;">
                                 <span *ngIf="!ticket.tm_end" style="color: blueviolet">
-                                    <mat-icon class="screen-icons">campaign</mat-icon>
+                                    <span class="mdi mdi-contactless-payment-circle-outline screen-icons"></span>
                                 </span>
                                 <span *ngIf="ticket.id_child && ticket.tm_end" style="color: red">
-                                    <mat-icon class="screen-icons">replay</mat-icon>
+                                    <span class="mdi mdi-arrow-left-circle-outline screen-icons"></span>
                                 </span>
                                 <span *ngIf="!ticket.id_child && ticket.tm_end" style="color: green">
-                                    <mat-icon class="screen-icons">check</mat-icon>
+                                    <span class="mdi mdi-check-circle-outline screen-icons"></span>
                                 </span>
                             </td>
                         </tr>
@@ -192,7 +201,7 @@
                 class="btn btn-danger button" (click)="cancelTicket()">
                 <!-- cancel ticket -->
                 <div>
-                    <mat-icon>power_settings_new</mat-icon>
+                    <span class="mdi mdi-power xl"></span>
                 </div>
                 <div class="button-inner">
                     Cancelar Turno
@@ -205,7 +214,7 @@
                 [ngClass]="{'button-disabled':!ticketsService.myTicket?.id_session || coming}" (click)="enCamino()">
                 <!-- cancel ticket -->
                 <div>
-                    <mat-icon>directions_walk</mat-icon>
+                    <span class="mdi mdi-walk xl"></span>
                 </div>
                 <div class="button-inner">
                     ¡En camino!
@@ -220,7 +229,7 @@
     <div class="row">
         <div class="col">
             <span class="footer-icon-menu" routerLink="/home">
-                <mat-icon>home</mat-icon>
+                <span class="mdi mdi-home xl"></span>
                 <div>Inicio</div>
             </span>
         </div>

@@ -25,7 +25,7 @@
     color           : white;
     background-color: seagreen;
     box-shadow      : none;
-    border-radius: .2em;
+    border-radius: 50%;
 }
 
 .chat-input {

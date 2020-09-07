@@ -34,12 +34,18 @@ div:focus {
     outline: none;
 }
 
+span:focus {
+    outline: none;
+}
+
 
 td {
     vertical-align: middle !important;
 }
 
-
+.pointer {
+    cursor: pointer;
+}
 .saturno-typo {
     font-family: monospace;
     font-weight: 300;
@@ -425,11 +431,11 @@ td {
     justify-content: center;
 }
 
-.mat-icon-search-company {
+.icon-search-company {
     width: 36px !important;
     color: darkgray;
-    font-size: 2em;
-    opacity: .5;
+    font-size: 1.5em;
+    opacity: .7;
 }
 
 .swal2-title {
