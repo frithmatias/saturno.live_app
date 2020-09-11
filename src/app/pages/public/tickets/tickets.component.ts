@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { WebsocketService } from '../../../services/websocket.service';
-import { TicketsService } from '../../../services/tickets.service';
 import { Router } from '@angular/router';
 import { TicketResponse } from '../../../interfaces/ticket.interface';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -20,24 +19,23 @@ export class TicketsComponent implements OnInit {
 	blPriority = false;
 	constructor(
 		private wsService: WebsocketService,
-		public ticketsService: TicketsService,
+		public publicService: PublicService,
 		private router: Router,
 		private snack: MatSnackBar,
-		private publicService: PublicService
 	) { }
 
 	ngOnInit(): void {
-		if (this.ticketsService.myTicket) {
+		if (this.publicService.ticket) {
 			this.snack.open('Usted ya tiene un turno!', null, { duration: 2000 });
-			this.router.navigate(['/public/screen']);
+			this.router.navigate(['/public/myticket']);
 		} else {
-			if (!this.ticketsService.companyData) {
+			if (!this.publicService.company) {
 				this.snack.open('Por favor ingrese una empresa primero.', null, { duration: 2000 });
 				this.router.navigate(['/public']);
 			} else {
-				let idCompany = this.ticketsService.companyData._id;
+				let idCompany = this.publicService.company._id;
 				this.wsService.emit('enterCompany', idCompany);
-				this.ticketsService.readSkills(idCompany).subscribe((data: SkillsResponse) => {
+				this.publicService.readSkills(idCompany).subscribe((data: SkillsResponse) => {
 					this.skills = data.skills;
 				})
 			}
@@ -59,13 +57,13 @@ export class TicketsComponent implements OnInit {
 
 		let idSocket = this.wsService.idSocket;
 		let blPriority = this.blPriority;
-		this.ticketsService.createTicket(idSkill, idSocket, blPriority).subscribe(
+		this.publicService.createTicket(idSkill, idSocket, blPriority).subscribe(
 			(data: TicketResponse) => {
 				if (data.ok) {
 					localStorage.setItem('ticket', JSON.stringify(data.ticket));
-					this.ticketsService.myTicket = data.ticket;
+					this.publicService.ticket = data.ticket;
 					this.loading = false;
-					this.router.navigate(['/public/screen']);
+					this.router.navigate(['/public/myticket']);
 				}
 			}
 		);

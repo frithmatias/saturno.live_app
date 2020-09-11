@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Desktop, DesktopsResponse, DesktopResponse } from 'src/app/interfaces/desktop.interface';
-import { UserService } from 'src/app/services/user.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { User } from 'src/app/interfaces/user.interface';
 import { Subscription } from 'rxjs';
+import { AssistantService } from '../../../services/assistant.service';
+import { LoginService } from '../../../services/login.service';
+import { SharedService } from 'src/app/services/shared.service';
 
 @Component({
   selector: 'app-home',
@@ -20,7 +22,9 @@ export class HomeComponent implements OnInit {
   user: User;
   constructor(
     private router: Router,
-    public userService: UserService,
+    public loginService: LoginService,
+    private assistantService: AssistantService,
+    private sharedService: SharedService,
     private snack: MatSnackBar
   ) { }
 
@@ -28,17 +32,17 @@ export class HomeComponent implements OnInit {
 
     this.loading = true;
 
-    if (this.userService.user.id_company?._id) {
-      let idCompany = this.userService.user.id_company._id;
+    if (this.loginService.user.id_company?._id) {
+      let idCompany = this.loginService.user.id_company._id;
       this.readDesktops(idCompany);
     } else {
-      this.userService.snackShow('No tiene una empresa seleccionada', 5000);
+      this.sharedService.snackShow('No tiene una empresa seleccionada', 5000);
       this.loading = false;
       return;
     }
 
     
-    this.userSuscription = this.userService.user$.subscribe(data => {
+    this.userSuscription = this.loginService.user$.subscribe(data => {
       if (data) {
         this.readDesktops(data.id_company._id);
       }
@@ -51,18 +55,18 @@ export class HomeComponent implements OnInit {
       return;
     }
 
-    if(this.userService.desktop){
+    if(this.assistantService.desktop){
       this.router.navigate(['/assistant/desktop']);
       return;
     }
 
     let idDesktop = desktop._id;
-    let idAssistant = this.userService.user._id;
+    let idAssistant = this.loginService.user._id;
 
-    this.userService.takeDesktop(idDesktop, idAssistant).subscribe((data: DesktopResponse) => {
+    this.assistantService.takeDesktop(idDesktop, idAssistant).subscribe((data: DesktopResponse) => {
       this.snack.open(data.msg, null, { duration: 2000 });
       if (data.ok) {
-        this.userService.desktop = data.desktop;
+        this.assistantService.desktop = data.desktop;
         localStorage.setItem('desktop', JSON.stringify(data.desktop));
         this.router.navigate(['/assistant/desktop']);
       } else {
@@ -72,18 +76,18 @@ export class HomeComponent implements OnInit {
   }
 
   readDesktops(idCompany: string): void {
-    this.userService.readDesktops(idCompany).subscribe((data: DesktopsResponse) => {
+    this.assistantService.readDesktops(idCompany).subscribe((data: DesktopsResponse) => {
 
       if(data.ok){
         this.desktops = data.desktops;
         this.desktopsAvailable = this.desktops.filter(desktop => desktop.id_session === null);
-        this.myDesktop = this.desktops.filter(desktop => desktop.id_session?.id_assistant._id === this.userService.user._id)[0]
+        this.myDesktop = this.desktops.filter(desktop => desktop.id_session?.id_assistant._id === this.loginService.user._id)[0]
       }
       if (this.myDesktop) {
-        this.userService.desktop = this.myDesktop;
+        this.assistantService.desktop = this.myDesktop;
         localStorage.setItem('desktop', JSON.stringify(this.myDesktop));
       } else {
-        this.userService.desktop = null;
+        this.assistantService.desktop = null;
         if (localStorage.getItem('desktop')) { localStorage.removeItem('desktop'); }
       }
 
@@ -96,8 +100,8 @@ export class HomeComponent implements OnInit {
     this.loading = true;
 
     let idDesktop = desktop._id;
-    let idCompany = this.userService.user.id_company._id;
-    this.userService.releaseDesktop(idDesktop).subscribe(data => {
+    let idCompany = this.loginService.user.id_company._id;
+    this.assistantService.releaseDesktop(idDesktop).subscribe(data => {
       this.readDesktops(idCompany);
       
     },

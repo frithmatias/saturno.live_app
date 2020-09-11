@@ -6,7 +6,7 @@ import { Session } from './session.interface';
 export interface Desktop {
 	id_company: string,
 	cd_desktop: string,
-	id_session: Session | null,
+	id_session: Session,
 	bl_generic: boolean,
 	__v: number;
 	_id: string;

@@ -3,13 +3,13 @@
   <!-- STEPPER OFF -->
   <div *ngIf="!showIntro">
     <div class="m-2 animated fadeIn">
-      <h4 class="mb-4">Bienvenido {{ userService?.user.tx_name }}!</h4>
+      <h4 class="mb-4">Bienvenido {{ loginService?.user.tx_name }}!</h4>
 
       <button class="btn btn-primary btn-block" routerLink="/assistant/home">Atender</button>
 
       <hr class="my-4">
 
-      <div *ngIf="userService.user.id_company" class="card bg-danger text-white">
+      <div *ngIf="loginService.user.id_company" class="card bg-danger text-white">
         <div class="card-body" style="text-align: left;">
 
           <div>
@@ -48,8 +48,8 @@
             La dirección web de acceso directo a el panel de turnos de su comercio es:
           </p>
           <p>
-            <a target="_blank" href="https://saturno.live/#/public/{{userService.user.id_company.tx_public_name}}">
-              https://saturno.live/#/public/{{userService.user.id_company.tx_public_name}}
+            <a target="_blank" href="https://saturno.live/#/public/{{loginService.user.id_company.tx_public_name}}">
+              https://saturno.live/#/public/{{loginService.user.id_company.tx_public_name}}
             </a>
           </p>
         </div>
@@ -65,7 +65,7 @@
     <mat-step state="star">
       <div class="m-2 animated fadeIn">
         <div class="card-body">
-          <h4>Hola {{ userService?.user.tx_name }}!</h4>
+          <h4>Hola {{ loginService?.user.tx_name }}!</h4>
 
           <p>
             Este pequeño asistente le ayuda a crear todo lo necesario para comenzar a atender turnos.
@@ -81,12 +81,12 @@
     </mat-step>
 
     <!-- Company Step -->
-    <mat-step [completed]="userService.companies?.length > 0 && userService.user?.id_company?._id" state="store">
+    <mat-step [completed]="adminService.companies?.length > 0 && loginService.user?.id_company?._id" state="store">
 
 
 
       <!-- no companies, no attached company -->
-      <div *ngIf="userService.companies?.length === 0">
+      <div *ngIf="adminService.companies?.length === 0">
         <h4 style="color: crimson;"><span class="mdi mdi-storefront-outline mr-2"></span>Comencemos</h4>
 
         <p>
@@ -101,7 +101,7 @@
       </div>
 
       <!-- companies and attached company -->
-      <div *ngIf="userService.companies?.length > 0 && userService.user?.id_company?._id">
+      <div *ngIf="adminService.companies?.length > 0 && loginService.user?.id_company?._id">
         <h4 style="color: crimson;"><span class="mdi mdi-storefront-outline mr-2"></span>Empresa creada! <span
             class="mdi mdi-check text-success"></span></h4>
 
@@ -130,7 +130,7 @@
         </div>
 
         <div class="col">
-          <div *ngIf="userService.companies || userService.user?.id_company?._id" class="footer-icon-menu"
+          <div *ngIf="adminService.companies || loginService.user?.id_company?._id" class="footer-icon-menu"
             style="color: green;" (click)="stepperGoNext(stepper)">
             <span class="mdi mdi-arrow-right-circle xxl"></span>
             <div>Siguiente</div>
@@ -289,7 +289,7 @@
         </p>
       </div>
 
-      <div *ngIf="userService.assistants.length === 1 && userService.user.id_skills.length === 0"
+      <div *ngIf="adminService.assistants.length === 1 && loginService.user.id_skills.length === 0"
         class="card bg-danger p-3 text-white">
         Usted no tiene asistentes creados ni habilidades asociadas a su usuario.
         <hr>

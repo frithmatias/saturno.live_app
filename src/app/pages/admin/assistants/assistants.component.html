@@ -21,7 +21,7 @@
                     </td>
                     <td style="text-align: right;">
                         <span class="mdi mdi-pencil ml-2 list-crud-edit" (click)="editAssistant(assistant)"></span>
-                        <span *ngIf="assistant._id !== userService.user._id"
+                        <span *ngIf="assistant._id !== loginService.user._id"
                             class="mdi mdi-delete ml-2 list-crud-delete"
                             (click)="deleteAssistant(assistant._id)"></span>
                     </td>

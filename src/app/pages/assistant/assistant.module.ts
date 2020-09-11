@@ -9,28 +9,22 @@ import { HomeComponent } from './home/home.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { DesktopComponent } from './desktop/desktop.component';
 import { MaterialModule } from '../../modules/material.module';
-import { TimeToHmsPipe } from 'src/app/pipes/time-to-hms.pipe';
-import { IntervalToHmsPipe } from 'src/app/pipes/interval-to-hms.pipe';
-
+import { PipesModule } from 'src/app/pipes/pipes.module';
 
 @NgModule({
   declarations: [
     AssistantComponent, 
     HomeComponent,
     DashboardComponent, 
-    DesktopComponent,
-    TimeToHmsPipe,
-    IntervalToHmsPipe
+    DesktopComponent
   ],
   imports: [
     FormsModule,
     CommonModule,
     MaterialModule,
+    PipesModule,
     AssistantRoutingModule
   ],
-  exports:[
-    TimeToHmsPipe,
-    IntervalToHmsPipe
-  ]
+  exports:[]
 })
 export class AssistantModule { }

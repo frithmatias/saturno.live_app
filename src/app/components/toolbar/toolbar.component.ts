@@ -1,9 +1,10 @@
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
-import { UserService } from '../../services/user.service';
-import { TicketsService } from '../../services/tickets.service';
 import { Router } from '@angular/router';
 import { User } from 'src/app/interfaces/user.interface';
 import { Subscription } from 'rxjs';
+import { PublicService } from 'src/app/services/public.service';
+import { LoginService } from '../../services/login.service';
+import { AssistantService } from 'src/app/services/assistant.service';
 
 @Component({
   selector: 'app-toolbar',
@@ -18,14 +19,15 @@ export class ToolbarComponent implements OnInit {
   user: User;
   userSuscription: Subscription;
   constructor(
-    public userService: UserService,
-    public ticketsService: TicketsService,
+    public loginService: LoginService,
+    public assistantService: AssistantService,
+    public publicService: PublicService,
     public router: Router
     ) { }
 
   ngOnInit(): void { 
-    this.user = this.userService.user;
-    this.userSuscription = this.userService.user$.subscribe(data => {
+    this.user = this.loginService.user;
+    this.userSuscription = this.loginService.user$.subscribe(data => {
       this.user = data;
     })
   }

@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { TicketsService } from '../../services/tickets.service';
 import moment from 'moment';
 import { timer, interval } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
@@ -12,7 +11,9 @@ moment.locale('es');
 })
 export class HomeComponent implements OnInit {
   date: string;
-  constructor(public ticketsService: TicketsService, private publicService: PublicService) {}
+  constructor(
+    public publicService: PublicService
+  ) {}
 
   ngOnInit(): void {
 

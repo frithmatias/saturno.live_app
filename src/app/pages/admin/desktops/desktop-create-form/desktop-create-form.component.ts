@@ -1,9 +1,11 @@
 import { Component, OnInit, EventEmitter, Output, Input, SimpleChanges } from '@angular/core';
-import { UserService } from 'src/app/services/user.service';
+import { AdminService } from 'src/app/services/admin.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormGroup, FormControl, Validators, FormGroupDirective } from '@angular/forms';
 import { Desktop, DesktopResponse } from '../../../../interfaces/desktop.interface';
 import { Company, CompaniesResponse } from '../../../../interfaces/company.interface';
+import { LoginService } from 'src/app/services/login.service';
+import { SharedService } from '../../../../services/shared.service';
 
 @Component({
 	selector: 'app-desktop-create-form',
@@ -15,7 +17,9 @@ export class DesktopCreateFormComponent implements OnInit {
 	forma: FormGroup;
 
 	constructor(
-		public userService: UserService,
+		public adminService: AdminService,
+		private loginService: LoginService,
+		private sharedService: SharedService,
 		private snack: MatSnackBar
 	) { }
 
@@ -34,7 +38,7 @@ export class DesktopCreateFormComponent implements OnInit {
 		}
 
 		const desktop: Desktop = {
-			id_company: this.userService.user.id_company._id,
+			id_company: this.loginService.user.id_company._id,
 			cd_desktop: this.forma.value.cdDesktop,
 			id_session: null,
 			bl_generic: false,
@@ -42,7 +46,7 @@ export class DesktopCreateFormComponent implements OnInit {
 			_id: null
 		};
 
-		this.userService.createDesktop(desktop).subscribe((data: DesktopResponse) => {
+		this.adminService.createDesktop(desktop).subscribe((data: DesktopResponse) => {
 			this.desktopCreated.emit(data.desktop);
 			this.snack.open(data.msg, null, { duration: 5000 });
 			this.resetForm(formDirective);
@@ -56,7 +60,7 @@ export class DesktopCreateFormComponent implements OnInit {
 	resetForm(formDirective: FormGroupDirective) {
 		formDirective.resetForm();
 		this.forma.reset();
-		this.userService.scrollTop();
+		this.sharedService.scrollTop();
 	}
 
 }

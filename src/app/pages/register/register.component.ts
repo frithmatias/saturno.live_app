@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { UserService } from '../../services/user.service';
+import { AdminService } from '../../services/admin.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import Swal from 'sweetalert2';
 import { environment } from 'src/environments/environment';
 import { WebsocketService } from 'src/app/services/websocket.service';
 import { PublicService } from '../../services/public.service';
+import { LoginService } from '../../services/login.service';
 declare const gapi: any;
 
 @Component({
@@ -20,13 +21,12 @@ export class RegisterComponent implements OnInit {
 
 	constructor(
 		private router: Router,
-		private userService: UserService,
+		private adminService: AdminService,
 		private publicService: PublicService,
+		private loginService: LoginService,
 		private wsService: WebsocketService,
 		private snack: MatSnackBar
 	) { }
-
-
 
 	ngOnInit() {
 		this.googleInit();
@@ -51,10 +51,6 @@ export class RegisterComponent implements OnInit {
 		});
 	}
 
-
-
-
-
 	sonIguales(campo1: string, campo2: string) {
 		return (group: FormGroup) => {
 			const pass1 = group.controls[campo1].value;
@@ -71,7 +67,7 @@ export class RegisterComponent implements OnInit {
 	checkEmailExists() {
 		let pattern = this.forma.value.email;
 		if (this.forma.value.email.length > 6)
-			this.userService.checkEmailExists(pattern).subscribe((data: any) => {
+			this.loginService.checkEmailExists(pattern).subscribe((data: any) => {
 				if (!data.ok) {
 					this.forma.controls['email'].setErrors({'incorrect': true});
 					this.forma.setErrors({'emailExists': true})
@@ -98,7 +94,7 @@ export class RegisterComponent implements OnInit {
 			id_company: this.forma.value.company
 		};
 
-		this.userService.createUser(user).subscribe((data: any) => {
+		this.loginService.createUser(user).subscribe((data: any) => {
 			if (data.ok) {
 				Swal.fire('Usuario creado', 'Por favor ahora ingrese con su usuario y contraseña', 'success');
 				this.router.navigate(['/login'])
@@ -129,7 +125,7 @@ export class RegisterComponent implements OnInit {
 	attachSignin(element) {
 		this.auth2.attachClickHandler(element, {}, googleUser => {
 			const gtoken = googleUser.getAuthResponse().id_token;
-			this.userService.login(gtoken, null, false).subscribe(
+			this.loginService.login(gtoken, null, false).subscribe(
 				data => {
 					if (data.ok) {
 						if (data.user.id_company) { this.wsService.emit('enterCompany', data.user.id_company._id); }

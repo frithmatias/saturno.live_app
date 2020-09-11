@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { TicketsService } from 'src/app/services/tickets.service';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { PublicService } from '../../services/public.service';
+import { SharedService } from 'src/app/services/shared.service';
 
 @Component({
   selector: 'app-public',
@@ -16,34 +17,24 @@ export class PublicComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private snack: MatSnackBar,
-    public ticketsService: TicketsService
-  ) {}
+    public publicService: PublicService,
+    public sharedService: SharedService
+  ) { }
 
   ngOnInit(): void {
 
-    if (localStorage.getItem('ticket')) {
-      this.ticketsService.myTicket = JSON.parse(localStorage.getItem('ticket'));
-      this.router.navigate(['/public/screen']);
-
-      if (this.ticketsService.myTicket.tm_end) { // si el ticket esta finalizado limpio la sesión
-        this.ticketsService.clearPublicSession();
-      }
-    } 
-
-    if (localStorage.getItem('company')) {
-      if (!this.ticketsService.companyData){
-        this.ticketsService.companyData = JSON.parse(localStorage.getItem('company'));
-      }
-    };
+    if (this.publicService.ticket?.tm_end) { // si el ticket esta finalizado limpio la sesión
+      this.publicService.clearPublicSession();
+    }
 
     this.route.params.subscribe((data: any) => {
-      // /public/nombreEmpresa
 
-      if (data.userCompanyName) {
-        this.ticketsService.readCompany(data.userCompanyName).subscribe((resp: any) => {
+      if (data.company) {
+        let txCompany = data.company;
+        this.publicService.readCompany(txCompany).subscribe((resp: any) => {
           if (resp.ok) {
             localStorage.setItem('company', JSON.stringify(resp.company));
-            this.ticketsService.companyData = resp.company;
+            this.publicService.company = resp.company;
             this.router.navigate(['/public/tickets'])
           }
 

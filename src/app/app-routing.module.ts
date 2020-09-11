@@ -1,24 +1,25 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-// COMPONENTS
-import { HomeComponent } from './pages/home/home.component';
-import { RegisterComponent } from './pages/register/register.component';
-import { LoginComponent } from './pages/login/login.component';
-import { NopagefoundComponent } from './pages/nopagefound/nopagefound.component';
-import { ContactComponent } from './pages/contact/contact.component';
-
+// ROLES COMPONENT
 import { SuperuserComponent } from './pages/superuser/superuser.component';
 import { AdminComponent } from './pages/admin/admin.component';
 import { AssistantComponent } from './pages/assistant/assistant.component';
 import { PublicComponent } from './pages/public/public.component';
 
+// PUBLIC COMPONENTS
+import { HomeComponent } from './pages/home/home.component';
+import { RegisterComponent } from './pages/register/register.component';
+import { LoginComponent } from './pages/login/login.component';
+import { NopagefoundComponent } from './pages/nopagefound/nopagefound.component';
+import { ContactComponent } from './pages/contact/contact.component';
+import { HowWorksComponent } from './pages/how-works/how-works.component';
+
 // GUARDS
 import { LoginGuard } from './guards/login.guard';
 import { TokenGuard } from './guards/token.guard';
 import { AdminGuard } from './guards/admin.guard';
-import { SuperuserModule } from './pages/superuser/superuser.module';
-import { HowWorksComponent } from './pages/how-works/how-works.component';
+
 
 const appRoutes: Routes = [
 

@@ -1,9 +1,10 @@
 import { Component, OnInit, EventEmitter, Output, Input, SimpleChanges } from '@angular/core';
-import { UserService } from 'src/app/services/user.service';
+import { AdminService } from 'src/app/services/admin.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormGroup, FormControl, Validators, FormGroupDirective } from '@angular/forms';
 import { Skill, SkillResponse } from '../../../../interfaces/skill.interface';
-import { User } from 'src/app/interfaces/user.interface';
+import { LoginService } from 'src/app/services/login.service';
+import { SharedService } from '../../../../services/shared.service';
 
 @Component({
 	selector: 'app-skill-create-form',
@@ -15,7 +16,9 @@ export class SkillCreateFormComponent implements OnInit {
 
 	forma: FormGroup;
 	constructor(
-		public userService: UserService,
+		public adminService: AdminService,
+		public loginService: LoginService,
+		private sharedService: SharedService,
 		private snack: MatSnackBar,
 	) { }
 
@@ -31,14 +34,14 @@ export class SkillCreateFormComponent implements OnInit {
 			return;
 		}
 		const skill: Skill = {
-			id_company: this.userService.user.id_company._id,
+			id_company: this.loginService.user.id_company._id,
 			cd_skill: this.forma.value.cdSkill,
 			tx_skill: this.forma.value.txSkill,
 			bl_generic: false,
 			_id: null
 		};
 
-		this.userService.createSkill(skill).subscribe((data: SkillResponse) => {
+		this.adminService.createSkill(skill).subscribe((data: SkillResponse) => {
 			if(data.ok){
 				this.skillCreated.emit(data.skill);
 				this.snack.open(data.msg, null, { duration: 5000 });
@@ -54,6 +57,6 @@ export class SkillCreateFormComponent implements OnInit {
 	resetForm(formDirective: FormGroupDirective) {
 		formDirective.resetForm();
 		this.forma.reset();
-		this.userService.scrollTop();
+		this.sharedService.scrollTop();
 	}
 }

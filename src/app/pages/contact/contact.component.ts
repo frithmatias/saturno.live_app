@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { TicketsService } from '../../services/tickets.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { PublicService } from '../../services/public.service';
 
 @Component({
   selector: 'app-contact',
@@ -11,7 +11,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class ContactComponent implements OnInit {
 showContactData = false;
   constructor(
-    private ticketsService: TicketsService,
+    private publicService: PublicService,
     private snack: MatSnackBar) { }
 
   ngOnInit(): void {
@@ -32,7 +32,7 @@ showContactData = false;
       tx_phone: f.value.telefono,
     }
     
-    this.ticketsService.sendContact(contact).subscribe( (resp: any) => {
+    this.publicService.sendContact(contact).subscribe( (resp: any) => {
       f.reset();
       this.snack.open(`Gracias, su mensaje fue recibido correctamente.`, null, { duration: 5000 });
     })

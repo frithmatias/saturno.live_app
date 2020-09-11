@@ -1,24 +1,21 @@
 import { Injectable } from '@angular/core';
 import { CanActivate } from '@angular/router';
-import { UserService } from '../services/user.service';
+import { LoginService } from '../services/login.service';
 
 @Injectable()
 export class AdminGuard implements CanActivate {
 
 	constructor(
-		public userService: UserService
+		public loginService: LoginService,
 	) { }
 
 	canActivate() {
-
-		if (this.userService.user.id_role === 'ADMIN_ROLE') {
+		if (this.loginService.user.id_role === 'ADMIN_ROLE') {
 			return true;
 		} else {
-
-			this.userService.logout();
+			this.loginService.logout();
 			return false;
 		}
-
 	}
 
 }

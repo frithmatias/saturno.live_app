@@ -2,11 +2,11 @@
     <mat-toolbar-row>
 
         <!-- Menu -->
-        <span class="mdi mdi-menu xl pointer" *ngIf="userService.logueado" (click)="toggle('sidenav')"></span>
+        <span class="mdi mdi-menu xl pointer" *ngIf="loginService.user" (click)="toggle('sidenav')"></span>
         <span class="example-spacer"></span>
 
         <!-- Title default -->
-        <div *ngIf="!userService.user && !ticketsService.companyData">
+        <div *ngIf="!loginService.user && !publicService.company">
             <span class="ml-3" style="float:left;">
                 <div class="saturno-title">
                     SATURNO
@@ -17,46 +17,46 @@
             </span>
         </div>
 
-        <div *ngIf="!userService.user && !ticketsService.companyData">
+        <div *ngIf="!loginService.user && !publicService.company">
             <img src="../../../assets/img/saturn.png" class="saturno-logo img-fluid">
         </div>
 
         <!-- Title Company -->
         <span style="font-size: x-large; font-weight: 300;"
-            *ngIf="user?.id_company?.tx_company_name || ticketsService.companyData">
-            {{user?.id_company?.tx_company_name || ticketsService.companyData.tx_company_name}}
+            *ngIf="user?.id_company?.tx_company_name || publicService.company">
+            {{user?.id_company?.tx_company_name || publicService.company.tx_company_name}}
         </span>
 
         <span class="example-spacer"></span>
 
         <!-- Chat Icon -->
 
-        <span *ngIf="ticketsService.myTicket" (click)="toggle('chat')" [matBadge]="unreadMessages"
+        <span *ngIf="publicService.ticket || assistantService.ticket" (click)="toggle('chat')" [matBadge]="unreadMessages"
             [matBadgeHidden]="hiddenBadge" matBadgeColor="warn" matBadgeSize="small"
-            class="mdi mdi-message-text xl pointer"></span>
+            class="mdi mdi-message-text xl pointer mx-3"></span>
 
 
-        <!-- User log-in Icon -->
+        <!-- Login Icon -->
         <div>
-            <span *ngIf="!userService.user && !ticketsService.myTicket" routerLink="/login"
+            <span *ngIf="!loginService.user && !publicService.ticket && !publicService.company" routerLink="/login"
                 class="mdi mdi-account-circle xl pointer"></span>
         </div>
 
         <!-- User logged Icon -->
-        <div *ngIf="userService.user">
+        <div *ngIf="loginService.user">
             <span class="mdi mdi-account-circle xl pointer" [matMenuTriggerFor]="menu"></span>
             <mat-menu #menu="matMenu">
                 <span mat-menu-item class="mdi mdi-monitor-cellphone-star footer-icon-menu mx-2 xl" routerLink="/assistant/desktop">
                     <span class="ml-3 md" style="vertical-align: bottom;">Mi escritorio</span>
                 </span>
                 <span mat-menu-item class="mdi mdi-account-circle footer-icon-menu mx-2 xl" routerLink="/assistant/desktop">
-                    <span class="ml-3 md" style="vertical-align: bottom;">{{userService.user.tx_name}}</span>
+                    <span class="ml-3 md" style="vertical-align: bottom;">{{loginService.user.tx_name}}</span>
                 </span>
                 <span mat-menu-item disabled class="mdi mdi-email footer-icon-menu mx-2 xl" routerLink="/assistant/desktop">
-                    <span class="ml-3 md" style="vertical-align: bottom;">{{userService.user.tx_email}}</span>
+                    <span class="ml-3 md" style="vertical-align: bottom;">{{loginService.user.tx_email}}</span>
                 </span>
                 <div class="p-2">
-                    <button class="btn btn-sm btn-block btn-danger" (click)="userService.logout()"> Salir </button>
+                    <button class="btn btn-sm btn-block btn-danger" (click)="loginService.logout()"> Salir </button>
                 </div>
             </mat-menu>
 

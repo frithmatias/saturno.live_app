@@ -1,8 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { UserService } from 'src/app/services/user.service';
+import { AdminService } from 'src/app/services/admin.service';
 import { MatSnackBar, MatSnackBarDismiss } from '@angular/material/snack-bar';
 import { User, UsersResponse, UserResponse } from '../../../interfaces/user.interface';
 import { Subscription } from 'rxjs';
+import { LoginService } from 'src/app/services/login.service';
+import { SharedService } from '../../../services/shared.service';
 
 @Component({
   selector: 'app-assistants',
@@ -17,21 +19,23 @@ export class AssistantsComponent implements OnInit, OnDestroy {
   userSubscription: Subscription;
 
   constructor(
-    private userService: UserService,
+    private adminService: AdminService,
+    public loginService: LoginService,
+    private sharedService: SharedService,
     private snack: MatSnackBar
   ) { }
 
   ngOnInit(): void {
-    if (this.userService.user) {
+    if (this.loginService.user) {
       
-      this.user = this.userService.user;
+      this.user = this.loginService.user;
       
       if (this.user.id_company) {
         let idCompany = this.user.id_company._id;
         this.readAssistants(idCompany);
       }
       
-      this.userSubscription = this.userService.user$.subscribe(data => {
+      this.userSubscription = this.loginService.user$.subscribe(data => {
         if (data) {
           this.user = data;
           if (data.id_company) { this.readAssistants(data.id_company._id); }
@@ -47,13 +51,13 @@ export class AssistantsComponent implements OnInit, OnDestroy {
   }
 
   deleteAssistant(idAssistant: string): void {
-    if(idAssistant === this.userService.user._id){
-      this.userService.snackShow('Usted no puede borrar su propio usuario!', 2000);
+    if(idAssistant === this.loginService.user._id){
+      this.sharedService.snackShow('Usted no puede borrar su propio usuario!', 2000);
       return;
     }
     this.snack.open('Desea eliminar el asistente?', 'ELIMINAR', { duration: 10000 }).afterDismissed().subscribe((data: MatSnackBarDismiss) => {
       if (data.dismissedByAction) {
-        this.userService.deleteAssistant(idAssistant).subscribe((data: UserResponse) => {
+        this.adminService.deleteAssistant(idAssistant).subscribe((data: UserResponse) => {
           this.snack.open(data.msg, null, { duration: 5000 });
           this.assistants = this.assistants.filter(assistant => assistant._id != idAssistant);
         },
@@ -68,13 +72,13 @@ export class AssistantsComponent implements OnInit, OnDestroy {
   // assistant was created or updated
   updateAssistants(assistant: string): void {
     this.assistantUpdated = assistant;
-    this.readAssistants(this.userService.user.id_company._id);
+    this.readAssistants(this.loginService.user.id_company._id);
   }
 
   readAssistants(idCompany: string): void {
-    this.userService.readAssistants(idCompany).subscribe((data: UsersResponse) => {
+    this.adminService.readAssistants(idCompany).subscribe((data: UsersResponse) => {
       this.assistants = data.users;
-      this.userService.assistants = data.users;
+      this.adminService.assistants = data.users;
     });
   }
 

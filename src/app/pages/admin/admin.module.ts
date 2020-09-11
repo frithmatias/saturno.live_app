@@ -23,7 +23,7 @@ import { TicketsComponent } from './tickets/tickets.component';
 import { AdminRoutingModule } from './admin-routing.module';
 import { MaterialModule } from '../../modules/material.module';
 import { ComponentsModule } from '../../components/components.module';
-import { WordMaxLengthPipe } from '../../pipes/word-max-length.pipe';
+import { PipesModule } from 'src/app/pipes/pipes.module';
 
 @NgModule({
 	declarations: [
@@ -40,7 +40,6 @@ import { WordMaxLengthPipe } from '../../pipes/word-max-length.pipe';
 		SkillCreateFormComponent,
 		CompaniesComponent,
 		CompanyCreateComponent,
-		WordMaxLengthPipe,
 
 	],
 	imports: [
@@ -50,6 +49,7 @@ import { WordMaxLengthPipe } from '../../pipes/word-max-length.pipe';
 		MaterialModule,
 		ComponentsModule,
 		AdminRoutingModule,
+		PipesModule,
 	]
 })
 export class AdminModule { }

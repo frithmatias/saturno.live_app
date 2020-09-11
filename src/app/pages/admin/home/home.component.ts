@@ -1,11 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { UserService } from '../../../services/user.service';
+import { AdminService } from '../../../services/admin.service';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { MatStepper } from '@angular/material/stepper/stepper';
-import { Company, CompaniesResponse } from '../../../interfaces/company.interface';
 import { User } from '../../../interfaces/user.interface';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
+import { LoginService } from 'src/app/services/login.service';
 
 @Component({
 	selector: 'app-home',
@@ -27,11 +27,15 @@ export class HomeComponent implements OnInit {
 	activateDesktopExplanation = false;
 	activateAssistantExplanation = false;
 
-	constructor(public userService: UserService, private router: Router) { }
+	constructor(
+		private loginService: LoginService,
+		public adminService: AdminService, 
+		private router: Router
+		) { }
 	ngOnInit() {
-		if (this.userService.user) { this.user = this.userService.user; }
+		if (this.loginService.user) { this.user = this.loginService.user; }
 
-		this.userSuscription = this.userService.user$.subscribe(data => {
+		this.userSuscription = this.loginService.user$.subscribe(data => {
 			if (data) {
 				this.user = data;
 			}

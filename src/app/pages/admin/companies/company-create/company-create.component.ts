@@ -1,11 +1,12 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormGroupDirective } from '@angular/forms';
-import { UserService } from '../../../../services/user.service';
+import { AdminService } from '../../../../services/admin.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { GetidstringPipe } from '../../../../pipes/getidstring.pipe';
 import { Company, CompanyResponse } from '../../../../interfaces/company.interface';
 import { HttpErrorResponse } from '@angular/common/http';
-import { UserResponse } from 'src/app/interfaces/user.interface';
+import { LoginService } from 'src/app/services/login.service';
+import { SharedService } from '../../../../services/shared.service';
 
 @Component({
 	selector: 'app-company-create',
@@ -19,7 +20,9 @@ export class CompanyCreateComponent implements OnInit {
 	publicName: string;
 
 	constructor(
-		private userService: UserService,
+		private adminService: AdminService,
+		private loginService: LoginService,
+		private sharedService: SharedService,
 		private snack: MatSnackBar,
 		private getidstring: GetidstringPipe
 	) { }
@@ -72,7 +75,7 @@ export class CompanyCreateComponent implements OnInit {
 		
 		let pattern = this.publicName;
 		if (pattern?.length > 3) {
-			this.userService.checkCompanyExists(pattern).subscribe((data: any) => {
+			this.adminService.checkCompanyExists(pattern).subscribe((data: any) => {
 				if (!data.ok) {
 					this.forma.controls['company'].setErrors({ 'incorrect': true });
 					this.forma.setErrors({ 'companyExists': true })
@@ -89,7 +92,7 @@ export class CompanyCreateComponent implements OnInit {
 		}
 
 		const company: any = {
-			id_user: this.userService.user._id,
+			id_user: this.loginService.user._id,
 			tx_company_name: this.forma.value.company,
 			tx_public_name: this.publicName,
 			cd_city: this.forma.value.city,
@@ -100,7 +103,7 @@ export class CompanyCreateComponent implements OnInit {
 		
 		if (this.companyEdit) {
 			company._id = this.companyEdit._id;
-			this.userService.updateCompany(company).subscribe((data: CompanyResponse) => {
+			this.adminService.updateCompany(company).subscribe((data: CompanyResponse) => {
 				this.newCompany.emit(data.company);
 				this.snack.open(data.msg, null, { duration: 5000 });
 				this.resetForm(formDirective);
@@ -111,7 +114,7 @@ export class CompanyCreateComponent implements OnInit {
 
 		} else {
 
-			this.userService.createCompany(company).subscribe((data: CompanyResponse) => {
+			this.adminService.createCompany(company).subscribe((data: CompanyResponse) => {
 				this.newCompany.emit(data.company);
 				this.resetForm(formDirective);
 				if (data.ok) {
@@ -130,6 +133,6 @@ export class CompanyCreateComponent implements OnInit {
 		this.forma.enable();
 		this.forma.reset();
 		formDirective.resetForm();
-		this.userService.scrollTop();
+		this.sharedService.scrollTop();
 	}
 }

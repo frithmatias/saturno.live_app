@@ -1,11 +1,11 @@
-import { Injectable, Output, EventEmitter } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
 import { Observable, of } from 'rxjs';
-import { TicketsService } from './tickets.service';
 import { AjaxError } from 'rxjs/ajax';
 import { catchError, take, tap } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { UserService } from './user.service';
+import { TicketResponse } from '../interfaces/ticket.interface';
+import { PublicService } from './public.service';
 
 @Injectable({
 	providedIn: 'root'
@@ -16,67 +16,20 @@ export class WebsocketService {
 
 	constructor(
 		private socket: Socket,
-		private ticketsService: TicketsService,
-		private userService: UserService,
+		private publicService: PublicService,
 		private snack: MatSnackBar,
 	) {
 		this.escucharConexiones();
 		this.escucharActualizarTicket();
 	}
 
-
-
 	escucharConexiones(): void {
 
 		this.socket.on('connect', () => {
-			this.snack.open('Conectado al servidor de turnos', null, { duration: 2000 });
-			// entra a la sala de la empresa asignada en el ticket
-			let idCompany: string;
-			if (this.ticketsService.myTicket?.id_company) { // public
-				idCompany = this.ticketsService.myTicket.id_company;
-			} else if(this.userService.user?.id_company?._id){ // user/assistant
-				idCompany = this.userService.user.id_company._id;
-			}
-
-			if (idCompany) {this.emit('enterCompany', idCompany);}
-
-			// si había un ticket en la LS lo actualizo
 			this.idSocket = this.socket.ioSocket.id;
-
-			if (localStorage.getItem('ticket') !== 'undefined') {
-				let myTicket = JSON.parse(localStorage.getItem('ticket'));
-				if (!myTicket) {
-					return;
-				}
-				this.ticketsService.myTicket = myTicket;
-
-				let idTicket = myTicket._id;
-				let oldSocket: string;
-				let newSocket = this.idSocket;
-
-				if (localStorage.getItem('session')) {
-					oldSocket = myTicket.id_socket_desk;
-				} else {
-					oldSocket = myTicket.id_socket;
-				}
-
-				this.ticketsService.actualizarSocket(idTicket, oldSocket, newSocket).pipe(
-					catchError(this.manejaError)
-				).subscribe((data: any) => {
-					if (data.ok) {
-						// si actualizo el ticket en la BD actualizo en myTicket y en la LS
-						if (this.ticketsService.myTicket) {
-							if (localStorage.getItem('session')) {
-								this.ticketsService.myTicket.id_socket_desk = this.idSocket;
-							} else {
-								this.ticketsService.myTicket.id_socket = this.idSocket;
-							}
-						}
-						localStorage.setItem('ticket', JSON.stringify(this.ticketsService.myTicket));
-					}
-				});
-			}
+			this.snack.open('Conectado al servidor de turnos', null, { duration: 2000 });
 			this.socketStatus = true;
+			this.updateSocket();
 		});
 
 		this.socket.on('disconnect', () => {
@@ -94,11 +47,9 @@ export class WebsocketService {
 		
 	}
 
-
 	escucharActualizarTicket(): void {
 		this.listen('ticket-updated').subscribe((data: any) => {
 			this.snack.open('Se actualizo la sesión remota', null, { duration: 1000 });
-			this.ticketsService.myTicket = data.ticket;
 			localStorage.setItem('ticket', JSON.stringify(data.ticket));
 		});
 	}
@@ -116,12 +67,44 @@ export class WebsocketService {
 		return this.listen('message-private');
 	}
 
-
 	escucharSystem(): Observable<string> {
 		return this.listen('message-system');
 	}
 
+	updateSocket(): void {
+		// sólo actualiza el socket si existe un ticket
+		if (localStorage.getItem('ticket')) {
 
+			// si se reinicia el browser obtengo el ticket de la LS
+			let myTicket = JSON.parse(localStorage.getItem('ticket'));
+		
+			// preparo la data
+			let idTicket = myTicket._id;
+			let oldSocket = localStorage.getItem('session') ? myTicket.id_socket_desk : myTicket.id_socket;
+			let newSocket = this.idSocket;
+
+			// oldSocket se envía como bandera para definir si es escritorio o público
+			this.publicService.actualizarSocket(idTicket, oldSocket, newSocket).pipe(
+				catchError(this.manejaError)
+			).subscribe((data: TicketResponse) => {
+				// actualizó ok en bd
+				if (data.ok) {
+					if (myTicket) {
+						if (localStorage.getItem('session')) {
+							myTicket.id_socket_desk = this.idSocket;
+						} else {
+							myTicket.id_socket = this.idSocket;
+						}
+					}
+					// actualizo en LS
+					localStorage.setItem('ticket', JSON.stringify(myTicket));
+
+					// lo ingreso en la sala de la company
+					this.emit('enterCompany', data.ticket.id_company);
+				}
+			});
+		}
+	}
 
 	emit(evento: string, payload?: any, callback?: () => void): void {
 		this.socket.emit(evento, payload, callback);

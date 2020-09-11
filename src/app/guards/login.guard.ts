@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 import { CanActivate  } from '@angular/router';
-import { UserService } from '../services/user.service';
+import { LoginService } from '../services/login.service';
 
 @Injectable()
 export class LoginGuard implements CanActivate {
 
 	constructor(
-		public userService: UserService,
+		public LoginService: LoginService,
 	) { }
 
 	canActivate() {
-		if (this.userService.logueado) {
+		if (this.LoginService.user) {
 			return true;
 		} else {
 			return false;

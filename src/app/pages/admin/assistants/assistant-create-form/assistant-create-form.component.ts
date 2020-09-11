@@ -1,12 +1,14 @@
-import { Component, OnInit, Output, EventEmitter, Input, OnChanges, SimpleChange, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormGroupDirective } from '@angular/forms';
 import { User, UserResponse } from 'src/app/interfaces/user.interface';
-import { UserService } from 'src/app/services/user.service';
+import { AdminService } from 'src/app/services/admin.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { of } from 'rxjs';
 import { AjaxError } from 'rxjs/ajax';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Skill, SkillsResponse } from '../../../../interfaces/skill.interface';
+import { LoginService } from 'src/app/services/login.service';
+import { SharedService } from '../../../../services/shared.service';
 
 @Component({
 	selector: 'app-assistant-create-form',
@@ -22,7 +24,9 @@ export class AssistantCreateFormComponent implements OnInit, OnChanges {
 	hasGenericSkillOnly = true; // dont show if assistant has generic skill only
 	selStrSkills: string[] = [];
 	constructor(
-		public userService: UserService,
+		public adminService: AdminService,
+		private loginService: LoginService,
+		private sharedService: SharedService,
 		private snack: MatSnackBar
 	) { }
 
@@ -70,7 +74,7 @@ export class AssistantCreateFormComponent implements OnInit, OnChanges {
 	}
 
 	getSkills(idCompany: string) {
-		this.userService.readSkills(idCompany).subscribe((data: SkillsResponse) => {
+		this.adminService.readSkills(idCompany).subscribe((data: SkillsResponse) => {
 			// if company has generic_skill only dont show table and select generic_skill by default
 			if(data.skills.length === 1 && data.skills[0].bl_generic === true){
 				this.hasGenericSkillOnly = true;
@@ -125,11 +129,11 @@ export class AssistantCreateFormComponent implements OnInit, OnChanges {
 		if (this.assistantEdit) {
 			assistant._id = this.assistantEdit._id;
 
-			this.userService.updateAssistant(assistant).subscribe((data: UserResponse) => {
+			this.adminService.updateAssistant(assistant).subscribe((data: UserResponse) => {
 				if (data.ok) {
-					if (data.user._id === this.userService.user._id) {
+					if (data.user._id === this.loginService.user._id) {
 						// push my user edited
-						this.userService.pushUser(data.user)
+						this.loginService.pushUser(data.user)
 					}
 					this.updateAssistants.emit(data.user._id);
 					this.snack.open(data.msg, null, { duration: 5000 });
@@ -141,7 +145,7 @@ export class AssistantCreateFormComponent implements OnInit, OnChanges {
 
 		} else {
 
-			this.userService.createAssistant(assistant).subscribe(
+			this.adminService.createAssistant(assistant).subscribe(
 				(data: UserResponse) => {
 					this.updateAssistants.emit(data.user._id);
 					this.snack.open(data.msg, null, { duration: 5000 });
@@ -165,6 +169,6 @@ export class AssistantCreateFormComponent implements OnInit, OnChanges {
 		this.forma.enable();
 		this.forma.reset();
 		formDirective.resetForm();
-		this.userService.scrollTop();
+		this.sharedService.scrollTop();
 	}
 }

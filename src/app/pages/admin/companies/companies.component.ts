@@ -1,10 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Company } from 'src/app/interfaces/company.interface';
-import { UserService } from '../../../services/user.service';
+import { AdminService } from '../../../services/admin.service';
 import { MatSnackBar, MatSnackBarDismiss } from '@angular/material/snack-bar';
 import { CompanyResponse, CompaniesResponse } from '../../../interfaces/company.interface';
 import { User } from 'src/app/interfaces/user.interface';
 import { Subscription } from 'rxjs';
+import { LoginService } from 'src/app/services/login.service';
 
 @Component({
   selector: 'app-companies',
@@ -19,13 +20,14 @@ export class CompaniesComponent implements OnInit, OnDestroy {
   userSubscription: Subscription;
 
   constructor(
-    private userService: UserService,
+    private adminService: AdminService,
+    private loginService: LoginService,
     private snack: MatSnackBar
   ) { }
 
   ngOnInit(): void {
 
-    this.user = this.userService.user;
+    this.user = this.loginService.user;
 
     if (this.user._id) {
 
@@ -33,7 +35,7 @@ export class CompaniesComponent implements OnInit, OnDestroy {
       this.readCompanies(idUser);
     }
 
-    this.userSubscription = this.userService.user$.subscribe(data => {
+    this.userSubscription = this.loginService.user$.subscribe(data => {
       if (data) {
         this.user = data;
       }
@@ -53,11 +55,11 @@ export class CompaniesComponent implements OnInit, OnDestroy {
   deleteCompany(idCompany: string): void {
     this.snack.open('Desea eliminar la empresa?', 'ELIMINAR', { duration: 10000 }).afterDismissed().subscribe((data: MatSnackBarDismiss) => {
       if (data.dismissedByAction) {
-        this.userService.deleteCompany(idCompany).subscribe((data: CompanyResponse) => {
+        this.adminService.deleteCompany(idCompany).subscribe((data: CompanyResponse) => {
           this.snack.open(data.msg, null, { duration: 2000 });
           this.companies = this.companies.filter(company => company._id != idCompany);
-          this.userService.companies = this.companies;
-          this.userService.companiesSource.next(this.companies);
+          this.adminService.companies = this.companies;
+          this.adminService.companiesSource.next(this.companies);
           if (idCompany === this.user.id_company?._id) {
             this.user.id_company = null;
             localStorage.setItem('user', JSON.stringify(this.user));
@@ -71,9 +73,9 @@ export class CompaniesComponent implements OnInit, OnDestroy {
   }
 
   readCompanies(idUser: string): void {
-    this.userService.readCompanies(idUser).subscribe((data: CompaniesResponse) => {
+    this.adminService.readCompanies(idUser).subscribe((data: CompaniesResponse) => {
       this.companies = data.companies;
-      this.userService.companies = data.companies;
+      this.adminService.companies = data.companies;
     });
   }
 

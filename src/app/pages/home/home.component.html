@@ -72,14 +72,14 @@
 
 <div class="saturno-footer">
   <div class="row">
-    <div *ngIf="ticketsService.companyData" class="col">
+    <div *ngIf="publicService.company" class="col">
       <span class="footer-icon-menu" routerLink="/public/screen">
        <span class="mdi mdi-monitor-dashboard xl"></span>
         <div>Ver Pantalla</div>
       </span>
     </div>
-    <div *ngIf="!ticketsService.companyData" class="col">
-      <span class="footer-icon-menu" routerLink="/public/screen">
+    <div *ngIf="!publicService.company" class="col">
+      <span class="footer-icon-menu" routerLink="/public/search">
         <span class="mdi mdi-magnify xl"></span>
         <div>Buscar Empresa</div>
       </span>

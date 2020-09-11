@@ -5,12 +5,14 @@ import { ScreenComponent } from './screen/screen.component';
 import { SearchComponent } from './search/search.component';
 import { NopagefoundComponent } from '../nopagefound/nopagefound.component';
 import { PublicComponent } from './public.component';
+import { MyticketComponent } from './myticket/myticket.component';
 
 const publicRoutes: Routes = [
-	{ path: 'tickets', component: TicketsComponent },
+  { path: 'tickets', component: TicketsComponent },
+	{ path: 'myticket', component: MyticketComponent },
   { path: 'screen', component: ScreenComponent },
   { path: '', component: SearchComponent },
-  { path: ':userCompanyName', component: PublicComponent },
+  { path: ':company', component: PublicComponent },
   { path: '**', component: NopagefoundComponent}
 
 ];

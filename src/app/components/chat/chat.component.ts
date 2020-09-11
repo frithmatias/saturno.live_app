@@ -2,7 +2,7 @@ import { Component, OnInit, Output, EventEmitter, Input, SimpleChange, OnDestroy
 import { WebsocketService } from '../../services/websocket.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { timer, Subscription } from 'rxjs';
-import { TicketsService } from '../../services/tickets.service';
+import { PublicService } from 'src/app/services/public.service';
 
 @Component({
   selector: 'app-chat',
@@ -20,13 +20,13 @@ export class ChatComponent implements OnInit, OnDestroy {
   constructor(
     private wsService: WebsocketService, 
     private snack: MatSnackBar, 
-    public ticketsService: TicketsService
+    public publicService: PublicService
     ) { }
 
   ngOnChanges(changes: any) {
     this.chatOpen = changes.chatOpenStatus.currentValue;
     if(this.chatOpen){
-      for(let message of this.ticketsService.chatMessages){
+      for(let message of this.publicService.chatMessages){
         message.viewed = true;
       }
     }
@@ -40,9 +40,9 @@ export class ChatComponent implements OnInit, OnDestroy {
         message: data.msg,
         viewed: this.chatOpen ? true : false,
       }
-      this.ticketsService.chatMessages.push(message);
+      this.publicService.chatMessages.push(message);
       if(!this.chatOpen){
-        let numUnread = this.ticketsService.chatMessages.filter(message => message.viewed === false).length;
+        let numUnread = this.publicService.chatMessages.filter(message => message.viewed === false).length;
         this.unreadMessages.emit(numUnread);
       } else {
         this.scrollTop();
@@ -57,7 +57,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     }
 
     if (message.value.length > 0) {
-      this.ticketsService.chatMessages.push({
+      this.publicService.chatMessages.push({
         own: true,
         time: new Date(),
         message: message.value,
@@ -65,10 +65,10 @@ export class ChatComponent implements OnInit, OnDestroy {
       });
 
       let to: string;
-      if(this.ticketsService.myTicket.id_socket === this.wsService.idSocket){
-        to = this.ticketsService.myTicket.id_socket_desk;
+      if(this.publicService.ticket.id_socket === this.wsService.idSocket){
+        to = this.publicService.ticket.id_socket_desk;
       } else {
-        to = this.ticketsService.myTicket.id_socket;
+        to = this.publicService.ticket.id_socket;
       } 
       this.wsService.emit('mensaje-privado', { to, msg: message.value });
       this.scrollTop();

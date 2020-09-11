@@ -1,170 +1,57 @@
 <!-- ======================================================== -->
 <!-- TICKETS SCREEN -->
 <!-- ======================================================== -->
-<div class="saturno-screen">
-    <div class="row p-2 pb-5 animated fadeIn">
-
+<div class="container-fluid">
+    <div class="row">
         <div class="col-sm-6">
-
-            <!-- ======================================================== -->
-            <!-- TICKET FINALIZADO -->
-            <!-- ======================================================== -->
-            <!-- *ngIf="!ticketsService.myTicket && ticketsService.myTicketEnd!==null" -->
-            <div *ngIf="ticketsService.myTicket===null && ticketsService.myTicketTmEnd!==null"
-                class="card text-white bg-danger mb-4">
-                <div class="card-header screen-text-title">SU OPINION</div>
-                <div class="banner-content p-3" style="background-color: rgb(141, 51, 51)">
-
-                    <div>¡Su turno ha finalizado!</div>
-
-                    <div *ngIf="ticketsService.allMytickets.length > 0" class="lead my-2">¿Podría dejarnos su opinión sobre la calidad de atención?</div>
-
-                    <div class="text-white my-4 table-responsive-sm">
-                        <table class="table table-sm text-white">
-                            <tr *ngFor="let ticket of ticketsService.allMytickets">
-                                <td class="py-2" style="width: 50%;text-align: left;">
-                                    {{ ticket.id_skill?.tx_skill }}
-                                </td>
-                                <td class="py-2">
-                                    <span 
-                                    class="mdi mdi-star screen-icon-star"
-                                    [ngClass]="{'screen-icon-star-on': scores.get(ticket._id) >= 1}"
-                                    (click)="setScore(ticket._id, 1)"
-                                    ></span>
-                                </td>
-                                <td class="py-2">
-                                    <span 
-                                    class="mdi mdi-star screen-icon-star"
-                                    [ngClass]="{'screen-icon-star-on': scores.get(ticket._id) >= 2}"
-                                    (click)="setScore(ticket._id, 2)"
-                                    ></span>                                </td>
-                                <td class="py-2">
-                                    <span 
-                                    class="mdi mdi-star screen-icon-star"
-                                    [ngClass]="{'screen-icon-star-on': scores.get(ticket._id) >= 3}"
-                                    (click)="setScore(ticket._id, 3)"
-                                    ></span>
-                                </td>
-                                <td class="py-2">
-                                    <span 
-                                    class="mdi mdi-star screen-icon-star"
-                                    [ngClass]="{'screen-icon-star-on': scores.get(ticket._id) >= 4}"
-                                    (click)="setScore(ticket._id, 4)"
-                                    ></span>
-                                </td>
-                                <td class="py-2">
-                                    <span 
-                                    class="mdi mdi-star screen-icon-star"
-                                    [ngClass]="{'screen-icon-star-on': scores.get(ticket._id) >= 5}"
-                                    (click)="setScore(ticket._id, 5)"
-                                    ></span>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-
-
-                </div>
-            </div>
-
-            <!-- ======================================================== -->
-            <!-- SU TURNO -->
-            <!-- ======================================================== -->
-
-            <div class="card rounded-0 bg-success text-white mb-4" *ngIf="ticketsService.myTicket">
-                <div class="card-header screen-text-title">SU TURNO</div>
-                <div class="banner-content bg-light text-success">
-
-                    <!------------------------------>
-                    <!-- EN ESPERA -->
-                    <!------------------------------>
-
-                    <div *ngIf="!ticketsService.myTicket?.id_session">
-                        <span class="screen-text-big">
-                            {{ ticketsService.myTicket?.id_skill.cd_skill }}
-                            {{ ticketsService.myTicket?.id_position }}
-                        </span>
-                    </div>
-
-                    <!------------------------------>
-                    <!-- EN ATENCIÓN -->
-                    <!------------------------------>
-
-                    <div class="banner-content " *ngIf="ticketsService.myTicket?.id_session">
-                        <div class="row">
-                            <div class="col xl">
-                                Por favor pase por el escritorio
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col xxxl">
-                                {{ ticketsService.myTicket?.id_session?.id_desktop?.cd_desktop }}
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
-
-            <!-- ======================================================== -->
+            <!------------------------------>
             <!-- ULTIMO TURNO -->
-            <!-- ======================================================== -->
-
-            <div class="card rounded-0 text-white bg-danger mb-4"
-                *ngIf="!ticketsService.myTicket && ticketsService.myTicketTmEnd===null">
+            <!------------------------------>
+            <div class="card rounded-0 text-white bg-danger my-2">
                 <div class="card-header screen-text-title">ULTIMO TURNO</div>
                 <div class="banner-content bg-light text-danger" style="background-color: rgb(141, 51, 51)">
-
-                    <div *ngIf="!ticketsService.lastTicket">
+                    <div *ngIf="!lastTicket">
                         <span class="xxxxl">
                             --
                             --
                         </span>
                     </div>
                     <div>
-                        <span class="screen-text-big" *ngIf="ticketsService.lastTicket">
+                        <span class="screen-text-big" *ngIf="lastTicket">
                             <!-- todo: si id_skill no existe es porque el skill fue eliminado. Los skills deberían desactivarse y no borrarse. -->
-                            {{ ticketsService.lastTicket?.id_skill?.cd_skill }}
-                            {{ ticketsService.lastTicket?.id_position }}
+                            {{ lastTicket?.id_skill?.cd_skill }}
+                            {{ lastTicket?.id_position }}
                         </span>
                     </div>
 
                 </div>
             </div>
-
-            <!-- ======================================================== -->
+            <!------------------------------>
             <!-- PUBLICIDAD -->
-            <!-- ======================================================== -->
-
+            <!------------------------------>
             <div>
                 <!-- <iframe width="100%" height="480px" [src]="'-FV0KKDdysw?rel=0&autoplay=1&mute=0&fullscreen=1&loop=1&playlist=-FV0KKDdysw' | domseguro: 'https://www.youtube.com/embed/'" frameborder="0" allowtransparency="true" allow="accelerometer; autoplay; loop; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> -->
             </div>
-
         </div>
-
+        <!-- ======================================================== -->
+        <!-- HISTORIAL DE LLAMADAS -->
+        <!-- ======================================================== -->
         <div class="col-sm-6">
-
-            <!-- ======================================================== -->
-            <!-- HISTORIAL DE LLAMADAS -->
-            <!-- ======================================================== -->
-
-            <div class="card rounded-0 text-white bg-primary mb-4">
+            <div class="card rounded-0 text-white bg-primary my-2">
                 <div class="card-header screen-text-title">HISTORIAL</div>
                 <div class="banner-content bg-light text-primary">
                     <table class="w-100 table-sm text-center">
-
                         <tr>
                             <td class="screen-text-subtitled"> TURNO </td>
                             <td class="screen-text-subtitled"> ESCRITORIO</td>
                             <td class="screen-text-subtitled"> ESTADO </td>
                         </tr>
-                        <tr *ngIf="ticketsService.ticketsTail.length === 0">
+                        <tr *ngIf="ticketsTail.length === 0">
                             <td>--</td>
                             <td>--</td>
                             <td>--</td>
                         </tr>
-                        <tr class="screen-text-history" *ngFor="let ticket of ticketsService.ticketsTail;">
+                        <tr class="screen-text-history" *ngFor="let ticket of ticketsTail;">
                             <td style="text-align: center;">{{ ticket.id_skill?.cd_skill }}{{ ticket.id_position }}</td>
                             <td style="text-align: center; ">{{ ticket.id_session.id_desktop.cd_desktop }}</td>
                             <td style="padding: 0; vertical-align: middle;">
@@ -179,59 +66,9 @@
                                 </span>
                             </td>
                         </tr>
-
                     </table>
-
                 </div>
             </div>
-
-        </div>
-
-    </div>
-</div>
-
-<!-- ======================================================== -->
-<!-- PUBLIC BUTTONS -->
-<!-- ======================================================== -->
-<div *ngIf="ticketsService.myTicket" class="container bg-light fixed-bottom shadow-box no-radius text-center py-1">
-    <div class="row">
-
-        <div class="col-6 button-content">
-            <button [disabled]="!ticketsService.myTicket" [ngClass]="{'button-disabled':!ticketsService.myTicket}"
-                class="btn btn-danger button" (click)="cancelTicket()">
-                <!-- cancel ticket -->
-                <div>
-                    <span class="mdi mdi-power xl"></span>
-                </div>
-                <div class="button-inner">
-                    Cancelar Turno
-                </div>
-            </button>
-        </div>
-
-        <div class="col-6 button-content">
-            <button [disabled]="!ticketsService.myTicket?.id_session || coming" class="btn btn-success button"
-                [ngClass]="{'button-disabled':!ticketsService.myTicket?.id_session || coming}" (click)="enCamino()">
-                <!-- cancel ticket -->
-                <div>
-                    <span class="mdi mdi-walk xl"></span>
-                </div>
-                <div class="button-inner">
-                    ¡En camino!
-                </div>
-            </button>
-        </div>
-
-    </div>
-</div>
-
-<div *ngIf="!ticketsService.myTicket" class="saturno-footer">
-    <div class="row">
-        <div class="col">
-            <span class="footer-icon-menu" routerLink="/home">
-                <span class="mdi mdi-home xl"></span>
-                <div>Inicio</div>
-            </span>
         </div>
     </div>
 </div>

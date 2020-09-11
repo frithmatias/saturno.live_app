@@ -1,5 +1,5 @@
 import { Skill } from 'src/app/interfaces/skill.interface';
-import { Desktop } from 'src/app/interfaces/desktop.interface';
+import { Session } from './session.interface';
 // ========================================================
 // TICKET
 // ========================================================
@@ -11,7 +11,7 @@ export interface Ticket {
 	id_position: number;
 	id_socket: string;
 	id_socket_desk: string | null;
-	id_session: string | null;
+	id_session: Session;
 	id_company: string;
 	id_skill: Skill;
 	tm_start: number;

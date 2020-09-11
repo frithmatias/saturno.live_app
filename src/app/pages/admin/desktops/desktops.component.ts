@@ -1,9 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { UserService } from '../../../services/user.service';
+import { AdminService } from '../../../services/admin.service';
 import { MatSnackBar, MatSnackBarDismiss } from '@angular/material/snack-bar';
 import { Desktop, DesktopsResponse, DesktopResponse } from '../../../interfaces/desktop.interface';
 import { User } from 'src/app/interfaces/user.interface';
 import { Subscription } from 'rxjs';
+import { LoginService } from '../../../services/login.service';
 
 @Component({
   selector: 'app-desktops',
@@ -17,22 +18,23 @@ export class DesktopsComponent implements OnInit, OnDestroy {
   userSubscription: Subscription;
 
   constructor(
-    private userService: UserService,
+    private adminService: AdminService,
+    private loginService: LoginService,
     private snack: MatSnackBar
   ) { }
 
   ngOnInit(): void {
 
-    if (this.userService.user) {
+    if (this.loginService.user) {
 
-      this.user = this.userService.user;
+      this.user = this.loginService.user;
 
       if (this.user.id_company) {
         let idCompany = this.user.id_company._id;
         this.readDesktops(idCompany);
       }
 
-      this.userSubscription = this.userService.user$.subscribe(data => {
+      this.userSubscription = this.loginService.user$.subscribe(data => {
         if (data) {
           this.user = data;
           if (data.id_company) { this.readDesktops(data.id_company._id); }
@@ -49,7 +51,7 @@ export class DesktopsComponent implements OnInit, OnDestroy {
   deleteDesktop(idDesktop: string): void {
     this.snack.open('Desea eliminar el escritorio?', 'ELIMINAR', { duration: 10000 }).afterDismissed().subscribe((data: MatSnackBarDismiss) => {
       if (data.dismissedByAction) {
-        this.userService.deleteDesktop(idDesktop).subscribe((data: DesktopResponse) => {
+        this.adminService.deleteDesktop(idDesktop).subscribe((data: DesktopResponse) => {
           this.snack.open(data.msg, null, { duration: 5000 });
           this.desktops = this.desktops.filter(desktop => desktop._id != idDesktop);
         },
@@ -67,10 +69,10 @@ export class DesktopsComponent implements OnInit, OnDestroy {
 
   readDesktops(idCompany: string) {
     return new Promise((resolve, reject) => {
-      this.userService.readDesktops(idCompany).subscribe((data: DesktopsResponse) => {
+      this.adminService.readDesktops(idCompany).subscribe((data: DesktopsResponse) => {
         if(data.ok){
           this.desktops = data.desktops.filter(desktops => desktops.bl_generic === false); // filter default_desktop
-          this.userService.desktops = data.desktops;
+          this.adminService.desktops = data.desktops;
           resolve(data.desktops);
         }
       });

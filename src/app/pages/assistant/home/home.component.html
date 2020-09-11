@@ -10,7 +10,7 @@
         <p class="lead">Bienvenido, desde aquí puede tomar escritorios y atender turnos.</p>
 
         <!-- no company -->
-        <div *ngIf="!userService.user.id_company" class="card lead bg-danger text-white p-3 my-4"
+        <div *ngIf="!loginService.user.id_company" class="card lead bg-danger text-white p-3 my-4"
             style="line-height: initial;">
             No tiene asignada ningúna empresa. Debe seleccionarla desde el menú prinicipal.
         </div>
@@ -21,7 +21,7 @@
             No tiene escritorios creados. Debe darlos de alta desde el Menú de Administrador.
         </div>
 
-        <div *ngIf="desktops?.length > 0 && userService.user.id_company?._id">
+        <div *ngIf="desktops?.length > 0 && loginService.user.id_company?._id">
 
             <div class="my-4" *ngIf="myDesktop">
 

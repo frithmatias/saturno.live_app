@@ -1,9 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { TicketsService } from '../../../services/tickets.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Company, CompaniesResponse, CompanyResponse } from '../../../interfaces/company.interface';
-import { WebsocketService } from 'src/app/services/websocket.service';
+import { PublicService } from 'src/app/services/public.service';
 
 @Component({
   selector: 'app-search',
@@ -16,8 +15,7 @@ export class SearchComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private ticketsService: TicketsService,
-    private wsService: WebsocketService,
+    private publicService: PublicService,
     private snack: MatSnackBar) { }
 
   ngOnInit(): void {}
@@ -29,7 +27,7 @@ export class SearchComponent implements OnInit {
   findCompany(e: HTMLInputElement) {
 
     if (e.value.length > 1) {
-      this.ticketsService.findCompany(e.value).subscribe((data: CompaniesResponse) => {
+      this.publicService.findCompany(e.value).subscribe((data: CompaniesResponse) => {
         if (data.ok) {
           this.companies = data.companies;
         } else {
@@ -45,7 +43,7 @@ export class SearchComponent implements OnInit {
   goToCompany(): void {
     if(this.companySelected){
       localStorage.setItem('company', JSON.stringify(this.companySelected));
-      this.ticketsService.companyData = this.companySelected;
+      this.publicService.company = this.companySelected;
       this.router.navigate(['/public/', this.companySelected.tx_public_name]);
     }
   }

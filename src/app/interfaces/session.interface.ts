@@ -7,7 +7,7 @@ import { Desktop } from './desktop.interface';
 
 export interface Session {
 	id_assistant: User;
-    id_desktop: string;
+    id_desktop: Desktop;
     fc_start: Date;
     fc_end: Date;
 	__v: number;

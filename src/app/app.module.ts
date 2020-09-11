@@ -34,7 +34,6 @@ import { AdminGuard } from './guards/admin.guard';
 import { TokenGuard } from './guards/token.guard';
 import { LoginGuard } from './guards/login.guard';
 
-import { GetidstringPipe } from './pipes/getidstring.pipe';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { HowWorksComponent } from './pages/how-works/how-works.component';
 
@@ -45,7 +44,6 @@ import { HowWorksComponent } from './pages/how-works/how-works.component';
 		RegisterComponent,
 		LoginComponent,
 		NopagefoundComponent,
-		GetidstringPipe,
 		ContactComponent,
 		HowWorksComponent
 	],

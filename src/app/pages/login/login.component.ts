@@ -1,13 +1,14 @@
 import { NgForm } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { UserService } from '../../services/user.service';
+import { AdminService } from '../../services/admin.service';
 import { User } from 'src/app/interfaces/user.interface';
 import { environment } from 'src/environments/environment';
 
 import Swal from 'sweetalert2';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { WebsocketService } from '../../services/websocket.service';
+import { LoginService } from '../../services/login.service';
 
 declare const gapi: any;
 // 
@@ -26,7 +27,8 @@ export class LoginComponent implements OnInit {
 	constructor(
 		public router: Router,
 		public activatedRoute: ActivatedRoute,
-		public userService: UserService,
+		public adminService: AdminService,
+		private loginService: LoginService,
 		private wsService: WebsocketService,
 		private snack: MatSnackBar
 	) { }
@@ -53,7 +55,7 @@ export class LoginComponent implements OnInit {
 	attachSignin(element) {
 		this.auth2.attachClickHandler(element, {}, googleUser => {
 			const gtoken = googleUser.getAuthResponse().id_token;
-			this.userService.login(gtoken, null, false).subscribe(
+			this.loginService.login(gtoken, null, false).subscribe(
 				data => {
 					if (data.ok) {
 						if (data.user.id_company) { this.wsService.emit('enterCompany', data.user.id_company._id); }
@@ -85,7 +87,7 @@ export class LoginComponent implements OnInit {
 			id_company: null
 		};
 
-		this.userService.login(null, user, forma.value.recuerdame).subscribe(
+		this.loginService.login(null, user, forma.value.recuerdame).subscribe(
 		data => {
 			if (data.ok) {
 				if (data.user.id_company) { this.wsService.emit('enterCompany', data.user.id_company._id); }

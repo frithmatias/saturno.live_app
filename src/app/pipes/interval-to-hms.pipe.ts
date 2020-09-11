@@ -6,7 +6,7 @@ import moment from 'moment';
 })
 export class IntervalToHmsPipe implements PipeTransform {
 
-  transform(timeFrom: number, timeTo: number): string {
+  transform(timeFrom: number, timeTo?: number): string {
     let interval = timeTo - timeFrom;
     let duration = moment.duration(interval);
     let h = duration.hours();

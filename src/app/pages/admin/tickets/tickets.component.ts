@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { TicketsService } from 'src/app/services/tickets.service';
 import { Ticket } from 'src/app/interfaces/ticket.interface';
-import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
+import { TicketsResponse } from '../../../interfaces/ticket.interface';
+import { LoginService } from '../../../services/login.service';
+import { PublicService } from 'src/app/services/public.service';
 
 @Component({
   selector: 'app-tickets',
@@ -12,15 +13,19 @@ export class TicketsComponent implements OnInit {
 
   tickets: Ticket[] = [];
 
-  constructor(private ticketsService: TicketsService) { }
+  constructor(
+    private loginService: LoginService,
+    private publicService: PublicService 
+  ) { }
 
   ngOnInit(): void {
     this.readTickets();
   }
 
   readTickets(): void {
-    this.ticketsService.getTickets().then((tickets: Ticket[]) => {
-      this.tickets = tickets;
+    let idCompany = this.loginService.user.id_company?._id;
+    this.publicService.getTickets(idCompany).subscribe((data: TicketsResponse) => {
+      this.tickets = data.tickets;
     })
   }
 

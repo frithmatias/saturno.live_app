@@ -6,7 +6,7 @@
         </div>
         <!-- MESSAGES -->
         <div #chatmessages id="chatmessages" class="row-messages">
-            <div *ngFor="let message of ticketsService.chatMessages" class="d-flex message"
+            <div *ngFor="let message of publicService.chatMessages" class="d-flex message"
                 [ngClass]="{'message-me': message.own}">
                 <div>
                     {{ message.message }}

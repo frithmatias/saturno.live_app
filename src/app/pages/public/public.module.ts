@@ -12,14 +12,16 @@ import { PublicRoutingModule } from './public-routing.module';
 import { MaterialModule } from '../../modules/material.module';
 import { ComponentsModule } from '../../components/components.module';
 import { SearchComponent } from './search/search.component';
-
+import { MyticketComponent } from './myticket/myticket.component';
+import { PipesModule } from 'src/app/pipes/pipes.module';
 
 @NgModule({
 	declarations: [
 		ScreenComponent,
 		TicketsComponent,
 		PublicComponent,
-		SearchComponent
+		SearchComponent,
+		MyticketComponent
 	],
 	imports: [
 		CommonModule,
@@ -27,7 +29,8 @@ import { SearchComponent } from './search/search.component';
 		FormsModule,
 		MaterialModule,
 		ComponentsModule,
-		PublicRoutingModule
+		PublicRoutingModule,
+		PipesModule
 	]
 })
 export class PublicModule { }
