@@ -1,0 +1,10 @@
+.saturno-desktop-background {
+    height: 100vh;
+    background-image: url('../../../../assets/img/myticket-background.png');
+    background-size : 100px;
+  }
+
+.button-disabled {
+    background-color: #f1f1f1;
+    color: #c7c7c7;
+}

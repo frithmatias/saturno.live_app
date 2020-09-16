@@ -1,11 +1,13 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+
 import { MaterialModule } from '../modules/material.module';
+import { PipesModule } from 'src/app/pipes/pipes.module';
+
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { SidenavComponent } from './sidenav/sidenav.component';
 import { ChatComponent } from './chat/chat.component';
 import { RouterModule } from '@angular/router';
-import { PipesModule } from 'src/app/pipes/pipes.module';
 
 @NgModule({
   declarations: [
@@ -14,7 +16,7 @@ import { PipesModule } from 'src/app/pipes/pipes.module';
     ChatComponent
   ],
   imports: [
-		RouterModule,
+    RouterModule,
     CommonModule,
     MaterialModule,
     PipesModule

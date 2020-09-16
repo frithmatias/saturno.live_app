@@ -21,7 +21,7 @@
 
     <div class="row mt-3" style="align-items: baseline;">
       <div class="col" style="text-align: left;">
-        <span class="footer-text">Matias Frith | 2020</span>
+        <span class="footer-text"></span>
       </div>
       <div class="col" style="text-align: right;">
         <span class="mdi mdi-heart footer-icon ml-1" style="color:red; opacity: .7;"></span>
@@ -73,9 +73,9 @@
 <div class="saturno-footer">
   <div class="row">
     <div *ngIf="publicService.company" class="col">
-      <span class="footer-icon-menu" routerLink="/public/screen">
-       <span class="mdi mdi-monitor-dashboard xl"></span>
-        <div>Ver Pantalla</div>
+      <span class="footer-icon-menu" routerLink="/public/myticket">
+       <span class="mdi mdi-bookmark-outline xl"></span>
+        <div>Mi Turno!</div>
       </span>
     </div>
     <div *ngIf="!publicService.company" class="col">
@@ -85,15 +85,15 @@
       </span>
     </div>
     <div class="col">
-      <span class="footer-icon-menu" routerLink="/login">
-        <span class="mdi mdi-login xl"></span>
-        <div>Login</div>
+      <span class="footer-icon-menu" routerLink="/contact">
+        <span class="mdi mdi-file-document-edit-outline xl"></span>
+        <div>Contactenos</div>
       </span>
     </div>
     <div class="col">
-      <span class="footer-icon-menu" routerLink="/contact">
-        <span class="mdi mdi-file-document-edit-outline xl"></span>
-        <div>Contacto</div>
+      <span class="footer-icon-menu" routerLink="/register">
+        <span class="mdi mdi-account-plus xl"></span>
+        <div>Registrar Comercio</div>
       </span>
     </div>
   </div>

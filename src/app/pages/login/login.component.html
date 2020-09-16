@@ -6,7 +6,7 @@
         <!-- EMAIL -->
         <!---------------------------------------------------------------------->
         <div class="my-2">
-            <mat-form-field color="warn" appearance="fill" logincss class="w-100">
+            <mat-form-field color="warn"  logincss class="w-100">
                 <mat-label>Ingrese su Email</mat-label>
                 <input #inputEmail matInput placeholder="sumail@dominio.com" [ngModel]="email" name="email">
                 <span class="input-icon" (click)="cleanEmail(inputEmail, inputPassword)"><i
@@ -18,7 +18,7 @@
         <!-- PASSWORD -->
         <!---------------------------------------------------------------------->
         <div class="my-2">
-            <mat-form-field color="warn" appearance="fill" logincss class="w-100">
+            <mat-form-field color="warn" logincss class="w-100">
                 <mat-label>Ingrese su Password</mat-label>
                 <input #inputPassword matInput placeholder="password" ngModel name="password"
                     [type]="hidepass ? 'password' : 'text'" required>

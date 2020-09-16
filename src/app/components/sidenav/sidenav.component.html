@@ -1,5 +1,5 @@
 <div>
-    <mat-form-field *ngIf="companies?.length > 0" color="warn" appearance="fill" class="w-100">
+    <mat-form-field *ngIf="companies?.length > 0" color="warn" class="p-2 w-100">
         <mat-label>Seleccione una empresa</mat-label>
         <mat-select formControlName="idCompany" [value]="loginService.user?.id_company?._id" name="idCompany" #selectDesktop
             matNativeControl required>
@@ -12,20 +12,20 @@
     <mat-accordion multi>
 
 
-        <!-- ASSISTANT / USER -->
+        <!-- MENU -->
         <div *ngFor="let item of loginService.menu">
-            <mat-expansion-panel [expanded]="item.titulo === 'Asistente'">
+            <mat-expansion-panel [expanded]="item.tx_titulo === 'Asistente'">
 
                 <mat-expansion-panel-header>
                     <mat-panel-title style="align-items: center; color: darkred;">
-                        <span class="{{ item.icon }} sidenav-title-icons"></span>
-                        <span class="sidenav-title-text mx-2">{{ item.titulo }}</span>
+                        <span class="{{ item.tx_icon }} sidenav-title-icons"></span>
+                        <span class="sidenav-title-text mx-2">{{ item.tx_titulo }}</span>
                     </mat-panel-title>
                 </mat-expansion-panel-header>
 
-                <div *ngFor="let sub of item.submenu" routerLink="/{{sub.url}}" class="sidenav-item">
-                    <span class="{{ sub.icon }} sidenav-item-icons"></span>
-                    <span class="sidenav-item-text">{{ sub.titulo}}</span>
+                <div *ngFor="let sub of item.ar_submenu" routerLink="/{{sub.tx_url}}" class="sidenav-item">
+                    <span class="{{ sub.tx_icon }} sidenav-item-icons"></span>
+                    <span class="sidenav-item-text">{{ sub.tx_titulo}}</span>
                 </div>
 
             </mat-expansion-panel>
@@ -33,8 +33,4 @@
 
     </mat-accordion>
 
-    <!-- LOGOUT -->
-    <div class="p-2 pt-3" *ngIf="loginService.user">
-        <button class="btn btn-sm btn-block btn-danger" (click)="loginService.logout()"> Salir </button>
-    </div>
 </div>

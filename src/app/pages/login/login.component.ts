@@ -2,10 +2,7 @@ import { NgForm } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AdminService } from '../../services/admin.service';
-import { User } from 'src/app/interfaces/user.interface';
 import { environment } from 'src/environments/environment';
-
-import Swal from 'sweetalert2';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { WebsocketService } from '../../services/websocket.service';
 import { LoginService } from '../../services/login.service';
@@ -59,8 +56,9 @@ export class LoginComponent implements OnInit {
 				data => {
 					if (data.ok) {
 						if (data.user.id_company) { this.wsService.emit('enterCompany', data.user.id_company._id); }
-						window.location.href = '#/admin';
-						// this.router.navigate(['/admin']);				
+						// window.location.href = '#/admin';
+
+						this.router.navigate([data.home]);			
 					}
 				},
 				() => {

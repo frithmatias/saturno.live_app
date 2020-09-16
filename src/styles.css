@@ -6,7 +6,6 @@ body {
 }
 
 body {
-
     margin      : 0;
     font-family : Roboto, "Helvetica Neue", sans-serif;
     font-style  : normal;
@@ -17,6 +16,16 @@ body {
     font-display: swap;
 }
 
+/* 
+Quita el color de background-color que el navegador pone automaticamente en los 
+inputs cuando llena el control con un valor automáticamente con auto-fill. 
+*/
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px white inset !important;
+}
 
 button:focus {
     outline: none;
@@ -53,12 +62,33 @@ td {
     letter-spacing: .1em;
     color: coral;
 }
+
+
+/* -------------------------------------------------------------- */
+/* SATURNO STYLES  */
+/* -------------------------------------------------------------- */
+
+.saturno-container {
+    min-width: 18rem;
+    max-width: 30rem;
+    padding  : 1em;
+    margin   : 1em;
+}
+
 .shadow-box {
     border-radius   : 5px;
     background-color: white;
     box-shadow      : 0px 1px 3px 0px #999
 }
 
+/* using childs */
+.nomargin {
+    margin: 0 !important;
+}
+
+.nopadding {
+    padding: 0 !important;
+}
 
 .saturno-info-box {
     cursor          : pointer;
@@ -136,14 +166,6 @@ td {
     margin     : 0px;
 }
 
-.saturno-container {
-    min-width: 18rem;
-    max-width: 30rem;
-    padding  : 1em;
-    margin   : .5em;
-}
-
-
 .saturno-container-mini {
     min-width  : 4rem;
     max-width  : 8.5rem;
@@ -201,7 +223,7 @@ td {
 
 .button-inner {
     font-weight: 300;
-    font-size  : small;
+    font-size  : large;
 }
 
 .accessible-icon {
@@ -312,7 +334,7 @@ td {
 }
 
 .sidenav-item-text {
-    color         : black;
+    color         : rgb(111, 111, 111);
     font-size     : medium;
     vertical-align: bottom;
     margin-left   : .5rem;

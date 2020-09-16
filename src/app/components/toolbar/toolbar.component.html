@@ -37,9 +37,9 @@
 
 
         <!-- Login Icon -->
-        <div>
-            <span *ngIf="!loginService.user && !publicService.ticket && !publicService.company" routerLink="/login"
-                class="mdi mdi-account-circle xl pointer"></span>
+        <div *ngIf="!loginService.user && !publicService.ticket && !publicService.company" routerLink="/login" class="login-box">
+            <div class="mdi mdi-account-circle xl pointer"></div>
+            <div>Login</div>
         </div>
 
         <!-- User logged Icon -->
@@ -49,10 +49,13 @@
                 <span mat-menu-item class="mdi mdi-monitor-cellphone-star footer-icon-menu mx-2 xl" routerLink="/assistant/desktop">
                     <span class="ml-3 md" style="vertical-align: bottom;">Mi escritorio</span>
                 </span>
-                <span mat-menu-item class="mdi mdi-account-circle footer-icon-menu mx-2 xl" routerLink="/assistant/desktop">
+                <span mat-menu-item class="mdi mdi-view-dashboard-variant footer-icon-menu mx-2 xl" routerLink="/assistant/dashboard">
+                    <span class="ml-3 md" style="vertical-align: bottom;">Mis métricas</span>
+                </span>
+                <span mat-menu-item class="mdi mdi-account-circle footer-icon-menu mx-2 xl" routerLink="/assistant/profile">
                     <span class="ml-3 md" style="vertical-align: bottom;">{{loginService.user.tx_name}}</span>
                 </span>
-                <span mat-menu-item disabled class="mdi mdi-email footer-icon-menu mx-2 xl" routerLink="/assistant/desktop">
+                <span mat-menu-item disabled class="mdi mdi-email footer-icon-menu mx-2 xl" routerLink="/assistant/profile">
                     <span class="ml-3 md" style="vertical-align: bottom;">{{loginService.user.tx_email}}</span>
                 </span>
                 <div class="p-2">

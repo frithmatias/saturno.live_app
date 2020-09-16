@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 // ROUTES
@@ -36,6 +35,7 @@ import { LoginGuard } from './guards/login.guard';
 
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { HowWorksComponent } from './pages/how-works/how-works.component';
+import { PricingComponent } from './pages/pricing/pricing.component';
 
 @NgModule({
 	declarations: [
@@ -45,12 +45,12 @@ import { HowWorksComponent } from './pages/how-works/how-works.component';
 		LoginComponent,
 		NopagefoundComponent,
 		ContactComponent,
-		HowWorksComponent
+		HowWorksComponent,
+		PricingComponent
 	],
 	imports: [
 		MaterialModule,
 		ComponentsModule,
-		BrowserModule,
 		BrowserAnimationsModule,
 		FormsModule,
 		ReactiveFormsModule,

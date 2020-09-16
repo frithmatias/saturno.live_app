@@ -1,0 +1,42 @@
+<form autocomplete="off" style="color: brown;" ngNativeValidate #formDirective="ngForm" [formGroup]="forma"
+    (ngSubmit)="createMenu(formDirective)">
+
+    <mat-form-field color="warn" class="w-100">
+        <mat-label>Código de Rol</mat-label>
+        <input matInput placeholder="Codigo Rol" formControlName="cd_role" name="cd_role" type="text" required
+            placeholder="Nombre">
+    </mat-form-field>
+
+    <mat-form-field color="warn" class="w-100">
+        <mat-label>Titulo</mat-label>
+        <input matInput placeholder="Titulo" formControlName="tx_titulo" name="tx_titulo" type="text" required>
+    </mat-form-field>
+
+    <mat-form-field color="warn" class="w-100">
+        <mat-label>Icono</mat-label>
+        <input matInput placeholder="Icono" formControlName="tx_icon" name="tx_icon" type="text" required
+            placeholder="Contraseña" autocomplete="new-password">
+    </mat-form-field>
+
+    <div *ngIf="!menuEdit" class="row text-center">
+        <div class="col">
+            <button *ngIf="!menuEdit" class="btn btn-success btn-block text-uppercase" type="submit">
+                Crear Menu
+            </button>
+        </div>
+    </div>
+    <div *ngIf="menuEdit" class="row">
+        <div class="col w-100">
+            <button class="btn btn-danger btn-block text-uppercase" type="submit">
+                Guardar
+            </button>
+        </div>
+        <div class="col">
+            <button class="btn btn-warning btn-block text-uppercase" (click)="resetForm(formDirective)">
+                Limpiar
+            </button>
+        </div>
+    </div>
+
+
+</form>

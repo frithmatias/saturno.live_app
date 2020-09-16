@@ -95,8 +95,8 @@ export class PublicService {
 
   clearPublicSession(): void {
     this.chatMessages = [];
-    this.ticket = null;
-    this.company = null;
+    delete this.ticket;
+    delete this.company;
     if (localStorage.getItem('ticket')) { localStorage.removeItem('ticket'); }
     if (localStorage.getItem('company')) { localStorage.removeItem('company'); }
   }

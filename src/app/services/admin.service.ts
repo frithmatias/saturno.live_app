@@ -29,7 +29,7 @@ export class AdminService {
 		private http: HttpClient, 
 		
 		) {
-			if (this.loginService.user?.id_role === 'ADMIN_ROLE') {
+			if (this.loginService.user?.tx_role === 'ADMIN_ROLE') {
 				this.readCompanies(this.loginService.user._id).subscribe(data => {
 					this.companies = data.companies;
 					this.companiesSource.next(data.companies);

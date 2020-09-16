@@ -9,7 +9,8 @@ export interface User {
 	id_company?: Company;
     bl_google?: boolean;
     tx_img?: string;
-	id_role?: string;
+	tx_role?: string;
+	cd_pricing?: number;
 	id_skills?: Skill[],
 	fc_createdat?: Date;
 	fc_lastlogin?: Date;

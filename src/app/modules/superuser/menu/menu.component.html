@@ -1,0 +1,41 @@
+<div class="animated saturno-container fadeIn">
+
+    <div class="card bg-secondary text-white">
+        <div class="card-header">
+            <span class="mdi mdi-menu-open"></span>
+            Menus
+        </div>
+        <div class="card-body table-responsive-sm">
+
+            <table class="table table-sm text-white" id="wt-form">
+                <tr *ngFor="let menu of menus">
+                    <td>{{menu?.tx_titulo}} </td>
+                    <td>
+                        <span *ngIf="menu._id===menuUpdated"
+                            class="mdi mdi-check ml-2 list-crud-edit"></span>
+                    </td>
+                    <td style="text-align: right;">
+                        <span class="mdi mdi-pencil ml-2 list-crud-edit" (click)="editMenu(menu)"></span>
+                        <span class="mdi mdi-delete ml-2 list-crud-delete" (click)="deleteMenu(menu._id)"></span>
+                    </td>
+                </tr>
+            </table>
+
+        </div>
+    </div>
+
+    <div class="my-4"></div>
+
+    <div class="card">
+        <div class="card-header">
+            <span class="mdi mdi-plus-circle-outline"></span>
+            Alta de asistente </div>
+        <div class="card-body">
+
+            <app-menu-create-form [menuEdit]="menuEdit" (idMenuUpdated)="menuUpdated($event)">
+            </app-menu-create-form>
+
+        </div>
+    </div>
+
+</div>

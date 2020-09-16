@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { CanLoad } from '@angular/router';
 import { Router } from '@angular/router';
 import { LoginService } from '../services/login.service';
 import { SharedService } from '../services/shared.service';
 
 @Injectable()
-export class TokenGuard implements CanActivate {
+export class TokenGuard implements CanLoad {
 
 	constructor(
 		public loginService: LoginService,
@@ -16,7 +16,7 @@ export class TokenGuard implements CanActivate {
 	// verifica primero si expiro el token, si expiro devuelve false y lo manda al login
 	// si no expiro verifica si tiene que renovar (es cuando defino un tiempo proximo a vencer)
 	// si tiene que renovar devuelve true y sino, devuelve false.
-	canActivate(): Promise<boolean> | boolean {
+	canLoad(): Promise<boolean> | boolean {
 		const token = this.loginService.token;
 		if (!token) {
 			this.loginService.logout();

@@ -54,6 +54,7 @@ export class LoginService {
 	// Login Methods
 	// ========================================================
 
+	// google and normal login
 	login(gtoken: string, user: User, recordar: boolean = false) {
 		recordar ? localStorage.setItem('email', user.tx_email) : localStorage.removeItem('email');
 

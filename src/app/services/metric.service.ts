@@ -14,7 +14,6 @@ export class MetricService {
     private loginService: LoginService) { }
 
 	getUserMetrics(fcSel: number, idUser: string): Observable<object> {
-
 		const headers = new HttpHeaders({
 			'turnos-token': this.loginService.token
 		});
