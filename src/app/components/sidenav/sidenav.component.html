@@ -17,13 +17,13 @@
             <mat-expansion-panel [expanded]="item.tx_titulo === 'Asistente'">
 
                 <mat-expansion-panel-header>
-                    <mat-panel-title style="align-items: center; color: darkred;">
+                    <mat-panel-title style="align-items: center; color: darkred; outline: none;" routerLink="/{{item.tx_url}}">
                         <span class="{{ item.tx_icon }} sidenav-title-icons"></span>
                         <span class="sidenav-title-text mx-2">{{ item.tx_titulo }}</span>
                     </mat-panel-title>
                 </mat-expansion-panel-header>
 
-                <div *ngFor="let sub of item.ar_submenu" routerLink="/{{sub.tx_url}}" class="sidenav-item">
+                <div *ngFor="let sub of item.subitems" routerLink="/{{sub.tx_url}}" class="sidenav-item">
                     <span class="{{ sub.tx_icon }} sidenav-item-icons"></span>
                     <span class="sidenav-item-text">{{ sub.tx_titulo}}</span>
                 </div>

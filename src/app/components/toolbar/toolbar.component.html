@@ -1,12 +1,12 @@
-<mat-toolbar color="primary" class="tickets-toolbar mat-elevation-z2">
+<mat-toolbar class="mat-toolbar">
     <mat-toolbar-row>
-
+        
         <!-- Menu -->
         <span class="mdi mdi-menu xl pointer" *ngIf="loginService.user" (click)="toggle('sidenav')"></span>
-        <span class="example-spacer"></span>
+
 
         <!-- Title default -->
-        <div *ngIf="!loginService.user && !publicService.company">
+        <div *ngIf="!loginService.user && !publicService.company" routerLink="/home" class="pointer">
             <span class="ml-3" style="float:left;">
                 <div class="saturno-title">
                     SATURNO
@@ -21,11 +21,12 @@
             <img src="../../../assets/img/saturn.png" class="saturno-logo img-fluid">
         </div>
 
+        <span class="example-spacer"></span>
+        
         <!-- Title Company -->
-        <span style="font-size: x-large; font-weight: 300;"
-            *ngIf="user?.id_company?.tx_company_name || publicService.company">
+        <div *ngIf="user?.id_company?.tx_company_name || publicService.company">
             {{user?.id_company?.tx_company_name || publicService.company.tx_company_name}}
-        </span>
+        </div>
 
         <span class="example-spacer"></span>
 
@@ -37,9 +38,8 @@
 
 
         <!-- Login Icon -->
-        <div *ngIf="!loginService.user && !publicService.ticket && !publicService.company" routerLink="/login" class="login-box">
+        <div *ngIf="!loginService.user && !publicService.ticket && !publicService.company" routerLink="/login">
             <div class="mdi mdi-account-circle xl pointer"></div>
-            <div>Login</div>
         </div>
 
         <!-- User logged Icon -->

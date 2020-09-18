@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { LoginService } from 'src/app/services/login.service';
 import { environment } from 'src/environments/environment';
-import { Menu } from './superuser.interface';
+import { MenuItem } from './superuser.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +14,7 @@ export class SuperuserService {
     private loginService: LoginService) { }
 
 
-    createMenu(menu: Menu) {
+    createMenu(menu: MenuItem) {
       const headers = new HttpHeaders({
         'turnos-token': this.loginService.token
       });
@@ -26,16 +26,24 @@ export class SuperuserService {
 		const headers = new HttpHeaders({
 			'turnos-token': this.loginService.token
 		});
-		const url = environment.url + '/su/readmenus/';
+		const url = environment.url + '/su/readmenu/';
 		return this.http.get(url, { headers });
 	}
   
-	updateMenu(menu: Menu) {
+	updateMenu(menu: MenuItem) {
 		const headers = new HttpHeaders({
 			'turnos-token': this.loginService.token
 		});
 		const url = environment.url + '/su/updatemenu';
 		return this.http.post(url, menu, { headers });
+	}
+
+	deleteMenu(idMenu: string) {
+		const headers = new HttpHeaders({
+			'turnos-token': this.loginService.token
+		});
+		const url = environment.url + '/su/deletemenu/' + idMenu;
+		return this.http.delete(url, { headers }); 
 	}
 
 }

@@ -1,38 +1,50 @@
-<div class="animated saturno-container fadeIn">
+<div class="animated saturno-card fadeIn">
 
-    <div class="card bg-secondary text-white">
+    <div class="card bg-secondary p-2 text-white">
         <div class="card-header">
             <span class="mdi mdi-menu-open"></span>
             Menus
         </div>
-        <div class="card-body table-responsive-sm">
 
-            <table class="table table-sm text-white" id="wt-form">
-                <tr *ngFor="let menu of menus">
-                    <td>{{menu?.tx_titulo}} </td>
-                    <td>
-                        <span *ngIf="menu._id===menuUpdated"
-                            class="mdi mdi-check ml-2 list-crud-edit"></span>
-                    </td>
-                    <td style="text-align: right;">
-                        <span class="mdi mdi-pencil ml-2 list-crud-edit" (click)="editMenu(menu)"></span>
-                        <span class="mdi mdi-delete ml-2 list-crud-delete" (click)="deleteMenu(menu._id)"></span>
-                    </td>
-                </tr>
-            </table>
+        <div class="card-body bg-light rounded">
+
+            <!-- MENU SELECTOR -->
+            <mat-form-field color="warn" class="w-100 bg-light">
+                <mat-label>Seleccione el menú</mat-label>
+                <mat-select #selectDesktop matNativeControl required>
+                    <mat-option *ngFor="let item of menuItems" (click)="getSubItems(item._id)" [value]="item._id">
+                       <span class="{{item.tx_icon}} text-secondary"> <span class="mx-2">{{item.tx_titulo}}</span></span> 
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <!-- MENU ITEMS -->
+            <div *ngIf="submenuItems" class="card-body table-responsive-sm bg-secondary rounded">
+                <table class="w-100">
+                    <tr *ngFor="let item of submenuItems">
+                        <td class="{{item?.tx_icon}}" style="color: gold;"></td>
+                        <td>{{item?.tx_titulo}} </td>
+                        <td style="text-align: right;">
+                            <span class="mdi mdi-pencil ml-2 list-crud-edit" (click)="editMenuItem(item)"></span>
+                            <span class="mdi mdi-delete ml-2 list-crud-delete" (click)="deleteMenuItem(item._id)"></span>
+                        </td>
+                    </tr>
+                </table> mdi-shield-star
+            </div>
 
         </div>
     </div>
 
     <div class="my-4"></div>
 
+    <!-- MENU FORM -->
     <div class="card">
         <div class="card-header">
             <span class="mdi mdi-plus-circle-outline"></span>
-            Alta de asistente </div>
+            Crear Menú </div>
         <div class="card-body">
 
-            <app-menu-create-form [menuEdit]="menuEdit" (idMenuUpdated)="menuUpdated($event)">
+            <app-menu-create-form [itemEdit]="itemEdit" [idMenuSelected]="idMenuSelected" (itemUpdated)="menuItemUpdated($event)">
             </app-menu-create-form>
 
         </div>

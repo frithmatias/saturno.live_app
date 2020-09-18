@@ -5,28 +5,23 @@
 export interface MenusResponse {
 	ok: boolean;
 	msg: string;
-	menu: Menu[] | null;
+	menuitem: MenuItem[] | null;
 }
 
 export interface MenuResponse {
 	ok: boolean;
 	msg: string;
-	menu: Menu | null;
+	menuitem: MenuItem | null;
 }
 
-export interface Menu {
+export interface MenuItem { // menu OR submenu
+	id_parent: string | null;
     cd_role: number;
+	cd_pricing: number;
 	tx_titulo: string,
 	tx_icon?: string,
-	ar_submenu?: Submenu[],
+	tx_url?: string,
 	_id: string;
-}
-
-export interface Submenu {
-    cd_pricing: number;
-    tx_titulo: string;
-    tx_icon: string;
-    tx_url: string;
 }
 
 

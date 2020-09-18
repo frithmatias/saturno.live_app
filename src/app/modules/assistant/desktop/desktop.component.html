@@ -1,5 +1,5 @@
 <div class="saturno-desktop-background">
-  <div class="saturno-container shadow-box animated fadeIn" style="padding-bottom: 3em;">
+  <div class="saturno-card shadow-box animated fadeIn" style="padding-bottom: 3em;">
 
     <div *ngIf="loading" class="mt-5 animated fadeIn">
       <mat-spinner></mat-spinner>
@@ -82,7 +82,7 @@
       <!-- NO SKILLS -->
       <!-- ======================================================== -->
 
-      <div class="saturno-container card bg-danger text-white p-3 mb-4" *ngIf="skillsAssistantThisCompany.length === 0">
+      <div class="saturno-card card bg-danger text-white p-3 mb-4" *ngIf="skillsAssistantThisCompany.length === 0">
         <p>
           Usted no tiene habilidades asignadas. Debe ir al administrador de asistentes, luego seleccionar el asistente
           y allí asignarle skills / habilidades.
@@ -96,7 +96,7 @@
       <!-- SKILL TABLE -->
       <!-- ======================================================== -->
 
-      <div class="saturno-container card bg-secondary mb-4">
+      <div class="saturno-card card bg-secondary mb-4">
         <div class="card-content table-responsive-sm  p-2">
           <mat-radio-group [(ngModel)]="skillSelected">
 

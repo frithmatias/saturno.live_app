@@ -1,10 +1,14 @@
-<form autocomplete="off" style="color: brown;" ngNativeValidate #formDirective="ngForm" [formGroup]="forma"
+<form autocomplete="off" style="color: brown;" ngNativeValidate #formDirective="ngForm" [formGroup]="menuForm"
     (ngSubmit)="createMenu(formDirective)">
 
     <mat-form-field color="warn" class="w-100">
         <mat-label>Código de Rol</mat-label>
-        <input matInput placeholder="Codigo Rol" formControlName="cd_role" name="cd_role" type="text" required
-            placeholder="Nombre">
+        <input matInput placeholder="0" formControlName="cd_role" name="cd_role" type="text" required>
+    </mat-form-field>
+
+    <mat-form-field color="warn" class="w-100">
+        <mat-label>Código de Pricing</mat-label>
+        <input matInput placeholder="0" formControlName="cd_pricing" name="cd_pricing" type="text" required>
     </mat-form-field>
 
     <mat-form-field color="warn" class="w-100">
@@ -14,18 +18,22 @@
 
     <mat-form-field color="warn" class="w-100">
         <mat-label>Icono</mat-label>
-        <input matInput placeholder="Icono" formControlName="tx_icon" name="tx_icon" type="text" required
-            placeholder="Contraseña" autocomplete="new-password">
+        <input matInput placeholder="mdi mdi-icon" formControlName="tx_icon" name="tx_icon" type="text" required>
     </mat-form-field>
 
-    <div *ngIf="!menuEdit" class="row text-center">
+    <mat-form-field color="warn" class="w-100">
+        <mat-label>URL</mat-label>
+        <input matInput placeholder="/assistant/home" formControlName="tx_url" name="tx_url" type="text" required>
+    </mat-form-field>
+
+    <div *ngIf="!itemEdit" class="row text-center">
         <div class="col">
-            <button *ngIf="!menuEdit" class="btn btn-success btn-block text-uppercase" type="submit">
+            <button *ngIf="!itemEdit" class="btn btn-success btn-block text-uppercase" type="submit">
                 Crear Menu
             </button>
         </div>
     </div>
-    <div *ngIf="menuEdit" class="row">
+    <div *ngIf="itemEdit" class="row">
         <div class="col w-100">
             <button class="btn btn-danger btn-block text-uppercase" type="submit">
                 Guardar

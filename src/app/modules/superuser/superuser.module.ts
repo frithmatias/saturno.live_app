@@ -11,7 +11,13 @@ import { MaterialModule } from '../../modules/material.module';
 
 
 @NgModule({
-  declarations: [SuperuserComponent, MenuComponent, HomeComponent, MenuCreateFormComponent],
+  declarations: [
+    SuperuserComponent, 
+    MenuComponent, 
+    HomeComponent, 
+    MenuCreateFormComponent,
+    
+  ],
   imports: [
     CommonModule,
     SuperuserRoutingModule,

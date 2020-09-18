@@ -47,10 +47,11 @@ span:focus {
     outline: none;
 }
 
-
 td {
     vertical-align: middle !important;
 }
+
+
 
 .pointer {
     cursor: pointer;
@@ -69,15 +70,37 @@ td {
 /* -------------------------------------------------------------- */
 
 .saturno-container {
+    background-size:     cover;                      /* <------ */
+    background-repeat:   no-repeat;
+    background-position: center center;
+    background-blend-mode: lighten;
+    padding: 1em;
+}
+
+.saturno-bg-home {
+    background-image: url('./assets/img/bg-img-home.jpg');
+}
+
+.saturno-bg-login {
+    background-image: url('./assets/img/bg-img-login.jpg');
+}
+
+.saturno-bg-register {
+    background-image: url('./assets/img/bg-img-register.jpg');
+}
+
+
+.saturno-card {
+    background-color: rgba(255, 255, 255, .9);
     min-width: 18rem;
-    max-width: 30rem;
-    padding  : 1em;
+    max-width: 25rem;
+    padding  : 1.2em;
     margin   : 1em;
+    font-size: medium;
 }
 
 .shadow-box {
     border-radius   : 5px;
-    background-color: white;
     box-shadow      : 0px 1px 3px 0px #999
 }
 
@@ -90,21 +113,21 @@ td {
     padding: 0 !important;
 }
 
-.saturno-info-box {
+.saturno-minicard {
     cursor          : pointer;
-    margin          : .5em;
     padding         : 1em;
     background-color: white;
+    height: 100%;
 }
 
-.saturno-info-title {
+.saturno-minicard-title {
     font-size  : large;
     font-weight: 300;
     color      : dimgrey;
 }
 
-.saturno-info-text {
-    font-size  : medium;
+.saturno-minicard-text {
+    font-size  : small;
     font-family: system-ui;
     color      : dimgrey;
 }
@@ -126,6 +149,11 @@ td {
 
 .saturno-hr-grey {
     border-top: 5px solid rgb(180 180 180 / 70%);
+    width     : 50%;
+}
+
+.saturno-hr-pink {
+    border-top: 5px solid rgb(180 0 180 / 70%);
     width     : 50%;
 }
 
@@ -166,13 +194,7 @@ td {
     margin     : 0px;
 }
 
-.saturno-container-mini {
-    min-width  : 4rem;
-    max-width  : 8.5rem;
-    align-items: center;
-}
-
-.saturno-container-mini-body {
+.saturno-card-mini-body {
     font-size: xxx-large;
     padding  : .1em;
 }

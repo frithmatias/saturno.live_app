@@ -1,4 +1,4 @@
-<div class="animated saturno-container fadeIn" [ngClass]="{nomargin:nomargin, nopadding:nopadding}">
+<div class="animated saturno-card fadeIn" [ngClass]="{nomargin:nomargin, nopadding:nopadding}">
 
     <div class="card bg-primary text-white">
         <div class="card-header">
@@ -38,7 +38,7 @@
             Alta de asistente </div>
         <div class="card-body">
 
-            <app-assistant-create-form [assistantEdit]="assistantEdit" (updateAssistants)="updateAssistants($event)">
+            <app-assistant-create-form [assistantEdit]="assistantEdit" (idAssistantUpdated)="assistantUpdated($event)">
             </app-assistant-create-form>
 
         </div>

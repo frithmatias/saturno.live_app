@@ -1,22 +1,24 @@
+.mat-toolbar {
+  font-family: system-ui;
+  background-color: darkorange;
+  color: white;
+  font-weight: 300;
+}
+
 .example-spacer {
   /* Tres valores: flex-grow | flex-shrink | flex-basis */
   flex: 1 1 auto;
 }
 
-.tickets-toolbar {
-  font-size: medium;
-}
-
 .saturno-title {
   font-size     : 1.3em;
-  font-family   : sans-serif;
   font-weight   : 200;
   letter-spacing: .3em;
-  line-height   : normal;
+  line-height: 1em;
 }
 
 .saturno-description {
-  font-size  : .9em;
+  font-size  : .7em;
   font-weight: lighter;
   line-height: normal;
 }
@@ -25,8 +27,3 @@
   width: 7em;
 }
 
-.login-box {
-  text-align : center;
-  line-height: normal;
-  font-size  : small;
-}

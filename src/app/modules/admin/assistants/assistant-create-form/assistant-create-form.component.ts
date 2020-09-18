@@ -17,7 +17,7 @@ import { SharedService } from '../../../../services/shared.service';
 })
 export class AssistantCreateFormComponent implements OnInit, OnChanges {
 	@Input() assistantEdit: User;
-	@Output() updateAssistants: EventEmitter<string> = new EventEmitter();
+	@Output() idAssistantUpdated: EventEmitter<string> = new EventEmitter();
 
 	forma: FormGroup;
 	skills: Skill[] = [];
@@ -133,7 +133,7 @@ export class AssistantCreateFormComponent implements OnInit, OnChanges {
 						// push my user edited
 						this.loginService.pushUser(data.user)
 					}
-					this.updateAssistants.emit(data.user._id);
+					this.idAssistantUpdated.emit(data.user._id);
 					this.snack.open(data.msg, null, { duration: 5000 });
 					this.resetForm(formDirective);
 				}
@@ -145,7 +145,7 @@ export class AssistantCreateFormComponent implements OnInit, OnChanges {
 
 			this.adminService.createAssistant(assistant).subscribe(
 				(data: UserResponse) => {
-					this.updateAssistants.emit(data.user._id);
+					this.idAssistantUpdated.emit(data.user._id);
 					this.snack.open(data.msg, null, { duration: 5000 });
 					this.resetForm(formDirective);
 					formDirective.resetForm();

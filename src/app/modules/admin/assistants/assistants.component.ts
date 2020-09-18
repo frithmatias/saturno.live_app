@@ -16,7 +16,7 @@ export class AssistantsComponent implements OnInit, OnDestroy {
   @Input() nopadding: boolean;
   assistants: User[];
   assistantEdit: User;
-  assistantUpdated: string;
+  idAssistantUpdated: string;
   user: User;
   userSubscription: Subscription;
 
@@ -52,6 +52,19 @@ export class AssistantsComponent implements OnInit, OnDestroy {
     this.assistantEdit = assistant
   }
 
+  // assistant was created or updated
+  assistantUpdated(idAssistant: string): void {
+    this.idAssistantUpdated = idAssistant;
+    this.readAssistants(this.loginService.user.id_company._id);
+  }
+
+  readAssistants(idCompany: string): void {
+    this.adminService.readAssistants(idCompany).subscribe((data: UsersResponse) => {
+      this.assistants = data.users;
+      this.adminService.assistants = data.users;
+    });
+  }
+
   deleteAssistant(idAssistant: string): void {
     if(idAssistant === this.loginService.user._id){
       this.sharedService.snackShow('Usted no puede borrar su propio usuario!', 2000);
@@ -69,19 +82,6 @@ export class AssistantsComponent implements OnInit, OnDestroy {
         )
       }
     })
-  }
-
-  // assistant was created or updated
-  updateAssistants(assistant: string): void {
-    this.assistantUpdated = assistant;
-    this.readAssistants(this.loginService.user.id_company._id);
-  }
-
-  readAssistants(idCompany: string): void {
-    this.adminService.readAssistants(idCompany).subscribe((data: UsersResponse) => {
-      this.assistants = data.users;
-      this.adminService.assistants = data.users;
-    });
   }
 
   ngOnDestroy(): void {
