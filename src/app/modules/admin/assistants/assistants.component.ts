@@ -1,10 +1,16 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
-import { AdminService } from 'src/app/services/admin.service';
+
+// libraries
 import { MatSnackBar, MatSnackBarDismiss } from '@angular/material/snack-bar';
-import { User, UsersResponse, UserResponse } from '../../../interfaces/user.interface';
 import { Subscription } from 'rxjs';
-import { LoginService } from 'src/app/services/login.service';
+
+// services
+import { AdminService } from '../../../modules/admin/admin.service';
+import { LoginService } from '../../../services/login.service';
 import { SharedService } from '../../../services/shared.service';
+
+// interfaces
+import { User, UsersResponse, UserResponse } from '../../../interfaces/user.interface';
 
 @Component({
   selector: 'app-assistants',

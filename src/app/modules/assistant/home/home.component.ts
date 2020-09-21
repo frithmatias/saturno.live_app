@@ -4,7 +4,7 @@ import { Desktop, DesktopsResponse, DesktopResponse } from 'src/app/interfaces/d
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { User } from 'src/app/interfaces/user.interface';
 import { Subscription } from 'rxjs';
-import { AssistantService } from '../../../services/assistant.service';
+import { AssistantService } from '../../../modules/assistant/assistant.service';
 import { LoginService } from '../../../services/login.service';
 import { SharedService } from 'src/app/services/shared.service';
 

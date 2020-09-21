@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Ticket } from '../interfaces/ticket.interface';
+import { Ticket } from '../../interfaces/ticket.interface';
 import { Router } from '@angular/router';
-import { Company } from '../interfaces/company.interface';
-import { environment } from '../../environments/environment.prod';
+import { Company } from '../../interfaces/company.interface';
+import { environment } from '../../../environments/environment.prod';
 import { Observable } from 'rxjs';
-import { SkillsResponse } from '../interfaces/skill.interface';
+import { SkillsResponse } from '../../interfaces/skill.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -31,13 +31,21 @@ export class PublicService {
     private router: Router
   ) { 
 
+    
+  
 		if (localStorage.getItem('company')) {
       this.company = JSON.parse(localStorage.getItem('company'));
-    } 
 
-    if (localStorage.getItem('ticket')) {
-			this.ticket = JSON.parse(localStorage.getItem('ticket'));
-		}
+      if (localStorage.getItem('ticket')) {
+        this.ticket = JSON.parse(localStorage.getItem('ticket'));
+        this.router.navigate(['/public/myticket']);
+      } else {
+        this.router.navigate(['/public/tickets']);
+      }
+
+    } 
+    
+
 
   }
 

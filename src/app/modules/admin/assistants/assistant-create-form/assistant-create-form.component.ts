@@ -1,14 +1,21 @@
 import { Component, OnInit, Output, EventEmitter, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormGroupDirective } from '@angular/forms';
-import { User, UserResponse } from 'src/app/interfaces/user.interface';
-import { AdminService } from 'src/app/services/admin.service';
+
+// libraries
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { of } from 'rxjs';
 import { AjaxError } from 'rxjs/ajax';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Skill, SkillsResponse } from '../../../../interfaces/skill.interface';
-import { LoginService } from 'src/app/services/login.service';
+
+// services
+import { AdminService } from '../../../../modules/admin/admin.service';
+import { LoginService } from '../../../../services/login.service';
 import { SharedService } from '../../../../services/shared.service';
+
+// interfaces
+import { User, UserResponse } from '../../../../interfaces/user.interface';
+import { Skill, SkillsResponse } from '../../../../interfaces/skill.interface';
+
 
 @Component({
 	selector: 'app-assistant-create-form',

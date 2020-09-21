@@ -39,19 +39,13 @@ export class SharedService {
 		stepper.reset();
 	}
 
-	snackShow(msg: string, dur: number): Promise<boolean> {
-		return new Promise((resolve, reject) => {
-			this.snack.open(msg, null, { duration: dur });
-		})
-	}
-
-	snackAsk(msg: string, ask: string, dur: number): Promise<boolean> {
-		return new Promise((resolve, reject) => {
-			this.snack.open(msg, ask, { duration: dur }).afterDismissed().subscribe(data => {
+	snackShow(msg: string, dur: number, button?: string): Promise<boolean> {
+		return new Promise((resolve) => {
+			this.snack.open(msg, button, { duration: dur }).afterDismissed().subscribe(data => {
 				if (data.dismissedByAction) {
 					resolve(true);
 				} else {
-					reject(false);
+					resolve(false);
 				}
 			})
 		})

@@ -7,7 +7,7 @@ import { interval, Subscription, Subject } from 'rxjs';
 import { take, takeUntil, tap, map } from 'rxjs/operators';
 import { DesktopResponse } from 'src/app/interfaces/desktop.interface';
 import { Skill, SkillsResponse } from 'src/app/interfaces/skill.interface';
-import { AssistantService } from '../../../services/assistant.service';
+import { AssistantService } from '../../../modules/assistant/assistant.service';
 import { LoginService } from 'src/app/services/login.service';
 
 const DESK_TIMEOUT = 2; // 60 segundos

@@ -2,14 +2,16 @@ import { Injectable } from '@angular/core';
 import { tap } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { environment } from 'src/environments/environment';
+import { environment } from '../../../environments/environment.prod';
+
+// services
+import { LoginService } from '../../services/login.service';
 
 // Interfaces
-import { Skill } from '../interfaces/skill.interface';
-import { User, UserResponse } from 'src/app/interfaces/user.interface';
-import { Company, CompaniesResponse, CompanyResponse } from '../interfaces/company.interface';
-import { Desktop } from '../interfaces/desktop.interface';
-import { LoginService } from './login.service';
+import { Skill } from '../../interfaces/skill.interface';
+import { User, UserResponse } from '../../interfaces/user.interface';
+import { Company, CompaniesResponse, CompanyResponse } from '../../interfaces/company.interface';
+import { Desktop } from '../../interfaces/desktop.interface';
 
 @Injectable({
 	providedIn: 'root'

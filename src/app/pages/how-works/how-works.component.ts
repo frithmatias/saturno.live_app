@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatStepper } from '@angular/material/stepper';
-import { PublicService } from '../../services/public.service';
+import { PublicService } from '../../modules/public/public.service';
 
 @Component({
 	selector: 'app-how-works',

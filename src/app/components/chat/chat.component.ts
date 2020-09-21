@@ -2,7 +2,7 @@ import { Component, OnInit, Output, EventEmitter, Input, SimpleChange, OnDestroy
 import { WebsocketService } from '../../services/websocket.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { timer, Subscription } from 'rxjs';
-import { PublicService } from 'src/app/services/public.service';
+import { PublicService } from 'src/app/modules/public/public.service';
 
 @Component({
   selector: 'app-chat',

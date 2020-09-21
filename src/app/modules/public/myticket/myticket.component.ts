@@ -7,7 +7,7 @@ import { Ticket } from '../../../interfaces/ticket.interface';
 
 // services
 import { WebsocketService } from '../../../services/websocket.service';
-import { PublicService } from '../../../services/public.service';
+import { PublicService } from '../public.service';
 
 // libs
 import { MatSnackBar, MatSnackBarDismiss } from '@angular/material/snack-bar';
@@ -56,11 +56,6 @@ export class MyticketComponent implements OnInit {
 
 	ngOnInit(): void {
 
-		if (!this.publicService.company) {
-			this.router.navigate(['/public/home']);
-			this.sharedService.snackShow('Debe ingrear a una empresa primero.', 5000)
-			return;
-		}
 		
 		if (!this.publicService.ticket) {
 			this.router.navigate(['/public/tickets']);

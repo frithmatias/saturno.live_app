@@ -1,7 +1,6 @@
 import { NgForm } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { AdminService } from '../../services/admin.service';
 import { environment } from 'src/environments/environment';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { WebsocketService } from '../../services/websocket.service';
@@ -24,7 +23,6 @@ export class LoginComponent implements OnInit {
 	constructor(
 		public router: Router,
 		public activatedRoute: ActivatedRoute,
-		public adminService: AdminService,
 		private loginService: LoginService,
 		private wsService: WebsocketService,
 		private snack: MatSnackBar

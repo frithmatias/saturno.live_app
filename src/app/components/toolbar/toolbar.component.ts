@@ -2,9 +2,9 @@ import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { User } from 'src/app/interfaces/user.interface';
 import { Subscription } from 'rxjs';
-import { PublicService } from 'src/app/services/public.service';
+import { PublicService } from 'src/app/modules/public/public.service';
 import { LoginService } from '../../services/login.service';
-import { AssistantService } from 'src/app/services/assistant.service';
+import { AssistantService } from '../../modules/assistant/assistant.service';
 
 @Component({
   selector: 'app-toolbar',

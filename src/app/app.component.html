@@ -1,7 +1,7 @@
-<app-toolbar (toggleSideNav)="toggle( sidenav )" [unreadMessages]="unreadMessages" (toggleChat)="toggle( chat )">
-</app-toolbar>
-
-<mat-drawer-container>
+<mat-drawer-container class="h-100">
+        
+    <app-toolbar (toggleSideNav)="toggle( sidenav )" [unreadMessages]="unreadMessages" (toggleChat)="toggle( chat )">
+    </app-toolbar>
 
     <!-- sidenav -->
     <mat-drawer #sidenav id="sidenav" mode="over">
@@ -15,10 +15,10 @@
     </mat-drawer>
 
     <!-- container -->
-    <div style="text-align: -webkit-center;">
+    <div class="h-100" style="text-align: -webkit-center;">
         <router-outlet></router-outlet>
     </div>
     
-    <div class="saturno-base"></div>
+    <!-- <div class="saturno-base"></div> -->
 
 </mat-drawer-container>

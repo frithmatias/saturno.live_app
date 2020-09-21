@@ -1,9 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { AdminService } from 'src/app/services/admin.service';
-import { Company, CompaniesResponse } from 'src/app/interfaces/company.interface';
-import { User } from 'src/app/interfaces/user.interface';
+import { AdminService } from '../../modules/admin/admin.service';
+import { Company, CompaniesResponse } from '../../interfaces/company.interface';
+import { User } from '../../interfaces/user.interface';
 import { Subscription } from 'rxjs';
-import { LoginService } from 'src/app/services/login.service';
+import { LoginService } from '../../services/login.service';
 
 @Component({
   selector: 'app-sidenav',

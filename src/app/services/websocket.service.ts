@@ -5,7 +5,7 @@ import { AjaxError } from 'rxjs/ajax';
 import { catchError, take, tap } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TicketResponse } from '../interfaces/ticket.interface';
-import { PublicService } from './public.service';
+import { PublicService } from '../modules/public/public.service';
 
 @Injectable({
 	providedIn: 'root'

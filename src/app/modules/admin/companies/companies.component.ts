@@ -1,11 +1,15 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
-import { Company } from 'src/app/interfaces/company.interface';
-import { AdminService } from '../../../services/admin.service';
+
 import { MatSnackBar, MatSnackBarDismiss } from '@angular/material/snack-bar';
-import { CompanyResponse, CompaniesResponse } from '../../../interfaces/company.interface';
-import { User } from 'src/app/interfaces/user.interface';
 import { Subscription } from 'rxjs';
-import { LoginService } from 'src/app/services/login.service';
+
+import { AdminService } from '../../../modules/admin/admin.service';
+import { LoginService } from '../../../services/login.service';
+
+import { Company } from '../../../interfaces/company.interface';
+import { CompanyResponse, CompaniesResponse } from '../../../interfaces/company.interface';
+import { User } from '../../../interfaces/user.interface';
+
 
 @Component({
   selector: 'app-companies',

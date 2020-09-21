@@ -24,9 +24,12 @@ input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
-  -webkit-box-shadow: 0 0 0 30px white inset !important;
+    -webkit-box-shadow: 0 0 0 30px white inset !important;
 }
 
+.btn {
+    border: none;
+}
 button:focus {
     outline: none;
 }
@@ -52,16 +55,32 @@ td {
 }
 
 
+mat-drawer-container {
+    flex: 1 1 auto;
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 .pointer {
     cursor: pointer;
 }
+
 .saturno-typo {
-    font-family: monospace;
-    font-weight: 300;
-    font-size: x-large;
+    font-family   : monospace;
+    font-weight   : 300;
+    font-size     : x-large;
     letter-spacing: .1em;
-    color: coral;
+    color         : coral;
 }
 
 
@@ -69,29 +88,45 @@ td {
 /* SATURNO STYLES  */
 /* -------------------------------------------------------------- */
 
-.saturno-container {
-    background-size:     cover;                      /* <------ */
-    background-repeat:   no-repeat;
-    background-position: center center;
-    background-blend-mode: lighten;
-    padding: 1em;
+/* BACKGROUNDS  */
+
+.saturno-bg-tile-1 {
+    background-image: url('./assets/img/bgtile1.png');
+    background-size : 100px;
 }
 
-.saturno-bg-home {
-    background-image: url('./assets/img/bg-img-home.jpg');
+.saturno-bg-tile-2 {
+    background-image: url('./assets/img/bgtile2.png');
+    background-size : 80px;
 }
 
-.saturno-bg-login {
-    background-image: url('./assets/img/bg-img-login.jpg');
+.saturno-bg-tile-3 {
+    background-image: url('./assets/img/bgtile3.png');
+    background-size : 80px;
 }
 
-.saturno-bg-register {
-    background-image: url('./assets/img/bg-img-register.jpg');
+
+.saturno-bg-grey-5 {
+    background-color: rgba(217, 217, 217, .5);
 }
 
+.saturno-bg-white {
+    background-color: rgba(255, 255, 255, 1);
+}
+
+.saturno-bg-white-9 {
+    background-color: rgba(255, 255, 255, .9);
+}
+
+.saturno-bg-white-6 {
+    background-color: rgba(255, 255, 255, .6);
+}
+
+.saturno-bg-white-4 {
+    background-color: rgba(255, 255, 255, .4);
+}
 
 .saturno-card {
-    background-color: rgba(255, 255, 255, .9);
     min-width: 18rem;
     max-width: 25rem;
     padding  : 1.2em;
@@ -99,9 +134,10 @@ td {
     font-size: medium;
 }
 
+
 .shadow-box {
-    border-radius   : 5px;
-    box-shadow      : 0px 1px 3px 0px #999
+    border-radius: 5px;
+    box-shadow   : 0px 1px 3px 0px #999
 }
 
 /* using childs */
@@ -117,7 +153,7 @@ td {
     cursor          : pointer;
     padding         : 1em;
     background-color: white;
-    height: 100%;
+    height          : 100%;
 }
 
 .saturno-minicard-title {
@@ -165,8 +201,8 @@ td {
 }
 
 .footer-text {
-    text-align: center;
-    color: rgb(157 157 157);
+    text-align : center;
+    color      : rgb(157 157 157);
     font-weight: lighter;
     font-family: monospace;
     margin-left: .2em;
@@ -175,7 +211,7 @@ td {
 .footer-icon {
     text-align: center;
     opacity   : 0.4;
-    font-size: large;
+    font-size : large;
 }
 
 .desktop-panel-buttons {
@@ -326,20 +362,20 @@ td {
 }
 
 .input-icon {
-    position: absolute;
-    top: -10px;
-    right: 1px;
-    font-size: 14px;
-    cursor: pointer;
-    width: 25px;
-    height: 23px;
+    position        : absolute;
+    top             : 0px;
+    right           : 5px;
+    font-size       : 14px;
+    cursor          : pointer;
+    width           : 25px;
+    height          : 23px;
     /* border-radius: 11px; */
-    text-align: center;
-    padding: 3px;
-    color: #8d8d8d;
-    font-size: x-large;
-  
-  }
+    text-align      : center;
+    padding         : 3px;
+    color           : #776b6b;
+    font-size       : large;
+
+}
 
 /* sidenav items */
 .sidenav-item {
@@ -382,6 +418,30 @@ td {
 .banner-footer {
     font-size  : large;
     font-weight: 200;
+}
+
+.opacity-10 {
+    opacity: 1;
+}
+
+.opacity-8 {
+    opacity: .8;
+}
+
+.opacity-6 {
+    opacity: .6;
+}
+
+.opacity-4 {
+    opacity: .4;
+}
+
+.opacity-2 {
+    opacity: .2;
+}
+
+.opacity-0 {
+    opacity: 0;
 }
 
 .xxxxl {
@@ -466,7 +526,7 @@ td {
 }
 
 .icon-home-card {
-    opacity: .2;
+    opacity  : .2;
     font-size: 3em;
 }
 
@@ -476,10 +536,10 @@ td {
 }
 
 .icon-search-company {
-    width: 36px !important;
-    color: darkgray;
+    width    : 36px !important;
+    color    : darkgray;
     font-size: 1.5em;
-    opacity: .7;
+    opacity  : .7;
 }
 
 .swal2-title {

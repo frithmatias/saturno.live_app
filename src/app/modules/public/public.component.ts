@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { PublicService } from '../../services/public.service';
+import { PublicService } from './public.service';
 import { SharedService } from 'src/app/services/shared.service';
 
 @Component({
@@ -26,6 +26,7 @@ export class PublicComponent implements OnInit {
     if (this.publicService.ticket?.tm_end) { // si el ticket esta finalizado limpio la sesión
       this.publicService.clearPublicSession();
     }
+
 
     this.route.params.subscribe((data: any) => {
 

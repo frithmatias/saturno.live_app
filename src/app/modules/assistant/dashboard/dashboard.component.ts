@@ -1,8 +1,14 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+
+// libraries
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
-import { MetricService } from '../../../services/metric.service';
-import { MetricResponse, Metrics } from '../../../interfaces/metric.interface';
+
+// services
+import { MetricsService } from '../../../modules/metrics/metrics.service';
 import { LoginService } from 'src/app/services/login.service';
+
+// interfaces
+import { MetricResponse, Metrics } from '../../../interfaces/metric.interface';
 
 
 @Component({
@@ -16,7 +22,7 @@ export class DashboardComponent implements OnInit {
   date: Date = new Date();
 
   constructor(
-    private metricService: MetricService,
+    private MetricsService: MetricsService,
     private loginService: LoginService
   ) { }
 
@@ -34,7 +40,7 @@ export class DashboardComponent implements OnInit {
   getMetrics(fcSel: number) {
     this.loading = true;
     let idUser = this.loginService.user._id;
-    this.metricService.getUserMetrics(fcSel, idUser).subscribe((data: MetricResponse) => {
+    this.MetricsService.getUserMetrics(fcSel, idUser).subscribe((data: MetricResponse) => {
       this.metrics = data.metrics;
       this.loading = false;
     }, () => { this.loading = false; })

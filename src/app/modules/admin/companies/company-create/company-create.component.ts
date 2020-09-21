@@ -1,12 +1,14 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormGroupDirective } from '@angular/forms';
-import { AdminService } from '../../../../services/admin.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { HttpErrorResponse } from '@angular/common/http';
+
+import { AdminService } from '../../../../modules/admin/admin.service';
+import { LoginService } from '../../../../services/login.service';
+import { SharedService } from '../../../../services/shared.service';
+
 import { GetidstringPipe } from '../../../../pipes/getidstring.pipe';
 import { Company, CompanyResponse } from '../../../../interfaces/company.interface';
-import { HttpErrorResponse } from '@angular/common/http';
-import { LoginService } from 'src/app/services/login.service';
-import { SharedService } from '../../../../services/shared.service';
 
 @Component({
 	selector: 'app-company-create',

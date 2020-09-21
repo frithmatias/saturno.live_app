@@ -5,7 +5,7 @@ import { TicketResponse } from '../../../interfaces/ticket.interface';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Skill } from '../../../interfaces/skill.interface';
 import { SkillsResponse } from '../../../interfaces/skill.interface';
-import { PublicService } from '../../../services/public.service';
+import { PublicService } from '../public.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -70,8 +70,8 @@ export class TicketsComponent implements OnInit {
 	}
 
 	salir(): void {
-		if (localStorage.getItem('company')) { localStorage.removeItem('company'); }
-		this.router.navigate(['/public/search'])
+		this.publicService.clearPublicSession();
+		this.router.navigate(['/home'])
 	}
 
 }

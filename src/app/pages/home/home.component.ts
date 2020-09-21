@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import moment from 'moment';
 import { timer, interval } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
-import { PublicService } from '../../services/public.service';
+import { PublicService } from '../../modules/public/public.service';
 moment.locale('es');
 @Component({
   selector: 'app-home',

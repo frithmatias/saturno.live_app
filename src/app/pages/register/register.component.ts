@@ -1,13 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { AdminService } from '../../services/admin.service';
+
+import { WebsocketService } from 'src/app/services/websocket.service';
+import { PublicService } from '../../modules/public/public.service';
+import { LoginService } from '../../services/login.service';
+
+import { environment } from 'src/environments/environment';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import Swal from 'sweetalert2';
-import { environment } from 'src/environments/environment';
-import { WebsocketService } from 'src/app/services/websocket.service';
-import { PublicService } from '../../services/public.service';
-import { LoginService } from '../../services/login.service';
+
 declare const gapi: any;
 
 @Component({
@@ -21,7 +23,6 @@ export class RegisterComponent implements OnInit {
 
 	constructor(
 		private router: Router,
-		private adminService: AdminService,
 		private publicService: PublicService,
 		private loginService: LoginService,
 		private wsService: WebsocketService,

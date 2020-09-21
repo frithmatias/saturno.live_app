@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment.prod';
-import { LoginService } from './login.service';
+import { LoginService } from '../../services/login.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class MetricService {
+export class MetricsService {
 
   constructor(
     private http: HttpClient,

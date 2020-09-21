@@ -1,10 +1,10 @@
 import { Component, OnInit, EventEmitter, Output, Input, SimpleChanges } from '@angular/core';
-import { AdminService } from 'src/app/services/admin.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormGroup, FormControl, Validators, FormGroupDirective } from '@angular/forms';
+
+import { AdminService } from '../../../../modules/admin/admin.service';
 import { Desktop, DesktopResponse } from '../../../../interfaces/desktop.interface';
-import { Company, CompaniesResponse } from '../../../../interfaces/company.interface';
-import { LoginService } from 'src/app/services/login.service';
+import { LoginService } from '../../../../services/login.service';
 import { SharedService } from '../../../../services/shared.service';
 
 @Component({

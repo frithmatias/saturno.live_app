@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Ticket } from 'src/app/interfaces/ticket.interface';
 import { TicketsResponse } from '../../../interfaces/ticket.interface';
 import { LoginService } from '../../../services/login.service';
-import { PublicService } from 'src/app/services/public.service';
+import { PublicService } from 'src/app/modules/public/public.service';
 
 @Component({
   selector: 'app-tickets',

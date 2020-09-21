@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
-import { environment } from '../../environments/environment.prod';
+import { environment } from '../../../environments/environment.prod';
 
-import { Ticket } from '../interfaces/ticket.interface';
-import { Desktop } from '../interfaces/desktop.interface';
-import { User } from '../interfaces/user.interface';
+import { Ticket } from '../../interfaces/ticket.interface';
+import { Desktop } from '../../interfaces/desktop.interface';
+import { User } from '../../interfaces/user.interface';
+
+import { LoginService } from '../../services/login.service';
 
 import { Observable } from 'rxjs';
-import { LoginService } from './login.service';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 
 @Injectable({

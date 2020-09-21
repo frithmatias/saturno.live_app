@@ -8,12 +8,14 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
 import { SidenavComponent } from './sidenav/sidenav.component';
 import { ChatComponent } from './chat/chat.component';
 import { RouterModule } from '@angular/router';
+import { SearchComponent } from './toolbar/search/search.component';
 
 @NgModule({
   declarations: [
     ToolbarComponent,
     SidenavComponent,
-    ChatComponent
+    ChatComponent,
+    SearchComponent
   ],
   imports: [
     RouterModule,

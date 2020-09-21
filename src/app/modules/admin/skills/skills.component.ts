@@ -1,10 +1,16 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+
+// libraries
 import { MatSnackBar, MatSnackBarDismiss } from '@angular/material/snack-bar';
-import { AdminService } from 'src/app/services/admin.service';
-import { Skill, SkillsResponse, SkillResponse } from '../../../interfaces/skill.interface';
-import { User } from 'src/app/interfaces/user.interface';
 import { Subscription } from 'rxjs';
-import { LoginService } from 'src/app/services/login.service';
+
+// services
+import { AdminService } from '../../../modules/admin/admin.service';
+import { LoginService } from '../../../services/login.service';
+
+// interfaces
+import { Skill, SkillsResponse, SkillResponse } from '../../../interfaces/skill.interface';
+import { User } from '../../../interfaces/user.interface';
 
 @Component({
   selector: 'app-skills',

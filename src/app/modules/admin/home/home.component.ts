@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { AdminService } from '../../../services/admin.service';
+import { AdminService } from '../../../modules/admin/admin.service';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { MatStepper } from '@angular/material/stepper/stepper';
 import { User } from '../../../interfaces/user.interface';

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { WebsocketService } from '../../../services/websocket.service';
-import { PublicService } from '../../../services/public.service';
+import { PublicService } from '../public.service';
 import { Ticket, TicketsResponse } from 'src/app/interfaces/ticket.interface';
 import { Subject } from 'rxjs';
 const TAIL_LENGTH = 4;

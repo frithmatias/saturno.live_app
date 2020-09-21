@@ -1,11 +1,11 @@
 <!-- WELCOME -->
-<div class="saturno-container saturno-bg-login container-fluid">
+<div class="saturno-bg-tile-3 h-100 container-fluid">
 
     <div class="row">
         <div class="col-md"></div>
         <div class="col-md">
 
-            <div class="saturno-card shadow-box animated fadeIn">
+            <div class="saturno-card saturno-bg-white-4 shadow-box animated fadeIn">
                 <form ngNativeValidate #f="ngForm" (ngSubmit)="login( f )">
 
                     <!---------------------------------------------------------------------->
@@ -43,7 +43,7 @@
                             <div class="checkbox checkbox-primary pull-left">
                                 <input [(ngModel)]="recuerdame" name="recuerdame" id="checkbox-signup" type="checkbox"
                                     class="filled-in chk-col-light-blue">
-                                <label for="checkbox-signup"> &nbsp; Recordar E-mail </label>
+                                <label for="checkbox-signup" class="label"> &nbsp; Recordar E-mail </label>
                             </div>
                         </div>
                         <hr>
@@ -72,7 +72,7 @@
                         <!---------------------------------------------------------------------->
                         <!-- REGISTRARSE -->
                         <!---------------------------------------------------------------------->
-                        <div class="mt-4 text-center">
+                        <div class="mt-4 text-center label">
                             No tenes cuenta? | <a routerLink="/register" class="text-primary m-l-5">Crear
                                 cuenta</a>
                         </div>

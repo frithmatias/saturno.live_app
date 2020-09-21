@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { PublicService } from '../../services/public.service';
+import { Router } from '@angular/router';
+import { PublicService } from '../../modules/public/public.service';
+import { SharedService } from 'src/app/services/shared.service';
 
 @Component({
   selector: 'app-contact',
@@ -12,7 +14,8 @@ export class ContactComponent implements OnInit {
 showContactData = false;
   constructor(
     private publicService: PublicService,
-    private snack: MatSnackBar) { }
+    private sharedService: SharedService,
+    private router: Router) { }
 
   ngOnInit(): void {
   }
@@ -20,7 +23,7 @@ showContactData = false;
   enviar( f: NgForm): void {
 
     if (f.invalid) {
-      this.snack.open('Por favor verifique los datos ingresados.', null, { duration: 2000 });
+      this.sharedService.snackShow('Por favor verifique los datos ingresados.', 2000);
       return;
     }
 
@@ -34,7 +37,9 @@ showContactData = false;
     
     this.publicService.sendContact(contact).subscribe( (resp: any) => {
       f.reset();
-      this.snack.open(`Gracias, su mensaje fue recibido correctamente.`, null, { duration: 5000 });
+      this.sharedService.snackShow(`Gracias! Recibimos su mensaje.`, 2000, 'Aceptar').finally(() => {
+        this.router.navigate(['/home'])
+      })
     })
   }
 

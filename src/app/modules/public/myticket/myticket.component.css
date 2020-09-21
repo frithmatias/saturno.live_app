@@ -1,9 +1,3 @@
-.saturno-myticket-background {
-  height          : 100vh;
-  background-image: url('../../../../assets/img/myticket-background.png');
-  background-size : 100px;
-}
-
 .screen-icon-star {
   cursor   : pointer;
   transform: scale(2);
@@ -56,7 +50,6 @@
 }
 
 /* ------------------------------------------------------- */
-
 /* history */
 .screen-history-title {
   font-size: calc(.8em + .8vw);

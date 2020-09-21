@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
-import { AdminService } from '../../../services/admin.service';
+import { AdminService } from '../../../modules/admin/admin.service';
 import { MatSnackBar, MatSnackBarDismiss } from '@angular/material/snack-bar';
 import { Desktop, DesktopsResponse, DesktopResponse } from '../../../interfaces/desktop.interface';
 import { User } from 'src/app/interfaces/user.interface';
